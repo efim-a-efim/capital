@@ -378,7 +378,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
                             Choice("Contribution limit",limitLabel(mode),Limit.entries.map(::limitLabel),!saving) { chosen -> fields["mode"]=Limit.entries.first { limitLabel(it)==chosen }.name }
                             if(mode!=Limit.AUTO) field("value",if(mode==Limit.FIXED) "Amount in ${data.goals.first { it.id==editor.owner }.currency}" else limitLabel(mode),true)
                             field("cap","Optional maximum % of goal (0–100)",true)
-                            val preview=runCatching { transform(data).allocate() }.getOrNull()
+                            val preview=remember(fields.toMap()) { runCatching { transform(data).allocate() }.getOrNull() }
                             val goal=data.goals.first { it.id==editor.owner }
                             if(preview!=null) {
                                 val key="${fields.getValue("bucket")}/${editor.owner}"

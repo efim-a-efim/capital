@@ -54,7 +54,6 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
                 response.use {
                     try {
                         val bytes=it.body?.byteStream()?.readLimited() ?: throw ProviderFailure("Empty response")
-                        require(bytes.size <= MAX_FILE_BYTES) { "Provider response too large" }
                         if(continuation.isActive) continuation.resume(it.code to (bytes.toString(Charsets.UTF_8) to it.header("Retry-After")))
                     } catch(_: Exception) { if(continuation.isActive) continuation.resumeWithException(ProviderFailure("Invalid provider response")) }
                 }
@@ -208,5 +207,6 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
 fun Exception.safeMessage(): String = when(this) {
     is ProviderFailure -> message ?: "Provider unavailable"
     is IllegalArgumentException -> if(message?.contains("API key")==true) message!! else "Provider returned invalid or unsupported data"
+    is IllegalStateException -> if(message?.contains("key")==true) message!! else "Could not read provider data; retry or change provider"
     else -> "Could not read provider data; retry or change provider"
 }

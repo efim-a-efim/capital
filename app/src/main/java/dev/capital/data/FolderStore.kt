@@ -19,11 +19,10 @@ class FolderStore(private val resolver: ContentResolver, val tree: Uri) {
         } ?: error("Cannot read folder. Reconnect it in Settings.")
     }
     fun read(uri: Uri): String = resolver.openInputStream(uri)?.use {
-        val bytes=it.readLimited()
-        require(bytes.size <= MAX_FILE_BYTES) { "File too large" }; bytes.toString(Charsets.UTF_8)
+        it.readLimited().toString(Charsets.UTF_8)
     } ?: error("Cannot read file")
     // ponytail: scan retained snapshots; add an index when measured startup cost needs it.
-    private fun scanNow(): Scan = scanRevisions(documents().map { try { read(it) } catch(_: IllegalArgumentException) { "invalid snapshot" } })
+    private fun scanNow(): Scan = scanRevisions(documents().map { try { read(it) } catch(_: Exception) { "invalid snapshot" } })
     suspend fun scan() = withContext(Dispatchers.IO) { lock.withLock { scanNow() } }
     suspend fun save(data: Portfolio, expected: Set<String>, resolve: Boolean = false): Pair<Revision,Scan> = withContext(Dispatchers.IO) {
         lock.withLock {

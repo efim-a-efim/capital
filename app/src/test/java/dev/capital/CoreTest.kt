@@ -26,6 +26,7 @@ class CoreTest {
         rejects { p.copy(goals=listOf(goal("g1","0"))).validate() }
         rejects { p.copy(connections=listOf(Connection("g1","b",Limit.GOAL_PERCENT,"101"))).validate() }
         assertNull(p.convert(BigDecimal.ONE,"EUR","USD"))
+        eq("0",p.convert("0.00".toBigDecimal(),"EUR","USD")!!)
         eq("1",p.convert(BigDecimal.ONE,"EUR","EUR")!!)
     }
     @Test fun equalSharingCapsPrioritiesAndResidualUnits() {

@@ -15,5 +15,5 @@ class MainActivity: ComponentActivity() {
         setContent { CapitalApp(model) }
     }
     override fun onStart() { super.onStart(); model.resume() }
-    override fun onStop() { model.background(); super.onStop() }
+    override fun onStop() { if(!isChangingConfigurations) model.background(); super.onStop() }
 }

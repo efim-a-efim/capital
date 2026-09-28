@@ -91,7 +91,7 @@ val providerChoices = linkedMapOf(
     }
     fun price(asset: String): BigDecimal? = if (asset == "USD") BigDecimal.ONE else quotes.find { it.asset == asset }?.usd?.decimal()
     fun convert(amount: BigDecimal, from: String, to: String): BigDecimal? {
-        if (from == to || amount == ZERO) return amount
+        if (from == to || amount.signum() == 0) return amount
         return price(from)?.let { f -> price(to)?.let { t -> amount.multiply(f).divideMoney(t) } }
     }
     fun bucketValue(bucketId: String, currency: String): BigDecimal = holdings.filter { it.bucketId == bucketId }.fold(ZERO) { sum,h -> sum + (h.quantity?.let { convert(it.decimal(), h.asset, currency) } ?: ZERO) }

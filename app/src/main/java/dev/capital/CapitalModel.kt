@@ -28,6 +28,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     val state=mutable.asStateFlow()
     private val transaction=Mutex()
     private var refreshJob: Job?=null
+    private val providers=Providers(secrets::get)
     private var foreground=true
     init {
         val uri=prefs.getString("folder",null)
@@ -61,7 +62,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         finally { update { it.copy(loading=false) } }
     }
     private fun applyScan(scan: Scan) {
-        val blocked=scan.conflicted || scan.missingParents || (scan.heads.isEmpty() && scan.invalid>0)
+        val blocked=scan.conflicted || scan.missingParents
         update { it.copy(
             data=scan.heads.firstOrNull()?.data ?: if(scan.invalid>0) it.data else Portfolio(settings=it.data.settings),
             ready=true,heads=scan.heads,blocked=blocked,unsaved=false,
@@ -112,10 +113,10 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         refreshJob=viewModelScope.launch {
             update { it.copy(refreshing=true,message="Refreshing selected providers…") }
             try {
-                val observations=Providers(secrets::get).refresh(requested,bucketId)
+                val observations=providers.refresh(requested,bucketId)
                 transaction.withLock {
                     if(mutable.value.blocked || mutable.value.unsaved) { notice("Refresh finished; resolve storage issues before retrying."); return@withLock }
-                    persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes))
+                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes)) }
                     notice(if(observations.errors.isEmpty()) "Refreshed. Shared rates may revalue other buckets." else observations.errors.joinToString("\n"))
                 }
             } catch(e: CancellationException) { notice("Refresh stopped. Cached values retained."); throw e }
@@ -128,7 +129,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         try {
             val text=encodeRevision(Revision(data=mutable.value.data))
             withContext(Dispatchers.IO) {
-                resolver.openOutputStream(uri,"w")?.use { it.write(text.toByteArray()); it.flush() } ?: error("Cannot write backup")
+                resolver.openOutputStream(uri,"wt")?.use { it.write(text.toByteArray()); it.flush() } ?: error("Cannot write backup")
                 val readback=resolver.openInputStream(uri)?.use { it.readLimited().toString(Charsets.UTF_8) } ?: error("Cannot verify backup")
                 require(decodeRevision(readback).data==mutable.value.data) { "Backup verification failed; retry export" }
             }
@@ -137,7 +138,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     }
     fun inspectRestore(uri: Uri)=viewModelScope.launch {
         try {
-            val text=withContext(Dispatchers.IO) { resolver.openInputStream(uri)?.use { val bytes=it.readLimited(); require(bytes.size<=MAX_FILE_BYTES); bytes.toString(Charsets.UTF_8) } ?: error("Cannot read backup") }
+            val text=withContext(Dispatchers.IO) { resolver.openInputStream(uri)?.use { it.readLimited().toString(Charsets.UTF_8) } ?: error("Cannot read backup") }
             update { it.copy(restore=decodeRevision(text)) }
         } catch(e: Exception) { notice(e.message ?: "Invalid backup") }
     }
