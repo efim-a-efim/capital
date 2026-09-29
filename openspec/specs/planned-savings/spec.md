@@ -4,11 +4,11 @@
 Planned savings records and the projection of when goals close.
 ## Requirements
 ### Requirement: Planned savings records
-The app SHALL keep a list of planned savings, each with a name, a positive amount, a currency and a planned date. Planned savings SHALL NOT belong to any bucket and SHALL NOT change bucket values, totals, allocated or unallocated amounts. They SHALL be listed on the Buckets screen under "Planned savings" in date order with add, edit and delete. Delete SHALL require confirmation.
+The app SHALL keep a list of planned savings, each with a name, a positive amount, a currency and a planned date. Planned savings SHALL NOT belong to any bucket and SHALL NOT change bucket values, totals, allocated or unallocated amounts. They SHALL be listed on the Plans tab in date order with add, edit and delete. Delete SHALL require confirmation.
 
 #### Scenario: Add planned saving
 - **WHEN** the user adds "October salary", 500 EUR, 2026-10-25
-- **THEN** it appears under Planned savings and total valued savings are unchanged.
+- **THEN** it appears on the Plans tab and total valued savings are unchanged.
 
 ### Requirement: Archiving by date
 A planned saving whose date is before today SHALL be shown as archived with a text label, SHALL remain visible until the user deletes it, and SHALL NOT contribute to projections. A planned saving dated today SHALL still count.

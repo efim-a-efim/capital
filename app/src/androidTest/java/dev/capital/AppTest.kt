@@ -64,7 +64,7 @@ class AppTest {
             find("Cash"); capture("bucket")
             click("Goals"); click("Add goal"); type("Purpose","Emergency"); type("Currency code (EUR, USD, BTC…)","USD"); type("Target amount · no grouping separators","600"); click("Save")
             click("Emergency"); click("Connect bucket"); capture("connection"); click("Save"); find("Disconnect"); capture("goal")
-            click("Buckets"); click("Add planned saving"); type("Name","Salary"); type("Currency code (EUR, USD, BTC…)","USD"); type("Amount · no grouping separators","100"); click("Save"); find("Salary")
+            click("Plans"); click("Add planned saving"); type("Name","Salary"); type("Currency code (EUR, USD, BTC…)","USD"); type("Amount · no grouping separators","100"); click("Save"); find("Salary")
             var data=Portfolio(); var tree: Uri?=null
             scenario.onActivity { activity ->
                 val model=ViewModelProvider(activity)[CapitalModel::class.java]
@@ -82,7 +82,7 @@ class AppTest {
                 resolver.openOutputStream(broken)!!.use { it.write("partial".toByteArray()) }
                 assertEquals(1,store.scan().invalid); assertEquals(data,store.scan().heads.single().data)
             }
-            scenario.recreate(); find("Reserve"); click("Overview"); find("Emergency"); capture("overview")
+            scenario.recreate(); find("Salary"); click("Buckets"); find("Reserve"); click("Overview"); find("Emergency"); capture("overview")
         }
     }
 }

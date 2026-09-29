@@ -6,7 +6,13 @@ import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.draw.rotate
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.rememberScrollState
@@ -33,7 +39,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.graphics.Color
@@ -170,6 +175,11 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
         }
     } }
 }
+private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawable.ic_overview; "Buckets" -> R.drawable.ic_buckets; "Goals" -> R.drawable.ic_goals; "Plans" -> R.drawable.ic_plans; else -> R.drawable.ic_settings }
+@Composable private fun RefreshButton(refreshing: Boolean,enabled: Boolean,onClick: ()->Unit) {
+    val angle=if(refreshing) rememberInfiniteTransition(label="refresh").animateFloat(0f,360f,infiniteRepeatable(tween(900,easing=LinearEasing)),label="angle").value else 0f
+    IconButton(onClick=onClick,enabled=enabled && !refreshing,modifier=Modifier.testTag("refresh")) { Icon(painterResource(R.drawable.ic_refresh),contentDescription=if(refreshing) "Refreshing" else "Refresh",tint=if(refreshing) MaterialTheme.colorScheme.primary else LocalContentColor.current,modifier=Modifier.rotate(angle)) }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun CapitalApp(model: CapitalModel) {
     val state by model.state.collectAsStateWithLifecycle()
@@ -205,28 +215,26 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
             Scaffold(
                 topBar={ TopAppBar(title={ Text(if(!state.ready) "Capital" else section) },actions={
                     if(state.ready) {
-                        if(state.refreshing) Box(Modifier.size(48.dp).semantics { contentDescription="Refreshing" },contentAlignment=Alignment.Center) { CircularProgressIndicator(Modifier.size(24.dp),strokeWidth=2.dp) }
-                        else IconButton(onClick={ model.refresh(bucketId) },enabled=editable,modifier=Modifier.testTag("refresh")) { Icon(painterResource(R.drawable.ic_refresh),contentDescription="Refresh") }
+                        RefreshButton(state.refreshing,editable) { model.refresh(bucketId) }
                         IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription="Settings") }
                     }
                 }) },
-                bottomBar={ if(state.ready && !wide) NavigationBar { listOf("Overview","Buckets","Goals").forEach { target -> NavigationBarItem(selected=section==target,onClick={ select(target) },icon={ Text(when(target) { "Overview" -> "◫"; "Buckets" -> "▤"; else -> "◎" },Modifier.clearAndSetSemantics {}) },label={ Text(target) }) } } },
+                bottomBar={ if(state.ready && !wide) NavigationBar { listOf("Overview","Buckets","Goals","Plans").forEach { target -> NavigationBarItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(target) }) } } },
                 snackbarHost={ state.message?.let { Popup(it,model::dismissMessage) } },
                 floatingActionButton={
-                    val add=when { !state.ready || !editable -> null; section=="Buckets" && bucketId==null -> "Bucket"; section=="Goals" && goalId==null -> "Goal"; else -> null }
-                    add?.let { kind -> ExtendedFloatingActionButton(onClick={ editor=Editor(kind) }) { Text("Add ${kind.lowercase()}") } }
+                    val add=when { !state.ready || !editable -> null; section=="Buckets" && bucketId==null -> "Bucket"; section=="Goals" && goalId==null -> "Goal"; section=="Plans" -> "Planned"; else -> null }
+                    add?.let { kind -> FloatingActionButton(onClick={ editor=Editor(kind) },modifier=Modifier.testTag("add"),containerColor=MaterialTheme.colorScheme.primary,contentColor=MaterialTheme.colorScheme.onPrimary) { Icon(painterResource(R.drawable.ic_add),contentDescription=if(kind=="Planned") "Add planned saving" else "Add ${kind.lowercase()}") } }
                 },
-                floatingActionButtonPosition=FabPosition.Center,
             ) { padding ->
                 Row(Modifier.fillMaxSize().padding(padding)) {
-                    if(wide && state.ready) NavigationRail { listOf("Overview","Buckets","Goals","Settings").forEach { target -> NavigationRailItem(selected=section==target,onClick={ select(target) },icon={ Text(target.take(1),Modifier.clearAndSetSemantics {}) },label={ Text(target) }) } }
+                    if(wide && state.ready) NavigationRail { listOf("Overview","Buckets","Goals","Plans","Settings").forEach { target -> NavigationRailItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(target) }) } }
                     if(wide && ((section=="Buckets" && bucketId!=null) || (section=="Goals" && goalId!=null))) {
                         Column(Modifier.width(250.dp).fillMaxHeight().verticalScroll(rememberScrollState()).padding(16.dp)) {
                             if(section=="Buckets") data.buckets.forEach { b -> Item(b.name,b.currency) { bucketId=b.id } }
                             else data.goals.sortedWith(compareBy<Goal> { it.archived }.thenBy { it.due }.thenByDescending { it.priority }).forEach { g -> Item(g.name,date(g.due)) { goalId=g.id } }
                         }
                     }
-                    Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(screenScroll).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(screenScroll).padding(start=20.dp,top=20.dp,end=20.dp,bottom=88.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                         if(state.loading) { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("Opening your savings…") }
                         if(state.unsaved && !state.saving) {
                             Notice("Unsaved changes — kept in memory. Do not close the app before saving or exporting a copy.")
@@ -271,22 +279,31 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                     data.buckets.forEach { b -> Item(b.name,"${data.holdings.count { it.bucketId==b.id }} holdings · ${b.currency}",money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { section="Buckets"; bucketId=b.id } }
                                     Note("Goal allocations are part of savings, not additional money.")
                                 }
+                                "Plans" -> {
+                                    Note("Planned amounts are not part of your savings. They project when goals close.")
+                                    if(data.planned.isEmpty()) Text("Add the amounts you plan to save and their dates.")
+                                    val today=LocalDate.now()
+                                    data.planned.sortedWith(compareBy<Planned> { it.archived(today) }.thenBy { it.date }).forEach { pl ->
+                                        Column(Modifier.fillMaxWidth().padding(vertical=14.dp,horizontal=4.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                                            Text(pl.name,style=MaterialTheme.typography.titleMedium)
+                                            // Icons sit right of the amount; FlowRow drops them to the next line when they do not fit.
+                                            FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,itemVerticalAlignment=Alignment.CenterVertically) {
+                                                Text(money(pl.amount.decimal(),pl.currency),style=MaterialTheme.typography.titleLarge)
+                                                Row {
+                                                    IconButton(onClick={ editor=Editor("Planned",pl.id) },enabled=editable) { Icon(painterResource(R.drawable.ic_edit),contentDescription="Edit ${pl.name}") }
+                                                    IconButton(onClick={ confirmation="Delete planned saving ${pl.name}?" to { model.edit({ p -> p.copy(planned=p.planned.filterNot { it.id==pl.id }) }) } },enabled=editable) { Icon(painterResource(R.drawable.ic_delete),contentDescription="Delete ${pl.name}") }
+                                                }
+                                            }
+                                            Note("${date(pl.date)} · ${if(pl.archived(today)) "Archived · date passed" else "Planned"}")
+                                        }
+                                        HorizontalDivider()
+                                    }
+                                }
                                 "Buckets" -> {
                                     val bucket=data.buckets.find { it.id==bucketId }
                                     if(bucket==null) {
                                         if(data.buckets.isEmpty()) Text("Buckets group places where your money lives.")
                                         data.buckets.forEach { b -> Item(b.name,"${data.holdings.count { it.bucketId==b.id }} holdings",money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { bucketId=b.id } }
-                                        Heading("Planned savings")
-                                        Note("Planned amounts are not part of your savings. They project when goals close.")
-                                        Button(onClick={ editor=Editor("Planned") },enabled=editable) { Text("Add planned saving") }
-                                        val today=LocalDate.now()
-                                        data.planned.sortedWith(compareBy<Planned> { it.archived(today) }.thenBy { it.date }).forEach { pl ->
-                                            Item(pl.name,"${date(pl.date)} · ${if(pl.archived(today)) "Archived · date passed" else "Planned"}",money(pl.amount.decimal(),pl.currency),null)
-                                            Actions {
-                                                TextButton(onClick={ editor=Editor("Planned",pl.id) },enabled=editable) { Text("Edit") }
-                                                TextButton(onClick={ confirmation="Delete planned saving ${pl.name}?" to { model.edit({ p -> p.copy(planned=p.planned.filterNot { it.id==pl.id }) }) } },enabled=editable) { Text("Delete") }
-                                            }
-                                        }
                                     } else {
                                         TextButton(onClick={ bucketId=null }) { Text("← All buckets") }
                                         Heading(bucket.name)

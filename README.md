@@ -47,7 +47,7 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 2. Settings → set default currency and optional provider keys.
 3. Add a bucket, then manual holdings or public wallet addresses.
 4. Add goals and connect their funding buckets. Goals with earlier dates fund first; drag goals that share a date to set their order.
-5. Add planned savings on the Buckets screen to see when each goal closes.
+5. Add planned savings on the Plans tab to see when each goal closes.
 6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket displays native quantities plus converted values. Missing quotes mark totals incomplete; stale cached values remain usable with a warning. Goal allocations never transfer money or increase your total savings.
