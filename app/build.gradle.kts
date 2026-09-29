@@ -10,8 +10,8 @@ android {
         applicationId = "dev.capital"
         minSdk = 26
         targetSdk = 37
-        versionCode = 6
-        versionName = "2.2.0"
+        versionCode = 7
+        versionName = "2.2.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true }
