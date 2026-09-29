@@ -56,14 +56,16 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
 @Composable private fun Notice(value: String) { Surface(color=MaterialTheme.colorScheme.surfaceVariant,shape=MaterialTheme.shapes.medium) { Text(value,Modifier.fillMaxWidth().padding(16.dp),style=MaterialTheme.typography.bodyMedium) } }
 @Composable private fun Actions(content: @Composable FlowRowScope.()->Unit) { FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth(),content=content) }
 @Composable private fun Stat(label: String,value: String) { Column(Modifier.padding(vertical=12.dp)) { Note(label); Text(value,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold) } }
-@Composable private fun Item(title: String,subtitle: String,value: String?=null,onClick: ()->Unit) {
-    TextButton(onClick=onClick,modifier=Modifier.fillMaxWidth(),shape=MaterialTheme.shapes.small,contentPadding=PaddingValues(vertical=14.dp,horizontal=4.dp)) {
+@Composable private fun Item(title: String,subtitle: String,value: String?=null,onClick: (()->Unit)?) {
+    val body: @Composable ()->Unit = {
         Column(Modifier.fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(4.dp)) {
             Text(title,style=MaterialTheme.typography.titleMedium,color=MaterialTheme.colorScheme.onSurface)
             if(value!=null) Text(value,style=MaterialTheme.typography.titleLarge,color=MaterialTheme.colorScheme.onSurface)
             Note(subtitle)
         }
     }
+    if(onClick==null) Box(Modifier.fillMaxWidth().padding(vertical=14.dp,horizontal=4.dp)) { body() }
+    else TextButton(onClick=onClick,modifier=Modifier.fillMaxWidth(),shape=MaterialTheme.shapes.small,contentPadding=PaddingValues(vertical=14.dp,horizontal=4.dp)) { body() }
     HorizontalDivider()
 }
 @Composable private fun GoalRow(goal: Goal,data: Portfolio,allocation: Allocation,onClick: ()->Unit) {
@@ -176,7 +178,7 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
                                         Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text("Add holding") }
                                         data.holdings.filter { it.bucketId==bucket.id }.forEach { h ->
                                             val converted=h.quantity?.let { data.convert(it.decimal(),h.asset,bucket.currency) }
-                                            Item(h.label,"${h.address?.let { "Read-only · ${it.take(12)}…" } ?: "Manual"}\n${h.quantity?.let { money(it.decimal(),h.asset) } ?: "Balance unknown"}",money(converted,bucket.currency)) { if(editable) editor=Editor("Holding",h.id,bucket.id) }
+                                            Item(h.label,"${h.address?.let { "Read-only · ${it.take(12)}…" } ?: "Manual"}\n${h.quantity?.let { money(it.decimal(),h.asset) } ?: "Balance unknown"}",money(converted,bucket.currency),null)
                                             Note("${h.source} · observed ${time(h.observedAt)} · fetched ${time(h.fetchedAt)}")
                                             h.error?.let { Notice(it) }
                                             Actions { TextButton(onClick={ editor=Editor("Holding",h.id,bucket.id) },enabled=editable) { Text("Edit / move") }; TextButton(onClick={ confirmation="Delete ${h.label}?" to { model.edit({ p -> p.copy(holdings=p.holdings.filterNot { it.id==h.id }) }) } },enabled=editable) { Text("Delete") } }
