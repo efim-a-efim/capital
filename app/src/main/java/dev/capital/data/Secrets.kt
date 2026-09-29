@@ -4,6 +4,7 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import dev.capital.domain.tr
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -26,13 +27,13 @@ class Secrets(context: Context) {
             val cipher=Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE,key(),GCMParameterSpec(128,bytes.copyOfRange(0,12)))
             cipher.doFinal(bytes.copyOfRange(12,bytes.size)).toString(Charsets.UTF_8)
-        }.getOrElse { error("Cannot unlock $provider key. Re-enter it in Settings.") }
+        }.getOrElse { throw KeyState(tr("Cannot unlock {0} key. Re-enter it in Settings.",provider)) }
     }
     fun put(provider: String, value: String) {
         if(value.isBlank()) { prefs.edit().remove(provider).apply(); return }
-        require(value.length <= 1024 && !value.contains('\n')) { "Invalid API key" }
+        if(!(value.length <= 1024 && !value.contains('\n'))) throw KeyArgument(tr("Invalid API key"))
         val cipher=Cipher.getInstance("AES/GCM/NoPadding"); cipher.init(Cipher.ENCRYPT_MODE,key())
         val bytes=cipher.iv+cipher.doFinal(value.trim().toByteArray())
-        check(prefs.edit().putString(provider,Base64.encodeToString(bytes,Base64.NO_WRAP)).commit()) { "Could not save API key" }
+        if(!prefs.edit().putString(provider,Base64.encodeToString(bytes,Base64.NO_WRAP)).commit()) throw KeyState(tr("Could not save API key"))
     }
 }

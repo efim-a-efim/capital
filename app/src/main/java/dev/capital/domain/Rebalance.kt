@@ -34,12 +34,12 @@ fun Portfolio.weights(bucketId: String): Weights {
 
 /** Exact water-filling on 18-decimal amounts; the rounding remainder goes to the largest deficit so amounts sum to `amount` exactly. */
 fun Portfolio.rebalance(bucketId: String, amount: BigDecimal): Plan {
-    require(amount.signum() >= 0) { "Amount must not be negative" }
+    require(amount.signum() >= 0) { tr("Amount must not be negative") }
     fun unavailable(reason: String) = Plan(emptyList(), ZERO, reason)
     val bucket = buckets.find { it.id == bucketId }
-    if (bucket?.portfolio != true) return unavailable("Portfolio mode is off")
+    if (bucket?.portfolio != true) return unavailable(tr("Portfolio mode is off"))
     val w = weights(bucketId)
-    if (w.rows.isEmpty()) return unavailable(if (w.missing.isEmpty() && w.flagged.isEmpty()) "No targets" else "No value for ${(w.missing + w.flagged).joinToString()}")
+    if (w.rows.isEmpty()) return unavailable(if (w.missing.isEmpty() && w.flagged.isEmpty()) tr("No targets") else tr("No value for {0}", (w.missing + w.flagged).joinToString()))
     val base = settings.currency
     val total = w.total + amount
     val deficit = w.rows.map { it.target.divideMoney(HUNDRED) * total - it.value }

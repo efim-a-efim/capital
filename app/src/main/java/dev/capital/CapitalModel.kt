@@ -70,7 +70,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             resolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             val next=FolderStore(resolver,uri); val forms=next.forms()
             if(forms.encrypted>0 && !copy) {
-                require(!mutable.value.unsaved) { "Unsaved changes retained. Retry save, save a copy, or explicitly discard before reopening." }
+                require(!mutable.value.unsaved) { tr("Unsaved changes retained. Retry save, save a copy, or explicitly discard before reopening.") }
                 store=next
                 update { it.copy(encrypted=true,security=if(hasPin()) "PIN" else "PASSWORD",ready=false,data=Portfolio(),heads=emptyList(),blocked=false,unsaved=false,pendingRewrite=null,restore=null,restorePassword=null,message=null) }
                 prefs.edit().putString("folder",uri.toString()).apply()
@@ -81,19 +81,19 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             if(forms.encrypted==0) prefs.edit().remove("rewrite").remove("previousKey").apply()
             val scan=next.scan()
             if(copy) {
-                require(scan.heads.isEmpty() && scan.invalid==0) { "Save copy needs an empty folder. Existing data was not changed." }
+                require(scan.heads.isEmpty() && scan.invalid==0) { tr("Save copy needs an empty folder. Existing data was not changed.") }
                 val (revision,after)=next.save(mutable.value.data,emptySet())
                 store=next
-                update { it.copy(data=revision.data,heads=after.heads,unsaved=false,ready=true,blocked=after.conflicted,encrypted=false,security="OPEN",pendingRewrite=null,message="Copy saved") }
+                update { it.copy(data=revision.data,heads=after.heads,unsaved=false,ready=true,blocked=after.conflicted,encrypted=false,security="OPEN",pendingRewrite=null,message=tr("Copy saved")) }
             } else {
-                require(!mutable.value.unsaved) { "Unsaved changes retained. Retry save, save a copy, or explicitly discard before reopening." }
+                require(!mutable.value.unsaved) { tr("Unsaved changes retained. Retry save, save a copy, or explicitly discard before reopening.") }
                 store=next
                 update { it.copy(encrypted=false,security="OPEN",pendingRewrite=null,restorePassword=null) }
                 applyScan(scan)
             }
             prefs.edit().putString("folder",uri.toString()).apply()
             update { it.copy(folder=uri.toString()) }
-        } catch(e: Exception) { update { it.copy(message=e.message ?: "Folder unavailable") } }
+        } catch(e: Exception) { update { it.copy(message=e.message ?: tr("Folder unavailable")) } }
         finally { update { it.copy(loading=false) } }
     }
     private fun applyScan(scan: Scan) {
@@ -102,9 +102,9 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             data=scan.heads.firstOrNull()?.data ?: if(scan.invalid>0) it.data else Portfolio(settings=it.data.settings),
             ready=true,heads=scan.heads,blocked=blocked,unsaved=false,
             message=when {
-                scan.conflicted -> "Sync conflict: choose a revision below. Both originals will be preserved."
-                scan.missingParents -> "Sync incomplete. Wait for the remaining files, then reload."
-                scan.invalid>0 -> "Ignored ${scan.invalid} invalid or interrupted snapshots. Last valid data retained."
+                scan.conflicted -> tr("Sync conflict: choose a revision below. Both originals will be preserved.")
+                scan.missingParents -> tr("Sync incomplete. Wait for the remaining files, then reload.")
+                scan.invalid>0 -> tr("Ignored {0} invalid or interrupted snapshots. Last valid data retained.",scan.invalid)
                 else -> null
             },
         ) }
@@ -124,33 +124,33 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun reload(discard: Boolean = false) = viewModelScope.launch {
         transaction.withLock {
             if(!isOpen) return@withLock
-            if(mutable.value.unsaved && !discard) { notice("Unsaved changes retained. Retry save or save a copy."); return@withLock }
+            if(mutable.value.unsaved && !discard) { notice(tr("Unsaved changes retained. Retry save or save a copy.")); return@withLock }
             try { store?.scan()?.let { applyScan(it) } }
-            catch(e: Exception) { update { it.copy(blocked=true,message=e.message ?: "Cannot reload folder") } }
+            catch(e: Exception) { update { it.copy(blocked=true,message=e.message ?: tr("Cannot reload folder")) } }
         }
     }
     fun edit(transform: (Portfolio)->Portfolio,onSaved: ()->Unit = {}) = viewModelScope.launch {
         transaction.withLock {
             if(!isOpen) return@withLock
-            if(mutable.value.blocked || mutable.value.unsaved) { notice("Resolve storage issues before editing"); return@withLock }
+            if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Resolve storage issues before editing")); return@withLock }
             try { persist(transform(mutable.value.data).ranked().validate()); onSaved() }
-            catch(e: Exception) { notice(e.message ?: "Could not save") }
+            catch(e: Exception) { notice(e.message ?: tr("Could not save")) }
         }
     }
     private suspend fun persist(data: Portfolio,resolve: Boolean=false) {
-        val target=store ?: error("Choose a storage folder first")
-        check(isOpen) { "Locked" }
+        val target=store ?: error(tr("Choose a storage folder first"))
+        check(isOpen) { tr("Locked") }
         update { it.copy(data=data,saving=true,unsaved=true) }
         try {
             val (_,scan)=target.save(data,mutable.value.heads.map { it.id }.toSet(),resolve)
-            update { it.copy(heads=scan.heads,unsaved=false,blocked=scan.conflicted || scan.missingParents,message=if(scan.conflicted) "Concurrent edit detected. Resolve the conflict." else "Saved on device") }
+            update { it.copy(heads=scan.heads,unsaved=false,blocked=scan.conflicted || scan.missingParents,message=if(scan.conflicted) tr("Concurrent edit detected. Resolve the conflict.") else tr("Saved on device")) }
         } finally { update { it.copy(saving=false) } }
     }
     fun retrySave()=viewModelScope.launch { transaction.withLock {
-        try { persist(mutable.value.data) } catch(e: Exception) { notice(e.message ?: "Save failed") }
+        try { persist(mutable.value.data) } catch(e: Exception) { notice(e.message ?: tr("Save failed")) }
     } }
     fun resolve(revision: Revision)=viewModelScope.launch { transaction.withLock {
-        try { persist(revision.data.ranked(),true) } catch(e: Exception) { notice(e.message ?: "Conflict resolution failed") }
+        try { persist(revision.data.ranked(),true) } catch(e: Exception) { notice(e.message ?: tr("Conflict resolution failed")) }
     } }
     fun refresh(bucketId: String?=null) {
         if(refreshJob?.isActive==true || !isOpen || !mutable.value.ready || mutable.value.blocked || mutable.value.unsaved || !foreground) return
@@ -158,16 +158,16 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         // Nothing to value: never write a snapshot for an empty portfolio (e.g. a folder listing that came back empty).
         if(requested.buckets.isEmpty() && requested.goals.isEmpty()) return
         refreshJob=viewModelScope.launch {
-            update { it.copy(refreshing=true,message="Refreshing selected providers…") }
+            update { it.copy(refreshing=true,message=tr("Refreshing selected providers…")) }
             try {
                 val observations=providers.refresh(requested,bucketId)
                 transaction.withLock {
-                    if(mutable.value.blocked || mutable.value.unsaved) { notice("Refresh finished; resolve storage issues before retrying."); return@withLock }
+                    if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Refresh finished; resolve storage issues before retrying.")); return@withLock }
                     withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted)) }
-                    notice(if(observations.errors.isEmpty()) "Refreshed. Shared rates may revalue other buckets." else observations.errors.joinToString("\n"))
+                    notice(if(observations.errors.isEmpty()) tr("Refreshed. Shared rates may revalue other buckets.") else observations.errors.joinToString("\n"))
                 }
-            } catch(e: CancellationException) { notice("Refresh stopped. Cached values retained."); throw e }
-            catch(e: Exception) { notice(e.message ?: "Refresh failed. Cached values retained.") }
+            } catch(e: CancellationException) { notice(tr("Refresh stopped. Cached values retained.")); throw e }
+            catch(e: Exception) { notice(e.message ?: tr("Refresh failed. Cached values retained.")) }
             finally { update { it.copy(refreshing=false) } }
         }
     }
@@ -175,41 +175,41 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun fetchTokens(asset: String,address: String,done: (List<Token>?,String?)->Unit) { viewModelScope.launch {
         val data=mutable.value.data; val source=data.settings.providers["$asset tokens"]
         if(asset==Chain.BTC.name) return@launch done(emptyList(),null)
-        if(source==null || source=="Off") return@launch done(null,"Token source for $asset is Off. Choose one in Settings.")
+        if(source==null || source=="Off") return@launch done(null,tr("Token source for {0} is Off. Choose one in Settings.",asset))
         val stored=data.holdings.filter { it.asset==asset }.flatMap { it.tokens }
         val list=try { providers.tokens(Holding(bucketId="-",label="-",asset=asset,quantity=null,address=address),source).map { t -> stored.find { it.contract==t.contract }?.let { o -> t.copy(decimals=t.decimals ?: o.decimals,symbol=t.symbol.ifBlank { o.symbol },checkedAt=o.checkedAt) } ?: t } }
         catch(e: CancellationException) { throw e }
         catch(e: Exception) { return@launch done(null,e.safeMessage()) }
         done(list,null)
     } }
-    fun saveKey(provider: String,value: String): Boolean = try { secrets.put(provider,value); notice("$provider key saved on this device"); true } catch(e: Exception) { notice(e.message ?: "Could not save key"); false }
+    fun saveKey(provider: String,value: String): Boolean = try { secrets.put(provider,value); notice(tr("{0} key saved on this device",provider)); true } catch(e: Exception) { notice(e.message ?: tr("Could not save key")); false }
     fun export(uri: Uri,plaintext: Boolean=false)=viewModelScope.launch {
-        if(plaintext && mutable.value.encrypted) return@launch notice("Enter the password to export without encryption")
+        if(plaintext && mutable.value.encrypted) return@launch notice(tr("Enter the password to export without encryption"))
         writeBackup(uri)
     }
     private suspend fun writeBackup(uri: Uri,plaintext: Boolean=false) {
         try {
-            check(isOpen) { "Unlock the folder first" }
+            check(isOpen) { tr("Unlock the folder first") }
             val data=mutable.value.data; val s=store
             // encrypted unless encryption is off or a plaintext export was asked for after the password check
-            val key=if(mutable.value.encrypted && !plaintext) (s?.key ?: error("Unlock the folder first")) else null
+            val key=if(mutable.value.encrypted && !plaintext) (s?.key ?: error(tr("Unlock the folder first"))) else null
             val text=encodeRevision(Revision(data=data)).let { if(key!=null) encryptSnapshot(it,key,s!!.header!!) else it }
             withContext(Dispatchers.IO) {
-                resolver.openOutputStream(uri,"wt")?.use { it.write(text.toByteArray()); it.flush() } ?: error("Cannot write backup")
-                val readback=resolver.openInputStream(uri)?.use { it.readLimited(MAX_FILE_BYTES*2).toString(Charsets.UTF_8) } ?: error("Cannot verify backup")
-                require(decodeRevision(if(key!=null) decryptSnapshot(readback,key) else readback).data==data) { "Backup verification failed; retry export" }
+                resolver.openOutputStream(uri,"wt")?.use { it.write(text.toByteArray()); it.flush() } ?: error(tr("Cannot write backup"))
+                val readback=resolver.openInputStream(uri)?.use { it.readLimited(MAX_FILE_BYTES*2).toString(Charsets.UTF_8) } ?: error(tr("Cannot verify backup"))
+                require(decodeRevision(if(key!=null) decryptSnapshot(readback,key) else readback).data==data) { tr("Backup verification failed; retry export") }
             }
             if(key==null) { // every readable backup counts, also those exported while encryption is off
                 val count=mutable.value.plaintextExports+1; val now=System.currentTimeMillis()
                 prefs.edit().putInt("plaintextExports",count).putLong("lastPlaintextExport",now).apply()
                 update { it.copy(plaintextExports=count,lastPlaintextExport=now) }
             }
-            notice(if(key!=null) "Encrypted backup exported without provider keys" else "Backup exported without provider keys")
-        } catch(e: Exception) { notice(e.message ?: "Export failed") }
+            notice(if(key!=null) tr("Encrypted backup exported without provider keys") else tr("Backup exported without provider keys"))
+        } catch(e: Exception) { notice(e.message ?: tr("Export failed")) }
     }
     fun exportPlaintext(uri: Uri,password: CharArray,done: (String?)->Unit) = op(arrayOf(password),done) {
-        val h=store?.header ?: return@op "Encryption is off"
-        checkPassword(password,listOf(h))?.first?.wipe() ?: return@op "Wrong password"
+        val h=store?.header ?: return@op tr("Encryption is off")
+        checkPassword(password,listOf(h))?.first?.wipe() ?: return@op tr("Wrong password")
         writeBackup(uri,true); null
     }
     fun inspectRestore(uri: Uri)=viewModelScope.launch {
@@ -219,13 +219,13 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             if(!isEncrypted(text)) return@launch update { it.copy(restore=decodeRevision(text)) }
             val revision=store?.key?.let { k -> runCatching { decodeRevision(decryptSnapshot(text,k)) }.getOrNull() }
             update { if(revision!=null) it.copy(restore=revision) else it.copy(restorePassword=uri.toString()) }
-        } catch(e: Exception) { notice(e.message ?: "Invalid backup") }
+        } catch(e: Exception) { notice(e.message ?: tr("Invalid backup")) }
     }
-    private suspend fun readBackup(uri: Uri) = withContext(Dispatchers.IO) { resolver.openInputStream(uri)?.use { it.readLimited(MAX_FILE_BYTES*2).toString(Charsets.UTF_8) } ?: error("Cannot read backup") }
+    private suspend fun readBackup(uri: Uri) = withContext(Dispatchers.IO) { resolver.openInputStream(uri)?.use { it.readLimited(MAX_FILE_BYTES*2).toString(Charsets.UTF_8) } ?: error(tr("Cannot read backup")) }
     fun inspectRestoreWith(password: CharArray,done: (String?)->Unit) = op(arrayOf(password),done) {
-        val uri=mutable.value.restorePassword ?: return@op "Choose a backup first"
+        val uri=mutable.value.restorePassword ?: return@op tr("Choose a backup first")
         val text=readBackup(Uri.parse(uri))
-        val (key,_)=checkPassword(password,listOf(headerOf(text))) ?: return@op "Wrong password"
+        val (key,_)=checkPassword(password,listOf(headerOf(text))) ?: return@op tr("Wrong password")
         try { update { it.copy(restore=decodeRevision(decryptSnapshot(text,key)),restorePassword=null) } } finally { key.wipe() }
         null
     }
@@ -235,10 +235,10 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     // ---- encryption ----
     /** Runs a password-related operation off the main thread, one at a time; secrets are zeroed at the end. */
     private fun op(secrets: Array<CharArray>,done: (String?)->Unit,body: suspend ()->String?) {
-        if(mutable.value.checking) { secrets.forEach { it.fill('\u0000') }; return done("Another check is running") }
+        if(mutable.value.checking) { secrets.forEach { it.fill('\u0000') }; return done(tr("Another check is running")) }
         update { it.copy(checking=true) }
         viewModelScope.launch {
-            val message=try { body() } catch(e: CancellationException) { throw e } catch(e: Exception) { e.message ?: "Operation failed" }
+            val message=try { body() } catch(e: CancellationException) { throw e } catch(e: Exception) { e.message ?: tr("Operation failed") }
             finally { secrets.forEach { it.fill('\u0000') }; update { it.copy(checking=false,rewrite=null) } }
             done(message)
         }
@@ -251,39 +251,39 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     }
     /** Precondition for a rewrite: nothing changes under it. */
     private fun idle(): String? { val s=mutable.value; return when {
-        store==null -> "Choose a storage folder first"
-        !isOpen || !s.ready -> "Unlock the folder first"
-        s.blocked -> "Resolve the sync conflict or wait for sync first"
-        s.unsaved -> "Save or discard your edits first"
-        s.saving || s.refreshing -> "Wait for saving or refreshing to finish"
+        store==null -> tr("Choose a storage folder first")
+        !isOpen || !s.ready -> tr("Unlock the folder first")
+        s.blocked -> tr("Resolve the sync conflict or wait for sync first")
+        s.unsaved -> tr("Save or discard your edits first")
+        s.saving || s.refreshing -> tr("Wait for saving or refreshing to finish")
         else -> null
     } }
     /** Everything after a successful unlock: key into the store, scan, detect an unfinished rewrite. */
     private suspend fun openWith(key: DataKey,header: KeyHeader): String? = transaction.withLock {
-        val s=store ?: return@withLock "Choose a storage folder first"
+        val s=store ?: return@withLock tr("Choose a storage folder first")
         fun fail(message: String): String { s.key=null; s.header=null; s.previous=null; key.wipe(); return message }
         s.key=key; s.header=header; s.previous=null
         prefs.getString("previousKey",null)?.let { w ->
-            s.previous=try { unwrapKey(w,key) } catch(_: Exception) { return@withLock fail("A password change was interrupted. Enter the new password.") }
+            s.previous=try { unwrapKey(w,key) } catch(_: Exception) { return@withLock fail(tr("A password change was interrupted. Enter the new password.")) }
         }
         try {
             val scan=s.scan(); val forms=s.forms()
             applyScan(scan)
             val pending=prefs.getString("rewrite",null) ?: if(forms.plain>0 && forms.encrypted>0) "on" else null
             update { it.copy(security="OPEN",encrypted=true,pendingRewrite=pending) }
-        } catch(e: Exception) { return@withLock fail(e.message ?: "Cannot open folder") }
+        } catch(e: Exception) { return@withLock fail(e.message ?: tr("Cannot open folder")) }
         null
     }
     fun submitPassword(password: CharArray,done: (String?)->Unit) = op(arrayOf(password),done) {
-        val s=store ?: return@op "Choose a storage folder first"
-        val (key,header)=checkPassword(password,s.headers()) ?: return@op "Wrong password"
+        val s=store ?: return@op tr("Choose a storage folder first")
+        val (key,header)=checkPassword(password,s.headers()) ?: return@op tr("Wrong password")
         openWith(key,header).also { if(it==null) lock.resetFailures(); startupRefresh() }
     }
     /** PIN or biometric unlock: the key comes from device-bound storage; the caller keeps ownership of its copy. */
     fun unlockWith(key: DataKey,done: (String?)->Unit) = op(arrayOf(),done) {
-        val s=store ?: return@op "Choose a storage folder first"
+        val s=store ?: return@op tr("Choose a storage folder first")
         val own=DataKey(key.bytes())
-        val header=s.headerFor(own) ?: run { own.wipe(); return@op "Stored key does not match this folder" }
+        val header=s.headerFor(own) ?: run { own.wipe(); return@op tr("Stored key does not match this folder") }
         openWith(own,header).also { startupRefresh() }
     }
     /** The pin array is zeroed. done(null) = unlocked. */
@@ -293,7 +293,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             catch(e: IllegalStateException) { e.message } finally { pin.fill('\u0000') }
         if(key==null) {
             if(!lock.hasPin) update { it.copy(security="PASSWORD") }
-            return@launch done(message ?: if(!lock.hasPin) "PIN removed after 10 wrong entries. Use your password." else lock.blockedForMillis().let { w -> if(w>0) "Wrong PIN. Try again in ${formatWait(w)}" else "Wrong PIN" })
+            return@launch done(message ?: if(!lock.hasPin) tr("PIN removed after 10 wrong entries. Use your password.") else lock.blockedForMillis().let { w -> if(w>0) tr("Wrong PIN. Try again in {0}",formatWait(w)) else tr("Wrong PIN") })
         }
         unlockWith(key) { key.wipe(); done(it) }
     } }
@@ -305,11 +305,11 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     private suspend fun runRewrite(s: FolderStore,mode: String,target: Pair<DataKey,KeyHeader>?,previous: DataKey?=null): String? {
         try {
             val r=s.rewrite(target,previous) { p -> update { it.copy(rewrite=p) } }
-            if(r.skipped>0) notice("${r.skipped} unreadable files were left untouched")
+            if(r.skipped>0) notice(tr("{0} unreadable files were left untouched",r.skipped))
         } catch(e: CancellationException) { throw e }
         catch(e: Exception) {
             update { it.copy(encrypted=it.encrypted || mode!="off",pendingRewrite=mode) }
-            return e.message ?: "Rewrite stopped. Resume it in Settings."
+            return e.message ?: tr("Rewrite stopped. Resume it in Settings.")
         }
         prefs.edit().remove("rewrite").remove("previousKey").commit()
         update { it.copy(encrypted=target!=null,security="OPEN",pendingRewrite=null) }
@@ -318,12 +318,12 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         return null
     }
     fun enableEncryption(password: CharArray,acceptedBackupRisk: Boolean,done: (String?)->Unit) = op(arrayOf(password),done) {
-        if(!acceptedBackupRisk) return@op "Accept the backup warning first"
+        if(!acceptedBackupRisk) return@op tr("Accept the backup warning first")
         validPassword(password)?.let { return@op it }
         transaction.withLock {
             idle()?.let { return@withLock it }
             val s=store!!
-            if(s.key!=null) return@withLock "Encryption is already on"
+            if(s.key!=null) return@withLock tr("Encryption is already on")
             val (key,header)=coroutineScope {
                 val wait=async { delay(passwordDelayMillis()) }
                 val made=async(Dispatchers.Default) { newKey(password) }
@@ -337,8 +337,8 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun disableEncryption(password: CharArray,done: (String?)->Unit) = op(arrayOf(password),done) {
         transaction.withLock {
             idle()?.let { return@withLock it }
-            val s=store!!; val header=s.header ?: return@withLock "Encryption is off"
-            checkPassword(password,listOf(header))?.first?.wipe() ?: return@withLock "Wrong password"
+            val s=store!!; val header=s.header ?: return@withLock tr("Encryption is off")
+            checkPassword(password,listOf(header))?.first?.wipe() ?: return@withLock tr("Wrong password")
             prefs.edit().putString("rewrite","off").commit()
             runRewrite(s,"off",null)
         }
@@ -347,8 +347,8 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         validPassword(next)?.let { return@op it }
         transaction.withLock {
             idle()?.let { return@withLock it }
-            val s=store!!; val header=s.header ?: return@withLock "Encryption is off"
-            val (old,_)=checkPassword(current,listOf(header)) ?: return@withLock "Wrong password"
+            val s=store!!; val header=s.header ?: return@withLock tr("Encryption is off")
+            val (old,_)=checkPassword(current,listOf(header)) ?: return@withLock tr("Wrong password")
             val (key,newHeader)=withContext(Dispatchers.Default) { newKey(next) }
             // the old key stays recoverable with the new password until every file is rewritten
             prefs.edit().putString("previousKey",wrapKey(old,key)).putString("rewrite","change").commit()
@@ -362,8 +362,8 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             idle()?.let { return@withLock it }
             val s=store!!; val key=s.key; val header=s.header
             val forms=s.forms()
-            val mode=prefs.getString("rewrite",null) ?: if(forms.plain>0 && forms.encrypted>0) "on" else return@withLock "Nothing to finish"
-            if(key==null || header==null) return@withLock "Unlock the folder first"
+            val mode=prefs.getString("rewrite",null) ?: if(forms.plain>0 && forms.encrypted>0) "on" else return@withLock tr("Nothing to finish")
+            if(key==null || header==null) return@withLock tr("Unlock the folder first")
             runRewrite(s,mode,if(mode=="off") null else key to header,s.previous)
         }
     }

@@ -6,6 +6,8 @@ import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.biometric.BiometricManager
+import dev.capital.domain.I18n
+import dev.capital.domain.tr
 import java.security.GeneralSecurityException
 import java.security.KeyStore
 import java.security.SecureRandom
@@ -17,8 +19,8 @@ import javax.crypto.spec.SecretKeySpec
 
 /** null = acceptable. Digits only, 4 to 12. */
 fun validPin(pin: CharArray): String? = when {
-    pin.any { it !in '0'..'9' } -> "PIN must contain digits only"
-    pin.size < 4 || pin.size > 12 -> "PIN must be 4 to 12 digits"
+    pin.any { it !in '0'..'9' } -> tr("PIN must contain digits only")
+    pin.size < 4 || pin.size > 12 -> tr("PIN must be 4 to 12 digits")
     else -> null
 }
 /** Waiting time after the n-th wrong PIN. */
@@ -30,7 +32,7 @@ fun waitMillis(failures: Int): Long = when {
     failures == 8 -> 900_000L
     else -> 3_600_000L
 }
-fun formatWait(millis: Long): String { val s=(millis+999)/1000; return "%02d:%02d".format(s/60,s%60) }
+fun formatWait(millis: Long): String { val s=(millis+999)/1000; return "%02d:%02d".format(I18n.locale,s/60,s%60) }
 
 /** Device-bound copy of the data key, guarded by a PIN and optionally biometry. Never touches data files. */
 class Lock(context: Context) {
@@ -63,20 +65,20 @@ class Lock(context: Context) {
         try {
             val (n1,c1)=gcm(Cipher.ENCRYPT_MODE,SecretKeySpec(pk,"AES"),null,data)
             val (n2,c2)=gcm(Cipher.ENCRYPT_MODE,keystoreKey("capital-lock"),null,n1+c1)
-            check(prefs.edit().putString("pin",b64(n2+c2)).putString("salt",kdf.salt).putInt("m",kdf.m).putInt("t",kdf.t).putInt("p",kdf.p).putInt("failures",0).putLong("blockedUntil",0).commit()) { "Could not save PIN" }
+            check(prefs.edit().putString("pin",b64(n2+c2)).putString("salt",kdf.salt).putInt("m",kdf.m).putInt("t",kdf.t).putInt("p",kdf.p).putInt("failures",0).putLong("blockedUntil",0).commit()) { tr("Could not save PIN") }
         } finally { pk.fill(0); data.fill(0) }
     }
     fun removePin() { disableBiometric(); prefs.edit().remove("pin").remove("salt").remove("m").remove("t").remove("p").remove("failures").remove("blockedUntil").commit() }
     /** null = wrong PIN. Throws with a readable message when blocked or no PIN. */
     fun unlockWithPin(pin: CharArray): DataKey? {
-        val blob=prefs.getString("pin",null) ?: throw IllegalStateException("No PIN set. Use your password.")
+        val blob=prefs.getString("pin",null) ?: throw IllegalStateException(tr("No PIN set. Use your password."))
         val wait=blockedForMillis()
-        if(wait>0) throw IllegalStateException("Too many wrong entries. Try again in ${formatWait(wait)}")
+        if(wait>0) throw IllegalStateException(tr("Too many wrong entries. Try again in {0}",formatWait(wait)))
         // ponytail: wall-clock waiting time; changing the device clock can shorten it. The Keystore binding and the 10-failure wipe remain.
         val n=failures+1
-        check(prefs.edit().putInt("failures",n).putLong("blockedUntil",System.currentTimeMillis()+waitMillis(n)).commit()) { "Could not record the attempt" }
+        check(prefs.edit().putInt("failures",n).putLong("blockedUntil",System.currentTimeMillis()+waitMillis(n)).commit()) { tr("Could not record the attempt") }
         val outer=try { val raw=unb64(blob); gcm(Cipher.DECRYPT_MODE,keystoreKey("capital-lock"),raw.copyOfRange(0,12),raw.copyOfRange(12,raw.size)).second }
-            catch(_: GeneralSecurityException) { clear(); throw IllegalStateException("Device key unavailable. Use your password.") }
+            catch(_: GeneralSecurityException) { clear(); throw IllegalStateException(tr("Device key unavailable. Use your password.")) }
         val pk=derive(pin,Kdf(m=prefs.getInt("m",19456),t=prefs.getInt("t",2),p=prefs.getInt("p",1),salt=prefs.getString("salt",null).orEmpty()))
         try {
             val data=try { gcm(Cipher.DECRYPT_MODE,SecretKeySpec(pk,"AES"),outer.copyOfRange(0,12),outer.copyOfRange(12,outer.size)).second }
@@ -102,7 +104,7 @@ class Lock(context: Context) {
         val data=key.bytes()
         try {
             val blob=cipher.doFinal(data)
-            check(prefs.edit().putString("bioIv",b64(cipher.iv)).putString("bio",b64(blob)).commit()) { "Could not save biometric unlock" }
+            check(prefs.edit().putString("bioIv",b64(cipher.iv)).putString("bio",b64(blob)).commit()) { tr("Could not save biometric unlock") }
         } finally { data.fill(0) }
     }
     fun biometricDecryptCipher(): Cipher? {
@@ -114,7 +116,7 @@ class Lock(context: Context) {
         catch(_: GeneralSecurityException) { disableBiometric(); null }
     }
     fun openBiometric(cipher: Cipher): DataKey {
-        val data=cipher.doFinal(unb64(prefs.getString("bio",null) ?: throw IllegalStateException("Biometric unlock is off")))
+        val data=cipher.doFinal(unb64(prefs.getString("bio",null) ?: throw IllegalStateException(tr("Biometric unlock is off"))))
         try { return DataKey(data) } finally { data.fill(0) }
     }
     fun disableBiometric() {

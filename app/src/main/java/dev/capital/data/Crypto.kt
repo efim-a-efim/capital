@@ -6,14 +6,15 @@ import kotlinx.serialization.json.*
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator
 import org.bouncycastle.crypto.params.Argon2Parameters
 import java.nio.CharBuffer
+import dev.capital.domain.tr
 import java.security.SecureRandom
 import java.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-class WrongPassword : IllegalArgumentException("Wrong password")
-class Locked : IllegalStateException("Encrypted data: password required")
+class WrongPassword : IllegalArgumentException(tr("Wrong password"))
+class Locked : IllegalStateException(tr("Encrypted data: password required"))
 
 @Serializable data class Kdf(val alg: String = "argon2id", val m: Int = 47104, val t: Int = 1, val p: Int = 1, val salt: String)
 /** Everything needed to get the data key from a password. Stored in clear in every encrypted file. */
@@ -32,7 +33,7 @@ class DataKey(bytes: ByteArray) {
 }
 
 private val rng = SecureRandom()
-private const val BAD_PARAMS = "Unsupported encryption parameters"
+private fun badParams() = tr("Unsupported encryption parameters")
 private fun b64(bytes: ByteArray): String = Base64.getEncoder().encodeToString(bytes)
 private fun unb64(text: String): ByteArray = Base64.getDecoder().decode(text)
 private fun randomBytes(n: Int) = ByteArray(n).also { rng.nextBytes(it) }
@@ -49,7 +50,7 @@ private fun gcm(mode: Int, key: ByteArray, nonce: ByteArray, aad: ByteArray, inp
 
 private fun checkKdf(k: Kdf) {
     val salt = runCatching { unb64(k.salt).size }.getOrDefault(0)
-    require(k.alg == "argon2id" && k.m in 8192..262144 && k.t in 1..10 && k.p in 1..4 && salt in 16..64) { BAD_PARAMS }
+    require(k.alg == "argon2id" && k.m in 8192..262144 && k.t in 1..10 && k.p in 1..4 && salt in 16..64) { badParams() }
 }
 
 private fun utf8(password: CharArray): ByteArray {
@@ -76,12 +77,12 @@ fun newKey(password: CharArray, kdf: Kdf = Kdf(salt = b64(randomBytes(16)))): Pa
 fun unlock(header: KeyHeader, password: CharArray): DataKey {
     checkKdf(header.kdf)
     val wrapped = unb64(header.wrapped)
-    require(wrapped.size > 12) { "Invalid key header" }
+    require(wrapped.size > 12) { tr("Invalid key header") }
     val pk = derive(password, header.kdf)
     try {
         val data = try { gcm(Cipher.DECRYPT_MODE, pk, wrapped.copyOfRange(0, 12), keyAad(header.kdf), wrapped.copyOfRange(12, wrapped.size)) }
             catch (_: java.security.GeneralSecurityException) { throw WrongPassword() }
-        try { require(data.size == 32) { "Invalid key header" }; return DataKey(data) } finally { data.fill(0) }
+        try { require(data.size == 32) { tr("Invalid key header") }; return DataKey(data) } finally { data.fill(0) }
     } finally { pk.fill(0) }
 }
 
@@ -89,9 +90,9 @@ fun unlock(header: KeyHeader, password: CharArray): DataKey {
 fun isEncrypted(text: String): Boolean = runCatching { "enc" in json.parseToJsonElement(text).jsonObject }.getOrDefault(false)
 
 private fun parseEncrypted(text: String): EncryptedFile {
-    require(text.toByteArray().size <= MAX_FILE_BYTES * 2) { "File too large" }
+    require(text.toByteArray().size <= MAX_FILE_BYTES * 2) { tr("File too large") }
     val f = json.decodeFromString<EncryptedFile>(text)
-    require(f.enc == 1) { "Unsupported encryption version" }
+    require(f.enc == 1) { tr("Unsupported encryption version") }
     checkKdf(f.key.kdf)
     return f
 }
@@ -100,7 +101,7 @@ fun headerOf(text: String): KeyHeader = parseEncrypted(text).key
 
 fun meta(text: String): Meta {
     if (isEncrypted(text)) return parseEncrypted(text).let { Meta(it.id, it.parents, it.schema, true) }
-    require(text.toByteArray().size <= MAX_FILE_BYTES) { "File too large" }
+    require(text.toByteArray().size <= MAX_FILE_BYTES) { tr("File too large") }
     val payload = json.parseToJsonElement(json.decodeFromString<Envelope>(text).payload).jsonObject
     return Meta(
         payload.getValue("id").jsonPrimitive.content,
@@ -119,12 +120,12 @@ fun encryptSnapshot(plain: String, key: DataKey, header: KeyHeader): String {
 fun decryptSnapshot(text: String, key: DataKey): String {
     val f = parseEncrypted(text)
     val nonce = unb64(f.nonce)
-    require(nonce.size == 12) { "Invalid snapshot" }
+    require(nonce.size == 12) { tr("Invalid snapshot") }
     val k = key.bytes()
     val plain = try { String(gcm(Cipher.DECRYPT_MODE, k, nonce, fileAad(f), unb64(f.ciphertext))) }
-        catch (_: java.security.GeneralSecurityException) { throw IllegalArgumentException("Snapshot authentication failed") }
+        catch (_: java.security.GeneralSecurityException) { throw IllegalArgumentException(tr("Snapshot authentication failed")) }
         finally { k.fill(0) }
-    require(meta(plain) == Meta(f.id, f.parents, f.schema, false)) { "Snapshot header mismatch" }
+    require(meta(plain) == Meta(f.id, f.parents, f.schema, false)) { tr("Snapshot header mismatch") }
     return plain
 }
 
@@ -134,19 +135,19 @@ fun wrapKey(inner: DataKey, outer: DataKey): String {
     try { return b64(nonce + gcm(Cipher.ENCRYPT_MODE, o, nonce, "capital-wrap-1".toByteArray(), i)) } finally { i.fill(0); o.fill(0) }
 }
 fun unwrapKey(wrapped: String, outer: DataKey): DataKey {
-    val w = unb64(wrapped); require(w.size > 12) { "Invalid wrapped key" }
+    val w = unb64(wrapped); require(w.size > 12) { tr("Invalid wrapped key") }
     val o = outer.bytes()
     val data = try { gcm(Cipher.DECRYPT_MODE, o, w.copyOfRange(0, 12), "capital-wrap-1".toByteArray(), w.copyOfRange(12, w.size)) }
-        catch (_: java.security.GeneralSecurityException) { throw IllegalArgumentException("Invalid wrapped key") }
+        catch (_: java.security.GeneralSecurityException) { throw IllegalArgumentException(tr("Invalid wrapped key")) }
         finally { o.fill(0) }
-    try { require(data.size == 32) { "Invalid wrapped key" }; return DataKey(data) } finally { data.fill(0) }
+    try { require(data.size == 32) { tr("Invalid wrapped key") }; return DataKey(data) } finally { data.fill(0) }
 }
 
 fun passwordDelayMillis(random: SecureRandom = SecureRandom()): Long = 1000L + random.nextInt(4001)
 
 fun validPassword(password: CharArray): String? = when {
-    password.all { it.isWhitespace() } -> "Password must not be blank"
-    password.size < 8 -> "Password must be at least 8 characters"
-    password.size > 256 -> "Password must be at most 256 characters"
+    password.all { it.isWhitespace() } -> tr("Password must not be blank")
+    password.size < 8 -> tr("Password must be at least 8 characters")
+    password.size > 256 -> tr("Password must be at most 256 characters")
     else -> null
 }

@@ -17,6 +17,7 @@ class MainActivity: FragmentActivity() {
     private val model: CapitalModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Language.apply(this)
         enableEdgeToEdge()
         // no screenshots and a blank recent-apps preview while encryption is on
         lifecycleScope.launch { model.state.map { it.encrypted }.distinctUntilChanged().collect { if(it) window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,WindowManager.LayoutParams.FLAG_SECURE) else window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) } }

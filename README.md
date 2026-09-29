@@ -52,6 +52,10 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket displays native quantities plus converted values. Missing quotes mark totals incomplete; stale cached values remain usable with a warning. Goal allocations never transfer money or increase your total savings.
 
+## Languages
+
+The interface is translated to 15 languages: English, Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Japanese, Marathi and Vietnamese. The app starts in the device language, or in English when that language is not covered. Change it in Settings → Language. Translations live in `app/src/main/assets/i18n/<code>.json`, keyed by the English text; `I18nTest` fails when a text is missing in any language.
+
 ## Portfolio mode
 
 Switch on **Portfolio mode** in a bucket's settings to treat it as an investment portfolio. Set a target percentage per asset; targets must total 100%. The bucket then shows value, real share, target and difference for each asset, calculated in your default currency. Switching the mode off hides these views and keeps the targets.

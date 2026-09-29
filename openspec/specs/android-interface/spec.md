@@ -31,3 +31,14 @@ Every primary screen SHALL support loading, empty, cached/offline, partial-error
 - **WHEN** an unpriced holding is present
 - **THEN** the overview marks the total incomplete and opens a list of affected holdings with corrective actions.
 
+
+### Requirement: Interface language
+The interface SHALL be available in English, Chinese, Hindi, Spanish, Arabic, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Japanese, Marathi and Vietnamese. Settings SHALL offer a language choice with a "System default" option. Until the user chooses, the app SHALL use the device language when it is supported and English otherwise. The choice SHALL be stored on the device, not in the data folder, and SHALL apply to the lock screens. Arabic and Urdu SHALL use a right-to-left layout. Provider names, asset codes and user-entered names SHALL NOT be translated.
+
+#### Scenario: Unsupported device language
+- **WHEN** the app is installed on a device set to a language outside the list
+- **THEN** the interface is shown in English.
+
+#### Scenario: Change language
+- **WHEN** the user picks a language in Settings
+- **THEN** the interface switches at once and stays in that language after a restart.

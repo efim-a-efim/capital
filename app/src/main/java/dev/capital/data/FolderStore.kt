@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.provider.DocumentsContract
 import dev.capital.domain.Portfolio
+import dev.capital.domain.tr
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -24,23 +25,23 @@ class SafFiles(private val resolver: ContentResolver, private val tree: Uri) : S
         val children=DocumentsContract.buildChildDocumentsUriUsingTree(tree,DocumentsContract.getTreeDocumentId(tree))
         ids=resolver.query(children,arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID,DocumentsContract.Document.COLUMN_DISPLAY_NAME),null,null,null)?.use { c ->
             buildMap { while(c.moveToNext()) if(c.getString(1).startsWith("capital-") && c.getString(1).endsWith(".json")) put(c.getString(1),c.getString(0)) }
-        } ?: error("Cannot read folder. Reconnect it in Settings.")
+        } ?: error(tr("Cannot read folder. Reconnect it in Settings."))
         return ids.keys.toList()
     }
     private fun doc(name: String): Uri {
         if(name !in ids) list()
-        return DocumentsContract.buildDocumentUriUsingTree(tree,ids[name] ?: error("Cannot find $name"))
+        return DocumentsContract.buildDocumentUriUsingTree(tree,ids[name] ?: error(tr("Cannot find {0}",name)))
     }
     override fun read(name: String): String = resolver.openInputStream(doc(name))?.use {
         it.readLimited(MAX_FILE_BYTES*2).toString(Charsets.UTF_8)
-    } ?: error("Cannot read file")
+    } ?: error(tr("Cannot read file"))
     override fun create(name: String, text: String) {
-        val file=DocumentsContract.createDocument(resolver,root,"application/json",name) ?: error("Cannot create snapshot")
-        try { resolver.openOutputStream(file,"w")?.use { it.write(text.toByteArray()); it.flush() } ?: error("Cannot write snapshot") }
+        val file=DocumentsContract.createDocument(resolver,root,"application/json",name) ?: error(tr("Cannot create snapshot"))
+        try { resolver.openOutputStream(file,"w")?.use { it.write(text.toByteArray()); it.flush() } ?: error(tr("Cannot write snapshot")) }
         catch(e: Exception) { runCatching { DocumentsContract.deleteDocument(resolver,file) }; throw e }
     }
     override fun delete(name: String) {
-        check(DocumentsContract.deleteDocument(resolver,doc(name))) { "Cannot delete $name" }
+        check(DocumentsContract.deleteDocument(resolver,doc(name))) { tr("Cannot delete {0}",name) }
         ids=ids-name
     }
 }
@@ -82,16 +83,16 @@ class FolderStore(private val files: SnapshotFiles, val tree: Uri?) {
     suspend fun save(data: Portfolio, expected: Set<String>, resolve: Boolean = false): Pair<Revision,Scan> = withContext(Dispatchers.IO) {
         lock.withLock {
             val before=scanNow() // throws Locked before anything is written into an encrypted folder
-            require(!before.missingParents) { "Sync incomplete: some parent revisions are missing. Finish syncing first." }
-            require(before.heads.map { it.id }.toSet()==expected) { "Folder changed. Reload before saving; your edits are retained." }
-            require(resolve || !before.conflicted) { "Resolve the folder conflict before editing" }
+            require(!before.missingParents) { tr("Sync incomplete: some parent revisions are missing. Finish syncing first.") }
+            require(before.heads.map { it.id }.toSet()==expected) { tr("Folder changed. Reload before saving; your edits are retained.") }
+            require(resolve || !before.conflicted) { tr("Resolve the folder conflict before editing") }
             val revision=Revision(parents=expected.sorted(),data=data.validate())
             val k=key; val h=header
             val encoded=encodeRevision(revision).let { if(k!=null && h!=null) encryptSnapshot(it,k,h) else it }
             val name="capital-${revision.id}.json"
             files.create(name,encoded)
             val back=files.read(name)
-            require(decodeRevision(if(k!=null) decryptSnapshot(back,k) else back)==revision) { "Snapshot verification failed. Previous data is safe." }
+            require(decodeRevision(if(k!=null) decryptSnapshot(back,k) else back)==revision) { tr("Snapshot verification failed. Previous data is safe.") }
             revision to scanNow()
         }
     }
@@ -123,7 +124,7 @@ class FolderStore(private val files: SnapshotFiles, val tree: Uri?) {
                         try {
                             files.create(name,form(i.plain,target))
                             val back=files.read(name)
-                            check(runCatching { decodeRevision(if(target==null) back else decryptSnapshot(back,target.first)) }.getOrNull()==revision) { "Verification of a rewritten snapshot failed. Original files were kept." }
+                            check(runCatching { decodeRevision(if(target==null) back else decryptSnapshot(back,target.first)) }.getOrNull()==revision) { tr("Verification of a rewritten snapshot failed. Original files were kept.") }
                         } catch(e: Exception) { runCatching { files.delete(name) }; throw e }
                         have+=revision
                     }

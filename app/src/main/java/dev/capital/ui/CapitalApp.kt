@@ -47,6 +47,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -66,25 +70,44 @@ import java.util.Currency
 private val light=lightColorScheme(primary=Color(0xff176451),onPrimary=Color.White,background=Color(0xfff8faf5),surface=Color(0xfff8faf5),surfaceVariant=Color(0xffe2eee7),onSurface=Color(0xff192d2a),onSurfaceVariant=Color(0xff52645b))
 private val dark=darkColorScheme(primary=Color(0xff8fd3b0),onPrimary=Color(0xff123425),background=Color(0xff101b18),surface=Color(0xff182722),surfaceVariant=Color(0xff264b39),onSurface=Color(0xffe3eae3),onSurfaceVariant=Color(0xffb3c4b9))
 private data class Editor(val kind: String,val id: String="",val owner: String="")
+// Stored values and state keys are translated only when shown.
+private fun shown(v: String)=when(v) {
+    "Overview" -> tr("Overview"); "Buckets" -> tr("Buckets"); "Goals" -> tr("Goals"); "Plans" -> tr("Plans"); "Settings" -> tr("Settings")
+    "System" -> tr("System"); "Light" -> tr("Light"); "Dark" -> tr("Dark"); "Off" -> tr("Off"); "Manual" -> tr("Manual"); "Wallet" -> tr("Wallet")
+    "Not refreshed" -> tr("Not refreshed"); "Unknown" -> tr("Unknown"); "Choose treatment" -> tr("Choose treatment")
+    "Convert existing values" -> tr("Convert existing values"); "Replace with entered numbers" -> tr("Replace with entered numbers")
+    "ETH tokens" -> tr("ETH tokens"); "TON tokens" -> tr("TON tokens"); "TRX tokens" -> tr("TRX tokens"); "Crypto" -> tr("Crypto"); "Fiat" -> tr("Fiat")
+    "Powered by CoinGecko" -> tr("Powered by CoinGecko"); "Powered by CoinPaprika" -> tr("Powered by CoinPaprika")
+    else -> v
+}
+private fun editorTitle(kind: String,new: Boolean)=when(kind) {
+    "Settings" -> tr("Currency and appearance")
+    "Bucket" -> if(new) tr("Add bucket") else tr("Edit bucket")
+    "Holding" -> if(new) tr("Add holding") else tr("Edit holding")
+    "Goal" -> if(new) tr("Add goal") else tr("Edit goal")
+    "Planned" -> if(new) tr("Add planned saving") else tr("Edit planned saving")
+    "Connection" -> if(new) tr("Add connection") else tr("Edit connection")
+    else -> kind
+}
 private fun money(value: BigDecimal?,asset: String): String {
-    if(value==null) return "Unavailable · ${assetLabel(asset)}"
+    if(value==null) return tr("Unavailable · {0}",assetLabel(asset))
     // Chain assets are never formatted as fiat, even where the platform knows a currency code like BTC.
     val fiat=if(asset in Chain.entries.map { it.name }) null else runCatching { Currency.getInstance(asset) }.getOrNull()
-    return if(fiat != null) NumberFormat.getCurrencyInstance().apply { currency=fiat; maximumFractionDigits=fiat.defaultFractionDigits.coerceAtLeast(0) }.format(value)
-    else "${NumberFormat.getNumberInstance().apply { maximumFractionDigits=18 }.format(value)} ${assetLabel(asset)}"
+    return if(fiat != null) NumberFormat.getCurrencyInstance(I18n.locale).apply { currency=fiat; maximumFractionDigits=fiat.defaultFractionDigits.coerceAtLeast(0) }.format(value)
+    else "${NumberFormat.getNumberInstance(I18n.locale).apply { maximumFractionDigits=18 }.format(value)} ${assetLabel(asset)}"
 }
 // Digits worth showing for a trade quantity: currency minor units, at most 8 for coins, 6 for tokens.
 private fun assetDigits(asset: String)=Chain.entries.find { it.name==asset }?.let { minOf(it.decimals,8) } ?: if(':' in asset) 6 else runCatching { Currency.getInstance(asset).defaultFractionDigits.coerceAtLeast(0) }.getOrDefault(2)
-private fun tokenQty(value: BigDecimal,symbol: String)=listOf(NumberFormat.getNumberInstance().apply { maximumFractionDigits=18 }.format(value),symbol).filter { it.isNotBlank() }.joinToString(" ")
+private fun tokenQty(value: BigDecimal,symbol: String)=listOf(NumberFormat.getNumberInstance(I18n.locale).apply { maximumFractionDigits=18 }.format(value),symbol).filter { it.isNotBlank() }.joinToString(" ")
 private fun shortContract(chain: String,contract: String)=providerAddress(Chain.valueOf(chain),contract).let { if(it.length>14) it.take(8)+"…"+it.takeLast(6) else it }
 private fun assetName(data: Portfolio,asset: String): String {
     if(':' !in asset) return assetLabel(asset)
     val chain=asset.substringBefore(':'); val contract=asset.substringAfter(':')
     val symbol=data.holdings.filter { it.asset==chain }.flatMap { h -> h.tokens.filter { it.contract==contract && data.known(h,it) } }.firstOrNull()?.symbol?.takeIf { it.isNotBlank() }
-    return (symbol?.let { "$it · " } ?: "Token ")+shortContract(chain,contract)
+    return symbol?.let { "$it · "+shortContract(chain,contract) } ?: tr("Token {0}",shortContract(chain,contract))
 }
-internal fun time(value: Long?): String = value?.let { DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) } ?: "Never refreshed"
-private fun date(value: String): String=runCatching { LocalDate.parse(value).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) }.getOrDefault(value)
+internal fun time(value: Long?): String = value?.let { DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(I18n.locale).format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) } ?: tr("Never refreshed")
+private fun date(value: String): String=runCatching { LocalDate.parse(value).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18n.locale)) }.getOrDefault(value)
 @Composable internal fun Heading(value: String) { Text(value,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=20.dp,bottom=8.dp)) }
 @Composable internal fun Note(value: String,modifier: Modifier=Modifier) { Text(value,modifier,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
 // Overlay message: never moves content. Goes away on tap, on a swipe in any direction, or after a reading-time timer.
@@ -95,7 +118,7 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
         modifier=Modifier.padding(horizontal=16.dp,vertical=8.dp).fillMaxWidth().heightIn(min=48.dp)
             .graphicsLayer { translationX=offset.x; translationY=offset.y; alpha=(1f-offset.getDistance()/(240.dp.toPx())).coerceIn(0.2f,1f) }
             .pointerInput(message) { detectDragGestures(onDragEnd={ if(offset.getDistance()>80.dp.toPx()) onDismiss() else offset=Offset.Zero },onDragCancel={ offset=Offset.Zero }) { change,drag -> change.consume(); offset+=drag } }
-            .clickable(onClickLabel="Dismiss message") { onDismiss() }
+            .clickable(onClickLabel=tr("Dismiss message")) { onDismiss() }
             .semantics { liveRegion=LiveRegionMode.Polite }.testTag("message")) {
         Text(message,Modifier.padding(horizontal=16.dp,vertical=10.dp),style=MaterialTheme.typography.bodySmall,maxLines=6,overflow=TextOverflow.Ellipsis)
     }
@@ -118,20 +141,20 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
 private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     if(g.archived) return ""
     fun m(usd: BigDecimal)=money(data.convert(usd,"USD",g.currency),g.currency)
-    val target=p.targets[g.id] ?: return "Projection unavailable: missing rate"
+    val target=p.targets[g.id] ?: return tr("Projection unavailable: missing rate")
     val closes=p.closes[g.id]; val reached=p.reached[g.id]; val final=p.final[g.id]
     val line=when {
-        (p.now[g.id] ?: ZERO)>=target -> "Funded now"
-        closes!=null -> "Planned savings close this goal on ${date(closes)}"+LocalDate.parse(closes).let { c -> if(c<=LocalDate.parse(g.due)) " · on time" else " · ${ChronoUnit.DAYS.between(LocalDate.parse(g.due),c)} days after the due date" }
-        reached!=null && final!=null -> "Planned savings cover up to ${m(final)} of ${m(target)} by ${date(reached)} · short by ${m(target-final)}"
-        else -> "No planned savings reach this goal"
+        (p.now[g.id] ?: ZERO)>=target -> tr("Funded now")
+        closes!=null -> tr("Planned savings close this goal on {0}",date(closes))+" · "+LocalDate.parse(closes).let { c -> if(c<=LocalDate.parse(g.due)) tr("on time") else tr("{0} days after the due date",ChronoUnit.DAYS.between(LocalDate.parse(g.due),c)) }
+        reached!=null && final!=null -> tr("Planned savings cover up to {0} of {1} by {2} · short by {3}",m(final),m(target),date(reached),m(target-final))
+        else -> tr("No planned savings reach this goal")
     }
-    return if(p.incomplete) "$line · projection incomplete" else line
+    return if(p.incomplete) line+" · "+tr("projection incomplete") else line
 }
 @Composable private fun GoalRow(goal: Goal,data: Portfolio,allocation: Allocation,projection: Projection,onClick: ()->Unit) {
     val funded=data.convert(allocation.goal(goal.id),"USD",goal.currency)
     val progress=funded?.divideMoney(goal.target.decimal())?.toFloat()?.coerceIn(0f,1f) ?: 0f
-    val status=when { goal.archived -> "Archived"; funded != null && funded >= goal.target.decimal() -> "Funded"; LocalDate.parse(goal.due)<LocalDate.now() -> "Overdue"; else -> "Due ${date(goal.due)}" }
+    val status=when { goal.archived -> tr("Archived"); funded != null && funded >= goal.target.decimal() -> tr("Funded"); LocalDate.parse(goal.due)<LocalDate.now() -> tr("Overdue"); else -> tr("Due {0}",date(goal.due)) }
     Item(goal.name,status,"${money(funded,goal.currency)} / ${money(goal.target.decimal(),goal.currency)}",onClick)
     LinearProgressIndicator(progress={ progress },modifier=Modifier.fillMaxWidth().padding(top=6.dp,bottom=if(goal.archived) 14.dp else 4.dp))
     projectionLine(goal,projection,data).takeIf { it.isNotEmpty() }?.let { Note(it); Spacer(Modifier.height(10.dp)) }
@@ -150,10 +173,10 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
         Row(Modifier.fillMaxWidth().onGloballyPositioned { heights[id]=it.size.height }.then(lift),verticalAlignment=Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) { GoalRow(goal,data,allocation,projection) { onOpen(id) } }
             if(ids.size>1) Box(Modifier.size(48.dp).testTag("drag-${goal.name}").semantics {
-                contentDescription="Reorder ${goal.name}"
+                contentDescription=tr("Reorder {0}",goal.name)
                 if(editable) customActions=listOfNotNull(
-                    if(at>0) CustomAccessibilityAction("Move up") { onMove(id,true,1); true } else null,
-                    if(at<ids.size-1) CustomAccessibilityAction("Move down") { onMove(id,false,1); true } else null,
+                    if(at>0) CustomAccessibilityAction(tr("Move up")) { onMove(id,true,1); true } else null,
+                    if(at<ids.size-1) CustomAccessibilityAction(tr("Move down")) { onMove(id,false,1); true } else null,
                 )
             }.then(if(editable) Modifier.pointerInput(id,ids) {
                 detectDragGestures(
@@ -178,7 +201,16 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
 private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawable.ic_overview; "Buckets" -> R.drawable.ic_buckets; "Goals" -> R.drawable.ic_goals; "Plans" -> R.drawable.ic_plans; else -> R.drawable.ic_settings }
 @Composable private fun RefreshButton(refreshing: Boolean,enabled: Boolean,onClick: ()->Unit) {
     val angle=if(refreshing) rememberInfiniteTransition(label="refresh").animateFloat(0f,360f,infiniteRepeatable(tween(900,easing=LinearEasing)),label="angle").value else 0f
-    IconButton(onClick=onClick,enabled=enabled && !refreshing,modifier=Modifier.testTag("refresh")) { Icon(painterResource(R.drawable.ic_refresh),contentDescription=if(refreshing) "Refreshing" else "Refresh",tint=if(refreshing) MaterialTheme.colorScheme.primary else LocalContentColor.current,modifier=Modifier.rotate(angle)) }
+    IconButton(onClick=onClick,enabled=enabled && !refreshing,modifier=Modifier.testTag("refresh")) { Icon(painterResource(R.drawable.ic_refresh),contentDescription=if(refreshing) tr("Refreshing") else tr("Refresh"),tint=if(refreshing) MaterialTheme.colorScheme.primary else LocalContentColor.current,modifier=Modifier.rotate(angle)) }
+}
+// A new language rebuilds the whole tree; Arabic and Urdu read right to left whatever the device language is.
+@Composable private fun Localized(language: String,scheme: ColorScheme,content: @Composable ()->Unit) {
+    key(language) { CompositionLocalProvider(LocalLayoutDirection provides if(I18n.rtl) LayoutDirection.Rtl else LayoutDirection.Ltr) { MaterialTheme(colorScheme=scheme,typography=if(I18n.rtl) rtlType else Typography(),content=content) } }
+}
+// Compose takes paragraph direction from the first strong character, so a line starting with "EUR" or a name would flip to left-to-right.
+private val rtlType=Typography().run {
+    fun TextStyle.r()=copy(textDirection=TextDirection.Rtl)
+    Typography(displayLarge.r(),displayMedium.r(),displaySmall.r(),headlineLarge.r(),headlineMedium.r(),headlineSmall.r(),titleLarge.r(),titleMedium.r(),titleSmall.r(),bodyLarge.r(),bodyMedium.r(),bodySmall.r(),labelLarge.r(),labelMedium.r(),labelSmall.r())
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun CapitalApp(model: CapitalModel) {
@@ -200,6 +232,7 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
     val backup=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { it?.let(model::export) }
     val restore=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::inspectRestore) }
     val context=LocalContext.current
+    var language by remember { mutableStateOf(dev.capital.Language.choice(context)) }
     val screenScroll=remember(section,bucketId,goalId) { ScrollState(0) }
     val scheme=when(data.settings.theme) { "Dark" -> dark; "Light" -> light; else -> if(isSystemInDarkTheme()) dark else light }
     fun move(id: String,up: Boolean,times: Int) { model.edit({ p -> (1..times).fold(p) { acc,_ -> acc.moveGoal(id,up) } }) }
@@ -208,26 +241,26 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
     BackHandler(editor==null && (bucketId!=null || goalId!=null || section!="Overview")) { if(bucketId!=null || goalId!=null) { bucketId=null; goalId=null } else section="Overview" }
     // Locked: only the lock screen; nothing financial is composed and open dialogs are dropped.
     LaunchedEffect(state.security) { if(state.security!="OPEN") { editor=null; calculator=null; confirmation=null; keyProvider=null; secDialog=null } }
-    if(state.security!="OPEN") { MaterialTheme(colorScheme=scheme) { LockedScreen(model,state) { } }; return }
-    MaterialTheme(colorScheme=scheme) {
+    if(state.security!="OPEN") { Localized(language,scheme) { LockedScreen(model,state) { } }; return }
+    Localized(language,scheme) {
         BoxWithConstraints(Modifier.semantics { testTagsAsResourceId=true }) {
             val wide=maxWidth>=840.dp
             Scaffold(
-                topBar={ TopAppBar(title={ Text(if(!state.ready) "Capital" else section) },actions={
+                topBar={ TopAppBar(title={ Text(if(!state.ready) tr("Capital") else shown(section)) },actions={
                     if(state.ready) {
                         RefreshButton(state.refreshing,editable) { model.refresh(bucketId) }
-                        IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription="Settings") }
+                        IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription=tr("Settings")) }
                     }
                 }) },
-                bottomBar={ if(state.ready && !wide) NavigationBar { listOf("Overview","Buckets","Goals","Plans").forEach { target -> NavigationBarItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(target) }) } } },
+                bottomBar={ if(state.ready && !wide) NavigationBar { listOf("Overview","Buckets","Goals","Plans").forEach { target -> NavigationBarItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(shown(target)) }) } } },
                 snackbarHost={ state.message?.let { Popup(it,model::dismissMessage) } },
                 floatingActionButton={
                     val add=when { !state.ready || !editable -> null; section=="Buckets" && bucketId==null -> "Bucket"; section=="Goals" && goalId==null -> "Goal"; section=="Plans" -> "Planned"; else -> null }
-                    add?.let { kind -> FloatingActionButton(onClick={ editor=Editor(kind) },modifier=Modifier.testTag("add"),containerColor=MaterialTheme.colorScheme.primary,contentColor=MaterialTheme.colorScheme.onPrimary) { Icon(painterResource(R.drawable.ic_add),contentDescription=if(kind=="Planned") "Add planned saving" else "Add ${kind.lowercase()}") } }
+                    add?.let { kind -> FloatingActionButton(onClick={ editor=Editor(kind) },modifier=Modifier.testTag("add"),containerColor=MaterialTheme.colorScheme.primary,contentColor=MaterialTheme.colorScheme.onPrimary) { Icon(painterResource(R.drawable.ic_add),contentDescription=editorTitle(kind,true)) } }
                 },
             ) { padding ->
                 Row(Modifier.fillMaxSize().padding(padding)) {
-                    if(wide && state.ready) NavigationRail { listOf("Overview","Buckets","Goals","Plans","Settings").forEach { target -> NavigationRailItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(target) }) } }
+                    if(wide && state.ready) NavigationRail { listOf("Overview","Buckets","Goals","Plans","Settings").forEach { target -> NavigationRailItem(selected=section==target,onClick={ select(target) },icon={ Icon(painterResource(sectionIcon(target)),contentDescription=null) },label={ Text(shown(target)) }) } }
                     if(wide && ((section=="Buckets" && bucketId!=null) || (section=="Goals" && goalId!=null))) {
                         Column(Modifier.width(250.dp).fillMaxHeight().verticalScroll(rememberScrollState()).padding(16.dp)) {
                             if(section=="Buckets") data.buckets.forEach { b -> Item(b.name,b.currency) { bucketId=b.id } }
@@ -235,53 +268,53 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
                         }
                     }
                     Column(Modifier.weight(1f).fillMaxHeight().verticalScroll(screenScroll).padding(start=20.dp,top=20.dp,end=20.dp,bottom=88.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                        if(state.loading) { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("Opening your savings…") }
+                        if(state.loading) { LinearProgressIndicator(Modifier.fillMaxWidth()); Text(tr("Opening your savings…")) }
                         if(state.unsaved && !state.saving) {
-                            Notice("Unsaved changes — kept in memory. Do not close the app before saving or exporting a copy.")
+                            Notice(tr("Unsaved changes — kept in memory. Do not close the app before saving or exporting a copy."))
                             Actions {
-                                Button(onClick={ model.retrySave() },enabled=!state.saving) { Text("Retry save") }
-                                OutlinedButton(onClick={ copyFolder=true; model.expectReturn(); folderPicker.launch(null) }) { Text("Save copy to folder") }
-                                TextButton(onClick={ confirmation="Discard unsaved changes and reload the folder?" to { model.reload(true) } }) { Text("Discard and reload") }
+                                Button(onClick={ model.retrySave() },enabled=!state.saving) { Text(tr("Retry save")) }
+                                OutlinedButton(onClick={ copyFolder=true; model.expectReturn(); folderPicker.launch(null) }) { Text(tr("Save copy to folder")) }
+                                TextButton(onClick={ confirmation=tr("Discard unsaved changes and reload the folder?") to { model.reload(true) } }) { Text(tr("Discard and reload")) }
                             }
                         }
                         if(state.blocked) {
-                            Notice("Editing is paused until storage is resolved. Cached data remains visible.")
-                            OutlinedButton(onClick={ model.reload() }) { Text("Reload folder") }
+                            Notice(tr("Editing is paused until storage is resolved. Cached data remains visible."))
+                            OutlinedButton(onClick={ model.reload() }) { Text(tr("Reload folder")) }
                             if(state.heads.size>1) state.heads.forEach { revision ->
                                 RevisionSummary(revision)
-                                OutlinedButton(onClick={ confirmation="Use revision ${revision.id.take(8)}? Both originals remain in the folder." to { model.resolve(revision) } }) { Text("Keep this version") }
+                                OutlinedButton(onClick={ confirmation=tr("Use revision {0}? Both originals remain in the folder.",revision.id.take(8)) to { model.resolve(revision) } }) { Text(tr("Keep this version")) }
                             }
                         }
                         if(!state.ready && !state.loading) {
-                            Text("Your savings.\nTheir purpose.",style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.SemiBold)
-                            Text("Track balances, connect goals, and see what is already covered. No account required.")
-                            Heading("Start with your folder")
-                            Text("Choose a dedicated local folder such as Documents/CapitalTracker. Reopen that folder on another device using your own sync tool.")
-                            Notice("Public wallet providers receive your addresses, token contract addresses and IP. Never enter private keys or seed phrases. Files in the chosen folder contain your financial records.")
-                            Button(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text("Choose or reopen folder") }
-                            Note("Default currency starts as EUR. Change it and configure optional free provider keys in Settings.")
+                            Text(tr("Your savings.\nTheir purpose."),style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.SemiBold)
+                            Text(tr("Track balances, connect goals, and see what is already covered. No account required."))
+                            Heading(tr("Start with your folder"))
+                            Text(tr("Choose a dedicated local folder such as Documents/CapitalTracker. Reopen that folder on another device using your own sync tool."))
+                            Notice(tr("Public wallet providers receive your addresses, token contract addresses and IP. Never enter private keys or seed phrases. Files in the chosen folder contain your financial records."))
+                            Button(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text(tr("Choose or reopen folder")) }
+                            Note(tr("Default currency starts as EUR. Change it and configure optional free provider keys in Settings."))
                         } else if(state.ready) {
-                            if(data.stale() || allocation.incomplete || data.incomplete(data.settings.currency)) Notice(if(allocation.incomplete || data.incomplete(data.settings.currency)) "Incomplete valuation — some balances or rates are unavailable. Native quantities remain visible." else "Cached / stale values — refresh when online. Allocations are estimates.")
+                            if(data.stale() || allocation.incomplete || data.incomplete(data.settings.currency)) Notice(if(allocation.incomplete || data.incomplete(data.settings.currency)) tr("Incomplete valuation — some balances or rates are unavailable. Native quantities remain visible.") else tr("Cached / stale values — refresh when online. Allocations are estimates."))
                             when(section) {
                                 "Overview" -> {
                                     val currency=data.settings.currency
                                     val values=data.buckets.filter { b -> data.holdings.any { it.bucketId==b.id } }.map { data.bucketValueOrNull(it.id,currency) }
                                     val total=if(values.isNotEmpty() && values.all { it==null }) null else values.filterNotNull().fold(ZERO,BigDecimal::add)
-                                    Note("TOTAL VALUED SAVINGS · $currency")
+                                    Note(tr("TOTAL VALUED SAVINGS · {0}",currency))
                                     Text(money(total,currency),style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.SemiBold)
-                                    Stat("Allocated to goals",money(data.convert(allocation.total,"USD",currency),currency))
-                                    Stat("Unallocated",money(data.convert(allocation.capacities.values.fold(ZERO,BigDecimal::add)-allocation.total,"USD",currency),currency))
-                                    if(data.buckets.isEmpty()) { Text("Add your first bucket to start tracking savings."); Button(onClick={ editor=Editor("Bucket") },enabled=editable) { Text("Add bucket") } }
-                                    Heading("Your goals")
-                                    if(data.goals.none { !it.archived }) { Text("Give your savings a purpose."); OutlinedButton(onClick={ editor=Editor("Goal") },enabled=editable) { Text("Add goal") } }
+                                    Stat(tr("Allocated to goals"),money(data.convert(allocation.total,"USD",currency),currency))
+                                    Stat(tr("Unallocated"),money(data.convert(allocation.capacities.values.fold(ZERO,BigDecimal::add)-allocation.total,"USD",currency),currency))
+                                    if(data.buckets.isEmpty()) { Text(tr("Add your first bucket to start tracking savings.")); Button(onClick={ editor=Editor("Bucket") },enabled=editable) { Text(tr("Add bucket")) } }
+                                    Heading(tr("Your goals"))
+                                    if(data.goals.none { !it.archived }) { Text(tr("Give your savings a purpose.")); OutlinedButton(onClick={ editor=Editor("Goal") },enabled=editable) { Text(tr("Add goal")) } }
                                     data.goals.filterNot { it.archived }.sortedBy { it.due }.forEach { GoalRow(it,data,allocation,projection) { section="Goals"; goalId=it.id } }
-                                    Heading("Buckets")
-                                    data.buckets.forEach { b -> Item(b.name,"${data.holdings.count { it.bucketId==b.id }} holdings · ${b.currency}",money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { section="Buckets"; bucketId=b.id } }
-                                    Note("Goal allocations are part of savings, not additional money.")
+                                    Heading(tr("Buckets"))
+                                    data.buckets.forEach { b -> Item(b.name,tr("{0} holdings · {1}",data.holdings.count { it.bucketId==b.id },b.currency),money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { section="Buckets"; bucketId=b.id } }
+                                    Note(tr("Goal allocations are part of savings, not additional money."))
                                 }
                                 "Plans" -> {
-                                    Note("Planned amounts are not part of your savings. They project when goals close.")
-                                    if(data.planned.isEmpty()) Text("Add the amounts you plan to save and their dates.")
+                                    Note(tr("Planned amounts are not part of your savings. They project when goals close."))
+                                    if(data.planned.isEmpty()) Text(tr("Add the amounts you plan to save and their dates."))
                                     val today=LocalDate.now()
                                     data.planned.sortedWith(compareBy<Planned> { it.archived(today) }.thenBy { it.date }).forEach { pl ->
                                         Column(Modifier.fillMaxWidth().padding(vertical=14.dp,horizontal=4.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
@@ -290,11 +323,11 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
                                             FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,itemVerticalAlignment=Alignment.CenterVertically) {
                                                 Text(money(pl.amount.decimal(),pl.currency),style=MaterialTheme.typography.titleLarge)
                                                 Row {
-                                                    IconButton(onClick={ editor=Editor("Planned",pl.id) },enabled=editable) { Icon(painterResource(R.drawable.ic_edit),contentDescription="Edit ${pl.name}") }
-                                                    IconButton(onClick={ confirmation="Delete planned saving ${pl.name}?" to { model.edit({ p -> p.copy(planned=p.planned.filterNot { it.id==pl.id }) }) } },enabled=editable) { Icon(painterResource(R.drawable.ic_delete),contentDescription="Delete ${pl.name}") }
+                                                    IconButton(onClick={ editor=Editor("Planned",pl.id) },enabled=editable) { Icon(painterResource(R.drawable.ic_edit),contentDescription=tr("Edit {0}",pl.name)) }
+                                                    IconButton(onClick={ confirmation=tr("Delete planned saving {0}?",pl.name) to { model.edit({ p -> p.copy(planned=p.planned.filterNot { it.id==pl.id }) }) } },enabled=editable) { Icon(painterResource(R.drawable.ic_delete),contentDescription=tr("Delete {0}",pl.name)) }
                                                 }
                                             }
-                                            Note("${date(pl.date)} · ${if(pl.archived(today)) "Archived · date passed" else "Planned"}")
+                                            Note("${date(pl.date)} · ${if(pl.archived(today)) tr("Archived · date passed") else tr("Planned")}")
                                         }
                                         HorizontalDivider()
                                     }
@@ -302,131 +335,132 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
                                 "Buckets" -> {
                                     val bucket=data.buckets.find { it.id==bucketId }
                                     if(bucket==null) {
-                                        if(data.buckets.isEmpty()) Text("Buckets group places where your money lives.")
-                                        data.buckets.forEach { b -> Item(b.name,"${data.holdings.count { it.bucketId==b.id }} holdings",money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { bucketId=b.id } }
+                                        if(data.buckets.isEmpty()) Text(tr("Buckets group places where your money lives."))
+                                        data.buckets.forEach { b -> Item(b.name,tr("{0} holdings",data.holdings.count { it.bucketId==b.id }),money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { bucketId=b.id } }
                                     } else {
-                                        TextButton(onClick={ bucketId=null }) { Text("← All buckets") }
+                                        TextButton(onClick={ bucketId=null }) { Text(tr("← All buckets")) }
                                         Heading(bucket.name)
                                         Text(money(data.bucketValueOrNull(bucket.id,bucket.currency),bucket.currency),style=MaterialTheme.typography.headlineLarge)
-                                        Stat("Allocated",money(data.convert(allocation.bucket(bucket.id),"USD",bucket.currency),bucket.currency))
-                                        Stat("Available",money(data.convert((allocation.capacities[bucket.id] ?: ZERO)-allocation.bucket(bucket.id),"USD",bucket.currency),bucket.currency))
+                                        Stat(tr("Allocated"),money(data.convert(allocation.bucket(bucket.id),"USD",bucket.currency),bucket.currency))
+                                        Stat(tr("Available"),money(data.convert((allocation.capacities[bucket.id] ?: ZERO)-allocation.bucket(bucket.id),"USD",bucket.currency),bucket.currency))
                                         Actions {
-                                            OutlinedButton(onClick={ editor=Editor("Bucket",bucket.id) },enabled=editable) { Text("Edit bucket") }
-                                            TextButton(onClick={ confirmation="Delete ${bucket.name}, its ${data.holdings.count { it.bucketId==bucket.id }} holdings and ${data.connections.count { it.bucketId==bucket.id }} goal connections? Previous snapshots remain recoverable." to { model.edit({ it.deleteBucket(bucket.id) }) { bucketId=null } } },enabled=editable) { Text("Delete bucket") }
+                                            OutlinedButton(onClick={ editor=Editor("Bucket",bucket.id) },enabled=editable) { Text(tr("Edit bucket")) }
+                                            TextButton(onClick={ confirmation=tr("Delete {0}, its {1} holdings and {2} goal connections? Previous snapshots remain recoverable.",bucket.name,data.holdings.count { it.bucketId==bucket.id },data.connections.count { it.bucketId==bucket.id }) to { model.edit({ it.deleteBucket(bucket.id) }) { bucketId=null } } },enabled=editable) { Text(tr("Delete bucket")) }
                                         }
                                         if(bucket.portfolio) {
                                             val base=data.settings.currency; val w=data.weights(bucket.id)
-                                            Heading("Portfolio")
-                                            Note("Shares are calculated in $base.")
-                                            if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) Notice("Portfolio shares unavailable: no value for ${(w.missing+w.flagged).joinToString { assetName(data,it) }}. Refresh, or remove the holding or target that has no value.")
+                                            Heading(tr("Portfolio"))
+                                            Note(tr("Shares are calculated in {0}.",base))
+                                            if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) Notice(tr("Portfolio shares unavailable: no value for {0}. Refresh, or remove the holding or target that has no value.",(w.missing+w.flagged).joinToString { assetName(data,it) }))
                                             else w.rows.forEach { r ->
                                                 val diff=r.real-r.target
-                                                val drift=if(diff.signum()==0) "on target" else (if(diff.signum()>0) "+" else "-")+diff.abs().setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()+"%"
-                                                Item(assetName(data,r.asset),"Real ${r.real.toPlainString()}% · target ${r.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()}% · $drift",money(r.value,base),null)
+                                                val drift=if(diff.signum()==0) tr("on target") else (if(diff.signum()>0) "+" else "-")+diff.abs().setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()+"%"
+                                                Item(assetName(data,r.asset),tr("Real {0}% · target {1}% · {2}",r.real.toPlainString(),r.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString(),drift),money(r.value,base),null)
                                             }
-                                            OutlinedButton(onClick={ calculator=bucket.id },modifier=Modifier.heightIn(min=48.dp).testTag("rebalance")) { Text("Rebalance") }
+                                            OutlinedButton(onClick={ calculator=bucket.id },modifier=Modifier.heightIn(min=48.dp).testTag("rebalance")) { Text(tr("Rebalance")) }
                                         }
-                                        Heading("Holdings")
-                                        Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text("Add holding") }
+                                        Heading(tr("Holdings"))
+                                        Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text(tr("Add holding")) }
                                         data.holdings.filter { it.bucketId==bucket.id }.forEach { h ->
                                             val wallet=h.address!=null; val cur=bucket.currency
                                             val (known,unknown)=h.tokens.filter { it.contract !in h.excluded }.partition { data.known(h,it) }
                                             val native=h.quantity?.let { data.convert(it.decimal(),h.asset,cur) }
                                             val total=(listOfNotNull(native)+known.mapNotNull { data.convert(it.quantity()!!,tokenAsset(h.asset,it.contract),cur) }).takeIf { it.isNotEmpty() }?.fold(ZERO,BigDecimal::add)
-                                            if(wallet) Item(h.label,"Read-only · ${h.address.orEmpty().take(12)}…",if(h.quantity==null) "Balance unknown" else money(total,cur),null)
-                                            else Item(h.label,"Manual\n${h.quantity?.let { money(it.decimal(),h.asset) } ?: "Balance unknown"}",money(native,cur),null)
-                                            Note("${h.source} · observed ${time(h.observedAt)} · fetched ${time(h.fetchedAt)}")
+                                            if(wallet) Item(h.label,tr("Read-only · {0}…",h.address.orEmpty().take(12)),if(h.quantity==null) tr("Balance unknown") else money(total,cur),null)
+                                            else Item(h.label,tr("Manual")+"\n"+(h.quantity?.let { money(it.decimal(),h.asset) } ?: tr("Balance unknown")),money(native,cur),null)
+                                            Note(tr("{0} · observed {1} · fetched {2}",shown(h.source),time(h.observedAt),time(h.fetchedAt)))
                                             h.error?.let { Notice(it) }
-                                            h.tokensError?.let { Notice("Tokens: $it") }
-                                            Actions { TextButton(onClick={ editor=Editor("Holding",h.id,bucket.id) },enabled=editable) { Text("Edit / move") }; TextButton(onClick={ confirmation="Delete ${h.label}?" to { model.edit({ p -> p.copy(holdings=p.holdings.filterNot { it.id==h.id }) }) } },enabled=editable) { Text("Delete") } }
-                                            h.tokens.count { it.contract in h.excluded }.takeIf { it>0 }?.let { Note("$it ${if(it==1) "token" else "tokens"} excluded in the holding editor") }
-                                            if(wallet) Item(assetLabel(h.asset),"Native · ${h.quantity?.let { money(it.decimal(),h.asset) } ?: "balance unknown"}",h.quantity?.let { money(native,cur) },null)
+                                            h.tokensError?.let { Notice(tr("Tokens: {0}",it)) }
+                                            Actions { TextButton(onClick={ editor=Editor("Holding",h.id,bucket.id) },enabled=editable) { Text(tr("Edit / move")) }; TextButton(onClick={ confirmation=tr("Delete {0}?",h.label) to { model.edit({ p -> p.copy(holdings=p.holdings.filterNot { it.id==h.id }) }) } },enabled=editable) { Text(tr("Delete")) } }
+                                            h.tokens.count { it.contract in h.excluded }.takeIf { it>0 }?.let { Note(if(it==1) tr("{0} token excluded in the holding editor",it) else tr("{0} tokens excluded in the holding editor",it)) }
+                                            if(wallet) Item(assetLabel(h.asset),tr("Native · {0}",h.quantity?.let { money(it.decimal(),h.asset) } ?: tr("balance unknown")),h.quantity?.let { money(native,cur) },null)
                                             var all by remember(h.id) { mutableStateOf(false) }
                                             known.sortedByDescending { data.convert(it.quantity()!!,tokenAsset(h.asset,it.contract),cur) ?: ZERO }.forEach { t ->
-                                                Item(t.symbol.ifBlank { shortContract(h.asset,t.contract) },"Token · ${tokenQty(t.quantity()!!,t.symbol)} · ${shortContract(h.asset,t.contract)}",money(data.convert(t.quantity()!!,tokenAsset(h.asset,t.contract),cur),cur),null)
+                                                Item(t.symbol.ifBlank { shortContract(h.asset,t.contract) },tr("Token · {0} · {1}",tokenQty(t.quantity()!!,t.symbol),shortContract(h.asset,t.contract)),money(data.convert(t.quantity()!!,tokenAsset(h.asset,t.contract),cur),cur),null)
                                             }
                                             val sortedUnknown=unknown.sortedWith(compareBy<Token> { it.symbol }.thenBy { it.contract })
                                             (if(all) sortedUnknown else sortedUnknown.take(5)).forEach { t ->
-                                                Item("Unknown token","Not counted · reported as “${t.symbol.ifBlank { t.name.ifBlank { "unnamed" } }}” · ${shortContract(h.asset,t.contract)} · ${t.quantity()?.let { tokenQty(it,"") } ?: "raw units ${t.units}"}",null,null)
+                                                Item(tr("Unknown token"),tr("Not counted · reported as “{0}” · {1} · {2}",t.symbol.ifBlank { t.name.ifBlank { tr("unnamed") } },shortContract(h.asset,t.contract),t.quantity()?.let { tokenQty(it,"") } ?: tr("raw units {0}",t.units)),null,null)
                                             }
-                                            if(sortedUnknown.size>5) TextButton(onClick={ all=!all }) { Text(if(all) "Show fewer" else "Show ${sortedUnknown.size-5} more unknown tokens") }
+                                            if(sortedUnknown.size>5) TextButton(onClick={ all=!all }) { Text(if(all) tr("Show fewer") else tr("Show {0} more unknown tokens",sortedUnknown.size-5)) }
                                         }
-                                        Heading("Connected goals")
+                                        Heading(tr("Connected goals"))
                                         data.connections.filter { it.bucketId==bucket.id }.forEach { c -> val g=data.goals.first { it.id==c.goalId }; Item(g.name,limitLabel(c.mode),money(data.convert(allocation.byConnection[c.key] ?: ZERO,"USD",g.currency),g.currency)) { section="Goals"; goalId=g.id } }
-                                        Note("Automatic tracking covers native balances and tokens on ETH, TON and TRX addresses. Tokens count only when the price provider lists their contract. Add staking or other investments as manual holdings.")
+                                        Note(tr("Automatic tracking covers native balances and tokens on ETH, TON and TRX addresses. Tokens count only when the price provider lists their contract. Add staking or other investments as manual holdings."))
                                     }
                                 }
                                 "Goals" -> {
                                     val goal=data.goals.find { it.id==goalId }
                                     if(goal==null) {
-                                        if(data.goals.isEmpty()) Text("Create a goal with a target, currency and due date.")
+                                        if(data.goals.isEmpty()) Text(tr("Create a goal with a target, currency and due date."))
                                         val today=LocalDate.now()
                                         data.goals.filterNot { it.archived }.sortedWith(compareBy<Goal> { it.due }.thenByDescending { it.priority }).groupBy { it.due }.forEach { (due,group) ->
-                                            Heading(date(due)+if(LocalDate.parse(due)<today) " · overdue" else "")
+                                            Heading(date(due)+if(LocalDate.parse(due)<today) " · "+tr("overdue") else "")
                                             GoalGroup(group,data,allocation,projection,editable,{ goalId=it },::move)
                                         }
-                                        if(data.goals.any { it.archived }) Heading("Archived")
+                                        if(data.goals.any { it.archived }) Heading(tr("Archived"))
                                         data.goals.filter { it.archived }.forEach { GoalRow(it,data,allocation,projection) { goalId=it.id } }
                                     } else {
-                                        TextButton(onClick={ goalId=null }) { Text("← All goals") }
+                                        TextButton(onClick={ goalId=null }) { Text(tr("← All goals")) }
                                         GoalRow(goal,data,allocation,projection) { if(editable) editor=Editor("Goal",goal.id) }
                                         val funded=data.convert(allocation.goal(goal.id),"USD",goal.currency)
-                                        Stat("Still needed",money(funded?.let { (goal.target.decimal()-it).max(ZERO) },goal.currency))
+                                        Stat(tr("Still needed"),money(funded?.let { (goal.target.decimal()-it).max(ZERO) },goal.currency))
                                         Actions {
-                                            OutlinedButton(onClick={ editor=Editor("Goal",goal.id) },enabled=editable) { Text("Edit goal") }
-                                            TextButton(onClick={ model.edit({ p -> p.copy(goals=p.goals.map { if(it.id==goal.id) it.copy(archived=!it.archived) else it }) }) },enabled=editable) { Text(if(goal.archived) "Activate" else "Archive") }
-                                            TextButton(onClick={ confirmation="Delete ${goal.name} and its connections?" to { model.edit({ it.deleteGoal(goal.id) }) { goalId=null } } },enabled=editable) { Text("Delete") }
+                                            OutlinedButton(onClick={ editor=Editor("Goal",goal.id) },enabled=editable) { Text(tr("Edit goal")) }
+                                            TextButton(onClick={ model.edit({ p -> p.copy(goals=p.goals.map { if(it.id==goal.id) it.copy(archived=!it.archived) else it }) }) },enabled=editable) { Text(if(goal.archived) tr("Activate") else tr("Archive")) }
+                                            TextButton(onClick={ confirmation=tr("Delete {0} and its connections?",goal.name) to { model.edit({ it.deleteGoal(goal.id) }) { goalId=null } } },enabled=editable) { Text(tr("Delete")) }
                                         }
-                                        Heading("Funding sources")
-                                        Button(onClick={ editor=Editor("Connection",owner=goal.id) },enabled=editable && data.buckets.isNotEmpty()) { Text("Connect bucket") }
-                                        if(data.buckets.isEmpty()) Note("Create a bucket first.")
+                                        Heading(tr("Funding sources"))
+                                        Button(onClick={ editor=Editor("Connection",owner=goal.id) },enabled=editable && data.buckets.isNotEmpty()) { Text(tr("Connect bucket")) }
+                                        if(data.buckets.isEmpty()) Note(tr("Create a bucket first."))
                                         data.connections.filter { it.goalId==goal.id }.forEach { c ->
                                             val b=data.buckets.first { it.id==c.bucketId }
                                             val amount=allocation.byConnection[c.key] ?: ZERO
-                                            Item(b.name,"${limitLabel(c.mode)} ${if(c.mode!=Limit.AUTO) c.value else ""}${c.goalCap?.let { " · Max $it% of goal" } ?: ""}",money(data.convert(amount,"USD",goal.currency),goal.currency)) { if(editable) editor=Editor("Connection",c.key,goal.id) }
+                                            Item(b.name,"${limitLabel(c.mode)} ${if(c.mode!=Limit.AUTO) c.value else ""}${c.goalCap?.let { " · "+tr("Max {0}% of goal",it) } ?: ""}",money(data.convert(amount,"USD",goal.currency),goal.currency)) { if(editable) editor=Editor("Connection",c.key,goal.id) }
                                             val free=(allocation.capacities[b.id] ?: ZERO)-allocation.bucket(b.id)
-                                            Note(when { goal.archived -> "Archived goals reserve no funds."; allocation.incomplete -> "Missing rates or balances can limit funding."; free>ZERO && funded!=null && funded<goal.target.decimal() -> "Available savings remain. Increase this connection's limit to allocate more."; amount==ZERO && funded!=null && funded>=goal.target.decimal() -> "Goal target is covered by other buckets."; amount==ZERO -> "No capacity left after higher-ranked goals or connection limits."; else -> "Contribution respects goal order and connection limits." })
-                                            TextButton(onClick={ confirmation="Disconnect ${b.name} from ${goal.name}?" to { model.edit({ p -> p.copy(connections=p.connections.filterNot { it.key==c.key }) }) } },enabled=editable) { Text("Disconnect") }
+                                            Note(when { goal.archived -> tr("Archived goals reserve no funds."); allocation.incomplete -> tr("Missing rates or balances can limit funding."); free>ZERO && funded!=null && funded<goal.target.decimal() -> tr("Available savings remain. Increase this connection's limit to allocate more."); amount==ZERO && funded!=null && funded>=goal.target.decimal() -> tr("Goal target is covered by other buckets."); amount==ZERO -> tr("No capacity left after higher-ranked goals or connection limits."); else -> tr("Contribution respects goal order and connection limits.") })
+                                            TextButton(onClick={ confirmation=tr("Disconnect {0} from {1}?",b.name,goal.name) to { model.edit({ p -> p.copy(connections=p.connections.filterNot { it.key==c.key }) }) } },enabled=editable) { Text(tr("Disconnect")) }
                                         }
-                                        Note("Earlier dates are funded first; within a date, the order shown. Allocation never moves money.")
-                                        Heading("Planned savings")
+                                        Note(tr("Earlier dates are funded first; within a date, the order shown. Allocation never moves money."))
+                                        Heading(tr("Planned savings"))
                                         val contributions=projection.contributions[goal.id].orEmpty()
-                                        if(contributions.isEmpty()) Note("No planned savings reach this goal.")
+                                        if(contributions.isEmpty()) Note(tr("No planned savings reach this goal."))
                                         contributions.forEach { c -> data.planned.find { it.id==c.plannedId }?.let { pl -> Item(pl.name,date(pl.date),"+${money(data.convert(c.usd,"USD",goal.currency),goal.currency)}",null) } }
                                     }
                                 }
                                 "Settings" -> {
-                                    Heading("Preferences")
-                                    OutlinedButton(onClick={ editor=Editor("Settings") },enabled=editable) { Text("Currency: ${data.settings.currency} · Theme: ${data.settings.theme}") }
-                                    Note("Default currency values the overview and new entities. Existing currencies stay unchanged.")
-                                    Heading("Free data providers")
+                                    Heading(tr("Preferences"))
+                                    OutlinedButton(onClick={ editor=Editor("Settings") },enabled=editable) { Text(tr("Currency: {0} · Theme: {1}",data.settings.currency,shown(data.settings.theme))) }
+                                    Choice(tr("Language"),language,listOf(I18n.SYSTEM)+I18n.languages.keys,show={ if(it==I18n.SYSTEM) tr("System default") else I18n.languages.getValue(it) }) { dev.capital.Language.choose(context,it); language=it }
+                                    Note(tr("Default currency values the overview and new entities. Existing currencies stay unchanged."))
+                                    Heading(tr("Free data providers"))
                                     providerChoices.forEach { (category,options) ->
-                                        Choice(category,data.settings.providers.getValue(category),options,editable) { provider -> model.edit({ p -> p.copy(settings=p.settings.copy(providers=p.settings.providers+(category to provider))) }) }
+                                        Choice(shown(category),data.settings.providers.getValue(category),options,editable,::shown) { provider -> model.edit({ p -> p.copy(settings=p.settings.copy(providers=p.settings.providers+(category to provider))) }) }
                                         val provider=data.settings.providers.getValue(category)
-                                        if(!category.endsWith(" tokens") && provider in listOf("Alchemy","TronGrid","CoinGecko","TON Center")) TextButton(onClick={ keyProvider=provider }) { Text("${if(provider=="TON Center") "Optional" else "Required free"} key: $provider") }
+                                        if(!category.endsWith(" tokens") && provider in listOf("Alchemy","TronGrid","CoinGecko","TON Center")) TextButton(onClick={ keyProvider=provider }) { Text(if(provider=="TON Center") tr("Optional key: {0}",provider) else tr("Required free key: {0}",provider)) }
                                     }
-                                    OutlinedButton(onClick={ model.refresh() },enabled=editable && !state.refreshing) { Text("Test sources / refresh portfolio") }
-                                    Note("Tests query only assets and addresses in your portfolio. No silent provider fallback. Token sources and price providers also receive wallet or token contract addresses; choose Off to stop token lookups for a chain.")
-                                    Heading("Quotes and freshness")
-                                    if(data.quotes.isEmpty()) Note("No cached quotes. Add holdings and refresh.")
-                                    data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note("$it token prices by contract address are shown with their wallets.") }
-                                    data.quotes.filter { ':' !in it.asset }.forEach { q -> Text("${q.asset}: ${money(q.usd.decimal(),"USD")}"); Note("${q.source} · observed ${time(q.observedAt)} · fetched ${time(q.fetchedAt)}${q.error?.let { "\n$it" } ?: ""}") }
+                                    OutlinedButton(onClick={ model.refresh() },enabled=editable && !state.refreshing) { Text(tr("Test sources / refresh portfolio")) }
+                                    Note(tr("Tests query only assets and addresses in your portfolio. No silent provider fallback. Token sources and price providers also receive wallet or token contract addresses; choose Off to stop token lookups for a chain."))
+                                    Heading(tr("Quotes and freshness"))
+                                    if(data.quotes.isEmpty()) Note(tr("No cached quotes. Add holdings and refresh."))
+                                    data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note(tr("{0} token prices by contract address are shown with their wallets.",it)) }
+                                    data.quotes.filter { ':' !in it.asset }.forEach { q -> Text("${q.asset}: ${money(q.usd.decimal(),"USD")}"); Note(tr("{0} · observed {1} · fetched {2}{3}",shown(q.source),time(q.observedAt),time(q.fetchedAt),q.error?.let { "\n$it" } ?: "")) }
                                     SecuritySection(model,state,lockRev,{ lockRev++ }) { secDialog=it }
-                                    Heading("Storage")
-                                    Text(state.folder ?: "No folder")
+                                    Heading(tr("Storage"))
+                                    Text(state.folder ?: tr("No folder"))
                                     Actions {
-                                        OutlinedButton(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text("Reconnect / open folder") }
-                                        OutlinedButton(onClick={ model.reload() }) { Text("Reload local files") }
-                                        OutlinedButton(onClick={ model.expectReturn(); backup.launch("capital-backup-${LocalDate.now()}.json") }) { Text("Export backup") }
-                                        if(state.encrypted) OutlinedButton(onClick={ secDialog="plain" },modifier=Modifier.testTag("export-plaintext")) { Text("Export plaintext backup") }
-                                        OutlinedButton(onClick={ model.expectReturn(); restore.launch(arrayOf("application/json","text/plain","application/octet-stream")) },enabled=editable) { Text("Restore backup") }
+                                        OutlinedButton(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text(tr("Reconnect / open folder")) }
+                                        OutlinedButton(onClick={ model.reload() }) { Text(tr("Reload local files")) }
+                                        OutlinedButton(onClick={ model.expectReturn(); backup.launch("capital-backup-${LocalDate.now()}.json") }) { Text(tr("Export backup")) }
+                                        if(state.encrypted) OutlinedButton(onClick={ secDialog="plain" },modifier=Modifier.testTag("export-plaintext")) { Text(tr("Export plaintext backup")) }
+                                        OutlinedButton(onClick={ model.expectReturn(); restore.launch(arrayOf("application/json","text/plain","application/octet-stream")) },enabled=editable) { Text(tr("Restore backup")) }
                                     }
-                                    Note("Your sync tool manages this folder. Snapshots are retained for recovery; API keys never leave device storage. Refresh happens only on cold startup or request.")
-                                    Heading("Sources / attribution")
-                                    listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice("No browser available") } }) { Text(name) } }
+                                    Note(tr("Your sync tool manages this folder. Snapshots are retained for recovery; API keys never leave device storage. Refresh happens only on cold startup or request."))
+                                    Heading(tr("Sources / attribution"))
+                                    listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(shown(name)) } }
                                     // Read from the installed package, so it always matches the build that is running.
                                     val pkg=remember { runCatching { context.packageManager.getPackageInfo(context.packageName,0) }.getOrNull() }
-                                    Note("Capital ${pkg?.versionName ?: "unknown version"} · build ${pkg?.let { androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(it) } ?: "unknown"}",Modifier.testTag("version"))
+                                    Note(tr("Capital {0} · build {1}",pkg?.versionName ?: tr("unknown version"),pkg?.let { androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(it) } ?: tr("unknown")),Modifier.testTag("version"))
                                 }
                             }
                         }
@@ -436,35 +470,35 @@ private fun sectionIcon(section: String)=when(section) { "Overview" -> R.drawabl
                 }
             }
         }
-        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: "Save failed" else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens) }
+        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens) }
         calculator?.let { id -> data.buckets.find { it.id==id }?.let { RebalanceDialog(it,data) { calculator=null } } }
-        confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text("Confirm change") },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text("Confirm") } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text("Cancel") } }) }
+        confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text(tr("Confirm change")) },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text(tr("Confirm")) } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text(tr("Cancel")) } }) }
         keyProvider?.let { provider -> KeyDialog(provider,onDismiss={ keyProvider=null },onSave={ if(model.saveKey(provider,it)) keyProvider=null }) }
         SecurityDialogs(model,state,secDialog,{ lockRev++ },{ secDialog=null }) { secDialog=it }
-        state.restore?.let { revision -> AlertDialog(onDismissRequest=model::cancelRestore,title={ Text("Restore backup?") },text={ Column { RevisionSummary(revision); Text("Replaces current records with this backup. Existing snapshots remain available.") } },confirmButton={ TextButton(onClick=model::restore) { Text("Restore") } },dismissButton={ TextButton(onClick=model::cancelRestore) { Text("Cancel") } }) }
+        state.restore?.let { revision -> AlertDialog(onDismissRequest=model::cancelRestore,title={ Text(tr("Restore backup?")) },text={ Column { RevisionSummary(revision); Text(tr("Replaces current records with this backup. Existing snapshots remain available.")) } },confirmButton={ TextButton(onClick=model::restore) { Text(tr("Restore")) } },dismissButton={ TextButton(onClick=model::cancelRestore) { Text(tr("Cancel")) } }) }
     }
 }
 @Composable private fun RevisionSummary(revision: Revision) {
     Column(verticalArrangement=Arrangement.spacedBy(4.dp)) {
-        Text("Revision ${revision.id.take(8)} · ${time(revision.createdAt)}",fontWeight=FontWeight.SemiBold)
-        Text("${revision.data.buckets.size} buckets · ${revision.data.holdings.size} holdings · ${revision.data.goals.size} goals")
+        Text(tr("Revision {0} · {1}",revision.id.take(8),time(revision.createdAt)),fontWeight=FontWeight.SemiBold)
+        Text(tr("{0} buckets · {1} holdings · {2} goals",revision.data.buckets.size,revision.data.holdings.size,revision.data.goals.size))
         revision.data.buckets.forEach { b -> Text("${b.name}: ${money(revision.data.bucketValueOrNull(b.id,b.currency),b.currency)}") }
-        revision.data.holdings.forEach { h -> Note("${h.label}: ${h.quantity ?: "unknown"} ${h.asset} · ${h.address ?: "manual"}") }
+        revision.data.holdings.forEach { h -> Note("${h.label}: ${h.quantity ?: tr("unknown")} ${h.asset} · ${h.address ?: tr("manual")}") }
         revision.data.goals.forEach { g -> Note("${g.name}: ${money(g.target.decimal(),g.currency)} · ${date(g.due)}") }
     }
 }
-@Composable internal fun Choice(label: String,value: String,options: List<String>,enabled: Boolean=true,onChange: (String)->Unit) {
+@Composable internal fun Choice(label: String,value: String,options: List<String>,enabled: Boolean=true,show: (String)->String={ it },onChange: (String)->Unit) {
     var expanded by remember { mutableStateOf(false) }
-    Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth()) { Text(value) }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { option -> DropdownMenuItem(text={ Text(option) },onClick={ expanded=false; onChange(option) }) } } } }
+    Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth()) { Text(show(value)) }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { option -> DropdownMenuItem(text={ Text(show(option)) },onClick={ expanded=false; onChange(option) }) } } } }
 }
-@Composable private fun Pick(label: String,selected: String?,options: List<Pair<String,String>>,enabled: Boolean=true,placeholder: String="Choose bucket",onChange: (String)->Unit) {
+@Composable private fun Pick(label: String,selected: String?,options: List<Pair<String,String>>,enabled: Boolean=true,placeholder: String=tr("Choose bucket"),onChange: (String)->Unit) {
     var expanded by remember { mutableStateOf(false) }
     Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp)) { Text(options.find { it.first==selected }?.second ?: placeholder) }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { (key,text) -> DropdownMenuItem(text={ Text(text) },onClick={ expanded=false; onChange(key) }) } } } }
 }
-private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to remaining need"; Limit.FIXED -> "Fixed amount in goal currency"; Limit.BUCKET_PERCENT -> "% of bucket"; Limit.GOAL_PERCENT -> "% of goal" }
+private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up to remaining need"); Limit.FIXED -> tr("Fixed amount in goal currency"); Limit.BUCKET_PERCENT -> tr("% of bucket"); Limit.GOAL_PERCENT -> tr("% of goal") }
 @Composable private fun KeyDialog(provider: String,onDismiss: ()->Unit,onSave: (String)->Unit) {
     var value by remember { mutableStateOf("") }
-    AlertDialog(onDismissRequest=onDismiss,title={ Text("$provider key") },text={ Column { Text("Stored encrypted on this device. Leave blank to remove an existing key."); OutlinedTextField(value,onValueChange={ value=it },label={ Text("API key") },visualTransformation=androidx.compose.ui.text.input.PasswordVisualTransformation(),singleLine=true) } },confirmButton={ TextButton(onClick={ onSave(value) }) { Text("Save") } },dismissButton={ TextButton(onClick=onDismiss) { Text("Cancel") } })
+    AlertDialog(onDismissRequest=onDismiss,title={ Text(tr("{0} key",provider)) },text={ Column { Text(tr("Stored encrypted on this device. Leave blank to remove an existing key.")); OutlinedTextField(value,onValueChange={ value=it },label={ Text(tr("API key")) },visualTransformation=androidx.compose.ui.text.input.PasswordVisualTransformation(),singleLine=true) } },confirmButton={ TextButton(onClick={ onSave(value) }) { Text(tr("Save")) } },dismissButton={ TextButton(onClick=onDismiss) { Text(tr("Cancel")) } })
 }
 
 // Read-only calculator: never calls model.edit.
@@ -476,21 +510,21 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     Dialog(onDismissRequest=onDismiss,properties=DialogProperties(usePlatformDefaultWidth=false)) {
         Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId=true },color=MaterialTheme.colorScheme.background) {
             Column(Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                Heading("Rebalance ${bucket.name}")
-                OutlinedTextField(amount,onValueChange={ amount=it },label={ Text("Amount to invest in $base · no grouping separators") },modifier=Modifier.fillMaxWidth().testTag("invest-amount"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal))
-                Text(if(bucket.allowSells) "Sells allowed" else "Buys only. Allow sells in the bucket settings.")
+                Heading(tr("Rebalance {0}",bucket.name))
+                OutlinedTextField(amount,onValueChange={ amount=it },label={ Text(tr("Amount to invest in {0} · no grouping separators",base)) },modifier=Modifier.fillMaxWidth().testTag("invest-amount"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal))
+                Text(if(bucket.allowSells) tr("Sells allowed") else tr("Buys only. Allow sells in the bucket settings."))
                 parsed.exceptionOrNull()?.let { Text(it.message.orEmpty(),color=MaterialTheme.colorScheme.error) }
                 if(plan?.unavailable!=null) {
                     val w=data.weights(bucket.id)
-                    Notice(if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) "Rebalance unavailable: no value for ${(w.missing+w.flagged).joinToString { assetName(data,it) }}. Refresh, or remove the holding or target that has no value." else "Rebalance unavailable: ${plan.unavailable}")
+                    Notice(if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) tr("Rebalance unavailable: no value for {0}. Refresh, or remove the holding or target that has no value.",(w.missing+w.flagged).joinToString { assetName(data,it) }) else tr("Rebalance unavailable: {0}",plan.unavailable))
                 } else plan?.trades?.forEach { t ->
-                    val action=when { t.amount.signum()>0 -> "Buy ${money(t.amount,base)}"; t.amount.signum()<0 -> "Sell ${money(t.amount.abs(),base)}"; else -> "No trade" }
-                    val qty=t.quantity?.let { "${NumberFormat.getNumberInstance().apply { maximumFractionDigits=assetDigits(t.asset) }.format(it.abs())} ${assetName(data,t.asset)}" } ?: "quantity unavailable"
-                    Item(assetName(data,t.asset),"$qty · result ${t.resultPercent.toPlainString()}% · target ${t.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()}%",action,null)
+                    val action=when { t.amount.signum()>0 -> tr("Buy {0}",money(t.amount,base)); t.amount.signum()<0 -> tr("Sell {0}",money(t.amount.abs(),base)); else -> tr("No trade") }
+                    val qty=t.quantity?.let { "${NumberFormat.getNumberInstance(I18n.locale).apply { maximumFractionDigits=assetDigits(t.asset) }.format(it.abs())} ${assetName(data,t.asset)}" } ?: tr("quantity unavailable")
+                    Item(assetName(data,t.asset),tr("{0} · result {1}% · target {2}%",qty,t.resultPercent.toPlainString(),t.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()),action,null)
                 }
-                Note("Estimate from cached rates. Capital does not trade; nothing is changed.")
-                if(data.holdings.any { it.bucketId==bucket.id && it.address!=null }) Note("Wallet balances are read-only. Trade in your wallet or exchange.")
-                Button(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)) { Text("Close") }
+                Note(tr("Estimate from cached rates. Capital does not trade; nothing is changed."))
+                if(data.holdings.any { it.bucketId==bucket.id && it.address!=null }) Note(tr("Wallet balances are read-only. Trade in your wallet or exchange."))
+                Button(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Close")) }
             }
         }
     }
@@ -536,13 +570,13 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     fun number(key: String)=fields.getValue(key).trim().replace(',','.').also { it.decimal() }
     fun transform(p: Portfolio): Portfolio {
         val currency=fields.getValue("currency").trim().uppercase()
-        require(validAsset(currency)) { "Use an ISO currency code (EUR, USD…) or BTC, ETH, TON, TRX" }
+        require(validAsset(currency)) { tr("Use an ISO currency code (EUR, USD…) or BTC, ETH, TON, TRX") }
         val name=fields.getValue("name").trim()
         val oldCurrency=when(editor.kind) { "Holding" -> h?.asset; "Goal" -> g?.currency; else -> null }
         val changed=oldCurrency!=null && oldCurrency!=currency && (editor.kind!="Holding" || fields.getValue("type")=="Manual")
-        if(changed) require(fields.getValue("currencyAction")!="Choose treatment") { "Choose how to treat the changed currency" }
+        if(changed) require(fields.getValue("currencyAction")!="Choose treatment") { tr("Choose how to treat the changed currency") }
         val convert=changed && fields.getValue("currencyAction")=="Convert existing values"
-        fun converted(amount: String)=p.convert(amount.decimal(),requireNotNull(oldCurrency),currency)?.text() ?: error("Refresh exchange rates before converting")
+        fun converted(amount: String)=p.convert(amount.decimal(),requireNotNull(oldCurrency),currency)?.text() ?: error(tr("Refresh exchange rates before converting"))
         return when(editor.kind) {
             "Bucket" -> {
                 val item=Bucket(b?.id ?: newId,name,currency,portfolio,targets.associate { (k,v) -> k to v.trim().replace(',','.') },sells)
@@ -550,10 +584,10 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
             }
             "Holding" -> {
                 val wallet=fields.getValue("type")=="Wallet"
-                val address=if(wallet) canonicalAddress(Chain.entries.find { it.name==currency } ?: error("Choose BTC, ETH, TON or TRX for a wallet"),fields.getValue("address")) else null
-                p.holdings.firstOrNull { it.id!=h?.id && it.address!=null && it.asset==currency && canonicalAddress(Chain.valueOf(currency),it.address)==address }?.let { duplicate -> error("Wallet already belongs to ${p.buckets.first { it.id==duplicate.bucketId }.name}. Edit or move it there.") }
+                val address=if(wallet) canonicalAddress(Chain.entries.find { it.name==currency } ?: error(tr("Choose BTC, ETH, TON or TRX for a wallet")),fields.getValue("address")) else null
+                p.holdings.firstOrNull { it.id!=h?.id && it.address!=null && it.asset==currency && canonicalAddress(Chain.valueOf(currency),it.address)==address }?.let { duplicate -> error(tr("Wallet already belongs to {0}. Edit or move it there.",p.buckets.first { it.id==duplicate.bucketId }.name)) }
                 val current=p.holdings.find { it.id==h?.id }
-                require(h==null || current!=null) { "This holding was removed; reopen the editor" }
+                require(h==null || current!=null) { tr("This holding was removed; reopen the editor") }
                 val unchanged=wallet && current?.address!=null && current.asset==currency && canonicalAddress(Chain.valueOf(currency),current.address)==address
                 val item=Holding(
                     id=h?.id ?: newId,bucketId=fields.getValue("bucket"),label=name,asset=currency,address=address,
@@ -588,12 +622,12 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     }
     @Composable fun dateField(key: String,label: String) {
         field(key,label)
-        OutlinedButton(onClick={ val d=runCatching { LocalDate.parse(fields.getValue(key)) }.getOrDefault(LocalDate.now()); DatePickerDialog(context,{ _,y,m,day -> fields[key]=LocalDate.of(y,m+1,day).toString() },d.year,d.monthValue-1,d.dayOfMonth).show() }) { Text("Choose date") }
+        OutlinedButton(onClick={ val d=runCatching { LocalDate.parse(fields.getValue(key)) }.getOrDefault(LocalDate.now()); DatePickerDialog(context,{ _,y,m,day -> fields[key]=LocalDate.of(y,m+1,day).toString() },d.year,d.monthValue-1,d.dayOfMonth).show() }) { Text(tr("Choose date")) }
     }
     @Composable fun TokenEditor() {
         val chain=Chain.entries.find { it.name==fields.getValue("currency").trim().uppercase() }?.takeIf { it!=Chain.BTC } ?: return
-        Heading("Tokens")
-        Note("Fetch the tokens held by this address and switch off the ones you do not want listed or counted.")
+        Heading(tr("Tokens"))
+        Note(tr("Fetch the tokens held by this address and switch off the ones you do not want listed or counted."))
         OutlinedButton(onClick={
             val asked=fields["currency"] to fields["address"]
             try {
@@ -604,40 +638,40 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
                     if(asked==(fields["currency"] to fields["address"])) { if(list!=null) { tokens=list; fetched=true } else tokenMessage=message }
                 }
             } catch(e: Exception) { tokenMessage=e.message }
-        },enabled=!saving && !fetching && fields.getValue("address").isNotBlank(),modifier=Modifier.testTag("fetch-tokens").heightIn(min=48.dp)) { Text("Fetch tokens") }
-        if(fetching) Note("Fetching tokens…")
+        },enabled=!saving && !fetching && fields.getValue("address").isNotBlank(),modifier=Modifier.testTag("fetch-tokens").heightIn(min=48.dp)) { Text(tr("Fetch tokens")) }
+        if(fetching) Note(tr("Fetching tokens…"))
         tokenMessage?.let { Notice(it) }
-        if(fetched && tokens.isEmpty()) Note("No tokens found on this address.")
+        if(fetched && tokens.isEmpty()) Note(tr("No tokens found on this address."))
         tokens.forEach { t ->
             val short=shortContract(chain.name,t.contract)
             val priced=data.price(tokenAsset(chain.name,t.contract))!=null && t.quantity()!=null
-            val title=if(priced) t.symbol.ifBlank { short } else "Unknown token"
+            val title=if(priced) t.symbol.ifBlank { short } else tr("Unknown token")
             Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                 Column(Modifier.weight(1f)) {
                     Text(title,style=MaterialTheme.typography.titleMedium)
-                    Note("${t.quantity()?.let { tokenQty(it,t.symbol) } ?: "raw units ${t.units}"} · $short"+if(priced) "" else " · reported as “${t.symbol.ifBlank { t.name.ifBlank { "unnamed" } }}”")
+                    Note("${t.quantity()?.let { tokenQty(it,t.symbol) } ?: tr("raw units {0}",t.units)} · $short"+if(priced) "" else " · "+tr("reported as “{0}”",t.symbol.ifBlank { t.name.ifBlank { tr("unnamed") } }))
                 }
-                Switch(checked=t.contract !in disabled,onCheckedChange={ on -> if(on) disabled.remove(t.contract) else if(t.contract !in disabled) disabled.add(t.contract) },enabled=!saving,modifier=Modifier.testTag("token-${t.contract.take(10)}").semantics { contentDescription="Include $title $short" })
+                Switch(checked=t.contract !in disabled,onCheckedChange={ on -> if(on) disabled.remove(t.contract) else if(t.contract !in disabled) disabled.add(t.contract) },enabled=!saving,modifier=Modifier.testTag("token-${t.contract.take(10)}").semantics { contentDescription=tr("Include {0} {1}",title,short) })
             }
         }
     }
     Dialog(onDismissRequest={ close() },properties=DialogProperties(usePlatformDefaultWidth=false,dismissOnClickOutside=false)) {
         Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId=true },color=MaterialTheme.colorScheme.background) {
-            Scaffold(topBar={ TopAppBar(title={ Text(if(editor.kind=="Settings") "Currency and appearance" else "${if(editor.id.isBlank()) "Add" else "Edit"} ${if(editor.kind=="Planned") "planned saving" else editor.kind.lowercase()}") },navigationIcon={ TextButton(onClick={ close() },enabled=!saving) { Text("Cancel") } },actions={ TextButton(onClick={
+            Scaffold(topBar={ TopAppBar(title={ Text(editorTitle(editor.kind,editor.id.isBlank())) },navigationIcon={ TextButton(onClick={ close() },enabled=!saving) { Text(tr("Cancel")) } },actions={ TextButton(onClick={
                 val checked=runCatching { transform(data) }
                 if(checked.isFailure) error=checked.exceptionOrNull()?.message else onSave(::transform)
-            },enabled=!saving) { Text(if(saving) "Saving…" else "Save") } }) }) { padding ->
+            },enabled=!saving) { Text(if(saving) tr("Saving…") else tr("Save")) } }) }) { padding ->
                 Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
                     error?.let { Text(it,color=MaterialTheme.colorScheme.error) }
                     if(saveError!=null) {
-                        Notice("$saveError\nYour changes remain in memory.")
-                        Button(onClick=onDismiss) { Text("Open save recovery") }
+                        Notice(tr("{0}\nYour changes remain in memory.",saveError))
+                        Button(onClick=onDismiss) { Text(tr("Open save recovery")) }
                     }
-                    if(editor.kind in listOf("Bucket","Holding","Goal","Planned")) field("name",if(editor.kind=="Goal") "Purpose" else "Name")
-                    if(editor.kind=="Holding") Choice("Tracking",fields.getValue("type"),listOf("Manual","Wallet"),!saving) { fields["type"]=it; if(it=="Wallet" && fields.getValue("currency") !in Chain.entries.map { chain -> chain.name }) fields["currency"]="BTC" }
+                    if(editor.kind in listOf("Bucket","Holding","Goal","Planned")) field("name",if(editor.kind=="Goal") tr("Purpose") else tr("Name"))
+                    if(editor.kind=="Holding") Choice(tr("Tracking"),fields.getValue("type"),listOf("Manual","Wallet"),!saving,::shown) { fields["type"]=it; if(it=="Wallet" && fields.getValue("currency") !in Chain.entries.map { chain -> chain.name }) fields["currency"]="BTC" }
                     if(editor.kind!="Connection") {
-                        if(editor.kind=="Holding" && fields.getValue("type")=="Wallet") Choice("Mainnet chain",fields.getValue("currency"),Chain.entries.map { it.name },!saving) { fields["currency"]=it }
-                        else { field("currency","Currency code (EUR, USD, BTC…)"); Note("Use an ISO currency code or a supported native asset. Conversion needs a quote from your selected provider.") }
+                        if(editor.kind=="Holding" && fields.getValue("type")=="Wallet") Choice(tr("Mainnet chain"),fields.getValue("currency"),Chain.entries.map { it.name },!saving) { fields["currency"]=it }
+                        else { field("currency",tr("Currency code (EUR, USD, BTC…)")); Note(tr("Use an ISO currency code or a supported native asset. Conversion needs a quote from your selected provider.")) }
                     }
                     if(editor.kind in listOf("Holding","Connection")) {
                         val options=data.buckets.map { x ->
@@ -645,74 +679,74 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
                             val twins=data.buckets.filter { it.name==x.name && it.currency==x.currency }
                             x.id to if(twins.size>1) "$text (${twins.indexOf(x)+1})" else text
                         }
-                        Pick("Bucket",fields["bucket"],options,!saving) { fields["bucket"]=it }
+                        Pick(tr("Bucket"),fields["bucket"],options,!saving) { fields["bucket"]=it }
                     }
                     when(editor.kind) {
                         "Bucket" -> {
                             Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-                                Text("Portfolio mode",Modifier.weight(1f))
-                                Switch(checked=portfolio,onCheckedChange={ portfolio=it; error=null },enabled=!saving,modifier=Modifier.testTag("portfolio-mode").semantics { contentDescription="Portfolio mode" })
+                                Text(tr("Portfolio mode"),Modifier.weight(1f))
+                                Switch(checked=portfolio,onCheckedChange={ portfolio=it; error=null },enabled=!saving,modifier=Modifier.testTag("portfolio-mode").semantics { contentDescription=tr("Portfolio mode") })
                             }
                             if(portfolio) {
                                 Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
-                                    Text("Allow sells during rebalance",Modifier.weight(1f))
-                                    Switch(checked=sells,onCheckedChange={ sells=it },enabled=!saving,modifier=Modifier.testTag("allow-sells").semantics { contentDescription="Allow sells during rebalance" })
+                                    Text(tr("Allow sells during rebalance"),Modifier.weight(1f))
+                                    Switch(checked=sells,onCheckedChange={ sells=it },enabled=!saving,modifier=Modifier.testTag("allow-sells").semantics { contentDescription=tr("Allow sells during rebalance") })
                                 }
-                                Heading("Target weights")
+                                Heading(tr("Target weights"))
                                 val held=data.holdings.filter { it.bucketId==b?.id }.flatMap { x -> listOf(x.asset)+x.tokens.filter { data.known(x,it) }.map { tokenAsset(x.asset,it.contract) } }.distinct().filter { a -> targets.none { it.first==a } }
-                                if(targets.isEmpty() && held.isNotEmpty()) Note("Add a target for each asset. Targets must total 100%.")
+                                if(targets.isEmpty() && held.isNotEmpty()) Note(tr("Add a target for each asset. Targets must total 100%."))
                                 targets.forEachIndexed { i,(asset,value) ->
                                     Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                                         Text(assetName(data,asset),Modifier.weight(1f))
-                                        OutlinedTextField(value,onValueChange={ targets[i]=asset to it; error=null },label={ Text("Target %") },modifier=Modifier.width(120.dp).testTag("target-$i"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),enabled=!saving)
-                                        TextButton(onClick={ targets.removeAt(i); error=null },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text("Remove") }
+                                        OutlinedTextField(value,onValueChange={ targets[i]=asset to it; error=null },label={ Text(tr("Target %")) },modifier=Modifier.width(120.dp).testTag("target-$i"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),enabled=!saving)
+                                        TextButton(onClick={ targets.removeAt(i); error=null },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Remove")) }
                                     }
                                 }
                                 val sum=targets.fold(ZERO) { s,(_,v) -> s+(v.trim().replace(',','.').toBigDecimalOrNull() ?: ZERO) }
-                                Text(when { sum.compareTo(HUNDRED)==0 -> "Total 100%"; sum<HUNDRED -> "Total ${sum.text()}% · ${(HUNDRED-sum).text()}% missing"; else -> "Total ${sum.text()}% · ${(sum-HUNDRED).text()}% too much" },fontWeight=FontWeight.SemiBold)
-                                if(held.isNotEmpty()) Pick("Add target",null,held.map { it to assetName(data,it) },!saving,"Choose asset") { targets.add(it to ""); error=null }
+                                Text(when { sum.compareTo(HUNDRED)==0 -> tr("Total 100%"); sum<HUNDRED -> tr("Total {0}% · {1}% missing",sum.text(),(HUNDRED-sum).text()); else -> tr("Total {0}% · {1}% too much",sum.text(),(sum-HUNDRED).text()) },fontWeight=FontWeight.SemiBold)
+                                if(held.isNotEmpty()) Pick(tr("Add target"),null,held.map { it to assetName(data,it) },!saving,tr("Choose asset")) { targets.add(it to ""); error=null }
                                 Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                                    OutlinedTextField(otherAsset,onValueChange={ otherAsset=it; error=null },label={ Text("Other asset code (EUR, USD, BTC…)") },modifier=Modifier.weight(1f).testTag("other-asset"),singleLine=true,enabled=!saving)
+                                    OutlinedTextField(otherAsset,onValueChange={ otherAsset=it; error=null },label={ Text(tr("Other asset code (EUR, USD, BTC…)")) },modifier=Modifier.weight(1f).testTag("other-asset"),singleLine=true,enabled=!saving)
                                     TextButton(onClick={
                                         val code=otherAsset.trim().uppercase()
-                                        if(!validAsset(code) || ':' in code) error="Use an ISO currency code or BTC, ETH, TON, TRX. Tokens can be added only when held."
-                                        else if(targets.any { it.first==code }) error="$code already has a target"
+                                        if(!validAsset(code) || ':' in code) error=tr("Use an ISO currency code or BTC, ETH, TON, TRX. Tokens can be added only when held.")
+                                        else if(targets.any { it.first==code }) error=tr("{0} already has a target",code)
                                         else { targets.add(code to ""); otherAsset="" }
-                                    },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text("Add") }
+                                    },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Add")) }
                                 }
                             }
                         }
-                        "Holding" -> if(fields.getValue("type")=="Wallet") { field("address","Public wallet address"); Note("Paste one address. No seed phrase, private key or HD wallet discovery."); TokenEditor() } else field("quantity","Current quantity · no grouping separators",true)
+                        "Holding" -> if(fields.getValue("type")=="Wallet") { field("address",tr("Public wallet address")); Note(tr("Paste one address. No seed phrase, private key or HD wallet discovery.")); TokenEditor() } else field("quantity",tr("Current quantity · no grouping separators"),true)
                         "Goal" -> {
-                            field("target","Target amount · no grouping separators",true)
-                            dateField("due","Due date · YYYY-MM-DD")
+                            field("target",tr("Target amount · no grouping separators"),true)
+                            dateField("due",tr("Due date · YYYY-MM-DD"))
                         }
-                        "Planned" -> { field("amount","Amount · no grouping separators",true); dateField("date","Planned date · YYYY-MM-DD") }
+                        "Planned" -> { field("amount",tr("Amount · no grouping separators"),true); dateField("date",tr("Planned date · YYYY-MM-DD")) }
                         "Connection" -> {
                             val mode=Limit.valueOf(fields.getValue("mode"))
-                            Choice("Contribution limit",limitLabel(mode),Limit.entries.map(::limitLabel),!saving) { chosen -> fields["mode"]=Limit.entries.first { limitLabel(it)==chosen }.name }
-                            if(mode!=Limit.AUTO) field("value",if(mode==Limit.FIXED) "Amount in ${data.goals.first { it.id==editor.owner }.currency}" else limitLabel(mode),true)
-                            field("cap","Optional maximum % of goal (0–100)",true)
+                            Choice(tr("Contribution limit"),limitLabel(mode),Limit.entries.map(::limitLabel),!saving) { chosen -> fields["mode"]=Limit.entries.first { limitLabel(it)==chosen }.name }
+                            if(mode!=Limit.AUTO) field("value",if(mode==Limit.FIXED) tr("Amount in {0}",data.goals.first { it.id==editor.owner }.currency) else limitLabel(mode),true)
+                            field("cap",tr("Optional maximum % of goal (0–100)"),true)
                             val preview=remember(fields.toMap()) { runCatching { transform(data).allocate() }.getOrNull() }
                             val goal=data.goals.first { it.id==editor.owner }
                             if(preview!=null) {
                                 val key="${fields.getValue("bucket")}/${editor.owner}"
-                                Notice("Preview: ${money(data.convert(preview.byConnection[key] ?: ZERO,"USD",goal.currency),goal.currency)} from this bucket.\nGoal funded: ${money(data.convert(preview.goal(goal.id),"USD",goal.currency),goal.currency)} of ${money(goal.target.decimal(),goal.currency)}${if(preview.incomplete) "\nIncomplete: missing rates or balances." else ""}")
+                                Notice(tr("Preview: {0} from this bucket.\nGoal funded: {1} of {2}",money(data.convert(preview.byConnection[key] ?: ZERO,"USD",goal.currency),goal.currency),money(data.convert(preview.goal(goal.id),"USD",goal.currency),goal.currency),money(goal.target.decimal(),goal.currency))+(if(preview.incomplete) "\n"+tr("Incomplete: missing rates or balances.") else ""))
                             }
-                            Note("Limits are ceilings. Goal order, available savings, and other connections can reduce the contribution.")
+                            Note(tr("Limits are ceilings. Goal order, available savings, and other connections can reduce the contribution."))
                         }
-                        "Settings" -> Choice("Appearance",fields.getValue("theme"),listOf("System","Light","Dark"),!saving) { fields["theme"]=it }
+                        "Settings" -> Choice(tr("Appearance"),fields.getValue("theme"),listOf("System","Light","Dark"),!saving,::shown) { fields["theme"]=it }
                     }
                     val oldCurrency=if(editor.kind=="Holding") h?.asset else if(editor.kind=="Goal") g?.currency else null
                     if(oldCurrency!=null && oldCurrency!=fields.getValue("currency").trim().uppercase() && (editor.kind!="Holding" || fields.getValue("type")=="Manual")) {
-                        Choice("Currency changed from $oldCurrency",fields.getValue("currencyAction"),listOf("Convert existing values","Replace with entered numbers"),!saving) { fields["currencyAction"]=it }
-                        Note("Convert uses the saved amount and cached rates. Replace treats entered numbers (including fixed goal connection limits) as values in the new currency.")
+                        Choice(tr("Currency changed from {0}",oldCurrency),fields.getValue("currencyAction"),listOf("Convert existing values","Replace with entered numbers"),!saving,::shown) { fields["currencyAction"]=it }
+                        Note(tr("Convert uses the saved amount and cached rates. Replace treats entered numbers (including fixed goal connection limits) as values in the new currency."))
                     }
-                    Note("Changes stay in this editor until Save. Cancel discards them.")
+                    Note(tr("Changes stay in this editor until Save. Cancel discards them."))
                 }
             }
         }
         BackHandler { close() }
-        if(discard) AlertDialog(onDismissRequest={ discard=false },title={ Text("Discard edits?") },confirmButton={ TextButton(onClick=onDismiss) { Text("Discard") } },dismissButton={ TextButton(onClick={ discard=false }) { Text("Keep editing") } })
+        if(discard) AlertDialog(onDismissRequest={ discard=false },title={ Text(tr("Discard edits?")) },confirmButton={ TextButton(onClick=onDismiss) { Text(tr("Discard")) } },dismissButton={ TextButton(onClick={ discard=false }) { Text(tr("Keep editing")) } })
     }
 }

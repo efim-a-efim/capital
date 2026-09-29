@@ -12,8 +12,8 @@ fun id() = UUID.randomUUID().toString()
 val ZERO: BigDecimal = BigDecimal.ZERO
 val HUNDRED: BigDecimal = BigDecimal(100)
 fun String.decimal(): BigDecimal {
-    require(length in 1..100 && matches(Regex("[0-9]+(\\.[0-9]{1,18})?"))) { "Enter a nonnegative number (up to 18 decimals)" }
-    return toBigDecimal().also { require(it.precision() <= 60) { "Amount is too large" } }
+    require(length in 1..100 && matches(Regex("[0-9]+(\\.[0-9]{1,18})?"))) { tr("Enter a nonnegative number (up to 18 decimals)") }
+    return toBigDecimal().also { require(it.precision() <= 60) { tr("Amount is too large") } }
 }
 fun BigDecimal.text(): String = stripTrailingZeros().toPlainString()
 fun BigDecimal.divideMoney(other: BigDecimal) = divide(other, 18, RoundingMode.DOWN)
@@ -80,52 +80,52 @@ val providerChoices = linkedMapOf(
     val planned: List<Planned> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000) { "File exceeds personal portfolio limits" }
-        fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { "Duplicate or invalid identifiers" } }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000) { tr("File exceeds personal portfolio limits") }
+        fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { tr("Duplicate or invalid identifiers") } }
         unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id })
-        require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { "Duplicate or invalid identifiers" }
-        require(validAsset(settings.currency) && settings.theme in listOf("System", "Light", "Dark")) { "Invalid settings" }
-        require(settings.providers.keys == providerChoices.keys && settings.providers.all { (k,v) -> v in providerChoices.getValue(k) }) { "Unsupported provider" }
+        require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { tr("Duplicate or invalid identifiers") }
+        require(validAsset(settings.currency) && settings.theme in listOf("System", "Light", "Dark")) { tr("Invalid settings") }
+        require(settings.providers.keys == providerChoices.keys && settings.providers.all { (k,v) -> v in providerChoices.getValue(k) }) { tr("Unsupported provider") }
         val owners = mutableSetOf<String>()
-        buckets.forEach { require(it.name.isNotBlank() && it.name.length <= 120 && validAsset(it.currency)) { "Invalid bucket" }
-            require(it.targets.size <= 200) { "At most 200 targets" }
+        buckets.forEach { require(it.name.isNotBlank() && it.name.length <= 120 && validAsset(it.currency)) { tr("Invalid bucket") }
+            require(it.targets.size <= 200) { tr("At most 200 targets") }
             it.targets.forEach { (k, v) ->
-                require(validAsset(k)) { "Invalid target asset" }
-                require(v.matches(Regex("[0-9]{1,3}(\\.[0-9]{1,2})?")) && v.toBigDecimal() <= HUNDRED) { "Target for ${if (':' in k) "a token" else k} must be 0–100 with up to two decimals" }
+                require(validAsset(k)) { tr("Invalid target asset") }
+                require(v.matches(Regex("[0-9]{1,3}(\\.[0-9]{1,2})?")) && v.toBigDecimal() <= HUNDRED) { if (':' in k) tr("Target for a token must be 0–100 with up to two decimals") else tr("Target for {0} must be 0–100 with up to two decimals", k) }
             }
-            if (it.portfolio) it.targets.values.fold(ZERO) { s, v -> s + v.toBigDecimal() }.let { sum -> require(sum.compareTo(HUNDRED) == 0) { "Targets must total 100%. Now ${sum.text()}%." } }
+            if (it.portfolio) it.targets.values.fold(ZERO) { s, v -> s + v.toBigDecimal() }.let { sum -> require(sum.compareTo(HUNDRED) == 0) { tr("Targets must total 100%. Now {0}%.", sum.text()) } }
         }
         holdings.forEach { h ->
-            require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { "Invalid holding" }
+            require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { tr("Invalid holding") }
             h.quantity?.decimal()
-            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.asset != Chain.BTC.name)) { "Tokens need an ETH, TON or TRX wallet" }
+            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.asset != Chain.BTC.name)) { tr("Tokens need an ETH, TON or TRX wallet") }
             if (h.address != null) {
                 val chain = Chain.valueOf(h.asset)
-                require(h.tokens.size <= 100 && h.tokens.map { it.contract }.distinct().size == h.tokens.size) { "Invalid tokens" }
+                require(h.tokens.size <= 100 && h.tokens.map { it.contract }.distinct().size == h.tokens.size) { tr("Invalid tokens") }
                 fun canonical(c: String) = runCatching { canonicalAddress(chain, c) == c }.getOrDefault(false)
-                require(h.excluded.size <= 1000 && h.excluded.distinct().size == h.excluded.size && h.excluded.all { canonical(it) }) { "Invalid excluded tokens" }
-                h.tokens.forEach { t -> require(canonical(t.contract) && t.units.matches(Regex("[0-9]{1,80}")) && t.symbol.length <= 40 && t.name.length <= 40 && (t.decimals ?: 0) in 0..36) { "Invalid token" } }
-                require(owners.add("${chain.name}:${canonicalAddress(chain, h.address)}")) { "Wallet already belongs to a bucket" }
-                h.quantity?.let { require(it.decimal().stripTrailingZeros().scale() <= chain.decimals) { "Invalid native precision" } }
-            } else require(h.quantity != null) { "Manual balance required" }
+                require(h.excluded.size <= 1000 && h.excluded.distinct().size == h.excluded.size && h.excluded.all { canonical(it) }) { tr("Invalid excluded tokens") }
+                h.tokens.forEach { t -> require(canonical(t.contract) && t.units.matches(Regex("[0-9]{1,80}")) && t.symbol.length <= 40 && t.name.length <= 40 && (t.decimals ?: 0) in 0..36) { tr("Invalid token") } }
+                require(owners.add("${chain.name}:${canonicalAddress(chain, h.address)}")) { tr("Wallet already belongs to a bucket") }
+                h.quantity?.let { require(it.decimal().stripTrailingZeros().scale() <= chain.decimals) { tr("Invalid native precision") } }
+            } else require(h.quantity != null) { tr("Manual balance required") }
         }
         goals.forEach {
-            require(it.name.isNotBlank() && it.name.length <= 120 && it.target.decimal() > ZERO && validAsset(it.currency)) { "Invalid goal" }
+            require(it.name.isNotBlank() && it.name.length <= 120 && it.target.decimal() > ZERO && validAsset(it.currency)) { tr("Invalid goal") }
             LocalDate.parse(it.due)
         }
         planned.forEach {
-            require(it.name.isNotBlank() && it.name.length <= 120 && it.amount.decimal() > ZERO && validAsset(it.currency) && ':' !in it.currency) { "Invalid planned saving" }
+            require(it.name.isNotBlank() && it.name.length <= 120 && it.amount.decimal() > ZERO && validAsset(it.currency) && ':' !in it.currency) { tr("Invalid planned saving") }
             LocalDate.parse(it.date)
         }
-        require(connections.map { it.key }.distinct().size == connections.size) { "Duplicate connection" }
+        require(connections.map { it.key }.distinct().size == connections.size) { tr("Duplicate connection") }
         connections.forEach {
-            require(buckets.any { b -> b.id == it.bucketId } && goals.any { g -> g.id == it.goalId }) { "Missing connection owner" }
+            require(buckets.any { b -> b.id == it.bucketId } && goals.any { g -> g.id == it.goalId }) { tr("Missing connection owner") }
             val v = it.value.decimal()
-            if (it.mode in listOf(Limit.BUCKET_PERCENT, Limit.GOAL_PERCENT)) require(v <= HUNDRED) { "Percentage must be 0–100" }
-            it.goalCap?.let { cap -> require(cap.decimal() <= HUNDRED) { "Goal cap must be 0–100" } }
+            if (it.mode in listOf(Limit.BUCKET_PERCENT, Limit.GOAL_PERCENT)) require(v <= HUNDRED) { tr("Percentage must be 0–100") }
+            it.goalCap?.let { cap -> require(cap.decimal() <= HUNDRED) { tr("Goal cap must be 0–100") } }
         }
-        require(quotes.map { it.asset }.distinct().size == quotes.size) { "Duplicate quote" }
-        quotes.forEach { require(validAsset(it.asset) && it.usd.decimal() > ZERO && it.observedAt > 0 && it.fetchedAt > 0) { "Invalid quote" } }
+        require(quotes.map { it.asset }.distinct().size == quotes.size) { tr("Duplicate quote") }
+        quotes.forEach { require(validAsset(it.asset) && it.usd.decimal() > ZERO && it.observedAt > 0 && it.fetchedAt > 0) { tr("Invalid quote") } }
         return this
     }
     fun price(asset: String): BigDecimal? = if (asset == "USD") BigDecimal.ONE else quotes.find { it.asset == asset }?.usd?.decimal()
@@ -162,6 +162,6 @@ fun Portfolio.moveGoal(id: String, up: Boolean): Portfolio {
     return copy(goals = goals.map { when (it.id) { g.id -> it.copy(priority = other.priority); other.id -> it.copy(priority = g.priority); else -> it } }).ranked()
 }
 fun baseQuantity(units: String, chain: Chain): String {
-    require(units.length <= 80 && units.matches(Regex("[0-9]+"))) { "Invalid balance response" }
+    require(units.length <= 80 && units.matches(Regex("[0-9]+"))) { tr("Invalid balance response") }
     return BigDecimal(BigInteger(units), chain.decimals).text()
 }
