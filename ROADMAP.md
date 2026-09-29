@@ -4,7 +4,7 @@
 
 Buckets, manual holdings, read-only BTC/ETH/TON/TRX wallets with tokens, goals ranked by date, planned savings with closure projection, portable snapshot folder with conflict handling. Specs: `openspec/specs/`.
 
-## Version 2
+## Version 2 — implemented, build `2.0.0`
 
 ### Portfolio support
 
@@ -14,7 +14,7 @@ Buckets, manual holdings, read-only BTC/ETH/TON/TRX wallets with tokens, goals r
 - **Rebalancing calculator.** The user enters an amount to invest in the base currency. The app calculates what to buy to come as close to the targets as possible.
 - By default the app never recommends selling. The bucket setting **Allow sells during rebalance** lets it recommend selling some assets to buy others.
 
-Proposal: `openspec/changes/add-portfolio-mode/`.
+Change: `openspec/changes/add-portfolio-mode/`.
 
 ### Encryption and locking
 
@@ -25,7 +25,7 @@ Proposal: `openspec/changes/add-portfolio-mode/`.
 - "Use password" is always available on the PIN screen. Every password check waits a random 1 to 5 seconds.
 - No password recovery.
 
-Proposal: `openspec/changes/add-encryption-and-lock/`.
+Change: `openspec/changes/add-encryption-and-lock/`.
 
 ## Open items carried over from version 1
 

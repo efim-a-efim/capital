@@ -10,7 +10,7 @@ import kotlinx.serialization.json.int
 import java.security.MessageDigest
 
 val json = Json { encodeDefaults = true; ignoreUnknownKeys = false }
-const val SCHEMA = 3
+const val SCHEMA = 4
 const val MAX_FILE_BYTES = 8 * 1024 * 1024
 class FutureSchema : IllegalArgumentException("This folder needs a newer Capital version. No data was changed.")
 @Serializable data class Revision(val schema: Int = SCHEMA, val id: String = id(), val parents: List<String> = emptyList(), val createdAt: Long = System.currentTimeMillis(), val data: Portfolio)
@@ -66,13 +66,13 @@ fun scanRevisions(files: List<String>): Scan {
     return Scan(heads,invalid,parents.any { it !in unique })
 }
 
-fun java.io.InputStream.readLimited(): ByteArray {
+fun java.io.InputStream.readLimited(limit: Int = MAX_FILE_BYTES): ByteArray {
     val output = java.io.ByteArrayOutputStream()
     val buffer = ByteArray(8192)
     while (true) {
         val count = read(buffer)
         if (count < 0) break
-        require(output.size() + count <= MAX_FILE_BYTES) { "File or response too large" }
+        require(output.size() + count <= limit) { "File or response too large" }
         output.write(buffer,0,count)
     }
     return output.toByteArray()

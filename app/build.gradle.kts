@@ -10,11 +10,27 @@ android {
         applicationId = "dev.capital"
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "2.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true }
+    // Release signing is configured only when the CI (or you) provide a keystore through the environment.
+    val keystore = System.getenv("CAPITAL_KEYSTORE")
+    if (keystore != null) signingConfigs {
+        create("release") {
+            storeFile = file(keystore)
+            storePassword = System.getenv("CAPITAL_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("CAPITAL_KEY_ALIAS")
+            keyPassword = System.getenv("CAPITAL_KEY_PASSWORD")
+        }
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            if (keystore != null) signingConfig = signingConfigs.getByName("release")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -33,10 +49,11 @@ dependencies {
     implementation(libs.coroutines)
     implementation(libs.okhttp)
     implementation(libs.bc)
+    implementation(libs.biometric)
+    implementation(libs.fragment)
     debugImplementation(libs.compose.tooling)
     androidTestImplementation("androidx.test:runner:1.7.0")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.4.0")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }

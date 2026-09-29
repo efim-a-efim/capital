@@ -15,6 +15,32 @@ APK: `app/build/outputs/apk/debug/app-debug.apk`.
 
 Toolchain: Gradle 9.8.0, Android Gradle Plugin 9.4.1, Kotlin/Compose compiler 2.4.20, SDK/Build-Tools 37. JDK 25 from current Android Studio works. `scripts/gradle` selects that JDK on macOS; elsewhere set `JAVA_HOME`. Set `sdk.dir` in untracked `local.properties` or `ANDROID_HOME`. First build downloads dependencies. Gradle distribution has a pinned SHA-256 checksum.
 
+## Releases and CI
+
+`.github/workflows/build.yml` builds the APKs on GitHub.
+
+- **Tag `vX.Y.Z`:** runs tests and lint, builds, uploads the APKs as build artifacts and publishes a GitHub release with a changelog made from the commits since the previous tag. The tag must match `versionName` in `app/build.gradle.kts`.
+- **Manual run** (Actions → Build APK → Run workflow): builds and uploads the APKs as build artifacts. A manual run on a tag also publishes the release.
+- Branch pushes do not build.
+
+`.github/workflows/release.yml` creates the next version. Only the repository owner can run it (Actions → release → Run workflow).
+
+- **Inputs:** the branch to release from, default `main`, and the version part to increase: `patch` (default), `minor` or `major`.
+- The next version is the latest `vX.Y.Z` tag increased by that part, following semantic versioning. With `v1.0.0` as the latest tag, `major` gives `v2.0.0`.
+- It writes the version into `app/build.gradle.kts`, increases `versionCode`, commits to the branch, creates the tag and starts the build for it. The build then publishes the release.
+- The branch must accept pushes from GitHub Actions. A protected branch that blocks them makes the workflow fail without creating a tag.
+
+The debug APK is signed with a temporary key, so it cannot be installed over another build. For updates that install over each other, add these repository secrets and the workflow also builds a signed release APK:
+
+| Secret | Content |
+|---|---|
+| `CAPITAL_KEYSTORE_BASE64` | `base64 -w0 your.jks` |
+| `CAPITAL_KEYSTORE_PASSWORD` | keystore password |
+| `CAPITAL_KEY_ALIAS` | key alias |
+| `CAPITAL_KEY_PASSWORD` | key password |
+
+Local builds of earlier versions are kept in `releases/`, which is not tracked.
+
 ## First use
 
 1. Choose a dedicated local folder, e.g. `Documents/CapitalTracker`. Existing Capital folders reopen directly.
@@ -25,6 +51,25 @@ Toolchain: Gradle 9.8.0, Android Gradle Plugin 9.4.1, Kotlin/Compose compiler 2.
 6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket displays native quantities plus converted values. Missing quotes mark totals incomplete; stale cached values remain usable with a warning. Goal allocations never transfer money or increase your total savings.
+
+## Portfolio mode
+
+Switch on **Portfolio mode** in a bucket's settings to treat it as an investment portfolio. Set a target percentage per asset; targets must total 100%. The bucket then shows value, real share, target and difference for each asset, calculated in your default currency. Switching the mode off hides these views and keeps the targets.
+
+**Rebalance** asks for an amount to invest and lists what to buy to come as close to the targets as possible. It recommends sells only when **Allow sells during rebalance** is on for that bucket. It is a calculator: it never changes holdings and uses cached rates. Unknown and excluded tokens are not part of a portfolio. If any asset has no rate, shares are shown as unavailable rather than calculated from part of the portfolio.
+
+## Encryption and lock
+
+Settings → Security → **Encryption** encrypts every snapshot in the folder with a password, including older revisions. Switching it off decrypts them all. A password change re-encrypts every file, after which the old password opens nothing.
+
+- **No password recovery.** A lost password means the data cannot be opened.
+- **Earlier plaintext backups stay readable.** The app warns about them when you switch encryption on and cannot encrypt or delete them. The same holds for copies your sync tool already made.
+- **PIN and biometrics** are available only while encryption is on. With encryption off the app opens directly. Without a PIN the password is asked at each launch.
+- **"Use password"** is always available on the PIN screen, also while the PIN is blocked. After 10 wrong PINs the PIN is removed and only the password works. Wrong entries never delete data.
+- Every password check waits a random 1 to 5 seconds.
+- While encryption is on, screenshots and the recent-apps preview are blocked.
+- Files use AES-256-GCM with a key derived by Argon2id. Revision ids stay readable so sync conflicts can be detected without the password.
+- Version 1 cannot open encrypted folders.
 
 ## Wallet and provider scope
 
@@ -48,7 +93,7 @@ Sources are independently selectable. No automatic switch to another operator. S
 
 ## Storage, sync and recovery
 
-Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Schema 2 adds wallet tokens; schema 1 folders open unchanged and upgrade on the next save. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
+Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Older schemas open unchanged and upgrade on the next save; the current schema is 4. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
 
 Use your preferred sync tool to sync the folder. Capital does not run its own sync service. Android folder access differs across sync tools; verify both apps can access your selected directory. Concurrent revisions produce a conflict screen; choose a version after reviewing it. Both originals remain. Incomplete sync blocks editing until missing parents arrive. Device clocks do not choose a winner.
 
@@ -59,7 +104,7 @@ Use your preferred sync tool to sync the folder. Capital does not run its own sy
 - **Backup:** Settings → Export backup. Restore validates before confirmation and creates a new revision.
 - **Newer schema:** upgrade the app; older builds refuse to modify it.
 
-Files are plaintext financial records. Protect your device and sync destination. Snapshot cleanup and portable encryption are not implemented. Keep the complete snapshot ancestry when syncing; use Export backup for a standalone portable copy.
+Files are plaintext financial records unless encryption is on. Protect your device and sync destination. Snapshot cleanup is not implemented. Keep the complete snapshot ancestry when syncing; use Export backup for a standalone portable copy.
 
 ## Checks
 

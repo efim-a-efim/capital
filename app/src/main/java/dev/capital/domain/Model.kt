@@ -27,7 +27,10 @@ fun tokenAsset(chain: String, contract: String) = "$chain:$contract"
 fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
 @Serializable enum class Chain(val decimals: Int) { BTC(8), ETH(18), TON(9), TRX(6) }
 @Serializable enum class Limit { AUTO, FIXED, BUCKET_PERCENT, GOAL_PERCENT }
-@Serializable data class Bucket(val id: String = id(), val name: String, val currency: String = "EUR")
+@Serializable data class Bucket(
+    val id: String = id(), val name: String, val currency: String = "EUR",
+    val portfolio: Boolean = false, val targets: Map<String, String> = emptyMap(), val allowSells: Boolean = false,
+)
 @Serializable data class Holding(
     val id: String = id(), val bucketId: String, val label: String, val asset: String,
     val quantity: String? = "0", val address: String? = null,
@@ -84,7 +87,14 @@ val providerChoices = linkedMapOf(
         require(validAsset(settings.currency) && settings.theme in listOf("System", "Light", "Dark")) { "Invalid settings" }
         require(settings.providers.keys == providerChoices.keys && settings.providers.all { (k,v) -> v in providerChoices.getValue(k) }) { "Unsupported provider" }
         val owners = mutableSetOf<String>()
-        buckets.forEach { require(it.name.isNotBlank() && it.name.length <= 120 && validAsset(it.currency)) { "Invalid bucket" } }
+        buckets.forEach { require(it.name.isNotBlank() && it.name.length <= 120 && validAsset(it.currency)) { "Invalid bucket" }
+            require(it.targets.size <= 200) { "At most 200 targets" }
+            it.targets.forEach { (k, v) ->
+                require(validAsset(k)) { "Invalid target asset" }
+                require(v.matches(Regex("[0-9]{1,3}(\\.[0-9]{1,2})?")) && v.toBigDecimal() <= HUNDRED) { "Target for ${if (':' in k) "a token" else k} must be 0–100 with up to two decimals" }
+            }
+            if (it.portfolio) it.targets.values.fold(ZERO) { s, v -> s + v.toBigDecimal() }.let { sum -> require(sum.compareTo(HUNDRED) == 0) { "Targets must total 100%. Now ${sum.text()}%." } }
+        }
         holdings.forEach { h ->
             require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { "Invalid holding" }
             h.quantity?.decimal()

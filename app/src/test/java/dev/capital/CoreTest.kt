@@ -70,7 +70,7 @@ class CoreTest {
         val resolved=Revision(id="resolved",parents=listOf("left","right"),data=left.data)
         assertEquals(listOf(resolved),scanRevisions(files+encodeRevision(resolved)).heads)
         assertTrue(scanRevisions(listOf(encodeRevision(left))).missingParents)
-        val future=root.copy(schema=4)
+        val future=root.copy(schema=5)
         assertThrows(FutureSchema::class.java) { decodeRevision(encodeRevision(future)) }
         rejects { decodeRevision(encodeRevision(root).replace("900","901")) }
         rejects { scanRevisions(listOf(encodeRevision(root.copy(parents=listOf("left"))),encodeRevision(left))) }
@@ -258,6 +258,16 @@ class CoreTest {
             assertTrue(prio(r.data,"b")>prio(r.data,"a")); assertTrue(prio(r.data,"a")>prio(r.data,"late"))
         }
         val text=encodeRevision(Revision(data=p)); assertEquals(9,prio(decodeRevision(text).data,"late"))
-        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(4,p)) }
+        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(5,p)) }
+    }
+    @Test fun schemaThreeOpensWithPortfolioDefaults() {
+        val p=portfolio().let { it.copy(buckets=listOf(Bucket("b","Savings","USD",true,mapOf("USD" to "100"),true))) }
+        val obj=json.parseToJsonElement(json.encodeToString(Revision(data=p))).jsonObject
+        val data=obj.getValue("data").jsonObject
+        val old=JsonObject(obj+mapOf("schema" to JsonPrimitive(3),"data" to JsonObject(data+("buckets" to JsonArray(data.getValue("buckets").jsonArray.map { JsonObject(it.jsonObject-"portfolio"-"targets"-"allowSells") })))))
+        val payload=old.toString()
+        val r=decodeRevision(json.encodeToString(Envelope(payload,checksum(payload))))
+        assertEquals(3,r.schema); assertEquals(Bucket("b","Savings","USD"),r.data.buckets.single())
+        assertFalse(r.data.buckets.single().portfolio); assertTrue(r.data.buckets.single().targets.isEmpty()); assertFalse(r.data.buckets.single().allowSells)
     }
 }

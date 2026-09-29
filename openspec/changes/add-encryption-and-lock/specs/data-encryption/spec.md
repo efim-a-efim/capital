@@ -27,19 +27,19 @@ The user SHALL be able to switch encryption on at any time by choosing a passwor
 - **THEN** the next start detects the mixed folder, loads the data, and resumes the switch after the password is entered.
 
 ### Requirement: Warning about earlier plaintext backups
-If at least one backup was exported without encryption, switching encryption on SHALL show a warning window stating that those backup files remain readable, that the app cannot encrypt or delete them, and when the last one was exported. The user SHALL have to accept this risk explicitly to continue; declining SHALL leave encryption off and change nothing. The window SHALL also state that copies already held by sync tools are outside the app's control.
+Switching encryption on SHALL show a warning window stating that backups exported without encryption remain readable and that the app cannot encrypt or delete them. When the app has a record of plaintext exports, the window SHALL state how many were exported and when the last one was. When it has no record, it SHALL say that backups exported earlier, including with older app versions, are not tracked. The user SHALL have to accept this risk explicitly to continue; declining SHALL leave encryption off and change nothing. The window SHALL also state that copies already held by sync tools are outside the app's control.
 
-#### Scenario: Plaintext backup exists
+#### Scenario: Plaintext backup recorded
 - **WHEN** the user exported a plaintext backup earlier and now switches encryption on
-- **THEN** the warning window appears and encryption starts only after the user accepts the risk.
+- **THEN** the warning window names the number and date of plaintext exports and encryption starts only after the user accepts the risk.
 
 #### Scenario: Decline
 - **WHEN** the user declines the warning
 - **THEN** encryption stays off and no file is changed.
 
-#### Scenario: No plaintext backup
-- **WHEN** no backup was ever exported without encryption
-- **THEN** no backup warning is shown.
+#### Scenario: No record
+- **WHEN** no plaintext export is recorded
+- **THEN** the warning window still appears, says earlier exports are not tracked, and requires acceptance.
 
 ### Requirement: Switching encryption off
 The user SHALL be able to switch encryption off at any time after entering the password. Switching off SHALL decrypt every snapshot in the data directory, keeping revision ids and ancestry, verifying each plaintext file before its encrypted original is removed. Device-bound key material, the PIN and biometric unlock SHALL be deleted. Afterwards the app SHALL open without any lock.

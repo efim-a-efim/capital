@@ -1,0 +1,104 @@
+name: release
+
+# Creates the next version tag from a branch. Only the repository owner can run it.
+# The version comes from the latest vX.Y.Z tag, bumped by the chosen part.
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch to release from
+        required: true
+        default: main
+        type: string
+      bump:
+        description: Version part to increase
+        required: true
+        default: patch
+        type: choice
+        options: [patch, minor, major]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write   # push the version commit and the tag
+      actions: write    # start the build workflow on the new tag
+    steps:
+      - name: Only the repository owner may release
+        env:
+          ACTOR: ${{ github.actor }}
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          if [ "$ACTOR" != "$OWNER" ] || [ "$TRIGGERING_ACTOR" != "$OWNER" ]; then
+            echo "::error::Only $OWNER can run the release workflow (started by $TRIGGERING_ACTOR)."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Calculate the next version
+        id: next
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          LATEST=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+          CURRENT=${LATEST#v}
+          CURRENT=${CURRENT:-0.0.0}
+          IFS=. read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          case "$BUMP" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+            *) echo "::error::Unknown bump '$BUMP'"; exit 1 ;;
+          esac
+          VERSION="$MAJOR.$MINOR.$PATCH"
+          if git rev-parse -q --verify "refs/tags/v$VERSION" > /dev/null; then
+            echo "::error::Tag v$VERSION already exists"; exit 1
+          fi
+          echo "Latest tag: ${LATEST:-none}; next version: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Write the version into the build file
+        env:
+          VERSION: ${{ steps.next.outputs.version }}
+        run: |
+          FILE=app/build.gradle.kts
+          CODE=$(sed -n 's/.*versionCode = \([0-9][0-9]*\).*/\1/p' "$FILE" | head -1)
+          test -n "$CODE"
+          sed -i -E "s/(versionCode = )[0-9]+/\1$((CODE + 1))/; s/(versionName = \")[^\"]*(\")/\1$VERSION\2/" "$FILE"
+          grep -E 'versionCode|versionName' "$FILE"
+          grep -q "versionName = \"$VERSION\"" "$FILE"
+
+      - name: Commit, tag and push
+        env:
+          VERSION: ${{ steps.next.outputs.version }}
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle.kts
+          git commit -m "Release v$VERSION"
+          git tag -a "v$VERSION" -m "Capital v$VERSION"
+          git push --atomic origin "HEAD:refs/heads/$BRANCH" "refs/tags/v$VERSION"
+
+      # A tag pushed by a workflow does not start other workflows, so the build is started here.
+      - name: Start the build for the new tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.next.outputs.version }}
+        run: |
+          gh workflow run build.yml --ref "v$VERSION"
+          echo "### Released v$VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "Build started for tag v$VERSION. It publishes the GitHub release when it finishes." >> "$GITHUB_STEP_SUMMARY"

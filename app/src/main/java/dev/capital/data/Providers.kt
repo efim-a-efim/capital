@@ -80,7 +80,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
     // Statuses in `soft` are returned to the caller instead of failing.
     private suspend fun send(url: String, body: String? = null, headers: Map<String,String> = emptyMap(), soft: Set<Int> = emptySet()): Pair<Int,Pair<String,Headers>> {
         require(url.startsWith("https://")) { "HTTPS is required" }
-        val builder=Request.Builder().url(url).header("User-Agent","Capital/1.0")
+        val builder=Request.Builder().url(url).header("User-Agent","Capital/2.0")
         headers.forEach { (k,v) -> builder.header(k,v) }
         body?.let { builder.post(it.toRequestBody(media)) }
         val req=builder.build()

@@ -68,14 +68,22 @@ private fun money(value: BigDecimal?,asset: String): String {
     return if(fiat != null) NumberFormat.getCurrencyInstance().apply { currency=fiat; maximumFractionDigits=fiat.defaultFractionDigits.coerceAtLeast(0) }.format(value)
     else "${NumberFormat.getNumberInstance().apply { maximumFractionDigits=18 }.format(value)} ${assetLabel(asset)}"
 }
+// Digits worth showing for a trade quantity: currency minor units, at most 8 for coins, 6 for tokens.
+private fun assetDigits(asset: String)=Chain.entries.find { it.name==asset }?.let { minOf(it.decimals,8) } ?: if(':' in asset) 6 else runCatching { Currency.getInstance(asset).defaultFractionDigits.coerceAtLeast(0) }.getOrDefault(2)
 private fun tokenQty(value: BigDecimal,symbol: String)=listOf(NumberFormat.getNumberInstance().apply { maximumFractionDigits=18 }.format(value),symbol).filter { it.isNotBlank() }.joinToString(" ")
 private fun shortContract(chain: String,contract: String)=providerAddress(Chain.valueOf(chain),contract).let { if(it.length>14) it.take(8)+"…"+it.takeLast(6) else it }
-private fun time(value: Long?): String = value?.let { DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) } ?: "Never refreshed"
+private fun assetName(data: Portfolio,asset: String): String {
+    if(':' !in asset) return assetLabel(asset)
+    val chain=asset.substringBefore(':'); val contract=asset.substringAfter(':')
+    val symbol=data.holdings.filter { it.asset==chain }.flatMap { h -> h.tokens.filter { it.contract==contract && data.known(h,it) } }.firstOrNull()?.symbol?.takeIf { it.isNotBlank() }
+    return (symbol?.let { "$it · " } ?: "Token ")+shortContract(chain,contract)
+}
+internal fun time(value: Long?): String = value?.let { DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())) } ?: "Never refreshed"
 private fun date(value: String): String=runCatching { LocalDate.parse(value).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) }.getOrDefault(value)
-@Composable private fun Heading(value: String) { Text(value,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=20.dp,bottom=8.dp)) }
-@Composable private fun Note(value: String) { Text(value,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
+@Composable internal fun Heading(value: String) { Text(value,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.SemiBold,modifier=Modifier.padding(top=20.dp,bottom=8.dp)) }
+@Composable internal fun Note(value: String,modifier: Modifier=Modifier) { Text(value,modifier,style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant) }
 // Overlay message: never moves content. Goes away on tap, on a swipe in any direction, or after a reading-time timer.
-@Composable private fun Popup(message: String,onDismiss: ()->Unit) {
+@Composable internal fun Popup(message: String,onDismiss: ()->Unit) {
     var offset by remember(message) { mutableStateOf(Offset.Zero) }
     LaunchedEffect(message) { delay((4000L+message.length*40L).coerceAtMost(15000L)); onDismiss() }
     Surface(color=MaterialTheme.colorScheme.inverseSurface,contentColor=MaterialTheme.colorScheme.inverseOnSurface,shape=MaterialTheme.shapes.small,shadowElevation=6.dp,
@@ -87,8 +95,8 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
         Text(message,Modifier.padding(horizontal=16.dp,vertical=10.dp),style=MaterialTheme.typography.bodySmall,maxLines=6,overflow=TextOverflow.Ellipsis)
     }
 }
-@Composable private fun Notice(value: String) { Surface(color=MaterialTheme.colorScheme.surfaceVariant,shape=MaterialTheme.shapes.medium) { Text(value,Modifier.fillMaxWidth().padding(16.dp),style=MaterialTheme.typography.bodyMedium) } }
-@Composable private fun Actions(content: @Composable FlowRowScope.()->Unit) { FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth(),content=content) }
+@Composable internal fun Notice(value: String) { Surface(color=MaterialTheme.colorScheme.surfaceVariant,shape=MaterialTheme.shapes.medium) { Text(value,Modifier.fillMaxWidth().padding(16.dp),style=MaterialTheme.typography.bodyMedium) } }
+@Composable internal fun Actions(content: @Composable FlowRowScope.()->Unit) { FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth(),content=content) }
 @Composable private fun Stat(label: String,value: String) { Column(Modifier.padding(vertical=12.dp)) { Note(label); Text(value,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold) } }
 @Composable private fun Item(title: String,subtitle: String,value: String?=null,onClick: (()->Unit)?) {
     val body: @Composable ()->Unit = {
@@ -172,9 +180,12 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     var bucketId by rememberSaveable { mutableStateOf<String?>(null) }
     var goalId by rememberSaveable { mutableStateOf<String?>(null) }
     var editor by remember { mutableStateOf<Editor?>(null) }
+    var calculator by remember { mutableStateOf<String?>(null) }
     var confirmation by remember { mutableStateOf<Pair<String,()->Unit>?>(null) }
     var copyFolder by remember { mutableStateOf(false) }
     var keyProvider by remember { mutableStateOf<String?>(null) }
+    var secDialog by remember { mutableStateOf<String?>(null) }
+    var lockRev by remember { mutableIntStateOf(0) }
     val folderPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri -> uri?.let { model.chooseFolder(it,copyFolder) } }
     val backup=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { it?.let(model::export) }
     val restore=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::inspectRestore) }
@@ -185,8 +196,11 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     fun select(value: String) { section=value; bucketId=null; goalId=null }
     val editable=state.ready && !state.blocked && !state.unsaved && !state.saving
     BackHandler(editor==null && (bucketId!=null || goalId!=null || section!="Overview")) { if(bucketId!=null || goalId!=null) { bucketId=null; goalId=null } else section="Overview" }
+    // Locked: only the lock screen; nothing financial is composed and open dialogs are dropped.
+    LaunchedEffect(state.security) { if(state.security!="OPEN") { editor=null; calculator=null; confirmation=null; keyProvider=null; secDialog=null } }
+    if(state.security!="OPEN") { MaterialTheme(colorScheme=scheme) { LockedScreen(model,state) { } }; return }
     MaterialTheme(colorScheme=scheme) {
-        BoxWithConstraints {
+        BoxWithConstraints(Modifier.semantics { testTagsAsResourceId=true }) {
             val wide=maxWidth>=840.dp
             Scaffold(
                 topBar={ TopAppBar(title={ Text(if(!state.ready) "Capital" else section) },actions={
@@ -218,7 +232,7 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                             Notice("Unsaved changes — kept in memory. Do not close the app before saving or exporting a copy.")
                             Actions {
                                 Button(onClick={ model.retrySave() },enabled=!state.saving) { Text("Retry save") }
-                                OutlinedButton(onClick={ copyFolder=true; folderPicker.launch(null) }) { Text("Save copy to folder") }
+                                OutlinedButton(onClick={ copyFolder=true; model.expectReturn(); folderPicker.launch(null) }) { Text("Save copy to folder") }
                                 TextButton(onClick={ confirmation="Discard unsaved changes and reload the folder?" to { model.reload(true) } }) { Text("Discard and reload") }
                             }
                         }
@@ -236,7 +250,7 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                             Heading("Start with your folder")
                             Text("Choose a dedicated local folder such as Documents/CapitalTracker. Reopen that folder on another device using your own sync tool.")
                             Notice("Public wallet providers receive your addresses, token contract addresses and IP. Never enter private keys or seed phrases. Files in the chosen folder contain your financial records.")
-                            Button(onClick={ copyFolder=false; folderPicker.launch(null) }) { Text("Choose or reopen folder") }
+                            Button(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text("Choose or reopen folder") }
                             Note("Default currency starts as EUR. Change it and configure optional free provider keys in Settings.")
                         } else if(state.ready) {
                             if(data.stale() || allocation.incomplete || data.incomplete(data.settings.currency)) Notice(if(allocation.incomplete || data.incomplete(data.settings.currency)) "Incomplete valuation — some balances or rates are unavailable. Native quantities remain visible." else "Cached / stale values — refresh when online. Allocations are estimates.")
@@ -282,6 +296,18 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                         Actions {
                                             OutlinedButton(onClick={ editor=Editor("Bucket",bucket.id) },enabled=editable) { Text("Edit bucket") }
                                             TextButton(onClick={ confirmation="Delete ${bucket.name}, its ${data.holdings.count { it.bucketId==bucket.id }} holdings and ${data.connections.count { it.bucketId==bucket.id }} goal connections? Previous snapshots remain recoverable." to { model.edit({ it.deleteBucket(bucket.id) }) { bucketId=null } } },enabled=editable) { Text("Delete bucket") }
+                                        }
+                                        if(bucket.portfolio) {
+                                            val base=data.settings.currency; val w=data.weights(bucket.id)
+                                            Heading("Portfolio")
+                                            Note("Shares are calculated in $base.")
+                                            if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) Notice("Portfolio shares unavailable: no value for ${(w.missing+w.flagged).joinToString { assetName(data,it) }}. Refresh, or remove the holding or target that has no value.")
+                                            else w.rows.forEach { r ->
+                                                val diff=r.real-r.target
+                                                val drift=if(diff.signum()==0) "on target" else (if(diff.signum()>0) "+" else "-")+diff.abs().setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()+"%"
+                                                Item(assetName(data,r.asset),"Real ${r.real.toPlainString()}% · target ${r.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()}% · $drift",money(r.value,base),null)
+                                            }
+                                            OutlinedButton(onClick={ calculator=bucket.id },modifier=Modifier.heightIn(min=48.dp).testTag("rebalance")) { Text("Rebalance") }
                                         }
                                         Heading("Holdings")
                                         Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text("Add holding") }
@@ -368,17 +394,22 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                     if(data.quotes.isEmpty()) Note("No cached quotes. Add holdings and refresh.")
                                     data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note("$it token prices by contract address are shown with their wallets.") }
                                     data.quotes.filter { ':' !in it.asset }.forEach { q -> Text("${q.asset}: ${money(q.usd.decimal(),"USD")}"); Note("${q.source} · observed ${time(q.observedAt)} · fetched ${time(q.fetchedAt)}${q.error?.let { "\n$it" } ?: ""}") }
+                                    SecuritySection(model,state,lockRev,{ lockRev++ }) { secDialog=it }
                                     Heading("Storage")
                                     Text(state.folder ?: "No folder")
                                     Actions {
-                                        OutlinedButton(onClick={ copyFolder=false; folderPicker.launch(null) }) { Text("Reconnect / open folder") }
+                                        OutlinedButton(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text("Reconnect / open folder") }
                                         OutlinedButton(onClick={ model.reload() }) { Text("Reload local files") }
-                                        OutlinedButton(onClick={ backup.launch("capital-backup-${LocalDate.now()}.json") }) { Text("Export backup") }
-                                        OutlinedButton(onClick={ restore.launch(arrayOf("application/json","text/plain","application/octet-stream")) },enabled=editable) { Text("Restore backup") }
+                                        OutlinedButton(onClick={ model.expectReturn(); backup.launch("capital-backup-${LocalDate.now()}.json") }) { Text("Export backup") }
+                                        if(state.encrypted) OutlinedButton(onClick={ secDialog="plain" },modifier=Modifier.testTag("export-plaintext")) { Text("Export plaintext backup") }
+                                        OutlinedButton(onClick={ model.expectReturn(); restore.launch(arrayOf("application/json","text/plain","application/octet-stream")) },enabled=editable) { Text("Restore backup") }
                                     }
                                     Note("Your sync tool manages this folder. Snapshots are retained for recovery; API keys never leave device storage. Refresh happens only on cold startup or request.")
                                     Heading("Sources / attribution")
                                     listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice("No browser available") } }) { Text(name) } }
+                                    // Read from the installed package, so it always matches the build that is running.
+                                    val pkg=remember { runCatching { context.packageManager.getPackageInfo(context.packageName,0) }.getOrNull() }
+                                    Note("Capital ${pkg?.versionName ?: "unknown version"} · build ${pkg?.let { androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(it) } ?: "unknown"}",Modifier.testTag("version"))
                                 }
                             }
                         }
@@ -389,8 +420,10 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
             }
         }
         editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: "Save failed" else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens) }
+        calculator?.let { id -> data.buckets.find { it.id==id }?.let { RebalanceDialog(it,data) { calculator=null } } }
         confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text("Confirm change") },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text("Confirm") } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text("Cancel") } }) }
         keyProvider?.let { provider -> KeyDialog(provider,onDismiss={ keyProvider=null },onSave={ if(model.saveKey(provider,it)) keyProvider=null }) }
+        SecurityDialogs(model,state,secDialog,{ lockRev++ },{ secDialog=null }) { secDialog=it }
         state.restore?.let { revision -> AlertDialog(onDismissRequest=model::cancelRestore,title={ Text("Restore backup?") },text={ Column { RevisionSummary(revision); Text("Replaces current records with this backup. Existing snapshots remain available.") } },confirmButton={ TextButton(onClick=model::restore) { Text("Restore") } },dismissButton={ TextButton(onClick=model::cancelRestore) { Text("Cancel") } }) }
     }
 }
@@ -403,13 +436,13 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
         revision.data.goals.forEach { g -> Note("${g.name}: ${money(g.target.decimal(),g.currency)} · ${date(g.due)}") }
     }
 }
-@Composable private fun Choice(label: String,value: String,options: List<String>,enabled: Boolean=true,onChange: (String)->Unit) {
+@Composable internal fun Choice(label: String,value: String,options: List<String>,enabled: Boolean=true,onChange: (String)->Unit) {
     var expanded by remember { mutableStateOf(false) }
     Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth()) { Text(value) }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { option -> DropdownMenuItem(text={ Text(option) },onClick={ expanded=false; onChange(option) }) } } } }
 }
-@Composable private fun Pick(label: String,selected: String?,options: List<Pair<String,String>>,enabled: Boolean=true,onChange: (String)->Unit) {
+@Composable private fun Pick(label: String,selected: String?,options: List<Pair<String,String>>,enabled: Boolean=true,placeholder: String="Choose bucket",onChange: (String)->Unit) {
     var expanded by remember { mutableStateOf(false) }
-    Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp)) { Text(options.find { it.first==selected }?.second ?: "Choose bucket") }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { (key,text) -> DropdownMenuItem(text={ Text(text) },onClick={ expanded=false; onChange(key) }) } } } }
+    Column { Note(label); Box { OutlinedButton(onClick={ expanded=true },enabled=enabled,modifier=Modifier.fillMaxWidth().heightIn(min=48.dp)) { Text(options.find { it.first==selected }?.second ?: placeholder) }; DropdownMenu(expanded=expanded,onDismissRequest={ expanded=false }) { options.forEach { (key,text) -> DropdownMenuItem(text={ Text(text) },onClick={ expanded=false; onChange(key) }) } } } }
 }
 private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to remaining need"; Limit.FIXED -> "Fixed amount in goal currency"; Limit.BUCKET_PERCENT -> "% of bucket"; Limit.GOAL_PERCENT -> "% of goal" }
 @Composable private fun KeyDialog(provider: String,onDismiss: ()->Unit,onSave: (String)->Unit) {
@@ -417,6 +450,34 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     AlertDialog(onDismissRequest=onDismiss,title={ Text("$provider key") },text={ Column { Text("Stored encrypted on this device. Leave blank to remove an existing key."); OutlinedTextField(value,onValueChange={ value=it },label={ Text("API key") },visualTransformation=androidx.compose.ui.text.input.PasswordVisualTransformation(),singleLine=true) } },confirmButton={ TextButton(onClick={ onSave(value) }) { Text("Save") } },dismissButton={ TextButton(onClick=onDismiss) { Text("Cancel") } })
 }
 
+// Read-only calculator: never calls model.edit.
+@Composable private fun RebalanceDialog(bucket: Bucket,data: Portfolio,onDismiss: ()->Unit) {
+    var amount by remember { mutableStateOf("") }
+    val base=data.settings.currency
+    val parsed=remember(amount) { runCatching { amount.trim().replace(',','.').ifEmpty { "0" }.decimal() } }
+    val plan=remember(parsed,data) { parsed.getOrNull()?.let { data.rebalance(bucket.id,it) } }
+    Dialog(onDismissRequest=onDismiss,properties=DialogProperties(usePlatformDefaultWidth=false)) {
+        Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId=true },color=MaterialTheme.colorScheme.background) {
+            Column(Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                Heading("Rebalance ${bucket.name}")
+                OutlinedTextField(amount,onValueChange={ amount=it },label={ Text("Amount to invest in $base · no grouping separators") },modifier=Modifier.fillMaxWidth().testTag("invest-amount"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal))
+                Text(if(bucket.allowSells) "Sells allowed" else "Buys only. Allow sells in the bucket settings.")
+                parsed.exceptionOrNull()?.let { Text(it.message.orEmpty(),color=MaterialTheme.colorScheme.error) }
+                if(plan?.unavailable!=null) {
+                    val w=data.weights(bucket.id)
+                    Notice(if(w.missing.isNotEmpty() || w.flagged.isNotEmpty()) "Rebalance unavailable: no value for ${(w.missing+w.flagged).joinToString { assetName(data,it) }}. Refresh, or remove the holding or target that has no value." else "Rebalance unavailable: ${plan.unavailable}")
+                } else plan?.trades?.forEach { t ->
+                    val action=when { t.amount.signum()>0 -> "Buy ${money(t.amount,base)}"; t.amount.signum()<0 -> "Sell ${money(t.amount.abs(),base)}"; else -> "No trade" }
+                    val qty=t.quantity?.let { "${NumberFormat.getNumberInstance().apply { maximumFractionDigits=assetDigits(t.asset) }.format(it.abs())} ${assetName(data,t.asset)}" } ?: "quantity unavailable"
+                    Item(assetName(data,t.asset),"$qty · result ${t.resultPercent.toPlainString()}% · target ${t.target.setScale(2,java.math.RoundingMode.HALF_UP).toPlainString()}%",action,null)
+                }
+                Note("Estimate from cached rates. Capital does not trade; nothing is changed.")
+                if(data.holdings.any { it.bucketId==bucket.id && it.address!=null }) Note("Wallet balances are read-only. Trade in your wallet or exchange.")
+                Button(onClick=onDismiss,modifier=Modifier.heightIn(min=48.dp)) { Text("Close") }
+            }
+        }
+    }
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit) {
     val b=data.buckets.find { it.id==editor.id }
@@ -441,6 +502,10 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     var discard by remember { mutableStateOf(false) }
     var tokens by remember { mutableStateOf(h?.tokens ?: emptyList()) }
     val disabled=remember { mutableStateListOf<String>().apply { addAll(h?.excluded ?: emptyList()) } }
+    var portfolio by remember { mutableStateOf(b?.portfolio ?: false) }
+    var sells by remember { mutableStateOf(b?.allowSells ?: false) }
+    val targets=remember { mutableStateListOf<Pair<String,String>>().apply { addAll(b?.targets?.toList().orEmpty()) } }
+    var otherAsset by remember { mutableStateOf("") }
     var fetching by remember { mutableStateOf(false) }
     var tokenMessage by remember { mutableStateOf<String?>(null) }
     var fetched by remember { mutableStateOf(false) }
@@ -450,7 +515,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     var tokenFor by remember { mutableStateOf(tokenKey) }
     LaunchedEffect(tokenKey) { if(tokenKey!=tokenFor) { tokenFor=tokenKey; tokens=emptyList(); disabled.clear(); fetched=false; tokenMessage=null } }
     val context=LocalContext.current
-    fun close() { if(fields.toMap()!=initial) discard=true else onDismiss() }
+    fun close() { if(fields.toMap()!=initial || portfolio!=(b?.portfolio ?: false) || sells!=(b?.allowSells ?: false) || targets.toList()!=b?.targets?.toList().orEmpty()) discard=true else onDismiss() }
     fun number(key: String)=fields.getValue(key).trim().replace(',','.').also { it.decimal() }
     fun transform(p: Portfolio): Portfolio {
         val currency=fields.getValue("currency").trim().uppercase()
@@ -463,7 +528,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
         fun converted(amount: String)=p.convert(amount.decimal(),requireNotNull(oldCurrency),currency)?.text() ?: error("Refresh exchange rates before converting")
         return when(editor.kind) {
             "Bucket" -> {
-                val item=Bucket(b?.id ?: newId,name,currency)
+                val item=Bucket(b?.id ?: newId,name,currency,portfolio,targets.associate { (k,v) -> k to v.trim().replace(',','.') },sells)
                 p.copy(buckets=if(b==null) p.buckets+item else p.buckets.map { if(it.id==b.id) item else it })
             }
             "Holding" -> {
@@ -566,6 +631,40 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
                         Pick("Bucket",fields["bucket"],options,!saving) { fields["bucket"]=it }
                     }
                     when(editor.kind) {
+                        "Bucket" -> {
+                            Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                                Text("Portfolio mode",Modifier.weight(1f))
+                                Switch(checked=portfolio,onCheckedChange={ portfolio=it; error=null },enabled=!saving,modifier=Modifier.testTag("portfolio-mode").semantics { contentDescription="Portfolio mode" })
+                            }
+                            if(portfolio) {
+                                Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                                    Text("Allow sells during rebalance",Modifier.weight(1f))
+                                    Switch(checked=sells,onCheckedChange={ sells=it },enabled=!saving,modifier=Modifier.testTag("allow-sells").semantics { contentDescription="Allow sells during rebalance" })
+                                }
+                                Heading("Target weights")
+                                val held=data.holdings.filter { it.bucketId==b?.id }.flatMap { x -> listOf(x.asset)+x.tokens.filter { data.known(x,it) }.map { tokenAsset(x.asset,it.contract) } }.distinct().filter { a -> targets.none { it.first==a } }
+                                if(targets.isEmpty() && held.isNotEmpty()) Note("Add a target for each asset. Targets must total 100%.")
+                                targets.forEachIndexed { i,(asset,value) ->
+                                    Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                                        Text(assetName(data,asset),Modifier.weight(1f))
+                                        OutlinedTextField(value,onValueChange={ targets[i]=asset to it; error=null },label={ Text("Target %") },modifier=Modifier.width(120.dp).testTag("target-$i"),singleLine=true,keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),enabled=!saving)
+                                        TextButton(onClick={ targets.removeAt(i); error=null },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text("Remove") }
+                                    }
+                                }
+                                val sum=targets.fold(ZERO) { s,(_,v) -> s+(v.trim().replace(',','.').toBigDecimalOrNull() ?: ZERO) }
+                                Text(when { sum.compareTo(HUNDRED)==0 -> "Total 100%"; sum<HUNDRED -> "Total ${sum.text()}% · ${(HUNDRED-sum).text()}% missing"; else -> "Total ${sum.text()}% · ${(sum-HUNDRED).text()}% too much" },fontWeight=FontWeight.SemiBold)
+                                if(held.isNotEmpty()) Pick("Add target",null,held.map { it to assetName(data,it) },!saving,"Choose asset") { targets.add(it to ""); error=null }
+                                Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                                    OutlinedTextField(otherAsset,onValueChange={ otherAsset=it; error=null },label={ Text("Other asset code (EUR, USD, BTC…)") },modifier=Modifier.weight(1f).testTag("other-asset"),singleLine=true,enabled=!saving)
+                                    TextButton(onClick={
+                                        val code=otherAsset.trim().uppercase()
+                                        if(!validAsset(code) || ':' in code) error="Use an ISO currency code or BTC, ETH, TON, TRX. Tokens can be added only when held."
+                                        else if(targets.any { it.first==code }) error="$code already has a target"
+                                        else { targets.add(code to ""); otherAsset="" }
+                                    },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text("Add") }
+                                }
+                            }
+                        }
                         "Holding" -> if(fields.getValue("type")=="Wallet") { field("address","Public wallet address"); Note("Paste one address. No seed phrase, private key or HD wallet discovery."); TokenEditor() } else field("quantity","Current quantity · no grouping separators",true)
                         "Goal" -> {
                             field("target","Target amount · no grouping separators",true)
