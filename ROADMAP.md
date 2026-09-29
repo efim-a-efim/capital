@@ -18,9 +18,12 @@ Proposal: `openspec/changes/add-portfolio-mode/`.
 
 ### Encryption and locking
 
-- Data encryption with a password.
-- App lock with a PIN and optional biometry.
-- Encryption can be switched on or off by the user at any time. Data is decrypted when encryption is switched off.
+- Data encryption with a password. Switching it on or off encrypts or decrypts the whole data directory, including older snapshots.
+- A password change re-encrypts every snapshot.
+- Warning window about earlier plaintext backups when encryption is switched on; the user accepts the risk.
+- App lock with a PIN and optional biometry, only while encryption is on. With encryption off the app just opens.
+- "Use password" is always available on the PIN screen. Every password check waits a random 1 to 5 seconds.
+- No password recovery.
 
 Proposal: `openspec/changes/add-encryption-and-lock/`.
 

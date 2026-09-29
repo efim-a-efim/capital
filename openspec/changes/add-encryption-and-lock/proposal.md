@@ -4,21 +4,23 @@ Snapshot files are plaintext financial records in a folder that the user often s
 
 ## What Changes
 
-- **Password encryption** of all snapshot and backup files. The user can switch it on or off at any time. Switching it off decrypts the data.
-- **BREAKING** Switching encryption on or off rewrites the folder: the current data is written in the new form and older snapshot files in the other form are removed after verification. Version 1 never deleted snapshots.
-- **App lock** with a PIN and optional biometry, independent of encryption. Locks on launch and after time in the background.
-- The password is asked once per device. After that the PIN or biometry unlocks a device-bound copy of the data key.
-- No password recovery. The app says so before encryption is switched on and offers a plaintext backup export first.
-- Locked or encrypted content is hidden from screenshots and the recent-apps preview.
+- **Password encryption** of the whole data directory. The user can switch it on or off at any time.
+- **BREAKING** Switching encryption on encrypts every snapshot in the folder; switching it off decrypts every snapshot. A password change re-encrypts every snapshot. Files are replaced after verification. Version 1 never rewrote or deleted snapshots.
+- Backups exported earlier without encryption stay readable. Switching encryption on shows a warning window about them, and the user must accept that risk to continue.
+- **App lock** with a PIN and optional biometry. It exists only while encryption is on. With encryption off the app simply opens.
+- The PIN screen always has a "Use password" link at the bottom. It works even while the PIN is locked after too many failures.
+- The password is the last line of defence. Every password check waits a random 1 to 5 seconds before it accepts or rejects.
+- No password recovery. The app says so before encryption is switched on.
+- Content is hidden from screenshots and the recent-apps preview while encryption is on.
 
 ## Capabilities
 
 ### New Capabilities
-- `data-encryption`: password-based encryption of snapshots and backups, switching on and off, password change, multi-device use.
-- `app-lock`: PIN and biometric lock, automatic locking, attempt limits, protection of the device-bound key.
+- `data-encryption`: password-based encryption of all snapshots and backups, switching on and off, password change with re-encryption, password entry delay, multi-device use.
+- `app-lock`: PIN and biometric lock tied to encryption, automatic locking, attempt limits, password fallback, protection of the device-bound key.
 
 ### Modified Capabilities
-- `local-storage`: snapshots may be encrypted; private storage also holds lock and key material; previous revisions are preserved except during an explicit encryption switch.
+- `local-storage`: snapshots may be encrypted; private storage also holds lock and key material; stored snapshots are rewritten only by an encryption switch or password change.
 
 ## Impact
 

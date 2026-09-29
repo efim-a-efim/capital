@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.res.painterResource
+import dev.capital.R
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -188,10 +190,19 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
             val wide=maxWidth>=840.dp
             Scaffold(
                 topBar={ TopAppBar(title={ Text(if(!state.ready) "Capital" else section) },actions={
-                    if(state.ready) { TextButton(onClick={ model.refresh(bucketId) },enabled=!state.refreshing && editable) { Text(if(state.refreshing) "Refreshing…" else "Refresh") }; TextButton(onClick={ select("Settings") }) { Text("Settings") } }
+                    if(state.ready) {
+                        if(state.refreshing) Box(Modifier.size(48.dp).semantics { contentDescription="Refreshing" },contentAlignment=Alignment.Center) { CircularProgressIndicator(Modifier.size(24.dp),strokeWidth=2.dp) }
+                        else IconButton(onClick={ model.refresh(bucketId) },enabled=editable,modifier=Modifier.testTag("refresh")) { Icon(painterResource(R.drawable.ic_refresh),contentDescription="Refresh") }
+                        IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription="Settings") }
+                    }
                 }) },
                 bottomBar={ if(state.ready && !wide) NavigationBar { listOf("Overview","Buckets","Goals").forEach { target -> NavigationBarItem(selected=section==target,onClick={ select(target) },icon={ Text(when(target) { "Overview" -> "◫"; "Buckets" -> "▤"; else -> "◎" },Modifier.clearAndSetSemantics {}) },label={ Text(target) }) } } },
                 snackbarHost={ state.message?.let { Popup(it,model::dismissMessage) } },
+                floatingActionButton={
+                    val add=when { !state.ready || !editable -> null; section=="Buckets" && bucketId==null -> "Bucket"; section=="Goals" && goalId==null -> "Goal"; else -> null }
+                    add?.let { kind -> ExtendedFloatingActionButton(onClick={ editor=Editor(kind) }) { Text("Add ${kind.lowercase()}") } }
+                },
+                floatingActionButtonPosition=FabPosition.Center,
             ) { padding ->
                 Row(Modifier.fillMaxSize().padding(padding)) {
                     if(wide && state.ready) NavigationRail { listOf("Overview","Buckets","Goals","Settings").forEach { target -> NavigationRailItem(selected=section==target,onClick={ select(target) },icon={ Text(target.take(1),Modifier.clearAndSetSemantics {}) },label={ Text(target) }) } }
@@ -249,7 +260,6 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                 "Buckets" -> {
                                     val bucket=data.buckets.find { it.id==bucketId }
                                     if(bucket==null) {
-                                        Button(onClick={ editor=Editor("Bucket") },enabled=editable) { Text("Add bucket") }
                                         if(data.buckets.isEmpty()) Text("Buckets group places where your money lives.")
                                         data.buckets.forEach { b -> Item(b.name,"${data.holdings.count { it.bucketId==b.id }} holdings",money(data.bucketValueOrNull(b.id,b.currency),b.currency)) { bucketId=b.id } }
                                         Heading("Planned savings")
@@ -306,7 +316,6 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                 "Goals" -> {
                                     val goal=data.goals.find { it.id==goalId }
                                     if(goal==null) {
-                                        Button(onClick={ editor=Editor("Goal") },enabled=editable) { Text("Add goal") }
                                         if(data.goals.isEmpty()) Text("Create a goal with a target, currency and due date.")
                                         val today=LocalDate.now()
                                         data.goals.filterNot { it.archived }.sortedWith(compareBy<Goal> { it.due }.thenByDescending { it.priority }).groupBy { it.due }.forEach { (due,group) ->
@@ -373,7 +382,8 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
                                 }
                             }
                         }
-                        Spacer(Modifier.height(24.dp))
+                        // Room for the pinned add button and the message pop-up.
+                        Spacer(Modifier.height(96.dp))
                     }
                 }
             }

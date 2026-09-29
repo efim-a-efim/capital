@@ -22,6 +22,7 @@ class AppTest {
     private fun find(text: String): UiObject2 {
         repeat(8) {
             device.wait(Until.findObject(By.text(text)),600)?.let { return it }
+            device.findObject(By.desc(text))?.let { return it }
             device.findObjects(By.scrollable(true)).firstOrNull()?.scroll(Direction.DOWN,0.7f)
         }
         val output=java.io.ByteArrayOutputStream(); device.dumpWindowHierarchy(output)
