@@ -34,13 +34,16 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         val uri=prefs.getString("folder",null)
         if(uri==null) mutable.value=ScreenState(loading=false) else viewModelScope.launch {
             connect(Uri.parse(uri),false)
-            if(foreground && mutable.value.ready && !mutable.value.blocked) refresh()
+            startupRefresh()
         }
     }
     private fun update(block: (ScreenState)->ScreenState) { mutable.value=block(mutable.value) }
     fun dismissMessage() { update { it.copy(message=null) } }
     fun notice(message: String) { update { it.copy(message=message) } }
-    fun chooseFolder(uri: Uri, copy: Boolean = false) = viewModelScope.launch { connect(uri,copy) }
+    // One automatic refresh per process, as soon as a folder is open: at launch, or after the first folder choice.
+    private var started=false
+    private fun startupRefresh() { if(!started && foreground && mutable.value.ready && !mutable.value.blocked) { started=true; refresh() } }
+    fun chooseFolder(uri: Uri, copy: Boolean = false) = viewModelScope.launch { connect(uri,copy); startupRefresh() }
     private suspend fun connect(uri: Uri,copy: Boolean) = transaction.withLock {
         update { it.copy(loading=true) }
         try {

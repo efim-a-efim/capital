@@ -531,7 +531,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> "Auto — up to r
     }
     Dialog(onDismissRequest={ close() },properties=DialogProperties(usePlatformDefaultWidth=false,dismissOnClickOutside=false)) {
         Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId=true },color=MaterialTheme.colorScheme.background) {
-            Scaffold(topBar={ TopAppBar(title={ Text("${if(editor.id.isBlank()) "Add" else "Edit"} ${if(editor.kind=="Planned") "planned saving" else editor.kind.lowercase()}") },navigationIcon={ TextButton(onClick={ close() },enabled=!saving) { Text("Cancel") } },actions={ TextButton(onClick={
+            Scaffold(topBar={ TopAppBar(title={ Text(if(editor.kind=="Settings") "Currency and appearance" else "${if(editor.id.isBlank()) "Add" else "Edit"} ${if(editor.kind=="Planned") "planned saving" else editor.kind.lowercase()}") },navigationIcon={ TextButton(onClick={ close() },enabled=!saving) { Text("Cancel") } },actions={ TextButton(onClick={
                 val checked=runCatching { transform(data) }
                 if(checked.isFailure) error=checked.exceptionOrNull()?.message else onSave(::transform)
             },enabled=!saving) { Text(if(saving) "Saving…" else "Save") } }) }) { padding ->

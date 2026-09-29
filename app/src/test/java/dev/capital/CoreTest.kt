@@ -28,6 +28,10 @@ class CoreTest {
         assertNull(p.convert(BigDecimal.ONE,"EUR","USD"))
         eq("0",p.convert("0.00".toBigDecimal(),"EUR","USD")!!)
         eq("1",p.convert(BigDecimal.ONE,"EUR","EUR")!!)
+        // Every pair converts through USD: no direct EUR/GBP or BTC/EUR rate is stored.
+        val q=p.copy(quotes=listOf(Quote("EUR","1.25","x",1000,1000),Quote("GBP","1.5","x",1000,1000),Quote("BTC","50000","x",1000,1000)))
+        eq("125",q.convert(BigDecimal(150),"EUR","GBP")!!); eq("40000",q.convert(BigDecimal.ONE,"BTC","EUR")!!); eq("1.5",q.convert(BigDecimal.ONE,"GBP","USD")!!)
+        assertNull(q.convert(BigDecimal.ONE,"EUR","ISK"))
     }
     @Test fun equalSharingCapsPrioritiesAndResidualUnits() {
         val equal=portfolio().allocate(); eq("450",equal.goal("g1")); eq("450",equal.goal("g2"))
