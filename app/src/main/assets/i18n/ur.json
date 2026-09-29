@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "کوئی منصوبہ بند بچت اس ہدف تک نہیں پہنچتی",
  "projection incomplete": "پیش گوئی نامکمل",
  "Archived": "آرکائیو شدہ",
+ "Not funded": "پورا نہیں ہوا",
+ "Funded in time": "بروقت پورا ہوگا",
  "Funded": "پورا ہو چکا",
  "Overdue": "میعاد گزر گئی",
  "Due {0}": "مقررہ تاریخ: \u2068{0}\u2069",

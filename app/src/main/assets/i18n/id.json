@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "Tidak ada rencana tabungan yang sampai ke tujuan ini",
  "projection incomplete": "proyeksi belum lengkap",
  "Archived": "Diarsipkan",
+ "Not funded": "Belum terpenuhi",
+ "Funded in time": "Akan terpenuhi tepat waktu",
  "Funded": "Terpenuhi",
  "Overdue": "Lewat tenggat",
  "Due {0}": "Tenggat {0}",

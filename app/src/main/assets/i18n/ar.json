@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "لا توجد ادخارات مخططة تصل إلى هذا الهدف",
  "projection incomplete": "التوقع غير مكتمل",
  "Archived": "مؤرشف",
+ "Not funded": "غير ممول",
+ "Funded in time": "سيُموَّل في الموعد",
  "Funded": "ممول",
  "Overdue": "متأخر",
  "Due {0}": "يستحق في {0}",

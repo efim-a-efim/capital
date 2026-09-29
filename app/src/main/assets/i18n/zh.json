@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "没有任何计划储蓄能达成此目标",
  "projection incomplete": "预测不完整",
  "Archived": "已归档",
+ "Not funded": "未达成",
+ "Funded in time": "将按时达成",
  "Funded": "已达成",
  "Overdue": "已逾期",
  "Due {0}": "{0} 截止",

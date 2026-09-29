@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "До этой цели плановые пополнения не доходят",
  "projection incomplete": "прогноз неполный",
  "Archived": "В архиве",
+ "Not funded": "Не покрыта",
+ "Funded in time": "Будет покрыта в срок",
  "Funded": "Покрыта",
  "Overdue": "Просрочена",
  "Due {0}": "Срок: {0}",

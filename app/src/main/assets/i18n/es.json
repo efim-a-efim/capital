@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "Ningún ahorro planificado llega a esta meta",
  "projection incomplete": "proyección incompleta",
  "Archived": "Archivada",
+ "Not funded": "Sin cubrir",
+ "Funded in time": "Se cubrirá a tiempo",
  "Funded": "Cubierta",
  "Overdue": "Vencida",
  "Due {0}": "Vence el {0}",

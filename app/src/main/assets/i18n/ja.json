@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "この目標に届く貯蓄予定はありません",
  "projection incomplete": "予測が不完全です",
  "Archived": "アーカイブ済み",
+ "Not funded": "未達成",
+ "Funded in time": "期限内に達成見込み",
  "Funded": "達成済み",
  "Overdue": "期限超過",
  "Due {0}": "期限 {0}",

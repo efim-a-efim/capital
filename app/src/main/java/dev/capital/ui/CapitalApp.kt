@@ -126,10 +126,17 @@ private fun date(value: String): String=runCatching { LocalDate.parse(value).for
 @Composable internal fun Notice(value: String) { Surface(color=MaterialTheme.colorScheme.surfaceVariant,shape=MaterialTheme.shapes.medium) { Text(value,Modifier.fillMaxWidth().padding(16.dp),style=MaterialTheme.typography.bodyMedium) } }
 @Composable internal fun Actions(content: @Composable FlowRowScope.()->Unit) { FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.fillMaxWidth(),content=content) }
 @Composable private fun Stat(label: String,value: String) { Column(Modifier.padding(vertical=12.dp)) { Note(label); Text(value,style=MaterialTheme.typography.headlineSmall,fontWeight=FontWeight.SemiBold) } }
-@Composable private fun Item(title: String,subtitle: String,value: String?=null,onClick: (()->Unit)?) {
+// One dark text colour reads on both badge backgrounds, in light and dark theme.
+private val badgeGreen=Color(0xff66bb6a); private val badgeYellow=Color(0xffffd54f); private val badgeText=Color(0xff1a1a1a)
+@Composable private fun Badge(text: String,color: Color) { Surface(color=color,contentColor=badgeText,shape=MaterialTheme.shapes.small) { Text(text,Modifier.padding(horizontal=8.dp,vertical=2.dp),style=MaterialTheme.typography.labelMedium,fontWeight=FontWeight.SemiBold) } }
+@Composable private fun Item(title: String,subtitle: String,value: String?=null,onClick: (()->Unit)?) { BadgedItem(title,subtitle,value,null,onClick) }
+@Composable private fun BadgedItem(title: String,subtitle: String,value: String?,badge: Pair<String,Color>?,onClick: (()->Unit)?) {
     val body: @Composable ()->Unit = {
         Column(Modifier.fillMaxWidth(),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-            Text(title,style=MaterialTheme.typography.titleMedium,color=MaterialTheme.colorScheme.onSurface)
+            FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(4.dp),itemVerticalAlignment=Alignment.CenterVertically) {
+                Text(title,style=MaterialTheme.typography.titleMedium,color=MaterialTheme.colorScheme.onSurface)
+                badge?.let { Badge(it.first,it.second) }
+            }
             if(value!=null) Text(value,style=MaterialTheme.typography.titleLarge,color=MaterialTheme.colorScheme.onSurface)
             Note(subtitle)
         }
@@ -155,7 +162,9 @@ private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     val funded=data.convert(allocation.goal(goal.id),"USD",goal.currency)
     val progress=funded?.divideMoney(goal.target.decimal())?.toFloat()?.coerceIn(0f,1f) ?: 0f
     val status=when { goal.archived -> tr("Archived"); funded != null && funded >= goal.target.decimal() -> tr("Funded"); LocalDate.parse(goal.due)<LocalDate.now() -> tr("Overdue"); else -> tr("Due {0}",date(goal.due)) }
-    Item(goal.name,status,"${money(funded,goal.currency)} / ${money(goal.target.decimal(),goal.currency)}",onClick)
+    val inTime=projection.closes[goal.id]?.let { LocalDate.parse(it)<=LocalDate.parse(goal.due) }==true
+    val badge=when { goal.archived -> null; funded != null && funded >= goal.target.decimal() -> tr("Funded") to badgeGreen; inTime -> tr("Funded in time") to badgeGreen; else -> tr("Not funded") to badgeYellow }
+    BadgedItem(goal.name,status,"${money(funded,goal.currency)} / ${money(goal.target.decimal(),goal.currency)}",badge,onClick)
     LinearProgressIndicator(progress={ progress },modifier=Modifier.fillMaxWidth().padding(top=6.dp,bottom=if(goal.archived) 14.dp else 4.dp))
     projectionLine(goal,projection,data).takeIf { it.isNotEmpty() }?.let { Note(it); Spacer(Modifier.height(10.dp)) }
 }
@@ -316,18 +325,23 @@ private val rtlType=Typography().run {
                                     Note(tr("Planned amounts are not part of your savings. They project when goals close."))
                                     if(data.planned.isEmpty()) Text(tr("Add the amounts you plan to save and their dates."))
                                     val today=LocalDate.now()
-                                    data.planned.sortedWith(compareBy<Planned> { it.archived(today) }.thenBy { it.date }).forEach { pl ->
+                                    val (past,active)=data.planned.sortedBy { it.date }.partition { it.archived(today) }
+                                    // Archived: the date passed, so the money is either in a bucket already or the plan was dropped. Newest first.
+                                    (active+past.reversed()).forEach { pl ->
+                                        val old=pl.archived(today)
+                                        if(old && pl==past.last()) Heading(tr("Archived"))
+                                        val tone=if(old) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface
                                         Column(Modifier.fillMaxWidth().padding(vertical=14.dp,horizontal=4.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
-                                            Text(pl.name,style=MaterialTheme.typography.titleMedium)
+                                            Text(pl.name,style=MaterialTheme.typography.titleMedium,color=tone)
                                             // Icons sit right of the amount; FlowRow drops them to the next line when they do not fit.
                                             FlowRow(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween,itemVerticalAlignment=Alignment.CenterVertically) {
-                                                Text(money(pl.amount.decimal(),pl.currency),style=MaterialTheme.typography.titleLarge)
+                                                Text(money(pl.amount.decimal(),pl.currency),style=MaterialTheme.typography.titleLarge,color=tone)
                                                 Row {
                                                     IconButton(onClick={ editor=Editor("Planned",pl.id) },enabled=editable) { Icon(painterResource(R.drawable.ic_edit),contentDescription=tr("Edit {0}",pl.name)) }
                                                     IconButton(onClick={ confirmation=tr("Delete planned saving {0}?",pl.name) to { model.edit({ p -> p.copy(planned=p.planned.filterNot { it.id==pl.id }) }) } },enabled=editable) { Icon(painterResource(R.drawable.ic_delete),contentDescription=tr("Delete {0}",pl.name)) }
                                                 }
                                             }
-                                            Note("${date(pl.date)} · ${if(pl.archived(today)) tr("Archived · date passed") else tr("Planned")}")
+                                            Note("${date(pl.date)} · ${if(old) tr("Archived · date passed") else tr("Planned")}")
                                         }
                                         HorizontalDivider()
                                     }

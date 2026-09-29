@@ -55,9 +55,11 @@ fun Portfolio.allocate(extra: BigDecimal = ZERO): Allocation {
     goals.filter { it.id in goalsUsd }.groupBy { it.priority }.toSortedMap(compareByDescending { it }).values.forEach { group ->
         val ids = group.map { it.id }.toSet()
         val groupKeys = caps.keys.filter { it.substringAfter('/') in ids }.sorted()
+        // Planned money only tops up what buckets leave open; offered together it would replace bucket money in goals that are funded already.
+        listOf(capacity.keys.filter { it != PLANNED_BUCKET }.sorted(), capacity.keys.filter { it == PLANNED_BUCKET }).forEach { sources ->
         while (true) {
             val offers = mutableMapOf<String,BigInteger>()
-            capacity.keys.sorted().forEach { b ->
+            sources.forEach { b ->
                 val eligible = groupKeys.filter { it.substringBefore('/') == b && funded(it.substringAfter('/')) < goalsUsd.getValue(it.substringAfter('/')) }
                 offers.putAll(share(capacity.getValue(b),eligible.associateWith { caps.getValue(it)-flow.getValue(it) }))
             }
@@ -83,7 +85,7 @@ fun Portfolio.allocate(extra: BigDecimal = ZERO): Allocation {
             for(target in targets) {
                 val parent = mutableMapOf<String,String>()
                 val queue = ArrayDeque<String>()
-                capacity.keys.sorted().filter { capacity.getValue(it) > Z }.forEach { val n="b:$it"; parent[n]="source"; queue.add(n) }
+                sources.filter { capacity.getValue(it) > Z }.forEach { val n="b:$it"; parent[n]="source"; queue.add(n) }
                 val end="g:$target"
                 while(queue.isNotEmpty() && end !in parent) {
                     val n=queue.removeFirst(); val id=n.substring(2)
@@ -107,6 +109,7 @@ fun Portfolio.allocate(extra: BigDecimal = ZERO): Allocation {
                 augmented=true; break
             }
             if(!augmented) break
+        }
         }
     }
     return Allocation(flow.mapValues { it.value.money() },bucketsUsd.mapValues { it.value.money() },incomplete("USD") || goals.any { !it.archived && it.id !in goalsUsd })

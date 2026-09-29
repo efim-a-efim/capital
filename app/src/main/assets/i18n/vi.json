@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "Không có khoản tiết kiệm dự kiến nào đến được mục tiêu này",
  "projection incomplete": "dự báo chưa đầy đủ",
  "Archived": "Đã lưu trữ",
+ "Not funded": "Chưa đủ tiền",
+ "Funded in time": "Sẽ đủ tiền đúng hạn",
  "Funded": "Đã đủ tiền",
  "Overdue": "Quá hạn",
  "Due {0}": "Hạn {0}",

@@ -205,6 +205,22 @@ class CoreTest {
         val same=plan(listOf(pl("x","300","2026-11-01"),pl("y","400","2026-11-01"))).project(today)
         assertEquals("x",same.contributions.getValue("A")[0].plannedId); assertEquals(listOf("y"),same.contributions.getValue("B").map { it.plannedId }); assertEquals("2026-11-01",same.closes["B"])
     }
+    @Test fun plannedArchivesByDateAndReactivatesOnEdit() {
+        val old=pl("s","300","2026-09-30"); assertTrue(old.archived(today)); assertFalse(pl("t","300","2026-10-01").archived(today))
+        val before=plan(listOf(old)).validate().project(today)
+        assertNull(before.contributions["A"]); assertNull(before.closes["A"])
+        val after=plan(listOf(old.copy(date="2026-10-02"))).validate().project(today)
+        assertEquals(listOf("s"),after.contributions.getValue("A").map { it.plannedId }); assertEquals("2026-10-02",after.closes["A"])
+    }
+    @Test fun plannedTopsUpOnlyWhatBucketsLeaveOpen() {
+        // A is funded by its bucket, so the whole planned amount goes to the next goal, not shared with A.
+        val base=Portfolio(buckets=listOf(Bucket("b","B","USD")),holdings=listOf(Holding("h","b","Cash","USD","900")),connections=listOf(Connection("A","b")))
+        val p=base.copy(goals=listOf(goalOn("A","600","2027-01-01"),goalOn("G","80","2027-01-01"),goalOn("T","350","2027-01-01")),planned=listOf(pl("s","100","2026-11-01"))).ranked().validate()
+        val r=p.project(today)
+        eq("600",r.now.getValue("A")); assertNull(r.contributions["A"])
+        eq("80",r.final.getValue("G")); assertEquals("2026-11-01",r.closes["G"]); eq("20",r.final.getValue("T")); assertNull(r.closes["T"])
+        val a=p.allocate(BigDecimal(100)); eq("600",a.byConnection.getValue("b/A")); eq("0",a.byConnection.getValue("~planned/A")); assertEquals(p.allocate().goal("A"),a.goal("A"))
+    }
     @Test fun projectionUnconvertibleAndExistingFunds() {
         val r=plan(listOf(pl("e","500","2026-11-01","EUR"),pl("s","500","2026-11-02"))).project(today)
         assertTrue(r.incomplete); assertEquals("s",r.contributions.getValue("A")[0].plannedId)

@@ -233,6 +233,8 @@
  "No planned savings reach this goal": "इस लक्ष्य को किसी नियोजित बचत से राशि नहीं मिलती",
  "projection incomplete": "पूर्वानुमान अधूरा",
  "Archived": "आर्काइव किया गया",
+ "Not funded": "राशि अधूरी",
+ "Funded in time": "समय पर पूरी होगी",
  "Funded": "राशि पूरी",
  "Overdue": "नियत तिथि बीती",
  "Due {0}": "नियत तिथि {0}",
