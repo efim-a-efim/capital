@@ -15,6 +15,13 @@ checks = [
     ("Frankfurter", "https://api.frankfurter.dev/v2/rates?base=USD&quotes=EUR,RSD", None),
     ("ECB", "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml", None),
     ("CoinPaprika TON", "https://api.coinpaprika.com/v1/tickers/toncoin-the-open-network", None),
+    ("Blockscout tokens", "https://eth.blockscout.com/api/v2/addresses/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045/token-balances", None),
+    ("Ethplorer tokens", "https://api.ethplorer.io/getAddressInfo/0xdAC17F958D2ee523a2206206994597C13D831ec7?apiKey=freekey", None),
+    ("TonAPI jettons", "https://tonapi.io/v2/accounts/EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N/jettons", None),
+    ("TON Center jettons", "https://toncenter.com/api/v3/jetton/wallets?owner_address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&exclude_zero_balance=true&limit=5", None),
+    ("TronGrid TRC-20", "https://api.trongrid.io/v1/accounts/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7", None),
+    ("DefiLlama", "https://coins.llama.fi/prices/current/coingecko:bitcoin,ethereum:0xdac17f958d2ee523a2206206994597c13d831ec7,tron:TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t,ton:EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs", None),
+    ("CoinPaprika contract", "https://api.coinpaprika.com/v1/contracts/eth-ethereum/0xdac17f958d2ee523a2206206994597c13d831ec7", None),
 ]
 results=[]
 for name,url,body in checks:

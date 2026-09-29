@@ -29,7 +29,7 @@ class AppTest {
     }
     private fun click(text: String) { find(text).click(); device.waitForIdle() }
     private fun type(label: String,value: String) {
-        val key=mapOf("Name" to "name", "Purpose" to "name", "Currency code (EUR, USD, BTC…)" to "currency", "Current quantity · no grouping separators" to "quantity", "Target amount · no grouping separators" to "target", "Priority (higher number first)" to "priority").getValue(label)
+        val key=mapOf("Name" to "name", "Purpose" to "name", "Currency code (EUR, USD, BTC…)" to "currency", "Current quantity · no grouping separators" to "quantity", "Target amount · no grouping separators" to "target", "Amount · no grouping separators" to "amount").getValue(label)
         var found: UiObject2?=null
         for(attempt in 0..6) {
             found=device.wait(Until.findObject(By.res(key)),600)
@@ -61,8 +61,9 @@ class AppTest {
             click("Add bucket"); type("Name","Reserve"); type("Currency code (EUR, USD, BTC…)","USD"); click("Save")
             click("Reserve"); click("Add holding"); type("Name","Cash"); type("Currency code (EUR, USD, BTC…)","USD"); type("Current quantity · no grouping separators","900"); click("Save")
             find("Cash"); capture("bucket")
-            click("Goals"); click("Add goal"); type("Purpose","Emergency"); type("Currency code (EUR, USD, BTC…)","USD"); type("Target amount · no grouping separators","600"); type("Priority (higher number first)","2"); click("Save")
+            click("Goals"); click("Add goal"); type("Purpose","Emergency"); type("Currency code (EUR, USD, BTC…)","USD"); type("Target amount · no grouping separators","600"); click("Save")
             click("Emergency"); click("Connect bucket"); capture("connection"); click("Save"); find("Disconnect"); capture("goal")
+            click("Buckets"); click("Add planned saving"); type("Name","Salary"); type("Currency code (EUR, USD, BTC…)","USD"); type("Amount · no grouping separators","100"); click("Save"); find("Salary")
             var data=Portfolio(); var tree: Uri?=null
             scenario.onActivity { activity ->
                 val model=ViewModelProvider(activity)[CapitalModel::class.java]
@@ -80,7 +81,7 @@ class AppTest {
                 resolver.openOutputStream(broken)!!.use { it.write("partial".toByteArray()) }
                 assertEquals(1,store.scan().invalid); assertEquals(data,store.scan().heads.single().data)
             }
-            scenario.recreate(); find("Reserve"); find("Emergency"); capture("overview")
+            scenario.recreate(); find("Reserve"); click("Overview"); find("Emergency"); capture("overview")
         }
     }
 }

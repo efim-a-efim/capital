@@ -20,14 +20,17 @@ Toolchain: Gradle 9.8.0, Android Gradle Plugin 9.4.1, Kotlin/Compose compiler 2.
 1. Choose a dedicated local folder, e.g. `Documents/CapitalTracker`. Existing Capital folders reopen directly.
 2. Settings → set default currency and optional provider keys.
 3. Add a bucket, then manual holdings or public wallet addresses.
-4. Add goals and connect their funding buckets. Higher priority numbers fund first; peers share equally subject to limits.
-5. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
+4. Add goals and connect their funding buckets. Goals with earlier dates fund first; drag goals that share a date to set their order.
+5. Add planned savings on the Buckets screen to see when each goal closes.
+6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket displays native quantities plus converted values. Missing quotes mark totals incomplete; stale cached values remain usable with a warning. Goal allocations never transfer money or increase your total savings.
 
 ## Wallet and provider scope
 
-Native mainnet address balances only: confirmed BTC, latest ETH, TON/GRAM, confirmed spendable TRX. No tokens, staking, DeFi, xpub discovery, signing or transactions. Record other investments manually as a quantity or labeled fiat value. A Bitcoin address does not represent an entire HD wallet.
+Native mainnet address balances: confirmed BTC, latest ETH, TON/GRAM, confirmed spendable TRX. Plus fungible tokens on tracked ETH (ERC-20), TON (jettons) and TRX (TRC-20) addresses. No staking, DeFi positions, NFTs, Bitcoin-based tokens, xpub discovery, signing or transactions. Record other investments manually as a quantity or labeled fiat value.
+
+**Tokens and scam protection.** A token is identified by its chain and smart-contract address, never by name or symbol. It counts only when the selected crypto price provider lists that exact contract. Everything else shows as "Unknown token · not counted" with its contract address and is left out of totals, allocations and goals. A fake "USDT" with a different contract is therefore never counted. Open a wallet holding's editor to fetch its tokens and switch off any you do not want listed or counted. DefiLlama prices all tokens of a refresh in batched requests and only prices with a confidence of at least 0.9 count. With CoinGecko lookups are limited to 30 contracts per refresh and with CoinPaprika to 10, because its free tier allows 60 requests per hour, so a wallet with many airdropped tokens is classified over several refreshes. At most 100 token types per wallet are tracked, in the order the token source reports them. A Bitcoin address does not represent an entire HD wallet.
 
 | Data | Default | Alternative | Key |
 |---|---|---|---|
@@ -35,14 +38,17 @@ Native mainnet address balances only: confirmed BTC, latest ETH, TON/GRAM, confi
 | ETH | PublicNode | Alchemy | Alchemy free key |
 | TON / GRAM | TON Center | TonAPI | Optional TON Center key |
 | TRX | TronGrid | PublicNode | TronGrid free key |
-| Crypto prices | CoinGecko Demo | CoinPaprika | CoinGecko free key |
+| ETH tokens | Blockscout | Ethplorer, Off | None |
+| TON tokens | TON Center | TonAPI, Off | Optional TON Center key |
+| TRX tokens | TronGrid | Off | Optional TronGrid key |
+| Crypto prices | DefiLlama | CoinGecko Demo, CoinPaprika | None; CoinGecko needs a free key |
 | Fiat | Frankfurter | ECB | None; currency coverage differs |
 
 Sources are independently selectable. No automatic switch to another operator. Settings links each provider's site and includes attribution. “Test sources / refresh” tests only assets/addresses currently present in the portfolio. Public queries disclose those addresses and your IP to the selected operator. API keys are encrypted with Android Keystore and excluded from snapshots, exports and OS backup. Never enter a private key or seed phrase.
 
 ## Storage, sync and recovery
 
-Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
+Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Schema 2 adds wallet tokens; schema 1 folders open unchanged and upgrade on the next save. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
 
 Use your preferred sync tool to sync the folder. Capital does not run its own sync service. Android folder access differs across sync tools; verify both apps can access your selected directory. Concurrent revisions produce a conflict screen; choose a version after reviewing it. Both originals remain. Incomplete sync blocks editing until missing parents arrive. Device clocks do not choose a winner.
 

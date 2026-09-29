@@ -17,7 +17,13 @@ fun String.decimal(): BigDecimal {
 }
 fun BigDecimal.text(): String = stripTrailingZeros().toPlainString()
 fun BigDecimal.divideMoney(other: BigDecimal) = divide(other, 18, RoundingMode.DOWN)
-fun validAsset(asset: String): Boolean = asset in Chain.entries.map { it.name } || runCatching { Currency.getInstance(asset) }.isSuccess
+fun validAsset(asset: String): Boolean = asset in Chain.entries.map { it.name } || runCatching { Currency.getInstance(asset) }.isSuccess || validToken(asset)
+private fun validToken(asset: String): Boolean {
+    val (c, contract) = asset.split(":", limit = 2).takeIf { it.size == 2 } ?: return false
+    val chain = Chain.entries.find { it.name == c }?.takeIf { it != Chain.BTC } ?: return false
+    return runCatching { canonicalAddress(chain, contract) == contract }.getOrDefault(false)
+}
+fun tokenAsset(chain: String, contract: String) = "$chain:$contract"
 fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
 @Serializable enum class Chain(val decimals: Int) { BTC(8), ETH(18), TON(9), TRX(6) }
 @Serializable enum class Limit { AUTO, FIXED, BUCKET_PERCENT, GOAL_PERCENT }
@@ -26,12 +32,21 @@ fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
     val id: String = id(), val bucketId: String, val label: String, val asset: String,
     val quantity: String? = "0", val address: String? = null,
     val observedAt: Long? = null, val fetchedAt: Long? = null, val source: String = "Manual",
-    val error: String? = null,
+    val error: String? = null, val tokens: List<Token> = emptyList(), val tokensError: String? = null,
+    val excluded: List<String> = emptyList(),
 )
+@Serializable data class Token(
+    val contract: String, val symbol: String = "", val name: String = "", val units: String,
+    val decimals: Int? = null, val checkedAt: Long? = null,
+) {
+    fun quantity(): BigDecimal? = decimals?.takeIf { it in 0..36 }?.let { BigDecimal(BigInteger(units), it).setScale(18, RoundingMode.DOWN) }
+}
 @Serializable data class Goal(
     val id: String = id(), val name: String, val target: String, val currency: String,
     val due: String, val priority: Int = 0, val archived: Boolean = false,
 )
+@Serializable data class Planned(val id: String = id(), val name: String, val amount: String, val currency: String, val date: String)
+fun Planned.archived(today: LocalDate = LocalDate.now()) = LocalDate.parse(date) < today
 @Serializable data class Connection(
     val goalId: String, val bucketId: String, val mode: Limit = Limit.AUTO,
     val value: String = "0", val goalCap: String? = null,
@@ -45,7 +60,10 @@ val providerChoices = linkedMapOf(
     "ETH" to listOf("PublicNode", "Alchemy"),
     "TON" to listOf("TON Center", "TonAPI"),
     "TRX" to listOf("TronGrid", "PublicNode"),
-    "Crypto" to listOf("CoinGecko", "CoinPaprika"),
+    "ETH tokens" to listOf("Blockscout", "Ethplorer", "Off"),
+    "TON tokens" to listOf("TON Center", "TonAPI", "Off"),
+    "TRX tokens" to listOf("TronGrid", "Off"),
+    "Crypto" to listOf("DefiLlama", "CoinGecko", "CoinPaprika"),
     "Fiat" to listOf("Frankfurter", "ECB"),
 )
 @Serializable data class Settings(
@@ -56,11 +74,13 @@ val providerChoices = linkedMapOf(
     val buckets: List<Bucket> = emptyList(), val holdings: List<Holding> = emptyList(),
     val goals: List<Goal> = emptyList(), val connections: List<Connection> = emptyList(),
     val quotes: List<Quote> = emptyList(), val settings: Settings = Settings(),
+    val planned: List<Planned> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 1000) { "File exceeds personal portfolio limits" }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000) { "File exceeds personal portfolio limits" }
         fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { "Duplicate or invalid identifiers" } }
-        unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id })
+        unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id })
+        require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { "Duplicate or invalid identifiers" }
         require(validAsset(settings.currency) && settings.theme in listOf("System", "Light", "Dark")) { "Invalid settings" }
         require(settings.providers.keys == providerChoices.keys && settings.providers.all { (k,v) -> v in providerChoices.getValue(k) }) { "Unsupported provider" }
         val owners = mutableSetOf<String>()
@@ -68,8 +88,13 @@ val providerChoices = linkedMapOf(
         holdings.forEach { h ->
             require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { "Invalid holding" }
             h.quantity?.decimal()
+            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.asset != Chain.BTC.name)) { "Tokens need an ETH, TON or TRX wallet" }
             if (h.address != null) {
                 val chain = Chain.valueOf(h.asset)
+                require(h.tokens.size <= 100 && h.tokens.map { it.contract }.distinct().size == h.tokens.size) { "Invalid tokens" }
+                fun canonical(c: String) = runCatching { canonicalAddress(chain, c) == c }.getOrDefault(false)
+                require(h.excluded.size <= 1000 && h.excluded.distinct().size == h.excluded.size && h.excluded.all { canonical(it) }) { "Invalid excluded tokens" }
+                h.tokens.forEach { t -> require(canonical(t.contract) && t.units.matches(Regex("[0-9]{1,80}")) && t.symbol.length <= 40 && t.name.length <= 40 && (t.decimals ?: 0) in 0..36) { "Invalid token" } }
                 require(owners.add("${chain.name}:${canonicalAddress(chain, h.address)}")) { "Wallet already belongs to a bucket" }
                 h.quantity?.let { require(it.decimal().stripTrailingZeros().scale() <= chain.decimals) { "Invalid native precision" } }
             } else require(h.quantity != null) { "Manual balance required" }
@@ -77,6 +102,10 @@ val providerChoices = linkedMapOf(
         goals.forEach {
             require(it.name.isNotBlank() && it.name.length <= 120 && it.target.decimal() > ZERO && validAsset(it.currency)) { "Invalid goal" }
             LocalDate.parse(it.due)
+        }
+        planned.forEach {
+            require(it.name.isNotBlank() && it.name.length <= 120 && it.amount.decimal() > ZERO && validAsset(it.currency) && ':' !in it.currency) { "Invalid planned saving" }
+            LocalDate.parse(it.date)
         }
         require(connections.map { it.key }.distinct().size == connections.size) { "Duplicate connection" }
         connections.forEach {
@@ -94,11 +123,33 @@ val providerChoices = linkedMapOf(
         if (from == to || amount.signum() == 0) return amount
         return price(from)?.let { f -> price(to)?.let { t -> amount.multiply(f).divideMoney(t) } }
     }
-    fun bucketValue(bucketId: String, currency: String): BigDecimal = holdings.filter { it.bucketId == bucketId }.fold(ZERO) { sum,h -> sum + (h.quantity?.let { convert(it.decimal(), h.asset, currency) } ?: ZERO) }
-    fun incomplete(currency: String) = holdings.any { it.quantity == null || convert(it.quantity.decimal(), it.asset, currency) == null }
-    fun stale(now: Long = System.currentTimeMillis()): Boolean = holdings.any { it.error != null || (it.address != null && (it.fetchedAt == null || now - it.fetchedAt > 86_400_000)) } || quotes.any { it.error != null || now - it.observedAt > (if (it.asset in Chain.entries.map { c -> c.name }) 86_400_000L else 604_800_000L) }
+    // ponytail: price() is a linear scan per token; index quotes by asset if portfolios reach thousands of tokens.
+    fun known(h: Holding, t: Token): Boolean = t.contract !in h.excluded && t.quantity() != null && price(tokenAsset(h.asset, t.contract)) != null
+    private fun tokenValue(h: Holding, currency: String): BigDecimal? = h.tokens.filter { known(h, it) }.fold(ZERO as BigDecimal?) { sum, t -> sum?.let { s -> convert(t.quantity()!!, tokenAsset(h.asset, t.contract), currency)?.let { s + it } } }
+    fun bucketValue(bucketId: String, currency: String): BigDecimal = holdings.filter { it.bucketId == bucketId }.fold(ZERO) { sum,h -> sum + (h.quantity?.let { convert(it.decimal(), h.asset, currency) } ?: ZERO) + h.tokens.filter { known(h, it) }.fold(ZERO) { s, t -> s + (convert(t.quantity()!!, tokenAsset(h.asset, t.contract), currency) ?: ZERO) } }
+    /** Null when something in the bucket cannot be converted and nothing else adds value; otherwise the (possibly partial) sum. */
+    fun bucketValueOrNull(bucketId: String, currency: String): BigDecimal? = bucketValue(bucketId, currency).takeUnless { it.signum() == 0 && incomplete(currency, bucketId) }
+    fun incomplete(currency: String, bucketId: String? = null) = holdings.any { (bucketId == null || it.bucketId == bucketId) && (it.quantity == null || convert(it.quantity.decimal(), it.asset, currency) == null || tokenValue(it, currency) == null) }
+    fun stale(now: Long = System.currentTimeMillis()): Boolean {
+        val used = holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset, it.contract) } }.toSet()
+        return holdings.any { it.error != null || it.tokensError != null || (it.address != null && (it.fetchedAt == null || now - it.fetchedAt > 86_400_000)) } ||
+            quotes.any { (':' !in it.asset || it.asset in used) && (it.error != null || now - it.observedAt > (if (it.asset in Chain.entries.map { c -> c.name } || ':' in it.asset) 86_400_000L else 604_800_000L)) }
+    }
     fun deleteBucket(id: String) = copy(buckets = buckets.filterNot { it.id == id }, holdings = holdings.filterNot { it.bucketId == id }, connections = connections.filterNot { it.bucketId == id })
     fun deleteGoal(id: String) = copy(goals = goals.filterNot { it.id == id }, connections = connections.filterNot { it.goalId == id })
+}
+// Active goals by (due, old priority desc, list index) get priority count..1; archived get 0. List order is untouched.
+fun Portfolio.ranked(): Portfolio {
+    val order = goals.withIndex().filter { !it.value.archived }.sortedWith(compareBy<IndexedValue<Goal>> { it.value.due }.thenByDescending { it.value.priority }.thenBy { it.index }).map { it.value.id }
+    val rank = order.withIndex().associate { (i, id) -> id to order.size - i }
+    return copy(goals = goals.map { it.copy(priority = rank[it.id] ?: 0) })
+}
+fun Portfolio.moveGoal(id: String, up: Boolean): Portfolio {
+    val g = goals.find { it.id == id && !it.archived } ?: return this
+    val row = goals.withIndex().filter { !it.value.archived && it.value.due == g.due }.sortedWith(compareByDescending<IndexedValue<Goal>> { it.value.priority }.thenBy { it.index }).map { it.value }
+    val at = row.indexOfFirst { it.id == id }
+    val other = row.getOrNull(if (up) at - 1 else at + 1) ?: return this
+    return copy(goals = goals.map { when (it.id) { g.id -> it.copy(priority = other.priority); other.id -> it.copy(priority = g.priority); else -> it } }).ranked()
 }
 fun baseQuantity(units: String, chain: Chain): String {
     require(units.length <= 80 && units.matches(Regex("[0-9]+"))) { "Invalid balance response" }

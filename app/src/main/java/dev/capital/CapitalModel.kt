@@ -89,7 +89,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun edit(transform: (Portfolio)->Portfolio,onSaved: ()->Unit = {}) = viewModelScope.launch {
         transaction.withLock {
             if(mutable.value.blocked || mutable.value.unsaved) { notice("Resolve storage issues before editing"); return@withLock }
-            try { persist(transform(mutable.value.data).validate()); onSaved() }
+            try { persist(transform(mutable.value.data).ranked().validate()); onSaved() }
             catch(e: Exception) { notice(e.message ?: "Could not save") }
         }
     }
@@ -105,18 +105,20 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         try { persist(mutable.value.data) } catch(e: Exception) { notice(e.message ?: "Save failed") }
     } }
     fun resolve(revision: Revision)=viewModelScope.launch { transaction.withLock {
-        try { persist(revision.data,true) } catch(e: Exception) { notice(e.message ?: "Conflict resolution failed") }
+        try { persist(revision.data.ranked(),true) } catch(e: Exception) { notice(e.message ?: "Conflict resolution failed") }
     } }
     fun refresh(bucketId: String?=null) {
         if(refreshJob?.isActive==true || !mutable.value.ready || mutable.value.blocked || mutable.value.unsaved || !foreground) return
         val requested=mutable.value.data
+        // Nothing to value: never write a snapshot for an empty portfolio (e.g. a folder listing that came back empty).
+        if(requested.buckets.isEmpty() && requested.goals.isEmpty()) return
         refreshJob=viewModelScope.launch {
             update { it.copy(refreshing=true,message="Refreshing selected providers…") }
             try {
                 val observations=providers.refresh(requested,bucketId)
                 transaction.withLock {
                     if(mutable.value.blocked || mutable.value.unsaved) { notice("Refresh finished; resolve storage issues before retrying."); return@withLock }
-                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes)) }
+                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted)) }
                     notice(if(observations.errors.isEmpty()) "Refreshed. Shared rates may revalue other buckets." else observations.errors.joinToString("\n"))
                 }
             } catch(e: CancellationException) { notice("Refresh stopped. Cached values retained."); throw e }
@@ -124,6 +126,17 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             finally { update { it.copy(refreshing=false) } }
         }
     }
+    /** Loads an address's tokens for the holding editor; persists nothing. */
+    fun fetchTokens(asset: String,address: String,done: (List<Token>?,String?)->Unit) { viewModelScope.launch {
+        val data=mutable.value.data; val source=data.settings.providers["$asset tokens"]
+        if(asset==Chain.BTC.name) return@launch done(emptyList(),null)
+        if(source==null || source=="Off") return@launch done(null,"Token source for $asset is Off. Choose one in Settings.")
+        val stored=data.holdings.filter { it.asset==asset }.flatMap { it.tokens }
+        val list=try { providers.tokens(Holding(bucketId="-",label="-",asset=asset,quantity=null,address=address),source).map { t -> stored.find { it.contract==t.contract }?.let { o -> t.copy(decimals=t.decimals ?: o.decimals,symbol=t.symbol.ifBlank { o.symbol },checkedAt=o.checkedAt) } ?: t } }
+        catch(e: CancellationException) { throw e }
+        catch(e: Exception) { return@launch done(null,e.safeMessage()) }
+        done(list,null)
+    } }
     fun saveKey(provider: String,value: String): Boolean = try { secrets.put(provider,value); notice("$provider key saved on this device"); true } catch(e: Exception) { notice(e.message ?: "Could not save key"); false }
     fun export(uri: Uri)=viewModelScope.launch {
         try {

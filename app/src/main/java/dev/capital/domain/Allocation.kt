@@ -3,6 +3,9 @@ package dev.capital.domain
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
+import java.time.LocalDate
+
+const val PLANNED_BUCKET = "~planned"
 
 private val Z = BigInteger.ZERO
 private val O = BigInteger.ONE
@@ -31,11 +34,12 @@ private fun share(total: BigInteger, caps: Map<String,BigInteger>): Map<String,B
     }
     return result
 }
-fun Portfolio.allocate(): Allocation {
-    val bucketsUsd = buckets.associate { it.id to bucketValue(it.id,"USD").units() }
+fun Portfolio.allocate(extra: BigDecimal = ZERO): Allocation {
+    val bucketsUsd0 = buckets.associate { it.id to bucketValue(it.id,"USD").units() }
+    val bucketsUsd = if(extra.signum() > 0) bucketsUsd0 + (PLANNED_BUCKET to extra.units()) else bucketsUsd0
     val capacity = bucketsUsd.toMutableMap()
     val goalsUsd = goals.filterNot { it.archived }.mapNotNull { g -> convert(g.target.decimal(),g.currency,"USD")?.let { g.id to it.units() } }.toMap()
-    val caps = connections.filter { it.goalId in goalsUsd }.associate { c ->
+    val caps = (connections.filter { it.goalId in goalsUsd }.associate { c ->
         val g = goals.first { it.id == c.goalId }
         val target = goalsUsd.getValue(g.id).money()
         val amount = when(c.mode) {
@@ -45,7 +49,7 @@ fun Portfolio.allocate(): Allocation {
             Limit.GOAL_PERCENT -> target * c.value.decimal() / HUNDRED
         }.min(target).min(c.goalCap?.let { target * it.decimal() / HUNDRED } ?: target)
         c.key to amount.units()
-    }
+    } + if(extra.signum() > 0) goalsUsd.map { (g,t) -> "$PLANNED_BUCKET/$g" to t } else emptyList())
     val flow = caps.mapValues { Z }.toMutableMap()
     fun funded(goal: String) = flow.filterKeys { it.substringAfter('/') == goal }.values.fold(Z,BigInteger::add)
     goals.filter { it.id in goalsUsd }.groupBy { it.priority }.toSortedMap(compareByDescending { it }).values.forEach { group ->
@@ -106,4 +110,34 @@ fun Portfolio.allocate(): Allocation {
         }
     }
     return Allocation(flow.mapValues { it.value.money() },bucketsUsd.mapValues { it.value.money() },incomplete("USD") || goals.any { !it.archived && it.id !in goalsUsd })
+}
+
+data class Contribution(val plannedId: String, val usd: BigDecimal)
+data class Projection(
+    val now: Map<String, BigDecimal>, val contributions: Map<String, List<Contribution>>,
+    val closes: Map<String, String>, val reached: Map<String, String>,
+    val final: Map<String, BigDecimal>, val targets: Map<String, BigDecimal>, val incomplete: Boolean,
+)
+// ponytail: one full allocation per planned saving; incremental residual flow if lists reach hundreds.
+fun Portfolio.project(today: LocalDate = LocalDate.now()): Projection {
+    val base = allocate()
+    val targets = goals.filterNot { it.archived }.mapNotNull { g -> convert(g.target.decimal(), g.currency, "USD")?.let { g.id to it.units().money() } }.toMap()
+    val now = targets.keys.associateWith { base.goal(it) }
+    val prev = now.toMutableMap(); val done = targets.keys.filter { now.getValue(it) >= targets.getValue(it) }.toMutableSet()
+    val contributions = mutableMapOf<String, MutableList<Contribution>>(); val closes = mutableMapOf<String, String>(); val reached = mutableMapOf<String, String>()
+    var incomplete = base.incomplete; var cumulative = ZERO
+    planned.withIndex().filterNot { it.value.archived(today) }.sortedWith(compareBy<IndexedValue<Planned>> { it.value.date }.thenBy { it.index }).map { it.value }.forEach { s ->
+        val usd = convert(s.amount.decimal(), s.currency, "USD") ?: run { incomplete = true; return@forEach }
+        cumulative += usd
+        val a = allocate(cumulative)
+        targets.forEach { (g, target) ->
+            val funded = a.goal(g)
+            // ponytail: totals are assumed non-decreasing as funds grow (checked by a test); a negative delta is clamped to zero.
+            val delta = funded - prev.getValue(g)
+            if (delta.signum() > 0) { contributions.getOrPut(g) { mutableListOf() }.add(Contribution(s.id, delta)); reached[g] = s.date }
+            if (funded >= target && done.add(g)) closes[g] = s.date
+            prev[g] = funded.max(prev.getValue(g))
+        }
+    }
+    return Projection(now, contributions, closes, reached, prev, targets, incomplete)
 }

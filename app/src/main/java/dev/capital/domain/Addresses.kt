@@ -22,6 +22,32 @@ private fun checked58(value: String): ByteArray {
     require(sha(sha(payload)).take(4) == bytes.takeLast(4)) { "Invalid address checksum" }
     return payload
 }
+private fun crc16(bytes: ByteArray): Int {
+    var crc = 0
+    bytes.forEach { byte ->
+        crc = crc xor ((byte.toInt() and 255) shl 8)
+        repeat(8) { crc = if (crc and 0x8000 != 0) (crc shl 1) xor 0x1021 else crc shl 1; crc = crc and 0xffff }
+    }
+    return crc
+}
+fun String.unhex(): ByteArray = chunked(2).map { it.toInt(16).toByte() }.toByteArray()
+private fun base58Encode(bytes: ByteArray): String {
+    val alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    var n = BigInteger(1, bytes); val out = StringBuilder()
+    while (n.signum() > 0) { val (q, r) = n.divideAndRemainder(BigInteger.valueOf(58)); out.append(alphabet[r.toInt()]); n = q }
+    return "1".repeat(bytes.takeWhile { it == 0.toByte() }.size) + out.reverse()
+}
+/** Provider-facing form of a canonical address: TRX Base58Check, TON bounceable url-safe base64. */
+fun providerAddress(chain: Chain, canonical: String): String = when (chain) {
+    Chain.TRX -> canonical.unhex().let { base58Encode(it + sha(sha(it)).copyOf(4)) }
+    Chain.TON -> {
+        val (wc, hash) = canonical.split(":")
+        val head = byteArrayOf(0x11, wc.toInt().toByte()) + hash.unhex()
+        val crc = crc16(head)
+        Base64.getUrlEncoder().withoutPadding().encodeToString(head + byteArrayOf((crc ushr 8).toByte(), crc.toByte()))
+    }
+    else -> canonical
+}
 fun canonicalAddress(chain: Chain, input: String): String {
     val value = input.trim()
     require(value.length <= 120) { "Address too long" }
@@ -40,7 +66,7 @@ fun canonicalAddress(chain: Chain, input: String): String {
             value.lowercase()
         }
         Chain.TRX -> {
-            val payload = if (value.matches(Regex("41[0-9a-fA-F]{40}"))) value.chunked(2).map { it.toInt(16).toByte() }.toByteArray() else checked58(value)
+            val payload = if (value.matches(Regex("41[0-9a-fA-F]{40}"))) value.unhex() else checked58(value)
             require(payload[0] == 0x41.toByte()) { "Enter a TRON address" }
             payload.hex()
         }
@@ -50,12 +76,7 @@ fun canonicalAddress(chain: Chain, input: String): String {
                 require(bytes.size == 36) { "Invalid TON address length" }
                 val tag = bytes[0].toInt() and 255
                 require(tag in listOf(0x11, 0x51)) { "Use a mainnet TON address" }
-                var crc = 0
-                bytes.take(34).forEach { byte ->
-                    crc = crc xor ((byte.toInt() and 255) shl 8)
-                    repeat(8) { crc = if (crc and 0x8000 != 0) (crc shl 1) xor 0x1021 else crc shl 1; crc = crc and 0xffff }
-                }
-                require(crc == ((bytes[34].toInt() and 255) shl 8 or (bytes[35].toInt() and 255))) { "Invalid TON checksum" }
+                require(crc16(bytes.copyOfRange(0, 34)) == ((bytes[34].toInt() and 255) shl 8 or (bytes[35].toInt() and 255))) { "Invalid TON checksum" }
                 require(bytes[1].toInt() in listOf(-1, 0)) { "Unsupported TON workchain" }
                 "${bytes[1]}:${bytes.copyOfRange(2,34).hex()}"
             }

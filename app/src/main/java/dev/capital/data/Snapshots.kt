@@ -10,9 +10,10 @@ import kotlinx.serialization.json.int
 import java.security.MessageDigest
 
 val json = Json { encodeDefaults = true; ignoreUnknownKeys = false }
+const val SCHEMA = 3
 const val MAX_FILE_BYTES = 8 * 1024 * 1024
 class FutureSchema : IllegalArgumentException("This folder needs a newer Capital version. No data was changed.")
-@Serializable data class Revision(val schema: Int = 1, val id: String = id(), val parents: List<String> = emptyList(), val createdAt: Long = System.currentTimeMillis(), val data: Portfolio)
+@Serializable data class Revision(val schema: Int = SCHEMA, val id: String = id(), val parents: List<String> = emptyList(), val createdAt: Long = System.currentTimeMillis(), val data: Portfolio)
 @Serializable data class Envelope(val payload: String, val sha256: String)
 fun checksum(value: String) = MessageDigest.getInstance("SHA-256").digest(value.toByteArray()).joinToString("") { "%02x".format(it.toInt() and 255) }
 fun encodeRevision(revision: Revision): String {
@@ -25,9 +26,12 @@ fun decodeRevision(text: String): Revision {
     val envelope = json.decodeFromString<Envelope>(text)
     require(checksum(envelope.payload) == envelope.sha256) { "Snapshot checksum mismatch" }
     val schema = json.parseToJsonElement(envelope.payload).jsonObject.getValue("schema").jsonPrimitive.int
-    if(schema > 1) throw FutureSchema()
-    require(schema == 1) { "Unsupported snapshot schema" }
-    return json.decodeFromString<Revision>(envelope.payload).also {
+    if(schema > SCHEMA) throw FutureSchema()
+    require(schema in 1..SCHEMA) { "Unsupported snapshot schema" }
+    return json.decodeFromString<Revision>(envelope.payload).let { r ->
+        // schema 1 lacks the token source keys; a no-op when all keys exist
+        r.copy(data=r.data.copy(settings=r.data.settings.copy(providers=providerChoices.mapValues { it.value.first() }+r.data.settings.providers)))
+    }.let { r -> if(schema < 3) r.copy(data=r.data.ranked()) else r }.also {
         require(it.id.length in 1..100 && it.id !in it.parents && it.parents.distinct().size == it.parents.size && it.parents.size <= 1000) { "Invalid revision ancestry" }
         it.data.validate()
     }
