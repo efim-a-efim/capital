@@ -1,5 +1,5 @@
 # Developer wallet addresses for tips: the single source for the app (read by app/build.gradle.kts into BuildConfig) and the site. Empty address = not shown. Keep the four networks in this order.
-- { network: BTC, address: "" }
-- { network: ETH / ERC-20, address: "" }
-- { network: TRX / TRC-20, address: "" }
-- { network: TON / GRAM, address: "" }
+- { network: BTC, address: "bc1qq7zmhc5xhu0w2wlw89mrw5x7qnua0c752906jt" }
+- { network: ETH / ERC-20, address: "0x3BeCA7D9e60803be14c811b81B0b5bFb4981BBfD" }
+- { network: TRX / TRC-20, address: "TMcdiShmeFGwbvjfvxAKKsT7H21VZZSvHr" }
+- { network: TON / GRAM, address: "UQDjBWNfRXnQKxobPz45XOufEv2v5nyYJeD7jSmXvc1Zl4jJ" }
