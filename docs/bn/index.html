@@ -1,0 +1,74 @@
+---
+layout: default
+lang: bn
+base: "/bn"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>দেখুন কবে প্রতিটি সঞ্চয়ের লক্ষ্য পূরণ হবে।</h1>
+    <p class="lead">Capital হলো Android-এর জন্য একটি ব্যক্তিগত সঞ্চয় ট্র্যাকার। আপনার অর্থকে বিভিন্ন তহবিলে ভাগ করুন, সেগুলোকে লক্ষ্যের সঙ্গে সংযুক্ত করুন, যে সঞ্চয় করার পরিকল্পনা আছে তা যোগ করুন — অ্যাপ জানিয়ে দেবে কোন লক্ষ্য পূরণ হয়েছে, কোনটি সময়মতো পূরণ হবে আর কোনটিতে ঘাটতি থাকবে।</p>
+    <div class="badges"><span class="badge green">পূরণ হয়েছে</span><span class="badge green">সময়মতো পূরণ হবে</span><span class="badge yellow">পূরণ হয়নি</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APK ডাউনলোড করুন</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Google Play-তে পান</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">ম্যানুয়াল পড়ুন</a>
+    </div>
+    <p class="note">কোনো অ্যাকাউন্ট নেই। কোনো অ্যানালিটিক্স নেই। কোনো বিজ্ঞাপন নেই। রেকর্ড থাকে আপনার বেছে নেওয়া ফোল্ডারে; যে সিঙ্ক টুল আপনি ইতিমধ্যে ব্যবহার করেন, তা দিয়েই সিঙ্ক করুন।</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="পূরণ হয়েছে, সময়মতো পূরণ হবে ও পূরণ হয়নি ব্যাজসহ লক্ষ্যের স্ক্রিন" width="1080" height="1920">
+</section>
+
+<h2>এটি কী করে</h2>
+<ul class="features">
+  <li><h3>তহবিল</h3><p>নগদ, সঞ্চয়ী অ্যাকাউন্ট, ব্রোকারেজ, ক্রিপ্টো। পরিমাণ নিজে লিখুন, অথবা একটি পাবলিক ওয়ালেট ঠিকানা পেস্ট করুন — অ্যাপ নিজেই ব্যালান্স পড়ে নেবে।</p></li>
+  <li><h3>অগ্রাধিকারসহ লক্ষ্য</h3><p>সীমা নির্ধারণ করে তহবিলকে লক্ষ্যের সঙ্গে সংযুক্ত করুন। আগের তারিখের লক্ষ্য আগে পূরণ হয়; একই তারিখের লক্ষ্যগুলোর ক্রম টেনে সাজান। বরাদ্দ কখনও অর্থ সরায় না।</p></li>
+  <li><h3>পরিকল্পনা</h3><p>যে সঞ্চয় করতে চান তা যোগ করুন। প্রক্ষেপণ দেখায় প্রতিটি লক্ষ্য কোন তারিখে পূরণ হবে, এবং সেটিকে <em>সময়মতো পূরণ হবে</em> বা <em>পূরণ হয়নি</em> হিসেবে চিহ্নিত করে।</p></li>
+  <li><h3>পোর্টফোলিও মোড</h3><p>প্রতিটি অ্যাসেটের টার্গেট শতাংশ, টার্গেটের তুলনায় প্রকৃত অংশ, এবং একটি রিব্যালান্স ক্যালকুলেটর যা দেখায় কী কিনতে হবে।</p></li>
+  <li><h3>ওয়ালেট ও মূল্য</h3><p>BTC, ETH, TON ও TRON ঠিকানা, সঙ্গে ERC-20, জেটন ও TRC-20 টোকেন। ক্রিপ্টোর মূল্য DefiLlama, CoinGecko বা CoinPaprika থেকে; ফিয়াট বিনিময় হার Frankfurter বা ECB থেকে। প্রতিটি উৎস আপনি নিজেই বেছে নিতে পারেন।</p></li>
+  <li><h3>এনক্রিপশন ও লক</h3><p>ঐচ্ছিকভাবে আপনার ফাইল AES-256-GCM দিয়ে এনক্রিপ্ট করা যায়, কী তৈরি হয় Argon2id দিয়ে; PIN ও বায়োমেট্রিক আনলক; লক করা ডেটা খোলা থাকলে স্ক্রিনশট নেওয়া যায় না।</p></li>
+  <li><h3>আপনার ফোল্ডার, আপনার সিঙ্ক</h3><p>স্ন্যাপশট হলো রিভিশন আইডি ও চেকসামসহ সাধারণ ফাইল। Syncthing, Nextcloud, Drive বা অন্য যেকোনো টুল দিয়ে সিঙ্ক করুন। দ্বন্দ্ব সবসময় দেখানো হয়, কখনও নীরবে সমাধান করা হয় না।</p></li>
+  <li><h3>15টি ভাষা</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>স্ক্রিন</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="সারসংক্ষেপ: মোট মূল্যায়িত সঞ্চয়, বরাদ্দ ও বরাদ্দহীন পরিমাণ" loading="lazy"><figcaption>সারসংক্ষেপ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="তহবিলের তালিকা" loading="lazy"><figcaption>তহবিল</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="ওয়ালেট সম্পদসহ একটি তহবিল" loading="lazy"><figcaption>তহবিলের বিবরণ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="ব্যাজসহ লক্ষ্য" loading="lazy"><figcaption>লক্ষ্য</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="অর্থের উৎস ও পরিকল্পিত সঞ্চয়সহ লক্ষ্যের বিবরণ" loading="lazy"><figcaption>লক্ষ্যের বিবরণ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="পরিকল্পিত সঞ্চয়" loading="lazy"><figcaption>পরিকল্পনা</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="সেটিংস" loading="lazy"><figcaption>সেটিংস</figcaption></figure>
+</div>
+
+<h2 id="download">ডাউনলোড</h2>
+<div class="download">
+  <div class="ver" id="ver">সর্বশেষ রিলিজ</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">GitHub-এ সর্বশেষ রিলিজ খুলুন</a></p>
+  <ul>
+    <li>Android 8.0 বা তার নতুন সংস্করণ। APK স্থায়ী রিলিজ কী দিয়ে সাইন করা, তাই নতুন সংস্করণ পুরোনোটির ওপরেই ইনস্টল হয়।</li>
+    <li>একই রিলিজের <code>SHA256SUMS.txt</code> দিয়ে ফাইলটি যাচাই করুন।</li>
+    <li>সব রিলিজ ও পরিবর্তনের তালিকা: <a href="{{ site.repo }}/releases">GitHub Releases</a>।</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'সর্বশেষ রিলিজ ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">ডাউনলোড ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">রিলিজ নোট</a>';
+}).catch(() => {});
+</script>
+
+<h2>নথিপত্র</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">ব্যবহারকারী ম্যানুয়াল</a></li>
+  <li><a href="{{ page.base }}/privacy">গোপনীয়তা নীতি</a></li>
+  <li><a href="{{ page.base }}/data-safety">ডেটা নিরাপত্তা ঘোষণা</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">আর্থিক বৈশিষ্ট্য ঘোষণা</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">সোর্স কোড ও ইস্যু ট্র্যাকার</a></li>
+</ul>

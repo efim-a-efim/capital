@@ -67,6 +67,7 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 • Funded / Funded in time / Not funded badges on goals
 • Planned money tops up goals after real buckets
 • Interface in 15 languages, selectable in Settings
+• Help button opens the documentation for the current screen
 • Signed with the permanent release key
 ```
 

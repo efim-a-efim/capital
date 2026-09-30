@@ -49,4 +49,9 @@ class I18nTest {
         assertEquals("en", I18n.resolve(null, Locale.forLanguageTag("sv-SE")))
         I18n.use("ar", Locale.US, emptyMap()); assertTrue(I18n.rtl)
     }
+    @Test fun helpUrlFollowsLanguage() {
+        I18n.use("en", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/screens/goals", I18n.helpUrl("goals"))
+        I18n.use("ru", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/ru/screens/bucket", I18n.helpUrl("bucket"))
+        I18n.use("id", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/id/screens/start", I18n.helpUrl("start"))
+    }
 }

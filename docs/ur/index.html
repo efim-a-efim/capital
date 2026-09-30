@@ -1,0 +1,74 @@
+---
+layout: default
+lang: ur
+base: "/ur"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>دیکھیں کہ بچت کا ہر ہدف کب پورا ہوگا۔</h1>
+    <p class="lead">Capital اینڈرائیڈ کے لیے ایک نجی بچت ٹریکر ہے۔ اپنی رقم کو گلک میں تقسیم کریں، انہیں اہداف سے جوڑیں، وہ بچت شامل کریں جو آپ آگے کرنے کا ارادہ رکھتے ہیں، اور ایپ بتاتی ہے کہ کون سا ہدف پورا ہو چکا، کون سا وقت پر پورا ہوگا اور کس میں کمی رہ جائے گی۔</p>
+    <div class="badges"><span class="badge green">پورا ہو چکا</span><span class="badge green">بروقت پورا ہوگا</span><span class="badge yellow">پورا نہیں ہوا</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APK ڈاؤن لوڈ کریں</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Google Play سے حاصل کریں</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">ہدایت نامہ پڑھیں</a>
+    </div>
+    <p class="note">کوئی اکاؤنٹ نہیں۔ کوئی اینالیٹکس نہیں۔ کوئی اشتہار نہیں۔ ریکارڈ آپ کے منتخب کردہ فولڈر میں رہتے ہیں؛ انہیں کسی بھی ایسے ٹول سے سنک کریں جو آپ پہلے سے استعمال کرتے ہیں۔</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="اہداف کی اسکرین، جس پر پورا ہو چکا، بروقت پورا ہوگا اور پورا نہیں ہوا کے بیجز ہیں" width="1080" height="1920">
+</section>
+
+<h2>یہ کیا کرتی ہے</h2>
+<ul class="features">
+  <li><h3>گلک</h3><p>نقد رقم، بچت اکاؤنٹس، بروکریج، کرپٹو۔ مقداریں خود درج کریں یا کوئی عوامی والیٹ ایڈریس پیسٹ کریں اور ایپ کو بیلنس پڑھنے دیں۔</p></li>
+  <li><h3>ترجیحات کے ساتھ اہداف</h3><p>گلک کو حدوں کے ساتھ اہداف سے جوڑیں۔ پہلے کی تاریخ والے اہداف کو رقم پہلے ملتی ہے؛ ایک ہی تاریخ والے اہداف کی ترتیب انہیں گھسیٹ کر طے کریں۔ مختص کرنے سے پیسہ کبھی منتقل نہیں ہوتا۔</p></li>
+  <li><h3>منصوبے</h3><p>وہ بچت شامل کریں جو آپ کرنے کا ارادہ رکھتے ہیں۔ پیش گوئی دکھاتی ہے کہ ہر ہدف کس تاریخ کو پورا ہوگا اور اس پر <em>بروقت پورا ہوگا</em> یا <em>پورا نہیں ہوا</em> کا نشان لگاتی ہے۔</p></li>
+  <li><h3>پورٹ فولیو موڈ</h3><p>ہر اثاثے کے لیے ٹارگٹ فیصد، ٹارگٹ کے مقابلے میں موجودہ حصہ، اور ری بیلنس کیلکولیٹر جو بتاتا ہے کہ کیا خریدنا ہے۔</p></li>
+  <li><h3>والیٹس اور قیمتیں</h3><p>BTC، ETH، TON اور TRON ایڈریسز، نیز ERC-20، جیٹن اور TRC-20 ٹوکنز۔ قیمتیں DefiLlama، CoinGecko یا CoinPaprika سے؛ فیاٹ کرنسی کے ریٹس Frankfurter یا ECB سے۔ ہر ذریعہ آپ خود منتخب کر سکتے ہیں۔</p></li>
+  <li><h3>انکرپشن اور لاک</h3><p>آپ کی فائلوں کی اختیاری AES-256-GCM انکرپشن، Argon2id سے حاصل کردہ کلید کے ساتھ؛ PIN اور بایومیٹرک ان لاک؛ مقفل ڈیٹا کھلا ہو تو اسکرین شاٹس بند۔</p></li>
+  <li><h3>آپ کا فولڈر، آپ کا سنک</h3><p>اسنیپ شاٹس سادہ فائلیں ہیں جن میں ریویژن ID اور چیک سم ہوتے ہیں۔ انہیں Syncthing، Nextcloud، Drive یا کسی اور ٹول سے سنک کریں۔ تنازعات دکھائے جاتے ہیں، کبھی خاموشی سے حل نہیں کیے جاتے۔</p></li>
+  <li><h3>15 زبانیں</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>اسکرینز</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="جائزہ: کل بچت کی مالیت، مختص اور غیر مختص رقوم" loading="lazy"><figcaption>جائزہ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="گلک کی فہرست" loading="lazy"><figcaption>گلک</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="والیٹ کھاتے والا گلک" loading="lazy"><figcaption>گلک کی تفصیل</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="بیجز کے ساتھ اہداف" loading="lazy"><figcaption>اہداف</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="ہدف کی تفصیل، فنڈنگ کے ذرائع اور منصوبہ بند بچت کے ساتھ" loading="lazy"><figcaption>ہدف کی تفصیل</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="منصوبہ بند بچت" loading="lazy"><figcaption>منصوبے</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="سیٹنگز" loading="lazy"><figcaption>سیٹنگز</figcaption></figure>
+</div>
+
+<h2 id="download">ڈاؤن لوڈ</h2>
+<div class="download">
+  <div class="ver" id="ver">تازہ ترین ریلیز</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">GitHub پر تازہ ترین ریلیز کھولیں</a></p>
+  <ul>
+    <li>اینڈرائیڈ 8.0 یا اس سے نیا۔ APK مستقل ریلیز کلید سے سائن کی گئی ہے، اس لیے نئے ورژن پرانے ورژن کے اوپر انسٹال ہو جاتے ہیں۔</li>
+    <li>فائل کی تصدیق اسی ریلیز کی <code>SHA256SUMS.txt</code> سے کریں۔</li>
+    <li>تمام ریلیزز اور تبدیلیوں کی تفصیل: <a href="{{ site.repo }}/releases">GitHub Releases</a>۔</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'تازہ ترین ریلیز ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">ڈاؤن لوڈ کریں ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">ریلیز نوٹس</a>';
+}).catch(() => {});
+</script>
+
+<h2>دستاویزات</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">ہدایت نامہ</a></li>
+  <li><a href="{{ page.base }}/privacy">رازداری کی پالیسی</a></li>
+  <li><a href="{{ page.base }}/data-safety">ڈیٹا کی حفاظت کا اعلامیہ</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">مالی خصوصیات کا اعلامیہ</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">سورس کوڈ اور مسائل کا ٹریکر</a></li>
+</ul>

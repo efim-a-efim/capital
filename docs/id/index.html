@@ -1,0 +1,74 @@
+---
+layout: default
+lang: id
+base: "/id"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Lihat kapan setiap tujuan tabungan terpenuhi.</h1>
+    <p class="lead">Capital adalah pencatat tabungan pribadi untuk Android. Kelompokkan uang Anda ke dalam kantong, hubungkan kantong ke tujuan, tambahkan tabungan yang Anda rencanakan, dan aplikasi akan menunjukkan tujuan mana yang sudah terpenuhi, mana yang terpenuhi tepat waktu, dan mana yang masih kurang.</p>
+    <div class="badges"><span class="badge green">Terpenuhi</span><span class="badge green">Akan terpenuhi tepat waktu</span><span class="badge yellow">Belum terpenuhi</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Unduh APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Dapatkan di Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Baca panduan</a>
+    </div>
+    <p class="note">Tanpa akun. Tanpa analitik. Tanpa iklan. Data tersimpan di folder pilihan Anda; sinkronkan dengan alat apa pun yang sudah Anda pakai.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Layar Tujuan dengan lencana Terpenuhi, Akan terpenuhi tepat waktu, dan Belum terpenuhi" width="1080" height="1920">
+</section>
+
+<h2>Apa yang dilakukannya</h2>
+<ul class="features">
+  <li><h3>Kantong</h3><p>Uang tunai, rekening tabungan, rekening efek, kripto. Masukkan jumlah secara manual atau tempel alamat dompet publik dan biarkan aplikasi membaca saldonya.</p></li>
+  <li><h3>Tujuan dengan prioritas</h3><p>Hubungkan kantong ke tujuan dengan batas. Tanggal yang lebih awal didanai lebih dulu; seret tujuan dengan tanggal yang sama untuk mengatur urutannya. Alokasi tidak pernah memindahkan uang.</p></li>
+  <li><h3>Rencana</h3><p>Tambahkan tabungan yang ingin Anda sisihkan. Proyeksi menunjukkan tanggal setiap tujuan terpenuhi dan menandainya <em>Akan terpenuhi tepat waktu</em> atau <em>Belum terpenuhi</em>.</p></li>
+  <li><h3>Mode portofolio</h3><p>Persentase target per aset, porsi aktual dibandingkan target, dan kalkulator penyeimbangan ulang yang mencantumkan apa yang perlu dibeli.</p></li>
+  <li><h3>Dompet dan harga</h3><p>Alamat BTC, ETH, TON, dan TRON serta token ERC-20, jetton, dan TRC-20. Harga dari DefiLlama, CoinGecko, atau CoinPaprika; kurs fiat dari Frankfurter atau ECB. Setiap sumber dapat dipilih.</p></li>
+  <li><h3>Enkripsi dan kunci</h3><p>Enkripsi opsional AES-256-GCM untuk file Anda dengan kunci turunan Argon2id, buka kunci dengan PIN dan biometrik, tangkapan layar diblokir selama data terkunci sedang terbuka.</p></li>
+  <li><h3>Folder Anda, sinkronisasi Anda</h3><p>Snapshot berupa file biasa dengan ID revisi dan checksum. Sinkronkan dengan Syncthing, Nextcloud, Drive, atau alat lain. Konflik selalu ditampilkan, tidak pernah diselesaikan diam-diam.</p></li>
+  <li><h3>15 bahasa</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Layar</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Ringkasan: total nilai tabungan, jumlah yang dialokasikan dan belum dialokasikan" loading="lazy"><figcaption>Ringkasan</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Daftar kantong" loading="lazy"><figcaption>Kantong</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Kantong dengan aset dompet" loading="lazy"><figcaption>Detail kantong</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Tujuan dengan lencana" loading="lazy"><figcaption>Tujuan</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Detail tujuan dengan sumber dana dan rencana tabungan" loading="lazy"><figcaption>Detail tujuan</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Rencana tabungan" loading="lazy"><figcaption>Rencana</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Pengaturan" loading="lazy"><figcaption>Pengaturan</figcaption></figure>
+</div>
+
+<h2 id="download">Unduh</h2>
+<div class="download">
+  <div class="ver" id="ver">Rilis terbaru</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Buka rilis terbaru di GitHub</a></p>
+  <ul>
+    <li>Android 8.0 atau yang lebih baru. APK ditandatangani dengan kunci rilis permanen, sehingga versi baru terpasang di atas versi lama.</li>
+    <li>Verifikasi file dengan <code>SHA256SUMS.txt</code> dari rilis yang sama.</li>
+    <li>Semua rilis dan catatan perubahan: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Rilis terbaru ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Unduh ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Catatan rilis</a>';
+}).catch(() => {});
+</script>
+
+<h2>Dokumen</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Panduan pengguna</a></li>
+  <li><a href="{{ page.base }}/privacy">Kebijakan Privasi</a></li>
+  <li><a href="{{ page.base }}/data-safety">Deklarasi keamanan data</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Deklarasi fitur keuangan</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Kode sumber dan pelacak masalah</a></li>
+</ul>

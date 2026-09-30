@@ -1,0 +1,74 @@
+---
+layout: default
+lang: hi
+base: "/hi"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>देखें कि बचत का हर लक्ष्य कब पूरा होगा।</h1>
+    <p class="lead">Capital Android के लिए एक निजी बचत ट्रैकर है। अपने पैसे को गुल्लकों में बाँटें, उन्हें लक्ष्यों से कनेक्ट करें, आगे जो बचत करने वाले हैं उसे जोड़ें — और ऐप बताएगा कि किस लक्ष्य की राशि पूरी है, कौन-सा समय पर पूरा होगा और किसमें कमी रह जाएगी।</p>
+    <div class="badges"><span class="badge green">राशि पूरी</span><span class="badge green">समय पर पूरी होगी</span><span class="badge yellow">राशि अधूरी</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APK डाउनलोड करें</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>इसे Google Play पर पाएं</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">गाइड पढ़ें</a>
+    </div>
+    <p class="note">कोई अकाउंट नहीं। कोई एनालिटिक्स नहीं। कोई विज्ञापन नहीं। रिकॉर्ड आपके चुने हुए फ़ोल्डर में रहते हैं; उसे किसी भी ऐसे टूल से सिंक करें जिसे आप पहले से इस्तेमाल करते हैं।</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="“राशि पूरी”, “समय पर पूरी होगी” और “राशि अधूरी” बैज के साथ लक्ष्य स्क्रीन" width="1080" height="1920">
+</section>
+
+<h2>यह क्या करता है</h2>
+<ul class="features">
+  <li><h3>गुल्लकें</h3><p>नकद, बचत खाते, ब्रोकरेज, क्रिप्टो। मात्रा खुद दर्ज करें, या सार्वजनिक वॉलेट पता पेस्ट करें और बैलेंस ऐप को पढ़ने दें।</p></li>
+  <li><h3>प्राथमिकता वाले लक्ष्य</h3><p>गुल्लकों को सीमाओं के साथ लक्ष्यों से कनेक्ट करें। पहले की तारीख वाले लक्ष्यों को पहले राशि मिलती है; एक ही तारीख वाले लक्ष्यों का क्रम उन्हें खींचकर तय करें। आवंटन से पैसा कहीं ट्रांसफ़र नहीं होता।</p></li>
+  <li><h3>योजनाएँ</h3><p>जो बचत आप करना चाहते हैं, उसे जोड़ें। पूर्वानुमान दिखाता है कि हर लक्ष्य किस तारीख को पूरा होगा, और उसे <em>समय पर पूरी होगी</em> या <em>राशि अधूरी</em> के रूप में चिह्नित करता है।</p></li>
+  <li><h3>पोर्टफ़ोलियो मोड</h3><p>हर एसेट के लिए टारगेट प्रतिशत, टारगेट के मुकाबले वास्तविक हिस्सा, और एक रीबैलेंस कैलकुलेटर जो बताता है कि क्या खरीदना है।</p></li>
+  <li><h3>वॉलेट और भाव</h3><p>BTC, ETH, TON और TRON पते, साथ में ERC-20, jetton और TRC-20 टोकन। भाव DefiLlama, CoinGecko या CoinPaprika से; फ़िएट दरें Frankfurter या ECB से। हर स्रोत आप खुद चुन सकते हैं।</p></li>
+  <li><h3>एन्क्रिप्शन और लॉक</h3><p>Argon2id से बनी कुंजी के साथ आपकी फ़ाइलों का वैकल्पिक AES-256-GCM एन्क्रिप्शन, PIN और बायोमेट्रिक अनलॉक; लॉक किया जाने वाला डेटा खुला होने पर स्क्रीनशॉट ब्लॉक रहते हैं।</p></li>
+  <li><h3>आपका फ़ोल्डर, आपका सिंक</h3><p>स्नैपशॉट रिवीज़न ID और चेकसम वाली साधारण फ़ाइलें हैं। उन्हें Syncthing, Nextcloud, Drive या किसी भी अन्य टूल से सिंक करें। टकराव दिखाए जाते हैं, चुपचाप कभी हल नहीं किए जाते।</p></li>
+  <li><h3>15 भाषाएँ</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>स्क्रीन</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="ओवरव्यू: कुल मूल्यांकित बचत, आवंटित और अनावंटित राशि" loading="lazy"><figcaption>ओवरव्यू</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="गुल्लकों की सूची" loading="lazy"><figcaption>गुल्लकें</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="वॉलेट होल्डिंग वाली गुल्लक" loading="lazy"><figcaption>गुल्लक का विवरण</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="बैज के साथ लक्ष्य" loading="lazy"><figcaption>लक्ष्य</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="फ़ंडिंग के स्रोतों और नियोजित बचत के साथ लक्ष्य का विवरण" loading="lazy"><figcaption>लक्ष्य का विवरण</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="नियोजित बचत" loading="lazy"><figcaption>योजनाएँ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="सेटिंग" loading="lazy"><figcaption>सेटिंग</figcaption></figure>
+</div>
+
+<h2 id="download">डाउनलोड</h2>
+<div class="download">
+  <div class="ver" id="ver">नवीनतम रिलीज़</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">GitHub पर नवीनतम रिलीज़ खोलें</a></p>
+  <ul>
+    <li>Android 8.0 या नया। APK स्थायी रिलीज़ कुंजी से साइन किया गया है, इसलिए नए संस्करण पुराने संस्करण के ऊपर इंस्टॉल हो जाते हैं।</li>
+    <li>फ़ाइल को उसी रिलीज़ की <code>SHA256SUMS.txt</code> से मिलाकर सत्यापित करें।</li>
+    <li>सभी रिलीज़ और बदलावों की सूची: <a href="{{ site.repo }}/releases">GitHub Releases</a>।</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'नवीनतम रिलीज़ ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">डाउनलोड करें ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">रिलीज़ नोट्स</a>';
+}).catch(() => {});
+</script>
+
+<h2>दस्तावेज़</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">उपयोगकर्ता गाइड</a></li>
+  <li><a href="{{ page.base }}/privacy">गोपनीयता नीति</a></li>
+  <li><a href="{{ page.base }}/data-safety">डेटा की सुरक्षा से जुड़ी घोषणा</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">वित्तीय सुविधाओं से जुड़ी घोषणा</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">सोर्स कोड और इश्यू ट्रैकर</a></li>
+</ul>

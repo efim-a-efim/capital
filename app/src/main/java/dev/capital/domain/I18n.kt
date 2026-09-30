@@ -21,6 +21,8 @@ object I18n {
         table = translations
         locale = if (resolve(null, device) == code) device else Locale.forLanguageTag(code)
     }
+    // English lives at the site root, every other language under its code.
+    fun helpUrl(screen: String): String = resolve(null, locale).let { "https://capital.fimych.dev/" + (if (it == "en") "" else "$it/") + "screens/$screen" }
 }
 
 private val placeholder = Regex("\\{(\\d+)\\}")

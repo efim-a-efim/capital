@@ -1,0 +1,74 @@
+---
+layout: default
+lang: zh
+base: "/zh"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>每个储蓄目标何时达成，一目了然。</h1>
+    <p class="lead">Capital 是一款注重隐私的 Android 储蓄追踪应用。把资金归入储蓄罐，将储蓄罐关联到目标，再添加您计划存入的金额，应用就会告诉您哪个目标已经达成、哪个能按时达成、哪个会有缺口。</p>
+    <div class="badges"><span class="badge green">已达成</span><span class="badge green">将按时达成</span><span class="badge yellow">未达成</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">下载 APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>在 Google Play 上获取</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">阅读使用手册</a>
+    </div>
+    <p class="note">无需账号。无数据分析。无广告。记录保存在您选择的文件夹中，可用您现有的任何工具同步。</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="“目标”界面，显示“已达成”“将按时达成”和“未达成”标记" width="1080" height="1920">
+</section>
+
+<h2>主要功能</h2>
+<ul class="features">
+  <li><h3>储蓄罐</h3><p>现金、储蓄账户、证券账户、加密货币。可以手动输入数量，也可以粘贴钱包公开地址，由应用读取余额。</p></li>
+  <li><h3>带优先级的目标</h3><p>将储蓄罐关联到目标，并可设置上限。截止日期较早的目标优先获得资金；同一日期的目标可拖动调整顺序。分配不会转移任何资金。</p></li>
+  <li><h3>计划</h3><p>添加您打算存入的金额。预测会显示每个目标的达成日期，并标记为<em>将按时达成</em>或<em>未达成</em>。</p></li>
+  <li><h3>投资组合模式</h3><p>为每项资产设定目标占比，对比实际占比与目标占比，再平衡计算器会列出需要买入的内容。</p></li>
+  <li><h3>钱包与价格</h3><p>支持 BTC、ETH、TON 和 TRON 地址，以及 ERC-20、jetton 和 TRC-20 代币。加密货币价格来自 DefiLlama、CoinGecko 或 CoinPaprika；法定货币汇率来自 Frankfurter 或欧洲央行（ECB）。每个数据源都可自行选择。</p></li>
+  <li><h3>加密与锁定</h3><p>可选用 AES-256-GCM 加密您的文件，密钥由 Argon2id 派生；支持 PIN 和生物识别解锁；查看已锁定的数据时禁止截屏。</p></li>
+  <li><h3>您的文件夹，您的同步</h3><p>快照是带有修订版本 ID 和校验和的普通文件。可用 Syncthing、Nextcloud、Drive 或任何其他工具同步。冲突会显示出来，绝不会被静默处理。</p></li>
+  <li><h3>15 种语言</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>界面</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="概览：已估值储蓄总额、已分配和未分配金额" loading="lazy"><figcaption>概览</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="储蓄罐列表" loading="lazy"><figcaption>储蓄罐</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="包含一项钱包持仓的储蓄罐" loading="lazy"><figcaption>储蓄罐详情</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="带标记的目标" loading="lazy"><figcaption>目标</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="目标详情，含资金来源和计划储蓄" loading="lazy"><figcaption>目标详情</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="计划储蓄" loading="lazy"><figcaption>计划</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="设置" loading="lazy"><figcaption>设置</figcaption></figure>
+</div>
+
+<h2 id="download">下载</h2>
+<div class="download">
+  <div class="ver" id="ver">最新版本</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">在 GitHub 上打开最新版本</a></p>
+  <ul>
+    <li>需要 Android 8.0 或更高版本。APK 使用固定的发布密钥签名，因此新版本可以直接覆盖安装旧版本。</li>
+    <li>请使用同一版本中的 <code>SHA256SUMS.txt</code> 校验文件。</li>
+    <li>所有版本和更新日志：<a href="{{ site.repo }}/releases">GitHub Releases</a>。</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = '最新版本 ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">下载 ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">发行说明</a>';
+}).catch(() => {});
+</script>
+
+<h2>文档</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">使用手册</a></li>
+  <li><a href="{{ page.base }}/privacy">隐私政策</a></li>
+  <li><a href="{{ page.base }}/data-safety">数据安全声明</a>（Google Play）</li>
+  <li><a href="{{ page.base }}/financial-features">金融功能声明</a>（Google Play）</li>
+  <li><a href="{{ site.repo }}">源代码和问题跟踪</a></li>
+</ul>

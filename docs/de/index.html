@@ -1,0 +1,74 @@
+---
+layout: default
+lang: de
+base: "/de"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Sehen Sie, wann jedes Sparziel erreicht ist.</h1>
+    <p class="lead">Capital ist ein privater Spar-Tracker für Android. Teilen Sie Ihr Geld in Töpfe auf, verknüpfen Sie diese mit Zielen, tragen Sie die geplanten Sparbeträge ein – und die App zeigt Ihnen, welches Ziel finanziert ist, welches rechtzeitig erreicht wird und welches nicht reicht.</p>
+    <div class="badges"><span class="badge green">Finanziert</span><span class="badge green">Wird rechtzeitig finanziert</span><span class="badge yellow">Nicht finanziert</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APK herunterladen</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Jetzt bei Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Handbuch lesen</a>
+    </div>
+    <p class="note">Kein Konto. Keine Analyse. Keine Werbung. Ihre Daten liegen in einem Ordner Ihrer Wahl; synchronisieren Sie ihn mit einem beliebigen Tool, das Sie bereits nutzen.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Bildschirm „Ziele“ mit den Kennzeichen „Finanziert“, „Wird rechtzeitig finanziert“ und „Nicht finanziert“" width="1080" height="1920">
+</section>
+
+<h2>Was die App kann</h2>
+<ul class="features">
+  <li><h3>Töpfe</h3><p>Bargeld, Sparkonten, Depots, Krypto. Mengen von Hand eingeben oder eine öffentliche Wallet-Adresse einfügen und das Guthaben von der App abrufen lassen.</p></li>
+  <li><h3>Ziele mit Prioritäten</h3><p>Verknüpfen Sie Töpfe mit Limits mit Ihren Zielen. Frühere Termine werden zuerst finanziert; Ziele mit gleichem Termin ordnen Sie per Ziehen. Die Zuordnung verschiebt nie Geld.</p></li>
+  <li><h3>Pläne</h3><p>Tragen Sie die Beträge ein, die Sie sparen möchten. Die Prognose zeigt, wann jedes Ziel finanziert ist, und kennzeichnet es mit <em>Wird rechtzeitig finanziert</em> oder <em>Nicht finanziert</em>.</p></li>
+  <li><h3>Portfoliomodus</h3><p>Zielanteile je Vermögenswert, Ist-Anteil im Vergleich zum Ziel und ein Rebalancing-Rechner, der auflistet, was Sie kaufen sollten.</p></li>
+  <li><h3>Wallets und Kurse</h3><p>BTC-, ETH-, TON- und TRON-Adressen sowie ERC-20-, Jetton- und TRC-20-Token. Preise von DefiLlama, CoinGecko oder CoinPaprika; Wechselkurse von Frankfurter oder der EZB. Jede Quelle ist frei wählbar.</p></li>
+  <li><h3>Verschlüsselung und Sperre</h3><p>Optionale AES-256-GCM-Verschlüsselung Ihrer Dateien mit einem per Argon2id abgeleiteten Schlüssel, Entsperren per PIN und Biometrie, Screenshots gesperrt, solange geschützte Daten geöffnet sind.</p></li>
+  <li><h3>Ihr Ordner, Ihre Synchronisierung</h3><p>Snapshots sind einfache Dateien mit Revisions-IDs und Prüfsummen. Synchronisieren Sie sie mit Syncthing, Nextcloud, Drive oder einem anderen Tool. Konflikte werden angezeigt und nie stillschweigend aufgelöst.</p></li>
+  <li><h3>15 Sprachen</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Bildschirme</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Übersicht: bewertete Ersparnisse gesamt, zugeordnete und nicht zugeordnete Beträge" loading="lazy"><figcaption>Übersicht</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Liste der Töpfe" loading="lazy"><figcaption>Töpfe</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Topf mit einer Wallet-Position" loading="lazy"><figcaption>Topf im Detail</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Ziele mit Kennzeichen" loading="lazy"><figcaption>Ziele</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Ziel im Detail mit Finanzierungsquellen und geplanten Sparbeträgen" loading="lazy"><figcaption>Ziel im Detail</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Geplante Sparbeträge" loading="lazy"><figcaption>Pläne</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Einstellungen" loading="lazy"><figcaption>Einstellungen</figcaption></figure>
+</div>
+
+<h2 id="download">Download</h2>
+<div class="download">
+  <div class="ver" id="ver">Neueste Version</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Neueste Version auf GitHub öffnen</a></p>
+  <ul>
+    <li>Android 8.0 oder neuer. Die APK ist mit dem dauerhaften Release-Schlüssel signiert, sodass sich neue Versionen über alte installieren lassen.</li>
+    <li>Prüfen Sie die Datei anhand von <code>SHA256SUMS.txt</code> aus derselben Version.</li>
+    <li>Alle Versionen und Änderungsprotokolle: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Neueste Version ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Herunterladen: ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Versionshinweise</a>';
+}).catch(() => {});
+</script>
+
+<h2>Dokumente</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Benutzerhandbuch</a></li>
+  <li><a href="{{ page.base }}/privacy">Datenschutzerklärung</a></li>
+  <li><a href="{{ page.base }}/data-safety">Angaben zur Datensicherheit</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Angaben zu Finanzfunktionen</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Quellcode und Issue-Tracker</a></li>
+</ul>

@@ -1,5 +1,8 @@
 ---
 layout: default
+lang: en
+base: ""
+key: "financial-features"
 title: Financial features declaration
 class: doc
 ---
@@ -39,6 +42,6 @@ Country-specific requirements for personal loan apps, and the United States cryp
 
 ## Related facts a reviewer may ask about
 
-- Market data comes from third-party operators selected by the user (see the [Privacy Policy]({{ '/privacy' | relative_url }})). The app shows the operator's name and site in Settings.
+- Market data comes from third-party operators selected by the user (see the [Privacy Policy]({{ page.base }}/privacy)). The app shows the operator's name and site in Settings.
 - Wallet queries use public, read-only blockchain APIs.
 - The app runs entirely on the device and has no developer-operated server.

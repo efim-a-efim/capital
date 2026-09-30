@@ -1,0 +1,74 @@
+---
+layout: default
+lang: pt
+base: "/pt"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Veja quando cada meta de economia será atingida.</h1>
+    <p class="lead">Capital é um app privado para acompanhar suas economias no Android. Agrupe seu dinheiro em caixinhas, vincule-as a metas, adicione as economias que você pretende fazer, e o app mostra qual meta já foi atingida, qual será atingida no prazo e qual vai ficar faltando.</p>
+    <div class="badges"><span class="badge green">Atingida</span><span class="badge green">Será atingida no prazo</span><span class="badge yellow">Não atingida</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Baixar APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Disponível no Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Ler o manual</a>
+    </div>
+    <p class="note">Sem conta. Sem análises de uso. Sem anúncios. Os registros ficam em uma pasta escolhida por você; sincronize-a com qualquer ferramenta que você já usa.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Tela Metas com os selos Atingida, Será atingida no prazo e Não atingida" width="1080" height="1920">
+</section>
+
+<h2>O que ele faz</h2>
+<ul class="features">
+  <li><h3>Caixinhas</h3><p>Dinheiro em espécie, contas de poupança, corretora, cripto. Digite as quantidades à mão ou cole o endereço público de uma carteira e deixe o app ler o saldo.</p></li>
+  <li><h3>Metas com prioridades</h3><p>Vincule caixinhas a metas, com limites. Datas mais próximas recebem recursos primeiro; arraste metas com a mesma data para definir a ordem. A alocação nunca movimenta dinheiro.</p></li>
+  <li><h3>Planos</h3><p>Adicione as economias que você pretende fazer. A projeção mostra a data em que cada meta será concluída e a marca como <em>Será atingida no prazo</em> ou <em>Não atingida</em>.</p></li>
+  <li><h3>Modo portfólio</h3><p>Percentuais-alvo por ativo, participação real comparada ao alvo e uma calculadora de rebalanceamento que lista o que comprar.</p></li>
+  <li><h3>Carteiras e preços</h3><p>Endereços BTC, ETH, TON e TRON, além de tokens ERC-20, jettons e TRC-20. Preços do DefiLlama, CoinGecko ou CoinPaprika; câmbio de moedas fiduciárias do Frankfurter ou do BCE. Todas as fontes podem ser escolhidas.</p></li>
+  <li><h3>Criptografia e bloqueio</h3><p>Criptografia opcional dos seus arquivos com AES-256-GCM e chave derivada por Argon2id, desbloqueio por PIN e biometria, capturas de tela bloqueadas enquanto os dados protegidos estão abertos.</p></li>
+  <li><h3>Sua pasta, sua sincronização</h3><p>As versões salvas são arquivos comuns com IDs de revisão e somas de verificação. Sincronize-as com Syncthing, Nextcloud, Drive ou qualquer outra ferramenta. Conflitos são exibidos, nunca resolvidos em silêncio.</p></li>
+  <li><h3>15 idiomas</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Telas</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Visão geral: total das economias avaliadas, valores alocados e não alocados" loading="lazy"><figcaption>Visão geral</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Lista de caixinhas" loading="lazy"><figcaption>Caixinhas</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Caixinha com uma posição de carteira" loading="lazy"><figcaption>Detalhes da caixinha</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Metas com selos" loading="lazy"><figcaption>Metas</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Detalhes da meta com fontes de recursos e economias planejadas" loading="lazy"><figcaption>Detalhes da meta</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Economias planejadas" loading="lazy"><figcaption>Planos</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Ajustes" loading="lazy"><figcaption>Ajustes</figcaption></figure>
+</div>
+
+<h2 id="download">Download</h2>
+<div class="download">
+  <div class="ver" id="ver">Versão mais recente</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Abrir a versão mais recente no GitHub</a></p>
+  <ul>
+    <li>Android 8.0 ou mais recente. O APK é assinado com a chave de release permanente, então novas versões são instaladas por cima das antigas.</li>
+    <li>Confira o arquivo com o <code>SHA256SUMS.txt</code> da mesma versão.</li>
+    <li>Todas as versões e registros de alterações: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Versão mais recente ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Baixar ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Notas da versão</a>';
+}).catch(() => {});
+</script>
+
+<h2>Documentos</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Manual do usuário</a></li>
+  <li><a href="{{ page.base }}/privacy">Política de Privacidade</a></li>
+  <li><a href="{{ page.base }}/data-safety">Declaração de segurança dos dados</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Declaração de recursos financeiros</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Código-fonte e rastreador de problemas</a></li>
+</ul>

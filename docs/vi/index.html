@@ -1,0 +1,74 @@
+---
+layout: default
+lang: vi
+base: "/vi"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Biết ngày mỗi mục tiêu tiết kiệm hoàn thành.</h1>
+    <p class="lead">Capital là ứng dụng theo dõi tiết kiệm riêng tư cho Android. Hãy chia tiền của bạn vào các hũ, liên kết chúng với mục tiêu, thêm các khoản bạn dự định tiết kiệm, và ứng dụng sẽ cho biết mục tiêu nào đã đủ tiền, mục tiêu nào sẽ đủ đúng hạn và mục tiêu nào còn thiếu.</p>
+    <div class="badges"><span class="badge green">Đã đủ tiền</span><span class="badge green">Sẽ đủ tiền đúng hạn</span><span class="badge yellow">Chưa đủ tiền</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Tải APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Tải trên Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Đọc hướng dẫn sử dụng</a>
+    </div>
+    <p class="note">Không cần tài khoản. Không phân tích dữ liệu. Không quảng cáo. Dữ liệu nằm trong thư mục do bạn chọn; hãy đồng bộ nó bằng bất kỳ công cụ nào bạn đang dùng.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Màn hình Mục tiêu với các nhãn Đã đủ tiền, Sẽ đủ tiền đúng hạn và Chưa đủ tiền" width="1080" height="1920">
+</section>
+
+<h2>Ứng dụng làm gì</h2>
+<ul class="features">
+  <li><h3>Hũ</h3><p>Tiền mặt, tài khoản tiết kiệm, tài khoản chứng khoán, tiền mã hóa. Nhập số lượng thủ công hoặc dán địa chỉ ví công khai để ứng dụng tự đọc số dư.</p></li>
+  <li><h3>Mục tiêu có thứ tự ưu tiên</h3><p>Liên kết hũ với mục tiêu kèm giới hạn. Mục tiêu có ngày sớm hơn được phân bổ tiền trước; kéo các mục tiêu cùng ngày để sắp xếp thứ tự. Việc phân bổ không bao giờ di chuyển tiền.</p></li>
+  <li><h3>Kế hoạch</h3><p>Thêm các khoản bạn định tiết kiệm. Phần dự báo cho biết ngày mỗi mục tiêu hoàn thành và gắn nhãn <em>Sẽ đủ tiền đúng hạn</em> hoặc <em>Chưa đủ tiền</em>.</p></li>
+  <li><h3>Chế độ danh mục đầu tư</h3><p>Tỷ trọng mục tiêu cho từng tài sản, tỷ trọng thực tế so với mục tiêu, và công cụ tính tái cân bằng liệt kê những gì cần mua.</p></li>
+  <li><h3>Ví và giá</h3><p>Địa chỉ BTC, ETH, TON và TRON cùng các token ERC-20, jetton và TRC-20. Giá từ DefiLlama, CoinGecko hoặc CoinPaprika; tỷ giá tiền pháp định từ Frankfurter hoặc ECB. Mọi nguồn đều có thể chọn.</p></li>
+  <li><h3>Mã hóa và khóa</h3><p>Tùy chọn mã hóa tệp bằng AES-256-GCM với khóa dẫn xuất qua Argon2id, mở khóa bằng PIN và sinh trắc học, chặn chụp màn hình khi dữ liệu được khóa đang mở.</p></li>
+  <li><h3>Thư mục của bạn, cách đồng bộ của bạn</h3><p>Các bản lưu là tệp thông thường có ID phiên bản và tổng kiểm. Đồng bộ chúng bằng Syncthing, Nextcloud, Drive hay bất cứ công cụ nào khác. Xung đột luôn được hiển thị, không bao giờ bị âm thầm giải quyết.</p></li>
+  <li><h3>15 ngôn ngữ</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Các màn hình</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Tổng quan: tổng tiết kiệm đã định giá, số tiền đã phân bổ và chưa phân bổ" loading="lazy"><figcaption>Tổng quan</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Danh sách hũ" loading="lazy"><figcaption>Hũ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Hũ có một tài sản dạng ví" loading="lazy"><figcaption>Chi tiết hũ</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Mục tiêu kèm nhãn trạng thái" loading="lazy"><figcaption>Mục tiêu</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Chi tiết mục tiêu với nguồn tiền và tiết kiệm dự kiến" loading="lazy"><figcaption>Chi tiết mục tiêu</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Tiết kiệm dự kiến" loading="lazy"><figcaption>Kế hoạch</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Cài đặt" loading="lazy"><figcaption>Cài đặt</figcaption></figure>
+</div>
+
+<h2 id="download">Tải xuống</h2>
+<div class="download">
+  <div class="ver" id="ver">Bản phát hành mới nhất</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Mở bản phát hành mới nhất trên GitHub</a></p>
+  <ul>
+    <li>Android 8.0 trở lên. APK được ký bằng khóa phát hành cố định, nên phiên bản mới cài đè lên phiên bản cũ.</li>
+    <li>Hãy đối chiếu tệp với <code>SHA256SUMS.txt</code> trong cùng bản phát hành.</li>
+    <li>Tất cả bản phát hành và nhật ký thay đổi: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Bản phát hành mới nhất ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Tải xuống ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Ghi chú phát hành</a>';
+}).catch(() => {});
+</script>
+
+<h2>Tài liệu</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Hướng dẫn sử dụng</a></li>
+  <li><a href="{{ page.base }}/privacy">Chính sách quyền riêng tư</a></li>
+  <li><a href="{{ page.base }}/data-safety">Khai báo an toàn dữ liệu</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Khai báo tính năng tài chính</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Mã nguồn và trình theo dõi sự cố</a></li>
+</ul>

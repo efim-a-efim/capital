@@ -1,0 +1,16 @@
+# Same codes and native names as the app (I18n.languages). English lives at the site root, others under /<code>/.
+- { code: en, name: English }
+- { code: zh, name: 中文 }
+- { code: hi, name: हिन्दी }
+- { code: es, name: Español }
+- { code: ar, name: العربية, rtl: true }
+- { code: fr, name: Français }
+- { code: bn, name: বাংলা }
+- { code: pt, name: Português }
+- { code: ru, name: Русский }
+- { code: id, name: Bahasa Indonesia }
+- { code: ur, name: اردو, rtl: true }
+- { code: de, name: Deutsch }
+- { code: ja, name: 日本語 }
+- { code: mr, name: मराठी }
+- { code: vi, name: Tiếng Việt }

@@ -1,0 +1,74 @@
+---
+layout: default
+lang: ru
+base: "/ru"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Узнайте, когда будет достигнута каждая цель.</h1>
+    <p class="lead">Capital — приватный трекер сбережений для Android. Разложите деньги по копилкам, привяжите их к целям, добавьте плановые пополнения, и приложение покажет, какая цель уже покрыта, какая будет закрыта в срок, а на какую не хватит.</p>
+    <div class="badges"><span class="badge green">Покрыта</span><span class="badge green">Будет покрыта в срок</span><span class="badge yellow">Не покрыта</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Скачать APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Доступно в Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Открыть руководство</a>
+    </div>
+    <p class="note">Без аккаунта. Без аналитики. Без рекламы. Данные хранятся в выбранной вами папке; синхронизируйте её любым привычным инструментом.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Экран «Цели» с отметками «Покрыта», «Будет покрыта в срок» и «Не покрыта»" width="1080" height="1920">
+</section>
+
+<h2>Возможности</h2>
+<ul class="features">
+  <li><h3>Копилки</h3><p>Наличные, сберегательные счета, брокерские счета, криптовалюта. Вводите количество вручную или вставьте публичный адрес кошелька, и приложение само прочитает баланс.</p></li>
+  <li><h3>Цели с приоритетами</h3><p>Привязывайте копилки к целям с лимитами. Цели с более ранним сроком покрываются первыми; порядок целей с одинаковым сроком задаётся перетаскиванием. Распределение никогда не перемещает деньги.</p></li>
+  <li><h3>Планы</h3><p>Добавьте суммы, которые собираетесь отложить. Прогноз покажет дату закрытия каждой цели и отметит её как <em>Будет покрыта в срок</em> или <em>Не покрыта</em>.</p></li>
+  <li><h3>Режим портфеля</h3><p>Целевые доли для каждого актива, фактическая доля в сравнении с целевой и калькулятор ребалансировки, который подскажет, что докупить.</p></li>
+  <li><h3>Кошельки и цены</h3><p>Адреса BTC, ETH, TON и TRON, а также токены ERC-20, жетоны и TRC-20. Цены — от DefiLlama, CoinGecko или CoinPaprika; курсы фиатных валют — от Frankfurter или ЕЦБ. Любой источник можно выбрать самостоятельно.</p></li>
+  <li><h3>Шифрование и блокировка</h3><p>Необязательное шифрование файлов по AES-256-GCM с ключом, полученным через Argon2id, разблокировка PIN-кодом и биометрией, запрет скриншотов, пока открыты защищённые данные.</p></li>
+  <li><h3>Ваша папка — ваша синхронизация</h3><p>Снимки данных — обычные файлы с идентификаторами версий и контрольными суммами. Синхронизируйте их через Syncthing, Nextcloud, Google Диск или что угодно ещё. Конфликты показываются, а не разрешаются молча.</p></li>
+  <li><h3>15 языков</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Экраны</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Обзор: оценка всех сбережений, распределённые и нераспределённые суммы" loading="lazy"><figcaption>Обзор</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Список копилок" loading="lazy"><figcaption>Копилки</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Копилка с активом-кошельком" loading="lazy"><figcaption>Копилка</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Цели с отметками" loading="lazy"><figcaption>Цели</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Цель с источниками средств и плановыми пополнениями" loading="lazy"><figcaption>Цель</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Плановые пополнения" loading="lazy"><figcaption>Планы</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Настройки" loading="lazy"><figcaption>Настройки</figcaption></figure>
+</div>
+
+<h2 id="download">Скачать</h2>
+<div class="download">
+  <div class="ver" id="ver">Последний выпуск</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Открыть последний выпуск на GitHub</a></p>
+  <ul>
+    <li>Android 8.0 или новее. APK подписан постоянным ключом выпуска, поэтому новые версии устанавливаются поверх старых.</li>
+    <li>Сверьте файл с <code>SHA256SUMS.txt</code> из того же выпуска.</li>
+    <li>Все выпуски и списки изменений: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Последний выпуск ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Скачать ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Список изменений</a>';
+}).catch(() => {});
+</script>
+
+<h2>Документы</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Руководство пользователя</a></li>
+  <li><a href="{{ page.base }}/privacy">Политика конфиденциальности</a></li>
+  <li><a href="{{ page.base }}/data-safety">Декларация о безопасности данных</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Декларация о финансовых функциях</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Исходный код и трекер задач</a></li>
+</ul>

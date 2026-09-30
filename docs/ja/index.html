@@ -1,0 +1,74 @@
+---
+layout: default
+lang: ja
+base: "/ja"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>すべての貯蓄目標の達成日がわかる。</h1>
+    <p class="lead">Capitalは、Android向けのプライベートな貯蓄管理アプリです。お金をポケットにまとめて目標と結び付け、貯める予定の金額を追加すると、どの目標が達成済みか、どの目標が期限内に達成できるか、どの目標が不足するかをアプリが示します。</p>
+    <div class="badges"><span class="badge green">達成済み</span><span class="badge green">期限内に達成見込み</span><span class="badge yellow">未達成</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APKをダウンロード</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Google Play で手に入れよう</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">マニュアルを読む</a>
+    </div>
+    <p class="note">アカウント不要。アナリティクスなし。広告なし。記録はあなたが選んだフォルダに保存され、普段お使いのツールで同期できます。</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="「達成済み」「期限内に達成見込み」「未達成」のバッジが表示された目標画面" width="1080" height="1920">
+</section>
+
+<h2>できること</h2>
+<ul class="features">
+  <li><h3>ポケット</h3><p>現金、預金口座、証券口座、暗号資産。数量を手動で入力するか、公開ウォレットアドレスを貼り付けてアプリに残高を読み取らせます。</p></li>
+  <li><h3>優先順位付きの目標</h3><p>上限を付けてポケットを目標に接続します。期限の早い目標から資金が充てられ、同じ期限の目標はドラッグで順序を決められます。配分でお金が移動することはありません。</p></li>
+  <li><h3>貯蓄予定</h3><p>これから貯める予定の金額を追加します。予測により各目標の達成日が表示され、<em>期限内に達成見込み</em>または<em>未達成</em>と示されます。</p></li>
+  <li><h3>ポートフォリオモード</h3><p>資産ごとの目標配分比率、目標に対する実際の構成比、購入すべきものを一覧にするリバランス計算機。</p></li>
+  <li><h3>ウォレットと価格</h3><p>BTC、ETH、TON、TRONのアドレスに加え、ERC-20、ジェットン、TRC-20トークンに対応。価格はDefiLlama、CoinGecko、CoinPaprikaから、法定通貨の為替レートはFrankfurterまたはECBから取得します。取得元はすべて選択できます。</p></li>
+  <li><h3>暗号化とロック</h3><p>Argon2idで導出した鍵によるファイルのAES-256-GCM暗号化（任意）、PINと生体認証によるロック解除、ロック対象のデータを表示中はスクリーンショットをブロック。</p></li>
+  <li><h3>あなたのフォルダ、あなたの同期</h3><p>スナップショットはリビジョンIDとチェックサム付きのプレーンなファイルです。Syncthing、Nextcloud、Driveなど、何でも同期に使えます。競合は必ず表示され、黙って解決されることはありません。</p></li>
+  <li><h3>15言語対応</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>画面</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="概要：貯蓄の評価額合計、配分済みと未配分の金額" loading="lazy"><figcaption>概要</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="ポケットの一覧" loading="lazy"><figcaption>ポケット</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="ウォレットの保有資産があるポケット" loading="lazy"><figcaption>ポケットの詳細</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="バッジ付きの目標" loading="lazy"><figcaption>目標</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="資金源と貯蓄予定が表示された目標の詳細" loading="lazy"><figcaption>目標の詳細</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="貯蓄予定" loading="lazy"><figcaption>貯蓄予定</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="設定" loading="lazy"><figcaption>設定</figcaption></figure>
+</div>
+
+<h2 id="download">ダウンロード</h2>
+<div class="download">
+  <div class="ver" id="ver">最新リリース</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">GitHubで最新リリースを開く</a></p>
+  <ul>
+    <li>Android 8.0以降。APKは恒久的なリリース鍵で署名されているため、新しいバージョンを古いバージョンの上からインストールできます。</li>
+    <li>同じリリースの <code>SHA256SUMS.txt</code> でファイルを検証してください。</li>
+    <li>すべてのリリースと変更履歴：<a href="{{ site.repo }}/releases">GitHub Releases</a></li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = '最新リリース ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">ダウンロード ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">リリースノート</a>';
+}).catch(() => {});
+</script>
+
+<h2>ドキュメント</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">ユーザーマニュアル</a></li>
+  <li><a href="{{ page.base }}/privacy">プライバシーポリシー</a></li>
+  <li><a href="{{ page.base }}/data-safety">データ セーフティの申告</a>（Google Play）</li>
+  <li><a href="{{ page.base }}/financial-features">金融機能の申告</a>（Google Play）</li>
+  <li><a href="{{ site.repo }}">ソースコードと課題トラッカー</a></li>
+</ul>

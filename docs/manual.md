@@ -1,5 +1,8 @@
 ---
 layout: default
+lang: en
+base: ""
+key: "manual"
 title: User manual
 class: doc
 ---

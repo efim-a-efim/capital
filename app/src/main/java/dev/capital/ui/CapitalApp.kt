@@ -43,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
@@ -256,6 +257,9 @@ private val rtlType=Typography().run {
             val wide=maxWidth>=840.dp
             Scaffold(
                 topBar={ TopAppBar(title={ Text(if(!state.ready) tr("Capital") else shown(section)) },actions={
+                    val uriHandler=LocalUriHandler.current
+                    val screen=when { !state.ready -> "start"; section=="Buckets" && bucketId!=null -> "bucket"; section=="Goals" && goalId!=null -> "goal"; else -> section.lowercase() }
+                    IconButton(onClick={ uriHandler.openUri(I18n.helpUrl(screen)) },modifier=Modifier.testTag("help")) { Icon(painterResource(R.drawable.ic_help),contentDescription=tr("Help")) }
                     if(state.ready) {
                         RefreshButton(state.refreshing,editable) { model.refresh(bucketId) }
                         IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription=tr("Settings")) }

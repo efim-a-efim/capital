@@ -1,11 +1,14 @@
 ---
 layout: default
+lang: en
+base: ""
+key: "data-safety"
 title: Data safety declaration
 class: doc
 ---
 # Data safety declaration
 
-<p class="meta">Answers for the Google Play Console form (Policy and programs → App content → Data safety), with the reasoning behind each one. Reviewed against version 2.2.1 on 30 September 2026. The <a href="{{ '/privacy' | relative_url }}">Privacy Policy</a> is the user-facing statement of the same facts.</p>
+<p class="meta">Answers for the Google Play Console form (Policy and programs → App content → Data safety), with the reasoning behind each one. Reviewed against version 2.2.1 on 30 September 2026. The <a href="{{ page.base }}/privacy">Privacy Policy</a> is the user-facing statement of the same facts.</p>
 
 ## How the app handles data
 
@@ -56,7 +59,7 @@ The user's financial records (holdings, goals, plans) are processed only on the 
 
 | Declaration | Answer |
 |---|---|
-| Privacy policy URL | `{{ site.url }}{{ site.baseurl }}/privacy` |
+| Privacy policy URL | `{{ site.url }}/privacy` |
 | Ads | No, the app contains no ads |
 | App access | All functionality is available without special access. No login. Provider API keys are optional; every provider has a keyless default. |
 | Content rating (IARC) | Utility / productivity questionnaire; no violence, sexual content, gambling, controlled substances, user interaction or location sharing. Expected result: Everyone / PEGI 3. |
@@ -65,7 +68,7 @@ The user's financial records (holdings, goals, plans) are processed only on the 
 | COVID-19 contact tracing and status | No |
 | Data safety | As above |
 | Government app | No |
-| Financial features | See the [Financial features declaration]({{ '/financial-features' | relative_url }}) |
+| Financial features | See the [Financial features declaration]({{ page.base }}/financial-features) |
 | Health apps | No health features |
 
 ## What to update when the app changes

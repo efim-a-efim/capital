@@ -1,0 +1,166 @@
+# Layout strings per language: header navigation, footer and screen names. Page bodies are translated in each language folder.
+en:
+  manual: Manual
+  screens: Screens
+  privacy: Privacy
+  download: Download
+  source: Source
+  privacy_policy: Privacy Policy
+  data_safety: Data safety
+  financial: Financial features
+  language: Language
+  screen_names: { start: Start, overview: Overview, buckets: Buckets, bucket: Bucket, goals: Goals, goal: Goal, plans: Plans, settings: Settings }
+zh:
+  manual: 使用手册
+  screens: 界面
+  privacy: 隐私
+  download: 下载
+  source: 源代码
+  privacy_policy: 隐私政策
+  data_safety: 数据安全
+  financial: 金融功能
+  language: 语言
+  screen_names: { start: 开始, overview: 概览, buckets: 储蓄罐, bucket: 储蓄罐详情, goals: 目标, goal: 目标详情, plans: 计划, settings: 设置 }
+hi:
+  manual: गाइड
+  screens: स्क्रीन
+  privacy: गोपनीयता
+  download: डाउनलोड
+  source: सोर्स कोड
+  privacy_policy: गोपनीयता नीति
+  data_safety: डेटा की सुरक्षा
+  financial: वित्तीय सुविधाएँ
+  language: भाषा
+  screen_names: { start: शुरुआत, overview: ओवरव्यू, buckets: गुल्लकें, bucket: गुल्लक, goals: लक्ष्य, goal: लक्ष्य विवरण, plans: योजनाएँ, settings: सेटिंग }
+es:
+  manual: Manual
+  screens: Pantallas
+  privacy: Privacidad
+  download: Descarga
+  source: Código fuente
+  privacy_policy: Política de privacidad
+  data_safety: Seguridad de los datos
+  financial: Funciones financieras
+  language: Idioma
+  screen_names: { start: Inicio, overview: Resumen, buckets: Bolsillos, bucket: Bolsillo, goals: Metas, goal: Meta, plans: Planes, settings: Ajustes }
+ar:
+  manual: الدليل
+  screens: الشاشات
+  privacy: الخصوصية
+  download: التنزيل
+  source: الشيفرة المصدرية
+  privacy_policy: سياسة الخصوصية
+  data_safety: أمان البيانات
+  financial: الميزات المالية
+  language: اللغة
+  screen_names: { start: البدء, overview: نظرة عامة, buckets: الصناديق, bucket: الصندوق, goals: الأهداف, goal: الهدف, plans: الخطط, settings: الإعدادات }
+fr:
+  manual: Manuel
+  screens: Écrans
+  privacy: Confidentialité
+  download: Télécharger
+  source: Code source
+  privacy_policy: Politique de confidentialité
+  data_safety: Sécurité des données
+  financial: Fonctionnalités financières
+  language: Langue
+  screen_names: { start: Démarrage, overview: Synthèse, buckets: Poches, bucket: Poche, goals: Objectifs, goal: Objectif, plans: Prévisions, settings: Paramètres }
+bn:
+  manual: ম্যানুয়াল
+  screens: স্ক্রিন
+  privacy: গোপনীয়তা
+  download: ডাউনলোড
+  source: সোর্স কোড
+  privacy_policy: গোপনীয়তা নীতি
+  data_safety: ডেটা নিরাপত্তা
+  financial: আর্থিক বৈশিষ্ট্য
+  language: ভাষা
+  screen_names: { start: শুরু, overview: সারসংক্ষেপ, buckets: তহবিল, bucket: তহবিলের বিবরণ, goals: লক্ষ্য, goal: লক্ষ্যের বিবরণ, plans: পরিকল্পনা, settings: সেটিংস }
+pt:
+  manual: Manual
+  screens: Telas
+  privacy: Privacidade
+  download: Download
+  source: Código-fonte
+  privacy_policy: Política de Privacidade
+  data_safety: Segurança dos dados
+  financial: Recursos financeiros
+  language: Idioma
+  screen_names: { start: Início, overview: Visão geral, buckets: Caixinhas, bucket: Caixinha, goals: Metas, goal: Meta, plans: Planos, settings: Ajustes }
+ru:
+  manual: Руководство
+  screens: Экраны
+  privacy: Конфиденциальность
+  download: Скачать
+  source: Исходный код
+  privacy_policy: Политика конфиденциальности
+  data_safety: Безопасность данных
+  financial: Финансовые функции
+  language: Язык
+  screen_names: { start: Начало, overview: Обзор, buckets: Копилки, bucket: Копилка, goals: Цели, goal: Цель, plans: Планы, settings: Настройки }
+id:
+  manual: Panduan
+  screens: Layar
+  privacy: Privasi
+  download: Unduh
+  source: Kode sumber
+  privacy_policy: Kebijakan Privasi
+  data_safety: Keamanan data
+  financial: Fitur keuangan
+  language: Bahasa
+  screen_names: { start: Awal, overview: Ringkasan, buckets: Kantong, bucket: Detail kantong, goals: Tujuan, goal: Detail tujuan, plans: Rencana, settings: Pengaturan }
+ur:
+  manual: ہدایت نامہ
+  screens: اسکرینز
+  privacy: رازداری
+  download: ڈاؤن لوڈ
+  source: سورس کوڈ
+  privacy_policy: رازداری کی پالیسی
+  data_safety: ڈیٹا کی حفاظت
+  financial: مالی خصوصیات
+  language: زبان
+  screen_names: { start: آغاز, overview: جائزہ, buckets: گلک, bucket: گلک کی تفصیل, goals: اہداف, goal: ہدف, plans: منصوبے, settings: سیٹنگز }
+de:
+  manual: Handbuch
+  screens: Bildschirme
+  privacy: Datenschutz
+  download: Download
+  source: Quellcode
+  privacy_policy: Datenschutzerklärung
+  data_safety: Datensicherheit
+  financial: Finanzfunktionen
+  language: Sprache
+  screen_names: { start: Start, overview: Übersicht, buckets: Töpfe, bucket: Topf, goals: Ziele, goal: Ziel, plans: Pläne, settings: Einstellungen }
+ja:
+  manual: マニュアル
+  screens: 画面
+  privacy: プライバシー
+  download: ダウンロード
+  source: ソースコード
+  privacy_policy: プライバシーポリシー
+  data_safety: データ セーフティ
+  financial: 金融機能
+  language: 言語
+  screen_names: { start: スタート, overview: 概要, buckets: ポケット, bucket: ポケットの詳細, goals: 目標, goal: 目標の詳細, plans: 貯蓄予定, settings: 設定 }
+mr:
+  manual: मार्गदर्शिका
+  screens: स्क्रीन्स
+  privacy: गोपनीयता
+  download: डाउनलोड
+  source: सोर्स कोड
+  privacy_policy: गोपनीयता धोरण
+  data_safety: डेटा सुरक्षितता
+  financial: आर्थिक वैशिष्ट्ये
+  language: भाषा
+  screen_names: { start: सुरुवात, overview: आढावा, buckets: कप्पे, bucket: कप्पा, goals: उद्दिष्टे, goal: उद्दिष्ट, plans: योजना, settings: सेटिंग्ज }
+vi:
+  manual: Hướng dẫn
+  screens: Màn hình
+  privacy: Quyền riêng tư
+  download: Tải xuống
+  source: Mã nguồn
+  privacy_policy: Chính sách quyền riêng tư
+  data_safety: An toàn dữ liệu
+  financial: Tính năng tài chính
+  language: Ngôn ngữ
+  screen_names: { start: Bắt đầu, overview: Tổng quan, buckets: Hũ, bucket: Chi tiết hũ, goals: Mục tiêu, goal: Chi tiết mục tiêu, plans: Kế hoạch, settings: Cài đặt }

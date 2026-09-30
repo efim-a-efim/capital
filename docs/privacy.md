@@ -1,5 +1,8 @@
 ---
 layout: default
+lang: en
+base: ""
+key: "privacy"
 title: Privacy Policy
 class: doc
 ---
@@ -82,7 +85,7 @@ Capital is a personal finance tool for adults. It is not directed at children un
 
 ## Changes to this policy
 
-The current version is always at [{{ site.url }}{{ site.baseurl }}/privacy]({{ '/privacy' | relative_url }}). Material changes are listed in the release notes of the version that introduces them.
+The current version is always at [{{ site.url }}{{ page.base }}/privacy]({{ page.base }}/privacy). Material changes are listed in the release notes of the version that introduces them.
 
 ## Contact
 

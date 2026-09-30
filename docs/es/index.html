@@ -1,0 +1,74 @@
+---
+layout: default
+lang: es
+base: "/es"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>Sepa cuándo se completa cada meta de ahorro.</h1>
+    <p class="lead">Capital es un registro privado de ahorros para Android. Agrupe su dinero en bolsillos, conéctelos a metas, añada los ahorros que planea hacer y la aplicación le dirá qué meta está cubierta, cuál se completará a tiempo y cuál se quedará corta.</p>
+    <div class="badges"><span class="badge green">Cubierta</span><span class="badge green">Se cubrirá a tiempo</span><span class="badge yellow">Sin cubrir</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Descargar APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Disponible en Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">Leer el manual</a>
+    </div>
+    <p class="note">Sin cuenta. Sin analíticas. Sin anuncios. Los registros se guardan en una carpeta que usted elige; sincronícela con cualquier herramienta que ya utilice.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="Pantalla Metas con las insignias Cubierta, Se cubrirá a tiempo y Sin cubrir" width="1080" height="1920">
+</section>
+
+<h2>Qué hace</h2>
+<ul class="features">
+  <li><h3>Bolsillos</h3><p>Efectivo, cuentas de ahorro, cuentas de valores, criptomonedas. Introduzca las cantidades a mano o pegue una dirección pública de billetera y deje que la aplicación lea el saldo.</p></li>
+  <li><h3>Metas con prioridades</h3><p>Conecte bolsillos a metas con límites. Las fechas más cercanas se cubren primero; arrastre las metas con la misma fecha para fijar su orden. La asignación nunca mueve dinero.</p></li>
+  <li><h3>Planes</h3><p>Añada los ahorros que tiene previsto hacer. La proyección muestra la fecha en que se completa cada meta y la marca como <em>Se cubrirá a tiempo</em> o <em>Sin cubrir</em>.</p></li>
+  <li><h3>Modo cartera</h3><p>Porcentajes objetivo por activo, proporción real frente al objetivo y una calculadora de reequilibrio que indica qué comprar.</p></li>
+  <li><h3>Billeteras y precios</h3><p>Direcciones BTC, ETH, TON y TRON, además de tokens ERC-20, jettons y TRC-20. Precios de DefiLlama, CoinGecko o CoinPaprika; tipos de cambio fiat de Frankfurter o del BCE. Todas las fuentes se pueden elegir.</p></li>
+  <li><h3>Cifrado y bloqueo</h3><p>Cifrado opcional de sus archivos con AES-256-GCM y una clave derivada con Argon2id, desbloqueo con PIN y biometría, y capturas de pantalla bloqueadas mientras hay datos protegidos abiertos.</p></li>
+  <li><h3>Su carpeta, su sincronización</h3><p>Las instantáneas son archivos normales con identificadores de revisión y sumas de verificación. Sincronícelas con Syncthing, Nextcloud, Drive o cualquier otra herramienta. Los conflictos se muestran; nunca se resuelven en silencio.</p></li>
+  <li><h3>15 idiomas</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Pantallas</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="Resumen: total de ahorros valorados, importes asignados y sin asignar" loading="lazy"><figcaption>Resumen</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="Lista de bolsillos" loading="lazy"><figcaption>Bolsillos</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="Bolsillo con una posición de billetera" loading="lazy"><figcaption>Detalle del bolsillo</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="Metas con insignias" loading="lazy"><figcaption>Metas</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="Detalle de la meta con fuentes de financiación y ahorros planificados" loading="lazy"><figcaption>Detalle de la meta</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="Ahorros planificados" loading="lazy"><figcaption>Planes</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="Ajustes" loading="lazy"><figcaption>Ajustes</figcaption></figure>
+</div>
+
+<h2 id="download">Descarga</h2>
+<div class="download">
+  <div class="ver" id="ver">Última versión</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Abrir la última versión en GitHub</a></p>
+  <ul>
+    <li>Android 8.0 o posterior. El APK está firmado con la clave de publicación permanente, así que las versiones nuevas se instalan sobre las anteriores.</li>
+    <li>Verifique el archivo con <code>SHA256SUMS.txt</code> de la misma versión.</li>
+    <li>Todas las versiones y registros de cambios: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Última versión ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Descargar ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Notas de la versión</a>';
+}).catch(() => {});
+</script>
+
+<h2>Documentos</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">Manual de usuario</a></li>
+  <li><a href="{{ page.base }}/privacy">Política de privacidad</a></li>
+  <li><a href="{{ page.base }}/data-safety">Declaración de seguridad de los datos</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">Declaración de funciones financieras</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Código fuente y registro de incidencias</a></li>
+</ul>

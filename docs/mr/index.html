@@ -1,0 +1,74 @@
+---
+layout: default
+lang: mr
+base: "/mr"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>प्रत्येक बचत उद्दिष्ट केव्हा पूर्ण होईल ते पहा.</h1>
+    <p class="lead">Capital हे Android साठी खाजगी बचत ट्रॅकर आहे. तुमचे पैसे कप्प्यांमध्ये विभागा, कप्पे उद्दिष्टांशी जोडा, पुढे करायची बचत नोंदवा — मग कोणत्या उद्दिष्टाचा निधी पूर्ण आहे, कोणते वेळेत पूर्ण होईल आणि कोणते मागे पडेल हे अॅप सांगते.</p>
+    <div class="badges"><span class="badge green">निधी पूर्ण</span><span class="badge green">वेळेत पूर्ण होईल</span><span class="badge yellow">निधी अपूर्ण</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">APK डाउनलोड करा</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Google Play वर मिळवा</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">मार्गदर्शिका वाचा</a>
+    </div>
+    <p class="note">खाते नाही. अॅनालिटिक्स नाही. जाहिराती नाहीत. नोंदी तुम्ही निवडलेल्या फोल्डरमध्ये राहतात; तुम्ही आधीपासून वापरत असलेल्या कोणत्याही साधनाने तो सिंक करा.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="निधी पूर्ण, वेळेत पूर्ण होईल आणि निधी अपूर्ण बॅज असलेली उद्दिष्टे स्क्रीन" width="1080" height="1920">
+</section>
+
+<h2>अॅप काय करते</h2>
+<ul class="features">
+  <li><h3>कप्पे</h3><p>रोख रक्कम, बचत खाती, ब्रोकरेज, क्रिप्टो. प्रमाण स्वतः टाका किंवा सार्वजनिक वॉलेट पत्ता पेस्ट करा आणि अॅपला शिल्लक वाचू द्या.</p></li>
+  <li><h3>प्राधान्यक्रमासह उद्दिष्टे</h3><p>कप्पे मर्यादांसह उद्दिष्टांशी जोडा. आधीची मुदत असलेल्या उद्दिष्टांना आधी निधी मिळतो; एकाच तारखेच्या उद्दिष्टांचा क्रम ओढून ठरवा. वाटपामुळे पैसे कधीही हलत नाहीत.</p></li>
+  <li><h3>योजना</h3><p>पुढे करायची बचत नोंदवा. अंदाज प्रत्येक उद्दिष्ट कोणत्या तारखेला पूर्ण होईल ते दाखवतो आणि त्याला <em>वेळेत पूर्ण होईल</em> किंवा <em>निधी अपूर्ण</em> असे चिन्हांकित करतो.</p></li>
+  <li><h3>पोर्टफोलिओ मोड</h3><p>प्रत्येक मालमत्तेसाठी लक्ष्य टक्केवारी, प्रत्यक्ष हिस्सा विरुद्ध लक्ष्य, आणि काय खरेदी करायचे याची यादी देणारा रिबॅलन्स कॅल्क्युलेटर.</p></li>
+  <li><h3>वॉलेट आणि भाव</h3><p>BTC, ETH, TON आणि TRON पत्ते, तसेच ERC-20, जेटन आणि TRC-20 टोकन. भाव DefiLlama, CoinGecko किंवा CoinPaprika कडून; फिएट दर Frankfurter किंवा ECB कडून. प्रत्येक स्रोत निवडता येतो.</p></li>
+  <li><h3>एन्क्रिप्शन आणि लॉक</h3><p>Argon2id ने तयार केलेल्या कीसह तुमच्या फाइल्सचे ऐच्छिक AES-256-GCM एन्क्रिप्शन, PIN आणि बायोमेट्रिक अनलॉक, आणि लॉक केलेला डेटा उघडा असताना स्क्रीनशॉटवर बंदी.</p></li>
+  <li><h3>तुमचे फोल्डर, तुमचे सिंक</h3><p>स्नॅपशॉट म्हणजे रिव्हिजन ID आणि चेकसम असलेल्या साध्या फाइल्स. त्या Syncthing, Nextcloud, Drive किंवा इतर कशानेही सिंक करा. संघर्ष दाखवले जातात, कधीही गुपचूप सोडवले जात नाहीत.</p></li>
+  <li><h3>15 भाषा</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>स्क्रीन्स</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="आढावा: एकूण मूल्यांकित बचत, वाटप केलेली आणि वाटप न केलेली रक्कम" loading="lazy"><figcaption>आढावा</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="कप्प्यांची यादी" loading="lazy"><figcaption>कप्पे</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="वॉलेट होल्डिंग असलेला कप्पा" loading="lazy"><figcaption>कप्प्याचा तपशील</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="बॅजसह उद्दिष्टे" loading="lazy"><figcaption>उद्दिष्टे</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="निधीचे स्रोत आणि नियोजित बचतीसह उद्दिष्टाचा तपशील" loading="lazy"><figcaption>उद्दिष्टाचा तपशील</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="नियोजित बचत" loading="lazy"><figcaption>योजना</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="सेटिंग्ज" loading="lazy"><figcaption>सेटिंग्ज</figcaption></figure>
+</div>
+
+<h2 id="download">डाउनलोड</h2>
+<div class="download">
+  <div class="ver" id="ver">नवीनतम रिलीज</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">GitHub वर नवीनतम रिलीज उघडा</a></p>
+  <ul>
+    <li>Android 8.0 किंवा नवीन. APK कायमस्वरूपी रिलीज कीने साइन केलेले आहे, त्यामुळे नवीन आवृत्त्या जुन्या आवृत्त्यांवर थेट इंस्टॉल होतात.</li>
+    <li>त्याच रिलीजमधील <code>SHA256SUMS.txt</code> वापरून फाइल पडताळा.</li>
+    <li>सर्व रिलीज आणि बदलांची नोंद: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'नवीनतम रिलीज ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">डाउनलोड करा ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">रिलीज नोट्स</a>';
+}).catch(() => {});
+</script>
+
+<h2>दस्तऐवज</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">वापरकर्ता मार्गदर्शिका</a></li>
+  <li><a href="{{ page.base }}/privacy">गोपनीयता धोरण</a></li>
+  <li><a href="{{ page.base }}/data-safety">डेटा सुरक्षितता घोषणापत्र</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">आर्थिक वैशिष्ट्यांचे घोषणापत्र</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">सोर्स कोड आणि इश्यू ट्रॅकर</a></li>
+</ul>

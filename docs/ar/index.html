@@ -1,0 +1,74 @@
+---
+layout: default
+lang: ar
+base: "/ar"
+key: ""
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>اعرف متى يكتمل كل هدف ادخاري.</h1>
+    <p class="lead">Capital متتبّع خاص للمدخرات على Android. وزّع أموالك على صناديق، واربطها بالأهداف، وأضف الادخارات التي تخطط لها، فيخبرك التطبيق أي هدف ممول، وأيها سيكتمل في موعده، وأيها سيقصر عن بلوغه.</p>
+    <div class="badges"><span class="badge green">ممول</span><span class="badge green">سيُموَّل في الموعد</span><span class="badge yellow">غير ممول</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">تنزيل APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>احصل عليه من Google Play</a>
+      <a class="btn secondary" href="{{ page.base }}/manual">اقرأ الدليل</a>
+    </div>
+    <p class="note">بلا حساب. بلا تحليلات. بلا إعلانات. تُحفظ السجلات في مجلد تختاره أنت؛ زامنه بأي أداة تستخدمها بالفعل.</p>
+  </div>
+  <img src="/screenshots/{{ page.lang }}/goals.png" alt="شاشة الأهداف مع شارات «ممول» و«سيُموَّل في الموعد» و«غير ممول»" width="1080" height="1920">
+</section>
+
+<h2>ما الذي يفعله</h2>
+<ul class="features">
+  <li><h3>الصناديق</h3><p>النقد وحسابات التوفير وحسابات الوساطة والعملات الرقمية. أدخل الكميات يدويًا أو الصق عنوان محفظة عامًا ودع التطبيق يقرأ الرصيد.</p></li>
+  <li><h3>أهداف بأولويات</h3><p>اربط الصناديق بالأهداف مع حدود للمساهمة. التواريخ الأسبق تُموَّل أولًا؛ واسحب الأهداف ذات التاريخ نفسه لتحديد ترتيبها. التخصيص لا ينقل الأموال أبدًا.</p></li>
+  <li><h3>الخطط</h3><p>أضف الادخارات التي تنوي القيام بها. يُظهر التوقع تاريخ اكتمال كل هدف ويسمه بـ <em>سيُموَّل في الموعد</em> أو <em>غير ممول</em>.</p></li>
+  <li><h3>وضع المحفظة الاستثمارية</h3><p>نسب مستهدفة لكل أصل، والحصة الفعلية مقابل المستهدفة، وحاسبة لإعادة التوازن تسرد ما يجب شراؤه.</p></li>
+  <li><h3>المحافظ والأسعار</h3><p>عناوين BTC وETH وTON وTRON، إضافة إلى توكنات ERC-20 وjetton وTRC-20. أسعار العملات الرقمية من DefiLlama أو CoinGecko أو CoinPaprika؛ وأسعار صرف العملات الورقية من Frankfurter أو البنك المركزي الأوروبي. كل مصدر قابل للاختيار.</p></li>
+  <li><h3>التشفير والقفل</h3><p>تشفير اختياري لملفاتك بـ AES-256-GCM بمفتاح مشتق عبر Argon2id، وفتح القفل برمز PIN أو بالقياسات الحيوية، وحظر لقطات الشاشة ما دامت البيانات المقفلة مفتوحة.</p></li>
+  <li><h3>مجلدك ومزامنتك</h3><p>اللقطات ملفات عادية تحمل معرّفات إصدارات ومجاميع اختبارية. زامنها عبر Syncthing أو Nextcloud أو Drive أو أي أداة أخرى. تُعرض التعارضات عليك، ولا تُحل بصمت أبدًا.</p></li>
+  <li><h3>15 لغة</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>الشاشات</h2>
+<div class="shots">
+  <figure><img src="/screenshots/{{ page.lang }}/overview.png" alt="النظرة العامة: إجمالي المدخرات المقيّمة والمبالغ المخصصة وغير المخصصة" loading="lazy"><figcaption>نظرة عامة</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/buckets.png" alt="قائمة الصناديق" loading="lazy"><figcaption>الصناديق</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/bucket.png" alt="صندوق يحتوي على أصل من نوع محفظة" loading="lazy"><figcaption>تفاصيل الصندوق</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goals.png" alt="الأهداف مع الشارات" loading="lazy"><figcaption>الأهداف</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/goal.png" alt="تفاصيل الهدف مع مصادر التمويل والادخارات المخططة" loading="lazy"><figcaption>تفاصيل الهدف</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/plans.png" alt="الادخارات المخططة" loading="lazy"><figcaption>الخطط</figcaption></figure>
+  <figure><img src="/screenshots/{{ page.lang }}/settings.png" alt="الإعدادات" loading="lazy"><figcaption>الإعدادات</figcaption></figure>
+</div>
+
+<h2 id="download">التنزيل</h2>
+<div class="download">
+  <div class="ver" id="ver">أحدث إصدار</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">افتح أحدث إصدار على GitHub</a></p>
+  <ul>
+    <li>Android 8.0 أو أحدث. ملف APK موقّع بمفتاح الإصدار الدائم، لذا تُثبَّت الإصدارات الجديدة فوق القديمة.</li>
+    <li>تحقّق من الملف بمقارنته بـ <code>SHA256SUMS.txt</code> من الإصدار نفسه.</li>
+    <li>جميع الإصدارات وسجلات التغييرات: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'أحدث إصدار ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">تنزيل ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">ملاحظات الإصدار</a>';
+}).catch(() => {});
+</script>
+
+<h2>المستندات</h2>
+<ul>
+  <li><a href="{{ page.base }}/manual">دليل المستخدم</a></li>
+  <li><a href="{{ page.base }}/privacy">سياسة الخصوصية</a></li>
+  <li><a href="{{ page.base }}/data-safety">إقرار أمان البيانات</a> (Google Play)</li>
+  <li><a href="{{ page.base }}/financial-features">إقرار الميزات المالية</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">الشيفرة المصدرية ومتتبّع المشكلات</a></li>
+</ul>
