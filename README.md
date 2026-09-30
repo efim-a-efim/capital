@@ -45,7 +45,7 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 
 ## Site and store listing
 
-`docs/` is the GitHub Pages site at https://efim-a-efim.github.io/capital/ : description, screenshots, manual, Privacy Policy, Data safety and Financial features declarations, and a download link that follows the latest release. `store/` holds the Google Play kit: listing texts, icon, feature graphic and 1080×1920 screenshots. After publishing, set `play_url` in `docs/_config.yml`.
+`docs/` is the GitHub Pages site at https://capital.fimych.dev/ : description, screenshots, manual, Privacy Policy, Data safety and Financial features declarations, and a download link that follows the latest release. `store/` holds the Google Play kit: listing texts, icon, feature graphic and 1080×1920 screenshots. After publishing, set `play_url` in `docs/_config.yml`.
 
 ## First use
 

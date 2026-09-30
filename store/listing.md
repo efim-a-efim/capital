@@ -10,14 +10,14 @@ Copy-paste kit for Play Console. Assets in this folder; policy answers on the si
 | Tags | Personal finance, Budgeting, Savings |
 | Free / paid | Free, no in-app purchases, no ads |
 | Contact email | efim.a.efim@gmail.com |
-| Website | https://efim-a-efim.github.io/capital/ |
-| Privacy policy URL | https://efim-a-efim.github.io/capital/privacy |
+| Website | https://capital.fimych.dev/ |
+| Privacy policy URL | https://capital.fimych.dev/privacy |
 | App icon | `icon-512.png` (512×512, 32-bit PNG) |
 | Feature graphic | `feature-graphic.png` (1024×500) |
 | Phone screenshots | `screenshots/phone-*.png` (1080×1920, 9:16), in file order |
 | Tablet screenshots | Not provided; the phone set is accepted, tablet promotion is not claimed |
-| Data safety | https://efim-a-efim.github.io/capital/data-safety |
-| Financial features | https://efim-a-efim.github.io/capital/financial-features |
+| Data safety | https://capital.fimych.dev/data-safety |
+| Financial features | https://capital.fimych.dev/financial-features |
 | Package | `dev.capital` |
 
 ## Short description (≤80)
@@ -74,8 +74,8 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 
 Answers with reasoning are on the site so they stay next to the privacy policy:
 
-- Data safety: https://efim-a-efim.github.io/capital/data-safety
-- Financial features: https://efim-a-efim.github.io/capital/financial-features
+- Data safety: https://capital.fimych.dev/data-safety
+- Financial features: https://capital.fimych.dev/financial-features
 - Ads: No. App access: all functionality available without login. Content rating: Everyone. Target audience: 18+. News / COVID / Government / Health: No.
 
 ## Upload
