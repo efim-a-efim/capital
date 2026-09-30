@@ -1,0 +1,71 @@
+---
+layout: default
+class: landing
+---
+<section class="hero">
+  <div>
+    <h1>See when every savings goal closes.</h1>
+    <p class="lead">Capital is a private savings tracker for Android. Group your money into buckets, connect them to goals, add the savings you plan to make, and the app tells you which goal is funded, which one closes in time and which one falls short.</p>
+    <div class="badges"><span class="badge green">Funded</span><span class="badge green">Funded in time</span><span class="badge yellow">Not funded</span></div>
+    <div class="cta">
+      <a class="btn" href="#download">Download APK</a>
+      <a class="btn secondary play" id="play" href="{{ site.play_url }}" {% if site.play_url == "" %}hidden{% endif %}>Get it on Google Play</a>
+      <a class="btn secondary" href="{{ '/manual' | relative_url }}">Read the manual</a>
+    </div>
+    <p class="note">No account. No analytics. No ads. Records live in a folder you choose; sync it with any tool you already use.</p>
+  </div>
+  <img src="{{ '/screenshots/goals.png' | relative_url }}" alt="Goals screen with Funded, Funded in time and Not funded badges" width="1080" height="1920">
+</section>
+
+<h2>What it does</h2>
+<ul class="features">
+  <li><h3>Buckets</h3><p>Cash, savings accounts, brokerage, crypto. Enter quantities by hand or paste a public wallet address and let the app read the balance.</p></li>
+  <li><h3>Goals with priorities</h3><p>Connect buckets to goals with limits. Earlier dates fund first; drag goals with the same date to set their order. Allocation never moves money.</p></li>
+  <li><h3>Plans</h3><p>Add the savings you intend to make. The projection shows the date each goal closes and marks it <em>Funded in time</em> or <em>Not funded</em>.</p></li>
+  <li><h3>Portfolio mode</h3><p>Target percentages per asset, real share versus target, and a rebalance calculator that lists what to buy.</p></li>
+  <li><h3>Wallets and prices</h3><p>BTC, ETH, TON and TRON addresses plus ERC-20, jetton and TRC-20 tokens. Prices from DefiLlama, CoinGecko or CoinPaprika; fiat rates from Frankfurter or the ECB. Every source is selectable.</p></li>
+  <li><h3>Encryption and lock</h3><p>Optional AES-256-GCM encryption of your files with an Argon2id-derived key, PIN and biometric unlock, screenshots blocked while locked data is open.</p></li>
+  <li><h3>Your folder, your sync</h3><p>Snapshots are plain files with revision ids and checksums. Sync them with Syncthing, Nextcloud, Drive or anything else. Conflicts are shown, never silently resolved.</p></li>
+  <li><h3>15 languages</h3><p class="langs">English, 中文, हिन्दी, Español, العربية, Français, বাংলা, Português, Русский, Bahasa Indonesia, اردو, Deutsch, 日本語, मराठी, Tiếng Việt.</p></li>
+</ul>
+
+<h2>Screens</h2>
+<div class="shots">
+  <figure><img src="{{ '/screenshots/overview.png' | relative_url }}" alt="Overview: total valued savings, allocated and unallocated amounts" loading="lazy"><figcaption>Overview</figcaption></figure>
+  <figure><img src="{{ '/screenshots/buckets.png' | relative_url }}" alt="Buckets list" loading="lazy"><figcaption>Buckets</figcaption></figure>
+  <figure><img src="{{ '/screenshots/bucket.png' | relative_url }}" alt="Bucket with a wallet holding" loading="lazy"><figcaption>Bucket detail</figcaption></figure>
+  <figure><img src="{{ '/screenshots/goals.png' | relative_url }}" alt="Goals with badges" loading="lazy"><figcaption>Goals</figcaption></figure>
+  <figure><img src="{{ '/screenshots/goal.png' | relative_url }}" alt="Goal detail with funding sources and planned savings" loading="lazy"><figcaption>Goal detail</figcaption></figure>
+  <figure><img src="{{ '/screenshots/plans.png' | relative_url }}" alt="Planned savings" loading="lazy"><figcaption>Plans</figcaption></figure>
+  <figure><img src="{{ '/screenshots/settings.png' | relative_url }}" alt="Settings" loading="lazy"><figcaption>Settings</figcaption></figure>
+</div>
+
+<h2 id="download">Download</h2>
+<div class="download">
+  <div class="ver" id="ver">Latest release</div>
+  <p id="dl"><a class="btn" href="{{ site.repo }}/releases/latest">Open the latest release on GitHub</a></p>
+  <ul>
+    <li>Android 8.0 or newer. The APK is signed with the permanent release key, so new versions install over old ones.</li>
+    <li>Verify the file against <code>SHA256SUMS.txt</code> from the same release.</li>
+    <li>All releases and changelogs: <a href="{{ site.repo }}/releases">GitHub Releases</a>.</li>
+  </ul>
+</div>
+<script>
+// ponytail: unauthenticated GitHub API, 60 requests/hour per visitor; the static link above stays as the fallback.
+fetch('https://api.github.com/repos/efim-a-efim/capital/releases/latest').then(r => r.ok ? r.json() : Promise.reject()).then(rel => {
+  const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+  if (!apk) return;
+  const mb = (apk.size / 1048576).toFixed(1);
+  document.getElementById('ver').textContent = 'Latest release ' + rel.tag_name + ' · ' + new Date(rel.published_at).toLocaleDateString();
+  document.getElementById('dl').innerHTML = '<a class="btn" href="' + apk.browser_download_url + '">Download ' + apk.name + ' (' + mb + ' MB)</a> <a class="btn secondary" href="' + rel.html_url + '">Release notes</a>';
+}).catch(() => {});
+</script>
+
+<h2>Documents</h2>
+<ul>
+  <li><a href="{{ '/manual' | relative_url }}">User manual</a></li>
+  <li><a href="{{ '/privacy' | relative_url }}">Privacy Policy</a></li>
+  <li><a href="{{ '/data-safety' | relative_url }}">Data safety declaration</a> (Google Play)</li>
+  <li><a href="{{ '/financial-features' | relative_url }}">Financial features declaration</a> (Google Play)</li>
+  <li><a href="{{ site.repo }}">Source code and issue tracker</a></li>
+</ul>

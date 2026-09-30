@@ -43,6 +43,10 @@ The keystore and its password are kept in `signing/`, which is not tracked. Keep
 
 Local builds of earlier versions are kept in `releases/`, which is not tracked.
 
+## Site and store listing
+
+`docs/` is the GitHub Pages site at https://efim-a-efim.github.io/capital/ : description, screenshots, manual, Privacy Policy, Data safety and Financial features declarations, and a download link that follows the latest release. `store/` holds the Google Play kit: listing texts, icon, feature graphic and 1080×1920 screenshots. After publishing, set `play_url` in `docs/_config.yml`.
+
 ## First use
 
 1. Choose a dedicated local folder, e.g. `Documents/CapitalTracker`. Existing Capital folders reopen directly.
@@ -122,4 +126,4 @@ python3 scripts/check-providers.py         # public test addresses; no user keys
 
 The device test creates a uniquely named `CapitalTest-*` folder through Android's real folder picker. It does not delete existing folders. Unit checks cover exact money round-trip, allocation caps/priorities/rerouting/conservation, 100 generated graphs, canonical addresses, snapshot conflicts/corruption, provider partial failure, bounded retries, cancellation and safe observation merging.
 
-Roadmap: [ROADMAP.md](ROADMAP.md). Implementation plan and remaining acceptance checks: [OpenSpec tasks](openspec/changes/archive/2026-09-29-build-android-savings-tracker/tasks.md). Emulator acceptance record: [acceptance.md](openspec/changes/archive/2026-09-29-build-android-savings-tracker/acceptance.md). Research: [sources](openspec/changes/archive/2026-09-29-build-android-savings-tracker/research.md). No release signing key is committed; the supplied APK is a debug build.
+Roadmap: [ROADMAP.md](ROADMAP.md). Implementation plan and remaining acceptance checks: [OpenSpec tasks](openspec/changes/archive/2026-09-29-build-android-savings-tracker/tasks.md). Emulator acceptance record: [acceptance.md](openspec/changes/archive/2026-09-29-build-android-savings-tracker/acceptance.md). Research: [sources](openspec/changes/archive/2026-09-29-build-android-savings-tracker/research.md).

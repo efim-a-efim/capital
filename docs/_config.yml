@@ -1,0 +1,11 @@
+title: Capital
+description: Private savings tracker for Android. Buckets, goals, plans. Your data stays in your folder.
+url: https://efim-a-efim.github.io
+baseurl: /capital
+repo: https://github.com/efim-a-efim/capital
+# Google Play link. Empty until the app is published; the layout hides the badge while it is empty.
+play_url: ""
+contact: efim.a.efim@gmail.com
+developer: Alex Efimov
+markdown: kramdown
+exclude: [README.md]
