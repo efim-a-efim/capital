@@ -27,7 +27,7 @@ blockquote { margin: 1em 0; padding: 8px 16px; border-left: 4px solid var(--yell
 .hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; padding: 32px 0 16px; }
 .hero h1 { font-size: 2.6rem; }
 .hero p.lead { font-size: 1.15rem; color: var(--muted); }
-.hero img { width: 100%; max-width: 320px; margin: 0 auto; display: block; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.hero img { width: 100%; height: auto; max-width: 320px; margin: 0 auto; display: block; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
 .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 20px 0; }
 .btn { display: inline-block; background: var(--green); color: #fff !important; text-decoration: none; padding: 12px 20px; border-radius: 12px; font-weight: 600; }
 .btn:hover { background: var(--green-dark); }
@@ -45,7 +45,7 @@ blockquote { margin: 1em 0; padding: 8px 16px; border-left: 4px solid var(--yell
 .features p { margin: 0; color: var(--muted); font-size: 15px; }
 .shots { display: flex; gap: 16px; overflow-x: auto; padding: 8px 0 16px; scroll-snap-type: x mandatory; }
 .shots figure { margin: 0; flex: 0 0 auto; width: 220px; scroll-snap-align: start; }
-.shots img { width: 100%; border-radius: 16px; border: 1px solid var(--line); }
+.shots img { width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); }
 .shots figcaption { font-size: 14px; color: var(--muted); text-align: center; margin-top: 6px; }
 .download { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
 .download .ver { font-size: 1.3rem; font-weight: 700; }
