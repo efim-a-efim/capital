@@ -24,6 +24,7 @@ biometric = { module = "androidx.biometric:biometric", version.ref = "biometric"
 # biometric 1.1.0 pulls fragment 1.2, which breaks the Activity Result API used by every system picker
 fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 bc = { module = "org.bouncycastle:bcprov-jdk18on", version = "1.86" }
+zxing = { module = "com.google.zxing:core", version = "3.5.3" }
 [plugins]
 android = { id = "com.android.application", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

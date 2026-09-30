@@ -13,8 +13,10 @@ android {
         versionCode = 9
         versionName = "2.3.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Tip screen with the developer's wallet addresses. `-Pcapital.tips=false` leaves it out, for the Google Play bundle.
+        buildConfigField("boolean", "TIPS", (findProperty("capital.tips") ?: "true").toString())
     }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     // Release signing is configured only when the CI (or you) provide a keystore through the environment.
     val keystore = System.getenv("CAPITAL_KEYSTORE")
     if (keystore != null) signingConfigs {
@@ -49,6 +51,7 @@ dependencies {
     implementation(libs.coroutines)
     implementation(libs.okhttp)
     implementation(libs.bc)
+    implementation(libs.zxing)
     implementation(libs.biometric)
     implementation(libs.fragment)
     debugImplementation(libs.compose.tooling)

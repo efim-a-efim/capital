@@ -79,6 +79,10 @@ Capital no sincroniza nada por sí misma. Si pone la carpeta bajo una herramient
 
 Elimine la carpeta que eligió (y las copias que haya hecho su herramienta de sincronización) y desinstale la aplicación. La desinstalación borra el almacenamiento privado de la aplicación, incluidas las claves de proveedores y los ajustes de bloqueo. El desarrollador no tiene nada que eliminar y no puede eliminar nada en su nombre. Los operadores a los que usted consultó pueden conservar registros de las solicitudes según sus propias normas de conservación.
 
+## Donaciones {#donations}
+
+La aplicación (botón del corazón en Resumen) y este sitio muestran las direcciones de billetera del desarrollador para propinas voluntarias. Una propina es una transferencia que usted hace desde su propia billetera a una de esas direcciones, según las condiciones de su billetera y de la red que utilice. Capital no interviene en ella: no procesa ningún pago, no puede ver si usted envió algo, no registra nada al respecto y no cambia nada; ninguna función se desbloquea ni se modifica. La única finalidad de una propina es apoyar al desarrollador. Como en cualquier transacción de blockchain, enviar a una dirección pública revela su dirección de envío en esa red.
+
 ## Menores
 
 Capital es una herramienta de finanzas personales para adultos. No está dirigida a menores de 13 años y no recopila conscientemente datos de ellos.

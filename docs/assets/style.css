@@ -64,3 +64,8 @@ nav.langs a.on { color: var(--ink); font-weight: 600; }
 .pager { font-size: 15px; line-height: 1.9; margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--line); }
 @media (max-width: 720px) { .screen { grid-template-columns: 1fr; } .screen figure { position: static; max-width: 260px; } }
 [dir="rtl"] .hero, [dir="rtl"] .screen { direction: rtl; }
+
+/* tips */
+.wallet .addr { word-break: break-all; }
+.wallet canvas { display: block; border-radius: 12px; border: 1px solid var(--line); margin: 8px 0 16px; }
+button.copy { font: inherit; font-size: 14px; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--green); background: transparent; color: var(--green); cursor: pointer; }

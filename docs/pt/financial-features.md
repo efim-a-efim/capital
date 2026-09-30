@@ -29,8 +29,9 @@ O Capital é um app pessoal para acompanhar economias. Ele registra o que o usu�
 | Credit monitoring and reporting (monitoramento e relatórios de crédito) | Nenhum |
 | Financial advice (consultoria financeira) | Nenhuma. A projeção apresenta cálculos aritméticos sobre os números do próprio usuário ("as economias planejadas concluem esta meta em …"); não recomenda nenhum produto, ativo ou ação. A calculadora de rebalanceamento lista as compras necessárias para atingir percentuais definidos pelo próprio usuário |
 | Insurance (seguros) | Nenhum |
+| In-app purchases, donations (compras no app, doações) | Nenhuma processada pelo app. Uma tela de gorjetas mostra os endereços públicos de carteira do desenvolvedor (os mesmos deste site); a transferência acontece no app de carteira do próprio usuário, não desbloqueia nada e é invisível para o app |
 
-O app também não oferece compras no app nem recursos pagos.
+O app também não oferece compras no app nem recursos pagos. A versão do Google Play é gerada sem a tela de gorjetas.
 
 ## Se o revisor discordar
 

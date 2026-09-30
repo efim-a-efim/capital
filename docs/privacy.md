@@ -79,6 +79,10 @@ Capital does not sync anything itself. If you place the folder under a sync tool
 
 Delete the folder you chose (and any copies your sync tool made) and uninstall the app. Uninstalling removes app-private storage, including provider keys and lock settings. The developer holds nothing to delete and cannot delete anything on your behalf. The operators you queried may keep request logs under their own retention rules.
 
+## Donations {#donations}
+
+The app (heart button on the Overview) and this site show the developer's wallet addresses for voluntary tips. A tip is a transfer you make from your own wallet to one of those addresses, under the terms of your wallet and of the network you use. Capital takes no part in it: it processes no payment, cannot see whether you sent anything, records nothing about it and changes nothing — no feature is unlocked or altered. The only purpose of a tip is to support the developer. As with any blockchain transaction, sending to a public address discloses your sending address on that network.
+
 ## Children
 
 Capital is a personal finance tool for adults. It is not directed at children under 13 and knowingly collects no data from them.

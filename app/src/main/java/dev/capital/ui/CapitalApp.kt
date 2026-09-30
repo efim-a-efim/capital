@@ -57,6 +57,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.capital.CapitalModel
 import dev.capital.data.Revision
+import dev.capital.Tips
 import dev.capital.domain.*
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -73,7 +74,7 @@ private val dark=darkColorScheme(primary=Color(0xff8fd3b0),onPrimary=Color(0xff1
 private data class Editor(val kind: String,val id: String="",val owner: String="")
 // Stored values and state keys are translated only when shown.
 private fun shown(v: String)=when(v) {
-    "Overview" -> tr("Overview"); "Buckets" -> tr("Buckets"); "Goals" -> tr("Goals"); "Plans" -> tr("Plans"); "Settings" -> tr("Settings")
+    "Overview" -> tr("Overview"); "Buckets" -> tr("Buckets"); "Goals" -> tr("Goals"); "Plans" -> tr("Plans"); "Settings" -> tr("Settings"); "Tips" -> tr("Tip the developer")
     "System" -> tr("System"); "Light" -> tr("Light"); "Dark" -> tr("Dark"); "Off" -> tr("Off"); "Manual" -> tr("Manual"); "Wallet" -> tr("Wallet")
     "Not refreshed" -> tr("Not refreshed"); "Unknown" -> tr("Unknown"); "Choose treatment" -> tr("Choose treatment")
     "Convert existing values" -> tr("Convert existing values"); "Replace with entered numbers" -> tr("Replace with entered numbers")
@@ -259,7 +260,8 @@ private val rtlType=Typography().run {
                 topBar={ TopAppBar(title={ Text(if(!state.ready) tr("Capital") else shown(section)) },actions={
                     val uriHandler=LocalUriHandler.current
                     val screen=when { !state.ready -> "start"; section=="Buckets" && bucketId!=null -> "bucket"; section=="Goals" && goalId!=null -> "goal"; else -> section.lowercase() }
-                    IconButton(onClick={ uriHandler.openUri(I18n.helpUrl(screen)) },modifier=Modifier.testTag("help")) { Icon(painterResource(R.drawable.ic_help),contentDescription=tr("Help")) }
+                    if(dev.capital.BuildConfig.TIPS && state.ready && section=="Overview" && Tips.shown.isNotEmpty()) TipButton { select("Tips") }
+                    IconButton(onClick={ uriHandler.openUri(if(screen=="tips") I18n.siteUrl("tips") else I18n.helpUrl(screen)) },modifier=Modifier.testTag("help")) { Icon(painterResource(R.drawable.ic_help),contentDescription=tr("Help")) }
                     if(state.ready) {
                         RefreshButton(state.refreshing,editable) { model.refresh(bucketId) }
                         IconButton(onClick={ select("Settings") },modifier=Modifier.testTag("settings")) { Icon(painterResource(R.drawable.ic_settings),contentDescription=tr("Settings")) }
@@ -446,6 +448,7 @@ private val rtlType=Typography().run {
                                         contributions.forEach { c -> data.planned.find { it.id==c.plannedId }?.let { pl -> Item(pl.name,date(pl.date),"+${money(data.convert(c.usd,"USD",goal.currency),goal.currency)}",null) } }
                                     }
                                 }
+                                "Tips" -> TipsScreen(model::notice)
                                 "Settings" -> {
                                     Heading(tr("Preferences"))
                                     OutlinedButton(onClick={ editor=Editor("Settings") },enabled=editable) { Text(tr("Currency: {0} · Theme: {1}",data.settings.currency,shown(data.settings.theme))) }

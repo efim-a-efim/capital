@@ -79,6 +79,10 @@ Capital tidak menyinkronkan apa pun sendiri. Jika Anda meletakkan folder di bawa
 
 Hapus folder yang Anda pilih (beserta salinan yang dibuat alat sinkronisasi Anda) lalu copot aplikasi. Mencopot aplikasi menghapus penyimpanan privat aplikasi, termasuk kunci penyedia dan pengaturan kunci. Developer tidak menyimpan apa pun yang perlu dihapus dan tidak dapat menghapus apa pun atas nama Anda. Operator yang Anda kueri mungkin menyimpan log permintaan sesuai aturan retensi mereka sendiri.
 
+## Donasi {#donations}
+
+Aplikasi (tombol hati di Ringkasan) dan situs ini menampilkan alamat dompet developer untuk tip sukarela. Tip adalah transfer yang Anda lakukan dari dompet Anda sendiri ke salah satu alamat tersebut, sesuai ketentuan dompet Anda dan jaringan yang Anda gunakan. Capital tidak terlibat di dalamnya: aplikasi tidak memproses pembayaran apa pun, tidak dapat melihat apakah Anda mengirim sesuatu, tidak mencatat apa pun tentangnya, dan tidak mengubah apa pun — tidak ada fitur yang dibuka atau diubah. Satu-satunya tujuan tip adalah mendukung developer. Seperti setiap transaksi blockchain, mengirim ke alamat publik mengungkapkan alamat pengirim Anda di jaringan tersebut.
+
 ## Anak-anak
 
 Capital adalah alat keuangan pribadi untuk orang dewasa. Aplikasi ini tidak ditujukan untuk anak-anak di bawah 13 tahun dan tidak dengan sengaja mengumpulkan data dari mereka.

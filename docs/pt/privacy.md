@@ -79,6 +79,10 @@ O Capital não sincroniza nada por conta própria. Se você colocar a pasta em u
 
 Exclua a pasta que você escolheu (e todas as cópias feitas pela sua ferramenta de sincronização) e desinstale o app. A desinstalação remove o armazenamento privado do app, inclusive as chaves de provedores e os ajustes de bloqueio. O desenvolvedor não guarda nada que precise ser excluído e não pode excluir nada em seu nome. Os operadores que você consultou podem manter registros das solicitações conforme suas próprias regras de retenção.
 
+## Doações {#donations}
+
+O app (botão de coração na Visão geral) e este site mostram os endereços de carteira do desenvolvedor para gorjetas voluntárias. Uma gorjeta é uma transferência que você faz da sua própria carteira para um desses endereços, nos termos da sua carteira e da rede que você usa. O Capital não participa dela: não processa nenhum pagamento, não consegue ver se você enviou algo, não registra nada a respeito e não altera nada — nenhum recurso é desbloqueado ou modificado. O único objetivo de uma gorjeta é apoiar o desenvolvedor. Como em qualquer transação em blockchain, enviar para um endereço público revela o seu endereço de envio nessa rede.
+
 ## Crianças
 
 O Capital é uma ferramenta de finanças pessoais para adultos. Ele não é direcionado a crianças menores de 13 anos e não coleta intencionalmente nenhum dado delas.

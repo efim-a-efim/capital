@@ -29,8 +29,9 @@ Capital is a personal savings tracker. It records what the user already owns and
 | Credit monitoring and reporting | None |
 | Financial advice | None. The projection reports arithmetic on the user's own numbers ("planned savings close this goal on …"); it recommends no product, asset or action. The rebalance calculator lists purchases needed to match percentages the user set themselves |
 | Insurance | None |
+| In-app purchases, donations | None processed by the app. A tip screen shows the developer's public wallet addresses (the same ones as on this site); a transfer happens in the user's own wallet app, unlocks nothing and is invisible to the app |
 
-The app also provides no in-app purchases and no paid features.
+The app also provides no in-app purchases and no paid features. The Google Play build is made without the tip screen.
 
 ## If the reviewer disagrees
 

@@ -29,8 +29,9 @@ Capital adalah pencatat tabungan pribadi. Aplikasi ini mencatat apa yang sudah d
 | Credit monitoring and reporting (Pemantauan dan pelaporan kredit) | Tidak ada |
 | Financial advice (Saran keuangan) | Tidak ada. Proyeksi hanya menampilkan hasil hitungan atas angka milik pengguna sendiri ("Rencana tabungan memenuhi tujuan ini pada …"); proyeksi tidak merekomendasikan produk, aset, atau tindakan apa pun. Kalkulator penyeimbangan ulang mencantumkan pembelian yang diperlukan untuk mencapai persentase yang ditetapkan pengguna sendiri |
 | Insurance (Asuransi) | Tidak ada |
+| In-app purchases, donations (Pembelian dalam aplikasi, donasi) | Tidak ada yang diproses oleh aplikasi. Layar tip menampilkan alamat dompet publik developer (sama dengan yang ada di situs ini); transfer dilakukan di aplikasi dompet milik pengguna sendiri, tidak membuka fitur apa pun, dan tidak terlihat oleh aplikasi |
 
-Aplikasi juga tidak menyediakan pembelian dalam aplikasi maupun fitur berbayar.
+Aplikasi juga tidak menyediakan pembelian dalam aplikasi maupun fitur berbayar. Build Google Play dibuat tanpa layar tip.
 
 ## Jika peninjau tidak setuju
 

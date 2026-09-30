@@ -29,8 +29,9 @@ Capital es un registro personal de ahorros. Anota lo que el usuario ya posee y m
 | Credit monitoring and reporting (supervisión e informes de crédito) | Ninguna |
 | Financial advice (asesoramiento financiero) | Ninguno. La proyección presenta operaciones aritméticas sobre los números del propio usuario («los ahorros planificados completan esta meta el …»); no recomienda ningún producto, activo ni acción. La calculadora de reequilibrio enumera las compras necesarias para ajustarse a los porcentajes que el propio usuario fijó |
 | Insurance (seguros) | Ninguno |
+| In-app purchases, donations (compras en la aplicación, donaciones) | La aplicación no procesa ninguna. Una pantalla de propinas muestra las direcciones públicas de billetera del desarrollador (las mismas que en este sitio); la transferencia se hace en la aplicación de billetera del propio usuario, no desbloquea nada y la aplicación no la ve |
 
-La aplicación tampoco ofrece compras dentro de la aplicación ni funciones de pago.
+La aplicación tampoco ofrece compras dentro de la aplicación ni funciones de pago. La versión de Google Play se compila sin la pantalla de propinas.
 
 ## Si el revisor no está de acuerdo
 

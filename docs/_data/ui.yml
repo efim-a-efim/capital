@@ -9,6 +9,9 @@ en:
   data_safety: Data safety
   financial: Financial features
   language: Language
+  tip: Tip
+  copy: Copy
+  copied: Copied
   screen_names: { start: Start, overview: Overview, buckets: Buckets, bucket: Bucket, goals: Goals, goal: Goal, plans: Plans, settings: Settings }
 zh:
   manual: 使用手册
@@ -20,6 +23,9 @@ zh:
   data_safety: 数据安全
   financial: 金融功能
   language: 语言
+  tip: 打赏
+  copy: 复制
+  copied: 已复制
   screen_names: { start: 开始, overview: 概览, buckets: 储蓄罐, bucket: 储蓄罐详情, goals: 目标, goal: 目标详情, plans: 计划, settings: 设置 }
 hi:
   manual: गाइड
@@ -31,6 +37,9 @@ hi:
   data_safety: डेटा की सुरक्षा
   financial: वित्तीय सुविधाएँ
   language: भाषा
+  tip: टिप
+  copy: कॉपी करें
+  copied: कॉपी हो गया
   screen_names: { start: शुरुआत, overview: ओवरव्यू, buckets: गुल्लकें, bucket: गुल्लक, goals: लक्ष्य, goal: लक्ष्य विवरण, plans: योजनाएँ, settings: सेटिंग }
 es:
   manual: Manual
@@ -42,6 +51,9 @@ es:
   data_safety: Seguridad de los datos
   financial: Funciones financieras
   language: Idioma
+  tip: Propina
+  copy: Copiar
+  copied: Copiado
   screen_names: { start: Inicio, overview: Resumen, buckets: Bolsillos, bucket: Bolsillo, goals: Metas, goal: Meta, plans: Planes, settings: Ajustes }
 ar:
   manual: الدليل
@@ -53,6 +65,9 @@ ar:
   data_safety: أمان البيانات
   financial: الميزات المالية
   language: اللغة
+  tip: دعم
+  copy: نسخ
+  copied: تم النسخ
   screen_names: { start: البدء, overview: نظرة عامة, buckets: الصناديق, bucket: الصندوق, goals: الأهداف, goal: الهدف, plans: الخطط, settings: الإعدادات }
 fr:
   manual: Manuel
@@ -64,6 +79,9 @@ fr:
   data_safety: Sécurité des données
   financial: Fonctionnalités financières
   language: Langue
+  tip: Soutenir
+  copy: Copier
+  copied: Copié
   screen_names: { start: Démarrage, overview: Synthèse, buckets: Poches, bucket: Poche, goals: Objectifs, goal: Objectif, plans: Prévisions, settings: Paramètres }
 bn:
   manual: ম্যানুয়াল
@@ -75,6 +93,9 @@ bn:
   data_safety: ডেটা নিরাপত্তা
   financial: আর্থিক বৈশিষ্ট্য
   language: ভাষা
+  tip: টিপ
+  copy: কপি করুন
+  copied: কপি হয়েছে
   screen_names: { start: শুরু, overview: সারসংক্ষেপ, buckets: তহবিল, bucket: তহবিলের বিবরণ, goals: লক্ষ্য, goal: লক্ষ্যের বিবরণ, plans: পরিকল্পনা, settings: সেটিংস }
 pt:
   manual: Manual
@@ -86,6 +107,9 @@ pt:
   data_safety: Segurança dos dados
   financial: Recursos financeiros
   language: Idioma
+  tip: Gorjeta
+  copy: Copiar
+  copied: Copiado
   screen_names: { start: Início, overview: Visão geral, buckets: Caixinhas, bucket: Caixinha, goals: Metas, goal: Meta, plans: Planos, settings: Ajustes }
 ru:
   manual: Руководство
@@ -97,6 +121,9 @@ ru:
   data_safety: Безопасность данных
   financial: Финансовые функции
   language: Язык
+  tip: Поддержать
+  copy: Копировать
+  copied: Скопировано
   screen_names: { start: Начало, overview: Обзор, buckets: Копилки, bucket: Копилка, goals: Цели, goal: Цель, plans: Планы, settings: Настройки }
 id:
   manual: Panduan
@@ -108,6 +135,9 @@ id:
   data_safety: Keamanan data
   financial: Fitur keuangan
   language: Bahasa
+  tip: Tip
+  copy: Salin
+  copied: Disalin
   screen_names: { start: Awal, overview: Ringkasan, buckets: Kantong, bucket: Detail kantong, goals: Tujuan, goal: Detail tujuan, plans: Rencana, settings: Pengaturan }
 ur:
   manual: ہدایت نامہ
@@ -119,6 +149,9 @@ ur:
   data_safety: ڈیٹا کی حفاظت
   financial: مالی خصوصیات
   language: زبان
+  tip: ٹپ
+  copy: کاپی کریں
+  copied: کاپی ہو گیا
   screen_names: { start: آغاز, overview: جائزہ, buckets: گلک, bucket: گلک کی تفصیل, goals: اہداف, goal: ہدف, plans: منصوبے, settings: سیٹنگز }
 de:
   manual: Handbuch
@@ -130,6 +163,9 @@ de:
   data_safety: Datensicherheit
   financial: Finanzfunktionen
   language: Sprache
+  tip: Trinkgeld
+  copy: Kopieren
+  copied: Kopiert
   screen_names: { start: Start, overview: Übersicht, buckets: Töpfe, bucket: Topf, goals: Ziele, goal: Ziel, plans: Pläne, settings: Einstellungen }
 ja:
   manual: マニュアル
@@ -141,6 +177,9 @@ ja:
   data_safety: データ セーフティ
   financial: 金融機能
   language: 言語
+  tip: チップ
+  copy: コピー
+  copied: コピーしました
   screen_names: { start: スタート, overview: 概要, buckets: ポケット, bucket: ポケットの詳細, goals: 目標, goal: 目標の詳細, plans: 貯蓄予定, settings: 設定 }
 mr:
   manual: मार्गदर्शिका
@@ -152,6 +191,9 @@ mr:
   data_safety: डेटा सुरक्षितता
   financial: आर्थिक वैशिष्ट्ये
   language: भाषा
+  tip: टिप
+  copy: कॉपी करा
+  copied: कॉपी केले
   screen_names: { start: सुरुवात, overview: आढावा, buckets: कप्पे, bucket: कप्पा, goals: उद्दिष्टे, goal: उद्दिष्ट, plans: योजना, settings: सेटिंग्ज }
 vi:
   manual: Hướng dẫn
@@ -163,4 +205,7 @@ vi:
   data_safety: An toàn dữ liệu
   financial: Tính năng tài chính
   language: Ngôn ngữ
+  tip: Ủng hộ
+  copy: Sao chép
+  copied: Đã sao chép
   screen_names: { start: Bắt đầu, overview: Tổng quan, buckets: Hũ, bucket: Chi tiết hũ, goals: Mục tiêu, goal: Chi tiết mục tiêu, plans: Kế hoạch, settings: Cài đặt }

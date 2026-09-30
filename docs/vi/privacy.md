@@ -79,6 +79,10 @@ Capital không tự đồng bộ bất cứ thứ gì. Nếu bạn đặt thư m
 
 Xóa thư mục bạn đã chọn (và mọi bản sao do công cụ đồng bộ tạo ra) rồi gỡ cài đặt ứng dụng. Gỡ cài đặt sẽ xóa bộ nhớ riêng của ứng dụng, bao gồm khóa nhà cung cấp và cài đặt khóa ứng dụng. Nhà phát triển không nắm giữ gì để xóa và không thể thay bạn xóa bất cứ thứ gì. Các nhà cung cấp bạn đã truy vấn có thể lưu nhật ký yêu cầu theo quy định lưu giữ của riêng họ.
 
+## Ủng hộ {#donations}
+
+Ứng dụng (nút hình trái tim trên màn hình Tổng quan) và trang web này hiển thị địa chỉ ví của nhà phát triển để nhận các khoản ủng hộ tự nguyện. Khoản ủng hộ là giao dịch chuyển tiền mà bạn tự thực hiện từ ví của mình đến một trong các địa chỉ đó, theo điều khoản của ví bạn dùng và của mạng lưới bạn sử dụng. Capital không tham gia vào việc này: ứng dụng không xử lý bất kỳ khoản thanh toán nào, không thể biết bạn đã gửi gì hay chưa, không ghi lại bất cứ điều gì về giao dịch đó và không thay đổi gì cả — không tính năng nào được mở khóa hay thay đổi. Mục đích duy nhất của khoản ủng hộ là hỗ trợ nhà phát triển. Như mọi giao dịch blockchain, việc gửi tiền đến một địa chỉ công khai sẽ làm lộ địa chỉ gửi của bạn trên mạng lưới đó.
+
 ## Trẻ em
 
 Capital là công cụ tài chính cá nhân dành cho người lớn. Ứng dụng không hướng đến trẻ em dưới 13 tuổi và không cố ý thu thập dữ liệu nào từ các em.

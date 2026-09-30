@@ -1,0 +1,23 @@
+{% assign ui = site.data.ui[page.lang] %}
+<div class="tips">
+{% for w in site.data.tips %}{% if w.address != "" %}
+<section class="wallet">
+  <h2>{{ w.network }}</h2>
+  <p><code class="addr">{{ w.address }}</code> <button type="button" class="copy" data-text="{{ w.address }}" data-done="{{ ui.copied }}">{{ ui.copy }}</button></p>
+  <canvas class="qr" data-text="{{ w.address }}" width="232" height="232" role="img" aria-label="{{ w.network }}"></canvas>
+</section>
+{% endif %}{% endfor %}
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+// Plain address as payload; rounded modules in the app colour on white, readable by any camera.
+document.querySelectorAll('canvas.qr').forEach(c => {
+  const q = qrcode(0, 'M'); q.addData(c.dataset.text); q.make();
+  const n = q.getModuleCount(), ctx = c.getContext('2d'), pad = 16, m = (c.width - 2 * pad) / n;
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#176451';
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (q.isDark(y, x)) { ctx.beginPath(); ctx.roundRect(pad + x * m, pad + y * m, m, m, m * 0.3); ctx.fill(); }
+});
+document.querySelectorAll('button.copy').forEach(b => b.addEventListener('click', () => {
+  navigator.clipboard.writeText(b.dataset.text).then(() => { const t = b.textContent; b.textContent = b.dataset.done; setTimeout(() => b.textContent = t, 1500); });
+}));
+</script>

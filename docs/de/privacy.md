@@ -79,6 +79,10 @@ Capital synchronisiert selbst nichts. Wenn Sie den Ordner in ein Sync-Tool legen
 
 Löschen Sie den gewählten Ordner (und alle Kopien, die Ihr Sync-Tool angelegt hat) und deinstallieren Sie die App. Bei der Deinstallation wird der app-private Speicher entfernt, einschließlich Anbieterschlüsseln und Sperreinstellungen. Der Entwickler besitzt keine Daten, die gelöscht werden könnten, und kann nichts in Ihrem Namen löschen. Die von Ihnen abgefragten Betreiber können Anfrageprotokolle nach ihren eigenen Aufbewahrungsregeln speichern.
 
+## Spenden {#donations}
+
+Die App (Herz-Schaltfläche in der Übersicht) und diese Website zeigen die Wallet-Adressen des Entwicklers für freiwillige Trinkgelder. Ein Trinkgeld ist eine Überweisung, die Sie aus Ihrer eigenen Wallet an eine dieser Adressen vornehmen, zu den Bedingungen Ihrer Wallet und des von Ihnen genutzten Netzwerks. Capital ist daran nicht beteiligt: Die App wickelt keine Zahlung ab, kann nicht sehen, ob Sie etwas gesendet haben, zeichnet nichts darüber auf und ändert nichts – keine Funktion wird freigeschaltet oder verändert. Ein Trinkgeld dient einzig dazu, den Entwickler zu unterstützen. Wie bei jeder Blockchain-Transaktion legt das Senden an eine öffentliche Adresse Ihre Absenderadresse in diesem Netzwerk offen.
+
 ## Kinder
 
 Capital ist ein Werkzeug für die persönlichen Finanzen von Erwachsenen. Es richtet sich nicht an Kinder unter 13 Jahren und erhebt wissentlich keine Daten von ihnen.

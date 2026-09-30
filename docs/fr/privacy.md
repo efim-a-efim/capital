@@ -79,6 +79,10 @@ Capital ne synchronise rien lui-même. Si vous placez le dossier sous un outil d
 
 Supprimez le dossier que vous avez choisi (ainsi que toutes les copies créées par votre outil de synchronisation) et désinstallez l’application. La désinstallation efface le stockage privé de l’application, y compris les clés de fournisseurs et les paramètres de verrouillage. Le développeur ne détient aucune donnée à supprimer et ne peut rien supprimer à votre place. Les opérateurs que vous avez interrogés peuvent conserver des journaux de requêtes selon leurs propres règles de conservation.
 
+## Dons {#donations}
+
+L’application (bouton en forme de cœur sur la Synthèse) et ce site affichent les adresses de portefeuille crypto du développeur pour des dons volontaires. Un don est un transfert que vous effectuez depuis votre propre portefeuille crypto vers l’une de ces adresses, selon les conditions de votre portefeuille et du réseau que vous utilisez. Capital n’y prend aucune part : l’application ne traite aucun paiement, ne peut pas savoir si vous avez envoyé quoi que ce soit, n’enregistre rien à ce sujet et ne change rien — aucune fonctionnalité n’est débloquée ni modifiée. Un don n’a pas d’autre but que de soutenir le développeur. Comme pour toute transaction blockchain, un envoi vers une adresse publique révèle votre adresse d’envoi sur ce réseau.
+
 ## Enfants
 
 Capital est un outil de finances personnelles destiné aux adultes. Il ne s’adresse pas aux enfants de moins de 13 ans et ne collecte sciemment aucune donnée les concernant.

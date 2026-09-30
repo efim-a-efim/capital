@@ -12,7 +12,7 @@ class: doc
 
 ## Cách ứng dụng xử lý dữ liệu
 
-Capital không có backend. Mọi thứ người dùng nhập đều nằm trong một thư mục trên thiết bị. Dữ liệu duy nhất từng rời khỏi thiết bị là những gì ứng dụng gửi, theo lệnh của người dùng, đến các nhà cung cấp dữ liệu bên thứ ba mà người dùng chọn trong Cài đặt: địa chỉ ví công khai, mã định danh hợp đồng token, mã tiền tệ và khóa API người dùng đã nhập cho nhà cung cấp đó (nếu có). Nhà cung cấp trả lời yêu cầu; ứng dụng lưu số dư và giá nhận được trên thiết bị và không giữ bản sao nào của yêu cầu. Không SDK nào trong ứng dụng tự gửi dữ liệu về máy chủ: các thư viện phụ thuộc chỉ gồm AndroidX, Kotlin, OkHttp và Bouncy Castle.
+Capital không có backend. Mọi thứ người dùng nhập đều nằm trong một thư mục trên thiết bị. Dữ liệu duy nhất từng rời khỏi thiết bị là những gì ứng dụng gửi, theo lệnh của người dùng, đến các nhà cung cấp dữ liệu bên thứ ba mà người dùng chọn trong Cài đặt: địa chỉ ví công khai, mã định danh hợp đồng token, mã tiền tệ và khóa API người dùng đã nhập cho nhà cung cấp đó (nếu có). Nhà cung cấp trả lời yêu cầu; ứng dụng lưu số dư và giá nhận được trên thiết bị và không giữ bản sao nào của yêu cầu. Không SDK nào trong ứng dụng tự gửi dữ liệu về máy chủ: các thư viện phụ thuộc chỉ gồm AndroidX, Kotlin, OkHttp, Bouncy Castle và ZXing (tạo mã QR, ngoại tuyến). Màn hình ủng hộ hiển thị các địa chỉ cố định được tích hợp sẵn trong ứng dụng và không gửi đi bất cứ thứ gì.
 
 Google Play coi dữ liệu là *được thu thập* khi nó được truyền ra khỏi thiết bị, kể cả khi không có máy chủ nào của nhà phát triển tham gia và việc xử lý chỉ là tạm thời, nên phần khai báo không phải là "không thu thập gì". Đó là một loại dữ liệu duy nhất, được xử lý tạm thời và không bắt buộc.
 

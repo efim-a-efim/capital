@@ -12,7 +12,7 @@ class: doc
 
 ## How the app handles data
 
-Capital has no backend. Everything the user enters stays in a folder on the device. The only data that ever leaves the device is what the app sends, on the user's instruction, to the third-party data operators the user selects in Settings: public wallet addresses, token contract ids, currency codes and any API key the user entered for that operator. The operators answer the request; the app stores the returned balances and prices locally and keeps no copy of the request. No SDK in the app phones home: dependencies are AndroidX, Kotlin, OkHttp and Bouncy Castle only.
+Capital has no backend. Everything the user enters stays in a folder on the device. The only data that ever leaves the device is what the app sends, on the user's instruction, to the third-party data operators the user selects in Settings: public wallet addresses, token contract ids, currency codes and any API key the user entered for that operator. The operators answer the request; the app stores the returned balances and prices locally and keeps no copy of the request. No SDK in the app phones home: dependencies are AndroidX, Kotlin, OkHttp, Bouncy Castle and ZXing (QR rendering, offline) only. The tip screen shows static addresses baked into the app and sends nothing.
 
 Google Play counts data as *collected* when it is transmitted off the device, even when no developer server is involved and the processing is ephemeral, so the declaration is not "collects nothing". It is a single ephemeral, optional data type.
 

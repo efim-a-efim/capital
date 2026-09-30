@@ -90,7 +90,9 @@ jobs:
           export CAPITAL_KEYSTORE="$RUNNER_TEMP/capital.jks"
           printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$CAPITAL_KEYSTORE"
           trap 'rm -f "$CAPITAL_KEYSTORE"' EXIT
-          ./gradlew assembleRelease bundleRelease
+          ./gradlew assembleRelease
+          # The Play bundle leaves the tip screen out: Play Payments policy does not allow other payment methods inside the app.
+          ./gradlew -Pcapital.tips=false bundleRelease
           # A wrong key or password must fail the build, never publish an unsigned file.
           APK=app/build/outputs/apk/release/app-release.apk
           test -f "$APK"

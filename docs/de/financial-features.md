@@ -29,8 +29,9 @@ Capital ist ein persönlicher Spar-Tracker. Die App erfasst, was der Nutzer bere
 | Credit monitoring and reporting (Bonitätsüberwachung und -berichte) | Keine |
 | Financial advice (Finanzberatung) | Keine. Die Prognose gibt lediglich Rechenergebnisse auf Basis der eigenen Zahlen des Nutzers aus („Mit geplanten Sparbeträgen am … finanziert“); sie empfiehlt kein Produkt, keinen Vermögenswert und keine Handlung. Der Rebalancing-Rechner listet die Käufe auf, die nötig sind, um die vom Nutzer selbst festgelegten Prozentsätze zu erreichen |
 | Insurance (Versicherungen) | Keine |
+| In-App-Käufe, Spenden | Die App wickelt keine ab. Ein Trinkgeld-Bildschirm zeigt die öffentlichen Wallet-Adressen des Entwicklers (dieselben wie auf dieser Website); eine Überweisung erfolgt in der eigenen Wallet-App des Nutzers, schaltet nichts frei und ist für die App unsichtbar |
 
-Die App bietet außerdem keine In-App-Käufe und keine kostenpflichtigen Funktionen.
+Die App bietet außerdem keine In-App-Käufe und keine kostenpflichtigen Funktionen. Die Google-Play-Version wird ohne den Trinkgeld-Bildschirm erstellt.
 
 ## Falls der Prüfer anderer Meinung ist
 
