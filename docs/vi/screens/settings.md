@@ -20,4 +20,6 @@ title: Cài đặt
 
 **Lưu trữ.** Thư mục hiện tại và phiên bản của nó. **Kết nối lại / mở thư mục** chạy lại trình chọn thư mục; **Tải lại tệp cục bộ** đọc lại thư mục, ví dụ sau khi công cụ đồng bộ đã chuyển về các thay đổi; **Xuất bản sao lưu** ghi ra một tệp di động duy nhất (không mã hóa khi mã hóa đang tắt, và được ghi rõ như vậy); **Khôi phục bản sao lưu** kiểm tra tính hợp lệ của tệp trước khi thay thế các bản ghi và giữ lại các bản lưu hiện có.
 
-**Nguồn / ghi công.** Liên kết đến trang web của từng nhà cung cấp, cùng phiên bản ứng dụng và số bản dựng ở cuối trang.
+**Nguồn / ghi công.** Liên kết đến trang web của từng nhà cung cấp.
+
+**Pháp lý.** Liên kết đến [Chính sách quyền riêng tư]({{ page.base }}/privacy), các bản khai [An toàn dữ liệu]({{ page.base }}/data-safety) và [Tính năng tài chính]({{ page.base }}/financial-features) trên trang web này, theo ngôn ngữ giao diện. Phiên bản ứng dụng và số bản dựng ở cuối trang.

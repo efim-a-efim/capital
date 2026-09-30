@@ -20,4 +20,6 @@ title: Ajustes
 
 **Almacenamiento.** La carpeta actual y su revisión. **Reconectar / abrir carpeta** vuelve a abrir el selector de carpetas; **Recargar archivos locales** vuelve a leer la carpeta, por ejemplo después de que su herramienta de sincronización haya traído cambios; **Exportar copia de seguridad** escribe un único archivo portátil (sin cifrar cuando el cifrado está desactivado, y marcado como tal); **Restaurar copia de seguridad** valida un archivo antes de reemplazar los registros y conserva las instantáneas existentes.
 
-**Fuentes / atribución.** Enlaces al sitio web de cada operador y, al final, la versión de la aplicación y el número de compilación.
+**Fuentes / atribución.** Enlaces al sitio web de cada operador.
+
+**Legal.** Enlaces a la [Política de privacidad]({{ page.base }}/privacy), a la declaración de [Seguridad de los datos]({{ page.base }}/data-safety) y a la de [Funciones financieras]({{ page.base }}/financial-features) de este sitio, en el idioma de la interfaz. La versión de la aplicación y el número de compilación están al final.

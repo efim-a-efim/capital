@@ -20,4 +20,6 @@ title: Ajustes
 
 **Armazenamento.** A pasta atual e a revisão dela. **Reconectar / abrir pasta** abre de novo o seletor de pastas; **Recarregar arquivos locais** lê a pasta de novo, por exemplo depois que sua ferramenta de sincronização trouxe alterações; **Exportar backup** grava um único arquivo portátil (sem criptografia quando a criptografia está desativada, e identificado como tal); **Restaurar backup** valida o arquivo antes de substituir os registros e mantém as versões salvas existentes.
 
-**Fontes / atribuição.** Links para o site de cada operador e, no final, a versão e o número de build do app.
+**Fontes / atribuição.** Links para o site de cada operador.
+
+**Legal.** Links para a [Política de Privacidade]({{ page.base }}/privacy), para as declarações de [Segurança dos dados]({{ page.base }}/data-safety) e de [Recursos financeiros]({{ page.base }}/financial-features) neste site, no idioma da interface. A versão e o número de build do app ficam no final.

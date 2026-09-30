@@ -44,7 +44,7 @@ The interface SHALL be available in English, Chinese, Hindi, Spanish, Arabic, Fr
 - **THEN** the interface switches at once and stays in that language after a restart.
 
 ### Requirement: Help button
-The top bar SHALL show a help button next to refresh and settings on every main screen, including the start screen. It SHALL open the documentation site page for the screen currently shown (start, overview, buckets, bucket, goals, goal, plans, settings) in the interface language: English at the site root, other languages under their code. The site SHALL document every screen with a screenshot in that language.
+The top bar SHALL show a help button next to refresh and settings on every main screen, including the start screen. It SHALL open the documentation site page for the screen currently shown (start, overview, buckets, bucket, goals, goal, plans, settings) in the interface language: English at the site root, other languages under their code. The site SHALL document every screen with a screenshot in that language. The bottom of Settings SHALL link to the Privacy Policy, Data safety and Financial features pages of the site in the interface language.
 
 #### Scenario: Help from a bucket in Russian
 - **WHEN** the interface language is Russian, a bucket is open and the user taps the help button

@@ -52,6 +52,6 @@ class I18nTest {
     @Test fun helpUrlFollowsLanguage() {
         I18n.use("en", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/screens/goals", I18n.helpUrl("goals"))
         I18n.use("ru", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/ru/screens/bucket", I18n.helpUrl("bucket"))
-        I18n.use("id", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/id/screens/start", I18n.helpUrl("start"))
+        I18n.use("id", Locale.US, emptyMap()); assertEquals("https://capital.fimych.dev/id/screens/start", I18n.helpUrl("start")); assertEquals("https://capital.fimych.dev/id/privacy", I18n.siteUrl("privacy"))
     }
 }

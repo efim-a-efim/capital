@@ -20,4 +20,6 @@ title: Einstellungen
 
 **Speicher.** Der aktuelle Ordner und seine Revision. **Ordner neu verbinden / öffnen** startet die Ordnerauswahl erneut; **Lokale Dateien neu laden** liest den Ordner neu ein, zum Beispiel nachdem Ihr Sync-Tool Änderungen geliefert hat; **Backup exportieren** schreibt eine einzelne portable Datei (unverschlüsselt, wenn die Verschlüsselung aus ist, und entsprechend gekennzeichnet); **Backup wiederherstellen** prüft eine Datei, bevor die Daten ersetzt werden, und behält die vorhandenen Snapshots.
 
-**Quellen / Nachweise.** Links zur Website jedes Betreibers sowie ganz unten die App-Version und die Build-Nummer.
+**Quellen / Nachweise.** Links zur Website jedes Betreibers.
+
+**Rechtliches.** Links zur [Datenschutzerklärung]({{ page.base }}/privacy), zu den Erklärungen „[Datensicherheit]({{ page.base }}/data-safety)“ und „[Finanzfunktionen]({{ page.base }}/financial-features)“ auf dieser Website, in der Sprache der Oberfläche. Die App-Version und die Build-Nummer stehen ganz unten.

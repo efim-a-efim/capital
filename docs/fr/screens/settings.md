@@ -20,4 +20,6 @@ title: Paramètres
 
 **Stockage.** Le dossier actuel et sa révision. **Reconnecter / ouvrir un dossier** relance le sélecteur de dossiers ; **Recharger les fichiers locaux** relit le dossier, par exemple après que votre outil de synchronisation a apporté des modifications ; **Exporter une sauvegarde** écrit un seul fichier portable (en clair lorsque le chiffrement est désactivé, et signalé comme tel) ; **Restaurer une sauvegarde** valide un fichier avant de remplacer les données et conserve les instantanés existants.
 
-**Sources / crédits.** Des liens vers le site de chaque opérateur, ainsi que la version de l’application et le numéro de build en bas de page.
+**Sources / crédits.** Des liens vers le site de chaque opérateur.
+
+**Mentions légales.** Des liens vers la [Politique de confidentialité]({{ page.base }}/privacy), vers les déclarations « [Sécurité des données]({{ page.base }}/data-safety) » et « [Fonctionnalités financières]({{ page.base }}/financial-features) » de ce site, dans la langue de l’interface. La version de l’application et le numéro de build figurent en bas de page.

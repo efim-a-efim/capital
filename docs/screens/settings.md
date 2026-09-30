@@ -20,4 +20,6 @@ title: Settings
 
 **Storage.** The current folder and its revision. **Reconnect / open folder** re-runs the folder picker; **Reload local files** re-reads the folder, for example after your sync tool delivered changes; **Export backup** writes one portable file (plaintext when encryption is off, marked as such); **Restore backup** validates a file before replacing the records and keeps the existing snapshots.
 
-**Sources / attribution.** Links to the site of every operator, and the app version and build number at the bottom.
+**Sources / attribution.** Links to the site of every operator.
+
+**Legal.** Links to the [Privacy Policy]({{ page.base }}/privacy), the [Data safety]({{ page.base }}/data-safety) and the [Financial features]({{ page.base }}/financial-features) declarations on this site, in the interface language. The app version and build number are at the bottom.

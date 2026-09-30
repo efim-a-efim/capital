@@ -20,4 +20,6 @@ title: Pengaturan
 
 **Penyimpanan.** Folder saat ini dan revisinya. **Hubungkan kembali / buka folder** menjalankan ulang pemilih folder; **Muat ulang file lokal** membaca ulang folder, misalnya setelah alat sinkronisasi Anda mengirimkan perubahan; **Ekspor cadangan** menulis satu file portabel (tanpa enkripsi jika enkripsi nonaktif, dan ditandai demikian); **Pulihkan cadangan** memvalidasi file sebelum mengganti data dan tetap menyimpan snapshot yang ada.
 
-**Sumber / atribusi.** Tautan ke situs setiap operator, serta versi aplikasi dan nomor build di bagian bawah.
+**Sumber / atribusi.** Tautan ke situs setiap operator.
+
+**Legal.** Tautan ke [Kebijakan Privasi]({{ page.base }}/privacy), deklarasi [Keamanan data]({{ page.base }}/data-safety), dan [Fitur keuangan]({{ page.base }}/financial-features) di situs ini, dalam bahasa antarmuka. Versi aplikasi dan nomor build ada di bagian bawah.
