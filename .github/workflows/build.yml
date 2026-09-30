@@ -90,21 +90,26 @@ jobs:
           export CAPITAL_KEYSTORE="$RUNNER_TEMP/capital.jks"
           printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$CAPITAL_KEYSTORE"
           trap 'rm -f "$CAPITAL_KEYSTORE"' EXIT
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease bundleRelease
           # A wrong key or password must fail the build, never publish an unsigned file.
           APK=app/build/outputs/apk/release/app-release.apk
           test -f "$APK"
           "$ANDROID_HOME/build-tools/37.0.0/apksigner" verify --print-certs "$APK" | grep "SHA-256"
+          # The bundle is signed by Gradle with the same key; jarsigner confirms the signature is present.
+          AAB=app/build/outputs/bundle/release/app-release.aab
+          test -f "$AAB"
+          jarsigner -verify "$AAB" | grep -q "jar verified"
 
       - name: Collect APKs
         run: |
           mkdir -p dist
           if [ "${{ steps.signing.outputs.signed }}" = "true" ]; then
             cp app/build/outputs/apk/release/app-release.apk "dist/capital-${{ steps.version.outputs.label }}.apk"
+            cp app/build/outputs/bundle/release/app-release.aab "dist/capital-${{ steps.version.outputs.label }}.aab"
           else
             cp app/build/outputs/apk/debug/app-debug.apk "dist/capital-${{ steps.version.outputs.label }}-debug.apk"
           fi
-          (cd dist && sha256sum *.apk > SHA256SUMS.txt && cat SHA256SUMS.txt)
+          (cd dist && sha256sum capital-* > SHA256SUMS.txt && cat SHA256SUMS.txt)
 
       - uses: actions/upload-artifact@v4
         with:
@@ -160,7 +165,7 @@ jobs:
             echo '```'
             echo
             if [ "${{ needs.build.outputs.signed }}" = "true" ]; then
-              echo "The APK is signed with the permanent release key and installs over earlier signed versions. Coming from a debug build, uninstall first; your data folder is kept."
+              echo "The APK is signed with the permanent release key and installs over earlier signed versions. Coming from a debug build, uninstall first; your data folder is kept. The AAB is the same build for upload to Google Play."
             else
               echo "The debug APK is signed with a temporary key and cannot be installed over another build. Uninstall first; your data folder is kept."
             fi

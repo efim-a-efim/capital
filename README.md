@@ -30,7 +30,7 @@ Toolchain: Gradle 9.8.0, Android Gradle Plugin 9.4.1, Kotlin/Compose compiler 2.
 - It writes the version into `app/build.gradle.kts`, increases `versionCode`, commits to the branch, creates the tag and starts the build for it. The build then publishes the release.
 - The branch must accept pushes from GitHub Actions. A protected branch that blocks them makes the workflow fail without creating a tag.
 
-When all four signing secrets below are set and not empty, the workflow publishes only the APK signed with that key, `capital-vX.Y.Z.apk`, and versions install over each other. When any of them is missing, it publishes a debug APK instead, `capital-vX.Y.Z-debug.apk`. A debug APK is signed with a temporary key, so it cannot be installed over another build.
+When all four signing secrets below are set and not empty, the workflow publishes only the APK signed with that key, `capital-vX.Y.Z.apk`, plus the app bundle `capital-vX.Y.Z.aab` for Google Play, and versions install over each other. When any of them is missing, it publishes a debug APK instead, `capital-vX.Y.Z-debug.apk`. A debug APK is signed with a temporary key, so it cannot be installed over another build.
 
 | Secret | Content |
 |---|---|

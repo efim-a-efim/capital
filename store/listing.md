@@ -9,7 +9,7 @@ Copy-paste kit for Play Console. Assets in this folder; policy answers on the si
 | Category | Finance |
 | Tags | Personal finance, Budgeting, Savings |
 | Free / paid | Free, no in-app purchases, no ads |
-| Contact email | efim.a.efim@gmail.com |
+| Contact email | apps@fimych.dev |
 | Website | https://capital.fimych.dev/ |
 | Privacy policy URL | https://capital.fimych.dev/privacy |
 | App icon | `icon-512.png` (512×512, 32-bit PNG) |

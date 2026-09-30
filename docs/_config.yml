@@ -5,7 +5,7 @@ baseurl: ""
 repo: https://github.com/efim-a-efim/capital
 # Google Play link. Empty until the app is published; the layout hides the badge while it is empty.
 play_url: ""
-contact: efim.a.efim@gmail.com
+contact: apps@fimych.dev
 developer: Alex Efimov
 markdown: kramdown
 exclude: [README.md]
