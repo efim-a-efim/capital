@@ -15,6 +15,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Tip screen with the developer's wallet addresses. `-Pcapital.tips=false` leaves it out, for the Google Play bundle.
         buildConfigField("boolean", "TIPS", (findProperty("capital.tips") ?: "true").toString())
+        // docs/_data/tips.yml is the single source of the addresses; the site reads the same file. CAPITAL_TIP_<NETWORK> in the environment overrides.
+        val tips = Regex("""\{ network: (.+?), address: "(.*?)" \}""").findAll(rootProject.file("docs/_data/tips.yml").readText()).map { it.groupValues[1] to it.groupValues[2] }.toList()
+        val networks = listOf("BTC", "ETH / ERC-20", "TRX / TRC-20", "TON / GRAM")
+        check(tips.map { it.first } == networks) { "docs/_data/tips.yml must list exactly: $networks" }
+        tips.forEach { (network, address) ->
+            val key = network.substringBefore(' ')
+            buildConfigField("String", "TIP_$key", "\"${System.getenv("CAPITAL_TIP_$key") ?: address}\"")
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     // Release signing is configured only when the CI (or you) provide a keystore through the environment.
