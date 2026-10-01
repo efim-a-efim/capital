@@ -31,7 +31,7 @@ O Capital é um app pessoal para acompanhar economias. Ele registra o que o usu�
 | Insurance (seguros) | Nenhum |
 | In-app purchases, donations (compras no app, doações) | Nenhuma processada pelo app. Uma tela de gorjetas mostra os endereços públicos de carteira do desenvolvedor (os mesmos deste site); a transferência acontece no app de carteira do próprio usuário, não desbloqueia nada e é invisível para o app |
 
-O app também não oferece compras no app nem recursos pagos. A versão do Google Play é gerada sem a tela de gorjetas.
+O app também não oferece compras no app nem recursos pagos.
 
 ## Se o revisor discordar
 

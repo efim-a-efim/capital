@@ -31,7 +31,7 @@ Capital adalah pencatat tabungan pribadi. Aplikasi ini mencatat apa yang sudah d
 | Insurance (Asuransi) | Tidak ada |
 | In-app purchases, donations (Pembelian dalam aplikasi, donasi) | Tidak ada yang diproses oleh aplikasi. Layar tip menampilkan alamat dompet publik developer (sama dengan yang ada di situs ini); transfer dilakukan di aplikasi dompet milik pengguna sendiri, tidak membuka fitur apa pun, dan tidak terlihat oleh aplikasi |
 
-Aplikasi juga tidak menyediakan pembelian dalam aplikasi maupun fitur berbayar. Build Google Play dibuat tanpa layar tip.
+Aplikasi juga tidak menyediakan pembelian dalam aplikasi maupun fitur berbayar.
 
 ## Jika peninjau tidak setuju
 

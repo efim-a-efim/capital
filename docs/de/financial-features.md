@@ -31,7 +31,7 @@ Capital ist ein persönlicher Spar-Tracker. Die App erfasst, was der Nutzer bere
 | Insurance (Versicherungen) | Keine |
 | In-App-Käufe, Spenden | Die App wickelt keine ab. Ein Trinkgeld-Bildschirm zeigt die öffentlichen Wallet-Adressen des Entwicklers (dieselben wie auf dieser Website); eine Überweisung erfolgt in der eigenen Wallet-App des Nutzers, schaltet nichts frei und ist für die App unsichtbar |
 
-Die App bietet außerdem keine In-App-Käufe und keine kostenpflichtigen Funktionen. Die Google-Play-Version wird ohne den Trinkgeld-Bildschirm erstellt.
+Die App bietet außerdem keine In-App-Käufe und keine kostenpflichtigen Funktionen.
 
 ## Falls der Prüfer anderer Meinung ist
 

@@ -31,7 +31,7 @@ Capital is a personal savings tracker. It records what the user already owns and
 | Insurance | None |
 | In-app purchases, donations | None processed by the app. A tip screen shows the developer's public wallet addresses (the same ones as on this site); a transfer happens in the user's own wallet app, unlocks nothing and is invisible to the app |
 
-The app also provides no in-app purchases and no paid features. The Google Play build is made without the tip screen.
+The app also provides no in-app purchases and no paid features.
 
 ## If the reviewer disagrees
 

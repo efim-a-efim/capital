@@ -51,7 +51,7 @@ The top bar SHALL show a help button next to refresh and settings on every main 
 - **THEN** the browser opens `https://capital.fimych.dev/ru/screens/bucket`.
 
 ### Requirement: Tip screen
-The Overview top bar SHALL show a tip button (heart with a dollar sign) next to the help button when at least one developer wallet address is configured. The tip screen SHALL explain that a tip changes nothing in the app and only supports the developer, and SHALL list the configured wallets (BTC, ETH/ERC-20, TRX/TRC-20, TON/GRAM), each with a copy button and a QR button. Addresses SHALL come from one file in the repository (`docs/_data/tips.yml`), read by the site and compiled into the app; an empty address hides its network. QR codes SHALL carry the plain address and remain readable by generic readers. The Google Play bundle SHALL be built without the tip screen.
+The Overview top bar SHALL show a tip button (heart with a dollar sign) next to the help button when at least one developer wallet address is configured. The tip screen SHALL explain that a tip changes nothing in the app and only supports the developer, and SHALL list the configured wallets (BTC, ETH/ERC-20, TRX/TRC-20, TON/GRAM), each with a copy button and a QR button. Addresses SHALL come from one file in the repository (`docs/_data/tips.yml`), read by the site and compiled into the app; an empty address hides its network. QR codes SHALL carry the plain address and remain readable by generic readers.
 
 #### Scenario: Empty address
 - **WHEN** the TON address constant is empty

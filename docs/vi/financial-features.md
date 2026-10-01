@@ -31,7 +31,7 @@ Capital là ứng dụng theo dõi tiết kiệm cá nhân. Ứng dụng ghi l�
 | Insurance (Bảo hiểm) | Không có |
 | In-app purchases, donations (Mua hàng trong ứng dụng, quyên góp) | Ứng dụng không xử lý bất kỳ khoản nào. Một màn hình ủng hộ hiển thị các địa chỉ ví công khai của nhà phát triển (giống với các địa chỉ trên trang web này); việc chuyển tiền diễn ra trong ứng dụng ví của chính người dùng, không mở khóa gì và ứng dụng không nhìn thấy được |
 
-Ứng dụng cũng không có giao dịch mua trong ứng dụng và không có tính năng trả phí. Bản dựng cho Google Play không có màn hình ủng hộ.
+Ứng dụng cũng không có giao dịch mua trong ứng dụng và không có tính năng trả phí.
 
 ## Nếu người đánh giá không đồng ý
 

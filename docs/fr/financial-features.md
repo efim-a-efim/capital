@@ -31,7 +31,7 @@ Capital est une application de suivi de l’épargne personnelle. Elle enregistr
 | Insurance (Assurance) | Aucune |
 | Achats intégrés, dons | Aucun n’est traité par l’application. Un écran de dons affiche les adresses publiques de portefeuille crypto du développeur (les mêmes que sur ce site) ; le transfert s’effectue dans l’application de portefeuille de l’utilisateur, ne débloque rien et reste invisible pour l’application |
 
-L’application ne propose par ailleurs aucun achat intégré ni aucune fonctionnalité payante. La version Google Play est compilée sans l’écran de dons.
+L’application ne propose par ailleurs aucun achat intégré ni aucune fonctionnalité payante.
 
 ## Si l’examinateur n’est pas d’accord
 

@@ -86,7 +86,7 @@ Play requires an Android App Bundle for new apps. Build it with the release key 
 ```sh
 export CAPITAL_KEYSTORE=$PWD/signing/capital-release.jks CAPITAL_KEY_ALIAS=capital
 export CAPITAL_KEYSTORE_PASSWORD=… CAPITAL_KEY_PASSWORD=…
-./scripts/gradle -Pcapital.tips=false bundleRelease   # no tip screen in the Play build (Payments policy)
+./scripts/gradle bundleRelease
 ```
 
 When Play App Signing asks for the app signing key, choose *Export and upload a key from a Java keystore* and upload the key from `signing/capital-release.jks`, so the Play build and the GitHub APK share one certificate and install over each other.
