@@ -13,4 +13,4 @@
 ## 3. Verification and release
 
 - [x] 3.1 Unit tests, instrumentation test, emulator check of the editor and Credentials for the new brokers.
-- [ ] 3.2 Release through the release workflow (minor).
+- [x] 3.2 Released as v2.10.0.
