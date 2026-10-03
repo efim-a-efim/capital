@@ -14,7 +14,7 @@ class: doc
 
 - O Capital não tem contas de usuário, análises de uso, publicidade, relatórios de falhas nem servidores operados pelo desenvolvedor. O desenvolvedor nunca recebe seus dados.
 - Seus registros financeiros ficam armazenados apenas no seu dispositivo, em uma pasta escolhida por você. Você pode criptografá-los com uma senha.
-- O único tráfego de rede são as solicitações que o app faz, por sua instrução, aos operadores de dados de preços e de blockchain que você seleciona em Ajustes. Essas solicitações contêm os endereços públicos de carteiras, os contratos de tokens e os códigos de moeda que você acompanha, além de qualquer chave de API que você tenha informado para aquele operador.
+- O único tráfego de rede são as solicitações que o app faz, por sua instrução, aos operadores de dados de preços e de blockchain que você seleciona em Ajustes e às corretoras cujas contas você conecta. Essas solicitações contêm os endereços públicos de carteiras, os contratos de tokens e os códigos de moeda que você acompanha, qualquer chave de API que você tenha informado para aquele operador e, no caso de uma conta de corretora, o token de acesso que você criou e o ID da conta ou da consulta.
 
 ## O que o app armazena no seu dispositivo
 
@@ -25,7 +25,7 @@ class: doc
 | Item | Finalidade |
 |---|---|
 | Permissão de acesso à pasta selecionada | Reabrir a pasta na próxima inicialização |
-| Chaves de API de provedores que você informou | Enviadas apenas ao operador que as emitiu; criptografadas com uma chave mantida no Android Keystore; excluídas das versões salvas, das exportações e dos backups do sistema |
+| Chaves de API de provedores e tokens de acesso de corretoras que você informou | Enviados apenas ao operador ou à corretora que os emitiu; criptografadas com uma chave mantida no Android Keystore; excluídas das versões salvas, das exportações e dos backups do sistema |
 | Ajustes de bloqueio | Desbloquear a pasta criptografada sem a senha: uma cópia da chave dos dados, criptografada com uma chave derivada do seu PIN e vinculada ao Android Keystore. O PIN em si não é armazenado |
 | Idioma e tema escolhidos | Preferências da interface |
 
@@ -41,6 +41,7 @@ O Capital se comunica apenas com os operadores que você escolhe em Ajustes, ape
 | Endereços de contratos de tokens e IDs de ativos | O operador de preços de cripto que você selecionou | Precificar os ativos |
 | Códigos de moeda | O operador de câmbio que você selecionou | Converter entre moedas |
 | A chave de API que você informou para um operador | Somente esse operador | Autenticar a sua própria conta com ele |
+| O token de acesso ou a chave de API e o ID da conta ou da consulta de uma conta de corretora | Somente essa corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Ler o valor total da conta |
 
 Todo operador também vê seu endereço IP, como em qualquer solicitação pela internet. Os operadores são independentes do desenvolvedor e processam a solicitação conforme seus próprios termos e políticas de privacidade, com links em Ajustes → Fontes / atribuição no app:
 
@@ -52,6 +53,7 @@ Todo operador também vê seu endereço IP, como em qualquer solicitação pela 
 | TRON e tokens TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Preços de cripto | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Câmbio de moedas fiduciárias | [Frankfurter](https://frankfurter.dev), [Banco Central Europeu](https://www.ecb.europa.eu) |
+| Contas de corretora | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Nada é enviado para nenhum outro lugar. Nenhum dado é vendido, compartilhado para fins de publicidade ou usado para criar perfis. Consultas a blockchains públicas revelam que o endereço que você acompanha interessa a alguém no seu endereço IP; use uma VPN se isso for importante para você.
 
@@ -59,6 +61,7 @@ Nada é enviado para nenhum outro lugar. Nenhum dado é vendido, compartilhado p
 
 - Nunca pede, armazena ou transmite chaves privadas ou frases-semente. Não consegue assinar nem enviar transações.
 - Nunca transfere dinheiro. As alocações para metas são cálculos exibidos para você e nada mais.
+- Nunca envia uma ordem nem uma instrução a uma corretora. O acesso à corretora serve apenas para ler o valor da conta; veja [Contas de corretora e de forex]({{ page.base }}/accounts).
 - Nunca se comunica com o desenvolvedor. Não há telemetria, verificação de atualizações dentro do app nem notificações push.
 
 ## Permissões

@@ -37,7 +37,31 @@ fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
     val observedAt: Long? = null, val fetchedAt: Long? = null, val source: String = "Manual",
     val error: String? = null, val tokens: List<Token> = emptyList(), val tokensError: String? = null,
     val excluded: List<String> = emptyList(),
+    /** Broker of an account holding; `address` then holds the account or query id and `asset` the account's base currency. */
+    val broker: String? = null,
 )
+val brokerChoices = listOf("Interactive Brokers", "OANDA", "Trading 212", "SnapTrade")
+/** Credentials entered in Settings per broker; the first is the token or key, the rest its companions. Names are Secrets keys. */
+val brokerCredentials = linkedMapOf(
+    "Interactive Brokers" to listOf("Interactive Brokers"), "OANDA" to listOf("OANDA"),
+    "Trading 212" to listOf("Trading 212", "Trading 212 secret"), "SnapTrade" to listOf("SnapTrade", "SnapTrade consumer key"),
+)
+private val accountIdForms = mapOf(
+    "Interactive Brokers" to Regex("[0-9]{1,20}"), "OANDA" to Regex("[0-9]{3}-[0-9]{3}-[0-9]{1,12}-[0-9]{3}"), "Trading 212" to Regex("[0-9]{1,20}"),
+    "SnapTrade" to Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"),
+)
+/** Trimmed id in the broker's own form: Flex Query id, OANDA account id, Trading 212 account number, SnapTrade account id. */
+fun accountId(broker: String?, raw: String): String {
+    val form = accountIdForms[broker] ?: throw IllegalArgumentException(tr("Choose a supported broker"))
+    return raw.trim().let { if (broker == "SnapTrade") it.lowercase() else it }.also {
+        require(form.matches(it)) { when (broker) {
+            "OANDA" -> tr("Enter the OANDA account id, for example 001-001-1234567-001")
+            "Trading 212" -> tr("Enter the numeric Trading 212 account number")
+            "SnapTrade" -> tr("Choose a SnapTrade account or enter its id")
+            else -> tr("Enter the numeric Flex Query id")
+        } }
+    }
+}
 @Serializable data class Token(
     val contract: String, val symbol: String = "", val name: String = "", val units: String,
     val decimals: Int? = null, val checkedAt: Long? = null,
@@ -98,8 +122,11 @@ val providerChoices = linkedMapOf(
         holdings.forEach { h ->
             require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { tr("Invalid holding") }
             h.quantity?.decimal()
-            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.asset != Chain.BTC.name)) { tr("Tokens need an ETH, TON or TRX wallet") }
-            if (h.address != null) {
+            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.broker == null && h.asset != Chain.BTC.name)) { tr("Tokens need an ETH, TON or TRX wallet") }
+            if (h.broker != null) {
+                require(h.address != null && accountId(h.broker, h.address) == h.address && ':' !in h.asset && h.asset !in Chain.entries.map { it.name }) { tr("Invalid account holding") }
+                require(owners.add("${h.broker}:${h.address}")) { tr("Account already belongs to a bucket") }
+            } else if (h.address != null) {
                 val chain = Chain.valueOf(h.asset)
                 require(h.tokens.size <= 100 && h.tokens.map { it.contract }.distinct().size == h.tokens.size) { tr("Invalid tokens") }
                 fun canonical(c: String) = runCatching { canonicalAddress(chain, c) == c }.getOrDefault(false)

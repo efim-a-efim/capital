@@ -70,7 +70,7 @@ class CoreTest {
         val resolved=Revision(id="resolved",parents=listOf("left","right"),data=left.data)
         assertEquals(listOf(resolved),scanRevisions(files+encodeRevision(resolved)).heads)
         assertTrue(scanRevisions(listOf(encodeRevision(left))).missingParents)
-        val future=root.copy(schema=5)
+        val future=root.copy(schema=SCHEMA+1)
         assertThrows(FutureSchema::class.java) { decodeRevision(encodeRevision(future)) }
         rejects { decodeRevision(encodeRevision(root).replace("900","901")) }
         rejects { scanRevisions(listOf(encodeRevision(root.copy(parents=listOf("left"))),encodeRevision(left))) }
@@ -274,7 +274,39 @@ class CoreTest {
             assertTrue(prio(r.data,"b")>prio(r.data,"a")); assertTrue(prio(r.data,"a")>prio(r.data,"late"))
         }
         val text=encodeRevision(Revision(data=p)); assertEquals(9,prio(decodeRevision(text).data,"late"))
-        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(5,p)) }
+        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(6,p)) }
+    }
+    @Test fun accountHoldingsValidateAndAreUnique() {
+        val p=portfolio()
+        val ib=Holding("ib","b","Broker","USD",null,"123456",broker="Interactive Brokers")
+        val oanda=Holding("oa","b","Forex","EUR","1200.5","001-001-1234567-001",broker="OANDA")
+        p.copy(holdings=listOf(ib,oanda)).validate()
+        assertTrue(p.copy(holdings=listOf(ib)).incomplete("USD"))
+        eq("1200.5",p.copy(holdings=listOf(oanda),quotes=listOf(Quote("EUR","1","t",1,1))).bucketValueOrNull("b","EUR")!!)
+        assertTrue(p.copy(holdings=listOf(oanda)).stale())
+        rejects { p.copy(holdings=listOf(ib,ib.copy(id="ib2",bucketId="b"))).validate() }
+        rejects { p.copy(holdings=listOf(ib.copy(address="12 34"))).validate() }
+        rejects { p.copy(holdings=listOf(oanda.copy(address="123456"))).validate() }
+        rejects { p.copy(holdings=listOf(ib.copy(asset="BTC"))).validate() }
+        rejects { p.copy(holdings=listOf(ib.copy(broker="Robinhood"))).validate() }
+        rejects { p.copy(holdings=listOf(ib.copy(tokens=listOf(Token("0x"+"1".repeat(40),"","","1",6))))).validate() }
+        assertEquals("001-001-1234567-001",accountId("OANDA"," 001-001-1234567-001 "))
+        rejects { accountId("OANDA","0010011234567001") }
+        rejects { accountId(null,"1") }
+        assertEquals("8b5f262d-4bb9-365d-888a-202bd3b15fa1",accountId("SnapTrade","8B5F262D-4BB9-365D-888A-202BD3B15FA1"))
+        assertEquals("42",accountId("Trading 212","42")); rejects { accountId("Trading 212","4-2") }
+        assertEquals(listOf("Interactive Brokers","OANDA","Trading 212","SnapTrade"),brokerChoices); assertEquals(brokerChoices,brokerCredentials.keys.toList())
+        rejects { p.copy(holdings=listOf(Holding("s","b","S","USD",null,"live",broker="Saxo"))).validate() }
+    }
+    @Test fun schemaFourOpensWithoutBrokers() {
+        val p=portfolio().copy(holdings=listOf(Holding("w","b","W","ETH","0","0x"+"2".repeat(40))))
+        val obj=json.parseToJsonElement(json.encodeToString(Revision(data=p))).jsonObject
+        val data=obj.getValue("data").jsonObject
+        val old=JsonObject(obj+mapOf("schema" to JsonPrimitive(4),"data" to JsonObject(data+("holdings" to JsonArray(data.getValue("holdings").jsonArray.map { JsonObject(it.jsonObject-"broker") })))))
+        val payload=old.toString()
+        val r=decodeRevision(json.encodeToString(Envelope(payload,checksum(payload))))
+        assertEquals(4,r.schema); assertNull(r.data.holdings.single().broker)
+        assertEquals(5,SCHEMA)
     }
     @Test fun schemaThreeOpensWithPortfolioDefaults() {
         val p=portfolio().let { it.copy(buckets=listOf(Bucket("b","Savings","USD",true,mapOf("USD" to "100"),true))) }

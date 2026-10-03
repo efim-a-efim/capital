@@ -21,7 +21,7 @@ Capital 是一款个人储蓄追踪应用。它记录用户已经拥有的资产
 | 表单中的功能 | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later（个人贷款直接放贷方、贷款中介、发薪日贷款、信用额度、工资预支、小额信贷、先买后付） | 不提供任何形式的借贷 |
-| Banking（银行业务） | 没有账户、存款或账户访问。银行余额由用户手动输入 |
+| Banking（银行业务） | 没有账户、存款或账户访问。银行余额由用户手动输入。券商和外汇账户的价值通过券商自己的报表接口、使用用户创建的令牌读取；应用无法下单、转账或提现 |
 | Mobile payments and digital wallets, money transfer and wire services（移动支付和数字钱包、转账和汇款服务） | 无法发送、接收或持有资金。目标分配只是显示在屏幕上的计算结果，不会转移任何资金 |
 | Cryptocurrency wallet（加密货币钱包） | 读取用户粘贴的公开地址的余额。它从不持有私钥或助记词，也无法签署或广播交易，因此不是钱包 |
 | Cryptocurrency exchange（加密货币交易所） | 不提供交易、订单路由或法币入金 |
@@ -37,9 +37,9 @@ Capital 是一款个人储蓄追踪应用。它记录用户已经拥有的资产
 
 如果 Play 审核仍将应用归类为提供金融功能，最接近的选项是 **Other（其他）**，并附上以下说明：
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 >
-> （只读的个人储蓄追踪应用。用户手动输入余额或粘贴公开的区块链地址；应用从第三方数据源获取余额和市场价格，并展示储蓄如何覆盖用户自己的目标。不托管资产，不持有密钥，不进行交易，不提供借贷、买卖或理财建议。）
+> （只读的个人储蓄追踪应用。用户手动输入余额、粘贴公开的区块链地址，或使用报表令牌连接券商账户；应用从第三方数据源获取余额、账户价值和市场价格，并展示储蓄如何覆盖用户自己的目标。不托管资产，不持有密钥，不进行交易，不提供借贷、买卖或理财建议。）
 
 由于没有选择上述任何功能，针对个人贷款应用的特定国家/地区要求以及美国的加密货币相关问题均不适用。
 
@@ -47,4 +47,5 @@ Capital 是一款个人储蓄追踪应用。它记录用户已经拥有的资产
 
 - 市场数据来自用户选择的第三方运营方（见[隐私政策]({{ page.base }}/privacy)）。应用会在“设置”中显示运营方的名称和网站。
 - 钱包查询使用公开的只读区块链 API。
+- 券商账户（Interactive Brokers、OANDA、Trading 212、SnapTrade）通过用户在券商自己的门户中创建的令牌或密钥读取；应用只调用报表接口，无法下单或转移资金。设置方法见[券商和外汇账户]({{ page.base }}/accounts)。
 - 应用完全在设备上运行，没有开发者运营的服务器。

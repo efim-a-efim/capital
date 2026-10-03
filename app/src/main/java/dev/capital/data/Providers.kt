@@ -40,8 +40,8 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
     val merged=current.copy(
         holdings=current.holdings.map { h ->
             val old=requested.holdings.find { it.id == h.id }; val result=results[h.id]
-            if(old != null && result != null && old.address == h.address && old.asset == h.asset && current.settings.providers[h.asset] == requested.settings.providers[h.asset]) {
-                val native=h.copy(quantity=result.quantity,observedAt=result.observedAt,fetchedAt=result.fetchedAt,source=result.source,error=result.error)
+            if(old != null && result != null && old.address == h.address && old.broker == h.broker && old.asset == h.asset && current.settings.providers[h.asset] == requested.settings.providers[h.asset]) {
+                val native=h.copy(asset=if(h.broker != null) result.asset else h.asset,quantity=result.quantity,observedAt=result.observedAt,fetchedAt=result.fetchedAt,source=result.source,error=result.error)
                 val src="${h.asset} tokens"
                 if(current.settings.providers[src] == requested.settings.providers[src]) native.copy(tokens=result.tokens,tokensError=result.tokensError) else native
             } else h
@@ -293,9 +293,110 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         val stamp=LocalDate.parse(requireNotNull(date)).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
         return quoteEach(assets,onError) { asset -> Quote(asset,usd.divideMoney(rates[asset] ?: throw ProviderFailure(tr("ECB does not cover {0}",asset))).text(),provider,stamp,now) }
     }
+    private fun xml(text: String): org.w3c.dom.Document {
+        require(!text.contains("<!DOCTYPE",ignoreCase=true) && !text.contains("<!ENTITY",ignoreCase=true)) { tr("XML must not declare entities") }
+        return try { DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(text.byteInputStream()) } catch(e: org.xml.sax.SAXException) { throw ProviderFailure(tr("Invalid provider response")) }
+    }
+    private fun org.w3c.dom.Element.child(name: String): String? = getElementsByTagName(name).item(0)?.textContent?.trim()
+    private fun flexError(code: String?,message: String?): String = when(code) {
+        "1012" -> tr("Token has expired; generate a new one in Client Portal")
+        "1015" -> tr("Token is invalid")
+        "1013" -> tr("Token is restricted to another IP address")
+        "1014" -> tr("Flex Query id is invalid")
+        "1011" -> tr("Flex Web Service is inactive; enable it in Client Portal")
+        "1016" -> tr("Account is invalid")
+        "1003","1021" -> tr("Statement is not available; retry later")
+        else -> tr("Interactive Brokers error {0}",(code ?: "?")+(message?.let { " "+it.clean() } ?: ""))
+    }
+    private fun brokerToken(broker: String,name: String=broker)=key(name).also { if(it.isBlank()) throw KeyArgument(tr("{0} needs your access token in Settings → Broker accounts",broker)) }
+    /** SnapTrade signed request: HMAC-SHA256 of the canonical payload with the consumer key. GET when body is null. */
+    private suspend fun snap(path: String,post: Boolean=false): String {
+        val client=brokerToken("SnapTrade"); val secret=brokerToken("SnapTrade","SnapTrade consumer key")
+        if(!client.matches(Regex("[A-Za-z0-9_-]{1,100}"))) throw KeyArgument(tr("Invalid SnapTrade client id"))
+        val query="clientId=$client&timestamp=${System.currentTimeMillis()/1000}"
+        // The only POST sends an empty body, which SnapTrade signs as null content.
+        val canonical="""{"content":null,"path":"/api/v1$path","query":"$query"}"""
+        val mac=javax.crypto.Mac.getInstance("HmacSHA256").apply { init(javax.crypto.spec.SecretKeySpec(secret.toByteArray(),"HmacSHA256")) }
+        val signature=java.util.Base64.getEncoder().encodeToString(mac.doFinal(canonical.toByteArray()))
+        return request("https://api.snaptrade.com/api/v1$path?$query",if(post) "{}" else null,mapOf("Signature" to signature))
+    }
+    /** Connection Portal URL for the user's own SnapTrade account; valid 5 minutes. */
+    suspend fun snapTradeLogin(): String = json.parseToJsonElement(snap("/snapTrade/login",post=true)).jsonObject.string("redirectURI").also { require(it.startsWith("https://")) { tr("Invalid provider response") } }
+    /** Accounts the broker lists: id to label. SnapTrade only. */
+    suspend fun accounts(broker: String): List<Pair<String,String>> {
+        require(broker=="SnapTrade") { tr("Choose a supported broker") }
+        return json.parseToJsonElement(snap("/accounts")).jsonArray.map { it.jsonObject }.mapNotNull { a ->
+            val id=a.opt("id")?.lowercase() ?: return@mapNotNull null
+            id to listOfNotNull(a.opt("institution_name"),a.opt("name"),a.opt("number")).map { it.clean() }.filter { it.isNotBlank() }.distinct().joinToString(" · ").ifBlank { id }
+        }
+    }
+    /** Interactive Brokers Flex Web Service: NAV total, base currency and report date of the one statement the query returns. */
+    private suspend fun flex(query: String): Triple<String,String,Long> {
+        val token=brokerToken("Interactive Brokers"); if(!token.matches(Regex("[A-Za-z0-9]{1,200}"))) throw KeyArgument(tr("Invalid Interactive Brokers token"))
+        val base="https://ndcdyn.interactivebrokers.com/AccountManagement/FlexWebService"; val ua=mapOf("User-Agent" to "Java")
+        val sent=xml(request("$base/SendRequest?t=$token&q=$query&v=3",headers=ua)).documentElement
+        if(sent.tagName!="FlexStatementResponse") throw ProviderFailure(tr("Invalid provider response"))
+        if(sent.child("Status")!="Success") throw ProviderFailure(flexError(sent.child("ErrorCode"),sent.child("ErrorMessage")))
+        val reference=sent.child("ReferenceCode")?.takeIf { it.matches(Regex("[0-9]{1,30}")) } ?: throw ProviderFailure(tr("Missing {0} in provider response","ReferenceCode"))
+        // ponytail: 6 polls, 5 s apart (10 s when throttled); a query with many sections can take longer and then fails as "not ready".
+        repeat(6) { attempt ->
+            val doc=xml(request("$base/GetStatement?t=$token&q=$reference&v=3",headers=ua)); val root=doc.documentElement
+            if(root.tagName=="FlexQueryResponse") {
+                val statements=doc.getElementsByTagName("FlexStatement")
+                if(statements.length!=1) throw ProviderFailure(tr("The query returned {0} accounts; make one Flex Query per account",statements.length))
+                val rows=doc.getElementsByTagName("EquitySummaryByReportDateInBase")
+                val latest=(0 until rows.length).map { rows.item(it) as org.w3c.dom.Element }.filter { it.hasAttribute("total") }.maxByOrNull { it.getAttribute("reportDate").filter { c -> c.isDigit() } }
+                    ?: throw ProviderFailure(tr("Add the section Net Asset Value (NAV) Summary in Base with Report Date and Total to the Flex Query"))
+                val info=doc.getElementsByTagName("AccountInformation").item(0) as? org.w3c.dom.Element
+                val currency=latest.getAttribute("currency").ifBlank { info?.getAttribute("currency").orEmpty() }.ifBlank { throw ProviderFailure(tr("Add the Currency field of Account Information to the Flex Query")) }
+                val date=latest.getAttribute("reportDate").filter { it.isDigit() }.takeIf { it.length==8 }?.let { LocalDate.parse(it,DateTimeFormatter.BASIC_ISO_DATE) } ?: throw ProviderFailure(tr("Invalid quote time"))
+                return Triple(currency,latest.getAttribute("total"),date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())
+            }
+            if(root.tagName!="FlexStatementResponse") throw ProviderFailure(tr("Invalid provider response"))
+            val code=root.child("ErrorCode")
+            if(code !in setOf("1009","1019","1018","1004")) throw ProviderFailure(flexError(code,root.child("ErrorMessage")))
+            if(attempt==5) throw ProviderFailure(tr("Statement is not ready yet; refresh again in a minute"))
+            delay(if(code=="1018") 10_000 else 5_000)
+        }
+        throw ProviderFailure(tr("Provider unavailable"))
+    }
+    /** Total account value in the account's base currency, read-only. */
+    suspend fun account(h: Holding): Holding {
+        val broker=requireNotNull(h.broker); val id=accountId(broker,requireNotNull(h.address)); val now=System.currentTimeMillis()
+        val (currency,total,observed)=when(broker) {
+            "OANDA" -> {
+                val a=obj("https://api-fxtrade.oanda.com/v3/accounts/$id/summary",headers=mapOf("Authorization" to "Bearer ${brokerToken(broker)}")).sub("account") ?: throw ProviderFailure(tr("Missing {0} in provider response","account"))
+                require(a.string("id")==id) { tr("Account mismatch") }
+                Triple(a.string("currency"),a.string("NAV"),now)
+            }
+            "Trading 212" -> {
+                val basic=java.util.Base64.getEncoder().encodeToString("${brokerToken(broker)}:${brokerToken(broker,"Trading 212 secret")}".toByteArray())
+                val a=obj("https://live.trading212.com/api/v0/equity/account/summary",headers=mapOf("Authorization" to "Basic $basic"))
+                require(a.string("id")==id) { tr("Account mismatch") }
+                Triple(a.string("currency"),a.string("totalValue"),now)
+            }
+            "SnapTrade" -> {
+                val a=json.parseToJsonElement(snap("/accounts/$id")).jsonObject
+                require(a.string("id").lowercase()==id) { tr("Account mismatch") }
+                val t=a.sub("balance")?.sub("total") ?: throw ProviderFailure(tr("SnapTrade has no total value for this account yet; sync the connection and retry"))
+                Triple(t.string("currency"),t.string("amount"),now)
+            }
+            else -> flex(id)
+        }
+        require(currency.matches(Regex("[A-Z]{3}")) && validAsset(currency)) { tr("Unsupported account currency {0}",currency.clean()) }
+        val value=total.trim().toBigDecimalOrNull() ?: throw ProviderFailure(tr("Invalid account value"))
+        if(value.signum()<0) throw ProviderFailure(tr("Negative account value {0} is not supported",value.toPlainString()))
+        return h.copy(asset=currency,quantity=value.setScale(18,java.math.RoundingMode.DOWN).text().also { it.decimal() },observedAt=observed,fetchedAt=now,source=broker,error=null)
+    }
     suspend fun refresh(data: Portfolio,bucketId: String?): Observations {
         val updated=mutableListOf<Holding>(); val quotes=mutableListOf<Quote>(); val errors=mutableListOf<String>()
         for(h in data.holdings.filter { it.address != null && (bucketId==null || it.bucketId==bucketId) }) {
+            if(h.broker != null) {
+                updated += try { account(h) }
+                catch(e: CancellationException) { throw e }
+                catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",h.label,message); h.copy(error=message) }
+                continue
+            }
             var r=try { balance(h,data.settings.providers.getValue(h.asset)) }
             catch(e: CancellationException) { throw e }
             catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",h.label,message); h.copy(error=message) }
@@ -307,7 +408,8 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} tokens: {1}",h.label,message); r.copy(tokens=h.tokens,tokensError=message) }
             updated += r
         }
-        val assets=(data.holdings.filter { bucketId==null || it.bucketId==bucketId }.map { it.asset }+data.buckets.map { it.currency }+data.goals.map { it.currency }+data.settings.currency).toSet()-"USD"
+        // Account holdings may come back in another currency than stored; its rate is fetched in the same refresh.
+        val assets=(data.holdings.filter { bucketId==null || it.bucketId==bucketId }.map { it.asset }+updated.map { it.asset }+data.buckets.map { it.currency }+data.goals.map { it.currency }+data.settings.currency).toSet()-"USD"
         val native=Chain.entries.map { it.name }.toSet()
         fun failedQuote(asset: String,e: Exception) {
             val message=e.safeMessage(); errors += tr("{0}: {1}",asset,message)

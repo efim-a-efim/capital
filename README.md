@@ -51,7 +51,7 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 
 1. Choose a dedicated local folder, e.g. `Documents/CapitalTracker`. Existing Capital folders reopen directly.
 2. Settings → set default currency and optional provider keys.
-3. Add a bucket, then manual holdings or public wallet addresses.
+3. Add a bucket, then manual holdings, public wallet addresses or broker accounts (Interactive Brokers, OANDA, Trading 212, SnapTrade; credentials in Settings → Broker accounts, steps on the site page `accounts`).
 4. Add goals and connect their funding buckets. Goals with earlier dates fund first; drag goals that share a date to set their order.
 5. Add planned savings on the Plans tab to see when each goal closes.
 6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
@@ -98,12 +98,18 @@ Native mainnet address balances: confirmed BTC, latest ETH, TON/GRAM, confirmed 
 | TRX tokens | TronGrid | Off | Optional TronGrid key |
 | Crypto prices | DefiLlama | CoinGecko Demo, CoinPaprika | None; CoinGecko needs a free key |
 | Fiat | Frankfurter | ECB | None; currency coverage differs |
+| Interactive Brokers account | Flex Web Service | — | Flex Web Service token |
+| OANDA account | v20 REST (fxTrade) | — | Personal access token |
+| Trading 212 account | Public API | — | API key and secret |
+| SnapTrade account | SnapTrade Personal (aggregator) | — | Client id and consumer key |
+
+**Broker accounts.** A holding of type Account reads the account's net asset value in its base currency: Interactive Brokers through the Flex Web Service (an Activity Flex Query with Account Information and the NAV Summary in Base, XML, last business day; two-step report retrieval, bounded polling while the report generates), OANDA through the v20 account summary, Trading 212 through its account summary (Basic auth with key and secret), and SnapTrade Personal through signed requests (account detail, account list for the editor's picker, Connection Portal link). Only brokers with long-lived credentials are included; Saxo (20-minute OAuth tokens) is not. Credentials are stored like provider keys. Only the total is read; no positions, no orders.
 
 Sources are independently selectable. No automatic switch to another operator. Settings links each provider's site and includes attribution. “Test sources / refresh” tests only assets/addresses currently present in the portfolio. Public queries disclose those addresses and your IP to the selected operator. API keys are encrypted with Android Keystore and excluded from snapshots, exports and OS backup. Never enter a private key or seed phrase.
 
 ## Storage, sync and recovery
 
-Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Older schemas open unchanged and upgrade on the next save; the current schema is 4. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
+Financial records live only in the selected folder. App-private storage holds the folder grant and encrypted provider keys. Snapshots use decimal strings, UUID revisions, parent IDs and SHA-256 checksums. Older schemas open unchanged and upgrade on the next save; the current schema is 5. Saves create a new file, close it, reopen it and verify it; existing snapshots are never truncated.
 
 Use your preferred sync tool to sync the folder. Capital does not run its own sync service. Android folder access differs across sync tools; verify both apps can access your selected directory. Concurrent revisions produce a conflict screen; choose a version after reviewing it. Both originals remain. Incomplete sync blocks editing until missing parents arrive. Device clocks do not choose a winner.
 

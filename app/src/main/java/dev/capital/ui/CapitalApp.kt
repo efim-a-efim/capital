@@ -75,12 +75,18 @@ private data class Editor(val kind: String,val id: String="",val owner: String="
 // Stored values and state keys are translated only when shown.
 private fun shown(v: String)=when(v) {
     "Overview" -> tr("Overview"); "Buckets" -> tr("Buckets"); "Goals" -> tr("Goals"); "Plans" -> tr("Plans"); "Settings" -> tr("Settings"); "Tips" -> tr("Tip the developer")
-    "System" -> tr("System"); "Light" -> tr("Light"); "Dark" -> tr("Dark"); "Off" -> tr("Off"); "Manual" -> tr("Manual"); "Wallet" -> tr("Wallet")
+    "System" -> tr("System"); "Light" -> tr("Light"); "Dark" -> tr("Dark"); "Off" -> tr("Off"); "Manual" -> tr("Manual"); "Wallet" -> tr("Wallet"); "Account" -> tr("Broker account")
     "Not refreshed" -> tr("Not refreshed"); "Unknown" -> tr("Unknown"); "Choose treatment" -> tr("Choose treatment")
     "Convert existing values" -> tr("Convert existing values"); "Replace with entered numbers" -> tr("Replace with entered numbers")
     "ETH tokens" -> tr("ETH tokens"); "TON tokens" -> tr("TON tokens"); "TRX tokens" -> tr("TRX tokens"); "Crypto" -> tr("Crypto"); "Fiat" -> tr("Fiat")
     "Powered by CoinGecko" -> tr("Powered by CoinGecko"); "Powered by CoinPaprika" -> tr("Powered by CoinPaprika")
     else -> v
+}
+// Secrets names shown as buttons and dialog titles.
+private fun credentialLabel(name: String)=when(name) {
+    "Trading 212" -> tr("API key: Trading 212"); "Trading 212 secret" -> tr("API secret: Trading 212")
+    "SnapTrade" -> tr("Client id: SnapTrade"); "SnapTrade consumer key" -> tr("Consumer key: SnapTrade")
+    else -> tr("Access token: {0}",name)
 }
 private fun editorTitle(kind: String,new: Boolean)=when(kind) {
     "Settings" -> tr("Currency and appearance")
@@ -305,7 +311,7 @@ private val rtlType=Typography().run {
                             Text(tr("Track balances, connect goals, and see what is already covered. No account required."))
                             Heading(tr("Start with your folder"))
                             Text(tr("Choose a dedicated local folder such as Documents/CapitalTracker. Reopen that folder on another device using your own sync tool."))
-                            Notice(tr("Public wallet providers receive your addresses, token contract addresses and IP. Never enter private keys or seed phrases. Files in the chosen folder contain your financial records."))
+                            Notice(tr("Public wallet providers receive your addresses, token contract addresses and IP. Brokers receive your access token and account id. Never enter private keys or seed phrases. Files in the chosen folder contain your financial records."))
                             Button(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text(tr("Choose or reopen folder")) }
                             Note(tr("Default currency starts as EUR. Change it and configure optional free provider keys in Settings."))
                         } else if(state.ready) {
@@ -382,11 +388,12 @@ private val rtlType=Typography().run {
                                         Heading(tr("Holdings"))
                                         Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text(tr("Add holding")) }
                                         data.holdings.filter { it.bucketId==bucket.id }.forEach { h ->
-                                            val wallet=h.address!=null; val cur=bucket.currency
+                                            val account=h.broker!=null; val wallet=h.address!=null && !account; val cur=bucket.currency
                                             val (known,unknown)=h.tokens.filter { it.contract !in h.excluded }.partition { data.known(h,it) }
                                             val native=h.quantity?.let { data.convert(it.decimal(),h.asset,cur) }
                                             val total=(listOfNotNull(native)+known.mapNotNull { data.convert(it.quantity()!!,tokenAsset(h.asset,it.contract),cur) }).takeIf { it.isNotEmpty() }?.fold(ZERO,BigDecimal::add)
-                                            if(wallet) Item(h.label,tr("Read-only · {0}…",h.address.orEmpty().take(12)),if(h.quantity==null) tr("Balance unknown") else money(total,cur),null)
+                                            if(account) Item(h.label,tr("Read-only · {0} · {1}",h.broker.orEmpty(),h.address.orEmpty())+"\n"+(h.quantity?.let { money(it.decimal(),h.asset) } ?: tr("Balance unknown")),if(h.quantity==null) tr("Balance unknown") else money(native,cur),null)
+                                            else if(wallet) Item(h.label,tr("Read-only · {0}…",h.address.orEmpty().take(12)),if(h.quantity==null) tr("Balance unknown") else money(total,cur),null)
                                             else Item(h.label,tr("Manual")+"\n"+(h.quantity?.let { money(it.decimal(),h.asset) } ?: tr("Balance unknown")),money(native,cur),null)
                                             Note(tr("{0} · observed {1} · fetched {2}",shown(h.source),time(h.observedAt),time(h.fetchedAt)))
                                             h.error?.let { Notice(it) }
@@ -406,7 +413,7 @@ private val rtlType=Typography().run {
                                         }
                                         Heading(tr("Connected goals"))
                                         data.connections.filter { it.bucketId==bucket.id }.forEach { c -> val g=data.goals.first { it.id==c.goalId }; Item(g.name,limitLabel(c.mode),money(data.convert(allocation.byConnection[c.key] ?: ZERO,"USD",g.currency),g.currency)) { section="Goals"; goalId=g.id } }
-                                        Note(tr("Automatic tracking covers native balances and tokens on ETH, TON and TRX addresses. Tokens count only when the price provider lists their contract. Add staking or other investments as manual holdings."))
+                                        Note(tr("Automatic tracking covers native balances and tokens on ETH, TON and TRX addresses, and the total value of connected broker accounts. Tokens count only when the price provider lists their contract. Add staking or other investments as manual holdings."))
                                     }
                                 }
                                 "Goals" -> {
@@ -462,6 +469,10 @@ private val rtlType=Typography().run {
                                     }
                                     OutlinedButton(onClick={ model.refresh() },enabled=editable && !state.refreshing) { Text(tr("Test sources / refresh portfolio")) }
                                     Note(tr("Tests query only assets and addresses in your portfolio. No silent provider fallback. Token sources and price providers also receive wallet or token contract addresses; choose Off to stop token lookups for a chain."))
+                                    Heading(tr("Broker accounts"))
+                                    brokerCredentials.values.flatten().forEach { name -> TextButton(onClick={ keyProvider=name }) { Text(credentialLabel(name)) } }
+                                    TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(I18n.siteUrl("accounts")))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(tr("Setup guide for broker accounts")) }
+                                    Note(tr("Tokens are stored encrypted on this device and sent only to the broker that issued them. Capital reads account values and never places orders."))
                                     Heading(tr("Quotes and freshness"))
                                     if(data.quotes.isEmpty()) Note(tr("No cached quotes. Add holdings and refresh."))
                                     data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note(tr("{0} token prices by contract address are shown with their wallets.",it)) }
@@ -478,7 +489,7 @@ private val rtlType=Typography().run {
                                     }
                                     Note(tr("Your sync tool manages this folder. Snapshots are retained for recovery; API keys never leave device storage. Refresh happens only on cold startup or request."))
                                     Heading(tr("Sources / attribution"))
-                                    listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(shown(name)) } }
+                                    listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu", "Interactive Brokers" to "https://www.interactivebrokers.com", "OANDA" to "https://www.oanda.com", "Trading 212" to "https://www.trading212.com", "SnapTrade" to "https://snaptrade.com").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(shown(name)) } }
                                     Heading(tr("Legal"))
                                     listOf(tr("Privacy Policy") to "privacy", tr("Data safety") to "data-safety", tr("Financial features") to "financial-features").forEach { (name,path) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(I18n.siteUrl(path)))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(name) } }
                                     // Read from the installed package, so it always matches the build that is running.
@@ -493,7 +504,8 @@ private val rtlType=Typography().run {
                 }
             }
         }
-        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens) }
+        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens,onFetchAccounts=model::fetchAccounts,
+            onConnectSnapTrade={ model.connectSnapTrade { url -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } } }) }
         calculator?.let { id -> data.buckets.find { it.id==id }?.let { RebalanceDialog(it,data) { calculator=null } } }
         confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text(tr("Confirm change")) },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text(tr("Confirm")) } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text(tr("Cancel")) } }) }
         keyProvider?.let { provider -> KeyDialog(provider,onDismiss={ keyProvider=null },onSave={ if(model.saveKey(provider,it)) keyProvider=null }) }
@@ -521,7 +533,7 @@ private val rtlType=Typography().run {
 private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up to remaining need"); Limit.FIXED -> tr("Fixed amount in goal currency"); Limit.BUCKET_PERCENT -> tr("% of bucket"); Limit.GOAL_PERCENT -> tr("% of goal") }
 @Composable private fun KeyDialog(provider: String,onDismiss: ()->Unit,onSave: (String)->Unit) {
     var value by remember { mutableStateOf("") }
-    AlertDialog(onDismissRequest=onDismiss,title={ Text(tr("{0} key",provider)) },text={ Column { Text(tr("Stored encrypted on this device. Leave blank to remove an existing key.")); OutlinedTextField(value,onValueChange={ value=it },label={ Text(tr("API key")) },visualTransformation=androidx.compose.ui.text.input.PasswordVisualTransformation(),singleLine=true) } },confirmButton={ TextButton(onClick={ onSave(value) }) { Text(tr("Save")) } },dismissButton={ TextButton(onClick=onDismiss) { Text(tr("Cancel")) } })
+    AlertDialog(onDismissRequest=onDismiss,title={ Text(if(provider in brokerCredentials.values.flatten()) credentialLabel(provider) else tr("{0} key",provider)) },text={ Column { Text(tr("Stored encrypted on this device. Leave blank to remove an existing key.")); OutlinedTextField(value,onValueChange={ value=it },label={ Text(tr("API key")) },visualTransformation=androidx.compose.ui.text.input.PasswordVisualTransformation(),singleLine=true) } },confirmButton={ TextButton(onClick={ onSave(value) }) { Text(tr("Save")) } },dismissButton={ TextButton(onClick=onDismiss) { Text(tr("Cancel")) } })
 }
 
 // Read-only calculator: never calls model.edit.
@@ -553,7 +565,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit) {
+@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit,onFetchAccounts: (String,(List<Pair<String,String>>?,String?)->Unit)->Unit,onConnectSnapTrade: ()->Unit) {
     val b=data.buckets.find { it.id==editor.id }
     val h=data.holdings.find { it.id==editor.id }
     val g=data.goals.find { it.id==editor.id }
@@ -567,7 +579,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         "quantity" to (h?.quantity ?: "0"), "target" to (g?.target ?: ""),
         "due" to (g?.due ?: LocalDate.now().plusYears(1).toString()),
         "bucket" to (h?.bucketId ?: c?.bucketId ?: editor.owner.takeIf { editor.kind=="Holding" } ?: data.buckets.firstOrNull()?.id.orEmpty()),
-        "address" to (h?.address ?: ""), "type" to (if(h?.address!=null) "Wallet" else "Manual"),
+        "address" to (h?.address ?: ""), "type" to (if(h?.broker!=null) "Account" else if(h?.address!=null) "Wallet" else "Manual"), "broker" to (h?.broker ?: brokerChoices.first()),
         "mode" to (c?.mode?.name ?: Limit.AUTO.name), "value" to (c?.value ?: "0"), "cap" to (c?.goalCap ?: ""),
         "theme" to data.settings.theme, "currencyAction" to "Choose treatment",
     ) }
@@ -583,6 +595,8 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     var fetching by remember { mutableStateOf(false) }
     var tokenMessage by remember { mutableStateOf<String?>(null) }
     var fetched by remember { mutableStateOf(false) }
+    var accounts by remember { mutableStateOf<List<Pair<String,String>>?>(null) }
+    var accountMessage by remember { mutableStateOf<String?>(null) }
     // Tokens belong to one chain + address: a change drops them (not on first composition).
     // ponytail: changing the address and changing it back also drops stored exclusions; re-fetch restores the list.
     val tokenKey=fields["currency"].orEmpty().trim().uppercase() to fields["address"].orEmpty().trim()
@@ -606,21 +620,26 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                 p.copy(buckets=if(b==null) p.buckets+item else p.buckets.map { if(it.id==b.id) item else it })
             }
             "Holding" -> {
-                val wallet=fields.getValue("type")=="Wallet"
-                val address=if(wallet) canonicalAddress(Chain.entries.find { it.name==currency } ?: error(tr("Choose BTC, ETH, TON or TRX for a wallet")),fields.getValue("address")) else null
-                p.holdings.firstOrNull { it.id!=h?.id && it.address!=null && it.asset==currency && canonicalAddress(Chain.valueOf(currency),it.address)==address }?.let { duplicate -> error(tr("Wallet already belongs to {0}. Edit or move it there.",p.buckets.first { it.id==duplicate.bucketId }.name)) }
+                val type=fields.getValue("type"); val wallet=type=="Wallet"; val account=type=="Account"; val remote=wallet || account
+                val broker=if(account) fields.getValue("broker") else null
+                val address=when { wallet -> canonicalAddress(Chain.entries.find { it.name==currency } ?: error(tr("Choose BTC, ETH, TON or TRX for a wallet")),fields.getValue("address")); account -> accountId(broker,fields.getValue("address")); else -> null }
+                if(wallet) p.holdings.firstOrNull { it.id!=h?.id && it.address!=null && it.broker==null && it.asset==currency && canonicalAddress(Chain.valueOf(currency),it.address)==address }?.let { duplicate -> error(tr("Wallet already belongs to {0}. Edit or move it there.",p.buckets.first { it.id==duplicate.bucketId }.name)) }
+                if(account) p.holdings.firstOrNull { it.id!=h?.id && it.broker==broker && it.address==address }?.let { duplicate -> error(tr("Account already belongs to {0}. Edit or move it there.",p.buckets.first { it.id==duplicate.bucketId }.name)) }
                 val current=p.holdings.find { it.id==h?.id }
                 require(h==null || current!=null) { tr("This holding was removed; reopen the editor") }
-                val unchanged=wallet && current?.address!=null && current.asset==currency && canonicalAddress(Chain.valueOf(currency),current.address)==address
+                val unchanged=(wallet && current?.address!=null && current.broker==null && current.asset==currency && canonicalAddress(Chain.valueOf(currency),current.address)==address) || (account && current!=null && current.broker==broker && current.address==address)
+                // An account's currency comes from the broker on refresh; until then any fiat code is a placeholder.
+                val asset=if(!account) currency else if(unchanged) current!!.asset else currency.takeIf { ':' !in it && it !in Chain.entries.map { c -> c.name } } ?: "USD"
                 val item=Holding(
-                    id=h?.id ?: newId,bucketId=fields.getValue("bucket"),label=name,asset=currency,address=address,
-                    quantity=if(wallet) if(unchanged) current?.quantity else null else if(convert) converted(requireNotNull(h?.quantity)) else number("quantity"),
-                    observedAt=if(unchanged) current?.observedAt else if(!wallet) System.currentTimeMillis() else null,
-                    fetchedAt=if(unchanged) current?.fetchedAt else null,source=if(unchanged) current?.source ?: "Unknown" else if(wallet) "Not refreshed" else "Manual",
+                    id=h?.id ?: newId,bucketId=fields.getValue("bucket"),label=name,asset=asset,address=address,
+                    quantity=if(remote) if(unchanged) current?.quantity else null else if(convert) converted(requireNotNull(h?.quantity)) else number("quantity"),
+                    observedAt=if(unchanged) current?.observedAt else if(!remote) System.currentTimeMillis() else null,
+                    fetchedAt=if(unchanged) current?.fetchedAt else null,source=if(unchanged) current?.source ?: "Unknown" else if(remote) "Not refreshed" else "Manual",
                     error=if(unchanged) current?.error else null,
                     tokens=if(!wallet || currency==Chain.BTC.name) emptyList() else if(fetched) tokens else if(unchanged) current?.tokens.orEmpty() else emptyList(),
                     tokensError=if(wallet && !fetched && unchanged) current?.tokensError else null,
                     excluded=if(wallet && currency!=Chain.BTC.name) disabled.distinct() else emptyList(),
+                    broker=broker,
                 )
                 p.copy(holdings=if(h==null) p.holdings+item else p.holdings.map { if(it.id==h.id) item else it })
             }
@@ -691,9 +710,10 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                         Button(onClick=onDismiss) { Text(tr("Open save recovery")) }
                     }
                     if(editor.kind in listOf("Bucket","Holding","Goal","Planned")) field("name",if(editor.kind=="Goal") tr("Purpose") else tr("Name"))
-                    if(editor.kind=="Holding") Choice(tr("Tracking"),fields.getValue("type"),listOf("Manual","Wallet"),!saving,::shown) { fields["type"]=it; if(it=="Wallet" && fields.getValue("currency") !in Chain.entries.map { chain -> chain.name }) fields["currency"]="BTC" }
+                    if(editor.kind=="Holding") Choice(tr("Tracking"),fields.getValue("type"),listOf("Manual","Wallet","Account"),!saving,::shown) { fields["type"]=it; if(it=="Wallet" && fields.getValue("currency") !in Chain.entries.map { chain -> chain.name }) fields["currency"]="BTC" }
                     if(editor.kind!="Connection") {
                         if(editor.kind=="Holding" && fields.getValue("type")=="Wallet") Choice(tr("Mainnet chain"),fields.getValue("currency"),Chain.entries.map { it.name },!saving) { fields["currency"]=it }
+                        else if(editor.kind=="Holding" && fields.getValue("type")=="Account") Choice(tr("Broker"),fields.getValue("broker"),brokerChoices,!saving) { if(it!=fields["broker"]) { fields["broker"]=it; fields["address"]=""; accounts=null; accountMessage=null } }
                         else { field("currency",tr("Currency code (EUR, USD, BTC…)")); Note(tr("Use an ISO currency code or a supported native asset. Conversion needs a quote from your selected provider.")) }
                     }
                     if(editor.kind in listOf("Holding","Connection")) {
@@ -739,7 +759,28 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                                 }
                             }
                         }
-                        "Holding" -> if(fields.getValue("type")=="Wallet") { field("address",tr("Public wallet address")); Note(tr("Paste one address. No seed phrase, private key or HD wallet discovery.")); TokenEditor() } else field("quantity",tr("Current quantity · no grouping separators"),true)
+                        "Holding" -> when(fields.getValue("type")) {
+                            "Wallet" -> { field("address",tr("Public wallet address")); Note(tr("Paste one address. No seed phrase, private key or HD wallet discovery.")); TokenEditor() }
+                            "Account" -> {
+                                when(val broker=fields.getValue("broker")) {
+                                    "SnapTrade" -> {
+                                        Actions {
+                                            OutlinedButton(onClick={ accountMessage=null; onFetchAccounts(broker) { list,message -> if(list!=null) { accounts=list; if(list.isEmpty()) accountMessage=tr("No accounts connected yet. Connect a brokerage through SnapTrade first.") } else accountMessage=message } },enabled=!saving,modifier=Modifier.heightIn(min=48.dp).testTag("fetch-accounts")) { Text(tr("Fetch accounts")) }
+                                            OutlinedButton(onClick=onConnectSnapTrade,enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Connect a brokerage through SnapTrade")) }
+                                        }
+                                        accountMessage?.let { Notice(it) }
+                                        accounts?.takeIf { it.isNotEmpty() }?.let { list -> Pick(tr("SnapTrade account"),fields["address"],list,!saving,tr("Choose account")) { fields["address"]=it; error=null } }
+                                        field("address",tr("SnapTrade account id"))
+                                    }
+                                    "Trading 212" -> field("address",tr("Trading 212 account number"))
+                                    "OANDA" -> field("address",tr("OANDA account id"))
+                                    else -> field("address",tr("Flex Query id"))
+                                }
+                                Note(tr("The currency and value come from the broker on refresh. Enter the access token in Settings → Broker accounts."))
+                                TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(I18n.siteUrl("accounts")))) }.onFailure { error=tr("No browser available") } },modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Setup guide for broker accounts")) }
+                            }
+                            else -> field("quantity",tr("Current quantity · no grouping separators"),true)
+                        }
                         "Goal" -> {
                             field("target",tr("Target amount · no grouping separators"),true)
                             dateField("due",tr("Due date · YYYY-MM-DD"))

@@ -12,7 +12,7 @@ class: doc
 
 ## Como o app trata os dados
 
-O Capital não tem back-end. Tudo o que o usuário informa fica em uma pasta no dispositivo. Os únicos dados que saem do dispositivo são os que o app envia, por instrução do usuário, aos operadores de dados terceiros que o usuário seleciona em Ajustes: endereços públicos de carteiras, IDs de contratos de tokens, códigos de moeda e qualquer chave de API que o usuário tenha informado para aquele operador. Os operadores respondem à solicitação; o app armazena localmente os saldos e preços retornados e não guarda nenhuma cópia da solicitação. Nenhum SDK do app envia dados ao fabricante: as dependências são apenas AndroidX, Kotlin, OkHttp, Bouncy Castle e ZXing (renderização de QR code, offline). A tela de gorjetas mostra endereços estáticos incorporados ao app e não envia nada.
+O Capital não tem back-end. Tudo o que o usuário informa fica em uma pasta no dispositivo. Os únicos dados que saem do dispositivo são os que o app envia, por instrução do usuário, aos operadores de dados terceiros que o usuário seleciona em Ajustes e às corretoras cujas contas o usuário conecta: endereços públicos de carteiras, IDs de contratos de tokens, códigos de moeda, qualquer chave de API que o usuário tenha informado para aquele operador e, no caso de uma conta de corretora, o token de acesso que o usuário criou e o ID da conta ou da consulta. Os operadores respondem à solicitação; o app armazena localmente os saldos e preços retornados e não guarda nenhuma cópia da solicitação. Nenhum SDK do app envia dados ao fabricante: as dependências são apenas AndroidX, Kotlin, OkHttp, Bouncy Castle e ZXing (renderização de QR code, offline). A tela de gorjetas mostra endereços estáticos incorporados ao app e não envia nada.
 
 O Google Play considera dados como *coletados* quando são transmitidos para fora do dispositivo, mesmo que nenhum servidor do desenvolvedor esteja envolvido e o processamento seja efêmero; por isso, a declaração não é "não coleta nada". Trata-se de um único tipo de dado, efêmero e opcional.
 
@@ -34,13 +34,13 @@ Selecione exatamente um tipo.
 |---|---|---|---|---|---|---|
 | Informações financeiras (Financial info) | Outras informações financeiras (Other financial info) | Sim | Não | **Sim** | **Opcional** | Funcionalidade do app (App functionality) |
 
-O que o tipo abrange: endereços públicos de blockchain que o usuário acompanha, os contratos de tokens encontrados neles e os códigos de moeda das posições do usuário. Eles são transmitidos ao operador de dados selecionado pelo usuário para que saldos e preços possam ser obtidos, mantidos na memória durante a solicitação e descartados.
+O que o tipo abrange: endereços públicos de blockchain que o usuário acompanha, os contratos de tokens encontrados neles os códigos de moeda das posições do usuário e os IDs das contas de corretora que o usuário conectou. Eles são transmitidos ao operador de dados selecionado pelo usuário para que saldos e preços possam ser obtidos, mantidos na memória durante a solicitação e descartados.
 
 Por que **não compartilhado**: a transferência vai diretamente do dispositivo para o operador escolhido pelo usuário, em uma atualização iniciada pelo usuário, depois que o app informou em Ajustes qual operador será consultado e que a solicitação revela o endereço e o IP a esse operador. Esta é a exceção de "ação iniciada pelo usuário, em que ele espera razoavelmente que os dados sejam compartilhados". O desenvolvedor não recebe nada e não tem prestadores de serviço.
 
 Por que **opcional**: o app pode ser usado por completo apenas com posições manuais. Endereços e chaves de API são informados por escolha do usuário.
 
-As chaves de API informadas pelo usuário são enviadas apenas ao operador que as emitiu. Elas são credenciais do usuário para o próprio serviço daquele operador e não são declaradas como um tipo de dado do usuário separado; se um revisor perguntar, descreva-as como acima.
+As chaves de API e os tokens de acesso de corretoras informados pelo usuário são enviados apenas ao operador ou à corretora que os emitiu. Elas são credenciais do usuário para o próprio serviço daquele operador e não são declaradas como um tipo de dado do usuário separado; se um revisor perguntar, descreva-as como acima.
 
 ### Tipos que **não** são coletados
 

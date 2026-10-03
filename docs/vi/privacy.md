@@ -14,7 +14,7 @@ class: doc
 
 - Capital không có tài khoản người dùng, không phân tích dữ liệu, không quảng cáo, không báo cáo sự cố và không có máy chủ nào do nhà phát triển vận hành. Nhà phát triển không bao giờ nhận được dữ liệu của bạn.
 - Hồ sơ tài chính của bạn chỉ được lưu trên thiết bị, trong thư mục do bạn chọn. Bạn có thể mã hóa chúng bằng mật khẩu.
-- Lưu lượng mạng duy nhất là các yêu cầu mà ứng dụng gửi, theo lệnh của bạn, đến các nhà cung cấp dữ liệu giá và blockchain mà bạn chọn trong Cài đặt. Các yêu cầu đó chứa địa chỉ ví công khai, hợp đồng token và mã tiền tệ bạn theo dõi, cùng khóa API bạn đã nhập cho nhà cung cấp đó (nếu có).
+- Lưu lượng mạng duy nhất là các yêu cầu mà ứng dụng gửi, theo lệnh của bạn, đến các nhà cung cấp dữ liệu giá và blockchain mà bạn chọn trong Cài đặt và đến các nhà môi giới có tài khoản bạn kết nối. Các yêu cầu đó chứa địa chỉ ví công khai, hợp đồng token và mã tiền tệ bạn theo dõi, mọi khóa API bạn đã nhập cho nhà cung cấp đó, và với tài khoản môi giới là mã truy cập bạn đã tạo cùng mã tài khoản hoặc mã truy vấn.
 
 ## Ứng dụng lưu gì trên thiết bị của bạn
 
@@ -25,7 +25,7 @@ class: doc
 | Mục | Mục đích |
 |---|---|
 | Quyền truy cập thư mục đã chọn | Mở lại thư mục ở lần khởi động tiếp theo |
-| Khóa API nhà cung cấp mà bạn đã nhập | Chỉ được gửi đến nhà cung cấp đã cấp khóa đó; được mã hóa bằng khóa lưu trong Android Keystore; không nằm trong bản lưu, bản xuất và bản sao lưu của hệ điều hành |
+| Khóa API nhà cung cấp và mã truy cập nhà môi giới mà bạn đã nhập | Chỉ được gửi đến nhà cung cấp hoặc nhà môi giới đã cấp chúng; được mã hóa bằng khóa lưu trong Android Keystore; không nằm trong bản lưu, bản xuất và bản sao lưu của hệ điều hành |
 | Cài đặt khóa ứng dụng | Mở khóa thư mục đã mã hóa mà không cần mật khẩu: một bản sao của khóa dữ liệu, được mã hóa bằng khóa dẫn xuất từ PIN của bạn và gắn với Android Keystore. Bản thân PIN không được lưu |
 | Lựa chọn ngôn ngữ và giao diện | Tùy chọn giao diện |
 
@@ -41,6 +41,7 @@ Capital chỉ liên hệ với các nhà cung cấp bạn chọn trong Cài đ�
 | Địa chỉ hợp đồng token và mã định danh tài sản | Nhà cung cấp giá tiền mã hóa bạn đã chọn | Định giá tài sản |
 | Mã tiền tệ | Nhà cung cấp tỷ giá tiền pháp định bạn đã chọn | Quy đổi giữa các loại tiền tệ |
 | Khóa API bạn đã nhập cho một nhà cung cấp | Chỉ nhà cung cấp đó | Xác thực tài khoản của chính bạn với họ |
+| Mã truy cập hoặc khóa API và mã tài khoản hoặc mã truy vấn của một tài khoản môi giới | Chỉ nhà môi giới đó (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Đọc tổng giá trị của tài khoản |
 
 Như với mọi yêu cầu qua Internet, mỗi nhà cung cấp cũng thấy địa chỉ IP của bạn. Các nhà cung cấp độc lập với nhà phát triển và xử lý yêu cầu theo điều khoản và chính sách quyền riêng tư của riêng họ; các liên kết đến đó có trong ứng dụng tại Cài đặt → Nguồn / ghi công:
 
@@ -52,6 +53,7 @@ Như với mọi yêu cầu qua Internet, mỗi nhà cung cấp cũng thấy đ�
 | TRON và token TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Giá tiền mã hóa | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tỷ giá tiền pháp định | [Frankfurter](https://frankfurter.dev), [Ngân hàng Trung ương châu Âu](https://www.ecb.europa.eu) |
+| Tài khoản môi giới | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Không có gì được gửi đi nơi khác. Không có dữ liệu nào bị bán, chia sẻ cho mục đích quảng cáo hay dùng để lập hồ sơ người dùng. Các truy vấn blockchain công khai tiết lộ rằng ai đó ở địa chỉ IP của bạn quan tâm đến địa chỉ bạn đang theo dõi; hãy dùng VPN nếu điều đó quan trọng với bạn.
 
@@ -59,6 +61,7 @@ Không có gì được gửi đi nơi khác. Không có dữ liệu nào bị b
 
 - Ứng dụng không bao giờ yêu cầu, lưu trữ hay truyền đi khóa riêng tư hoặc cụm từ khôi phục. Ứng dụng không thể ký hay gửi giao dịch.
 - Ứng dụng không bao giờ chuyển tiền. Phân bổ cho mục tiêu chỉ là phép tính hiển thị cho bạn, không hơn.
+- Ứng dụng không bao giờ gửi lệnh hay chỉ thị nào đến nhà môi giới. Quyền truy cập nhà môi giới chỉ dùng để đọc giá trị tài khoản; xem [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
 - Ứng dụng không bao giờ liên hệ với nhà phát triển. Không có dữ liệu đo từ xa, không kiểm tra cập nhật trong ứng dụng, không có thông báo đẩy.
 
 ## Quyền

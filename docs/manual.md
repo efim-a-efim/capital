@@ -20,7 +20,7 @@ Nothing in the app moves money. It is a mirror of what you own and a calculator 
 
 1. **Choose a folder.** Pick a dedicated folder on the device, for example `Documents/Capital`. This is where every record is written. A folder that already holds Capital data opens directly.
 2. **Settings → Default currency.** Totals and the Overview are shown in it.
-3. Optionally set **provider keys** in Settings for operators that offer higher limits with a free key (Alchemy, TronGrid, TON Center, CoinGecko). Every chain and price source has a keyless default.
+3. Optionally set **provider keys** in Settings for operators that offer higher limits with a free key (Alchemy, TronGrid, TON Center, CoinGecko). Every chain and price source has a keyless default. Broker accounts need an **access token** from the broker; see [Broker and forex accounts]({{ page.base }}/accounts).
 
 ## Buckets
 
@@ -28,6 +28,7 @@ Buckets tab → **+**. Give the bucket a name and a currency. Open it to add hol
 
 - **Manual holding**: a name, a currency or asset code (EUR, USD, BTC, a stock ticker you value yourself…) and a quantity. Use it for bank balances, cash, anything the app cannot read.
 - **Wallet holding**: choose the chain (BTC, ETH, TON, TRX) and paste one public address. On refresh the app reads the native balance and, for ETH, TON and TRX, the fungible tokens on the address.
+- **Broker account**: choose the broker (Interactive Brokers, OANDA, Trading 212 or SnapTrade) and enter the account or query id. On refresh the app reads the account's total value in its base currency. The access token is entered once in Settings → Broker accounts. The setup steps, with links to the brokers' own documentation, are on [Broker and forex accounts]({{ page.base }}/accounts).
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket shows native quantities and their value in your default currency. If a quote is missing the total is marked incomplete; a stale cached value stays usable with a warning.
 
@@ -57,7 +58,7 @@ Money from plans is applied after today's buckets, to the goals in due-date orde
 
 ## Refresh
 
-The refresh icon at the top reloads every wallet balance and price. A bucket can be refreshed alone. The app refreshes once on a cold start; coming back from the background only reloads the local files. Refreshing needs internet; without it the previous values remain and are marked stale.
+The refresh icon at the top reloads every wallet balance, broker account value and price. A bucket can be refreshed alone. The app refreshes once on a cold start; coming back from the background only reloads the local files. Refreshing needs internet; without it the previous values remain and are marked stale.
 
 ## Security
 

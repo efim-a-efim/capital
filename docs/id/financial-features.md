@@ -21,7 +21,7 @@ Capital adalah pencatat tabungan pribadi. Aplikasi ini mencatat apa yang sudah d
 | Fitur di formulir | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later (pemberi pinjaman pribadi langsung, fasilitator pinjaman, pinjaman gajian, jalur kredit, uang muka gaji, keuangan mikro, beli sekarang bayar nanti) | Tidak ada pinjaman dalam bentuk apa pun |
-| Banking (Perbankan) | Tidak ada rekening, simpanan, atau akses rekening. Saldo bank diketik sendiri oleh pengguna |
+| Banking (Perbankan) | Tidak ada rekening, simpanan, atau akses rekening. Saldo bank diketik sendiri oleh pengguna. Nilai akun efek dan forex dibaca melalui antarmuka pelaporan milik broker dengan token yang dibuat pengguna; aplikasi tidak dapat membuat order, mentransfer, atau menarik dana |
 | Mobile payments and digital wallets, money transfer and wire services (Pembayaran seluler dan dompet digital, layanan transfer uang dan pengiriman uang) | Tidak dapat mengirim, menerima, atau menyimpan uang. Alokasi tujuan adalah perhitungan yang ditampilkan di layar; tidak ada yang dipindahkan |
 | Cryptocurrency wallet (Dompet mata uang kripto) | Membaca saldo alamat publik yang ditempel pengguna. Aplikasi tidak pernah menyimpan kunci privat atau seed phrase dan tidak dapat menandatangani atau menyiarkan transaksi, jadi aplikasi ini bukan dompet |
 | Cryptocurrency exchange (Bursa mata uang kripto) | Tidak ada perdagangan, perutean order, atau on-ramp fiat |
@@ -37,9 +37,9 @@ Aplikasi juga tidak menyediakan pembelian dalam aplikasi maupun fitur berbayar.
 
 Jika peninjau Play tetap mengklasifikasikan aplikasi sebagai penyedia fitur keuangan, opsi terdekat adalah **Other** (Lainnya) dengan deskripsi ini:
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 
-(Terjemahan: Pencatat tabungan pribadi yang hanya membaca data. Pengguna mengetik saldo atau menempel alamat blockchain publik; aplikasi mengambil saldo dan harga pasar dari sumber data pihak ketiga dan menunjukkan bagaimana tabungan menutupi tujuan pengguna sendiri. Tanpa kustodi, tanpa kunci, tanpa transaksi, tanpa pinjaman, tanpa perdagangan, tanpa saran.)
+(Terjemahan: Pencatat tabungan pribadi yang hanya membaca data. Pengguna mengetik saldo, menempel alamat blockchain publik, atau menghubungkan akun efek dengan token pelaporan; aplikasi mengambil saldo, nilai akun, dan harga pasar dari sumber data pihak ketiga dan menunjukkan bagaimana tabungan menutupi tujuan pengguna sendiri. Tanpa kustodi, tanpa kunci, tanpa transaksi, tanpa pinjaman, tanpa perdagangan, tanpa saran.)
 
 Persyaratan khusus negara untuk aplikasi pinjaman pribadi, serta pertanyaan tentang mata uang kripto untuk Amerika Serikat, tidak berlaku karena tidak ada satu pun fitur tersebut yang dipilih.
 
@@ -47,4 +47,5 @@ Persyaratan khusus negara untuk aplikasi pinjaman pribadi, serta pertanyaan tent
 
 - Data pasar berasal dari operator pihak ketiga yang dipilih pengguna (lihat [Kebijakan Privasi]({{ page.base }}/privacy)). Aplikasi menampilkan nama dan situs operator di Pengaturan.
 - Kueri dompet menggunakan API blockchain publik yang hanya membaca data.
+- Akun broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) dibaca dengan token atau kunci yang dibuat pengguna di portal milik broker; aplikasi hanya memanggil endpoint pelaporan dan tidak dapat membuat order atau memindahkan uang. Penyiapannya didokumentasikan di [Akun broker dan forex]({{ page.base }}/accounts).
 - Aplikasi berjalan sepenuhnya di perangkat dan tidak memiliki server yang dijalankan developer.

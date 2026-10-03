@@ -20,7 +20,7 @@ Rien dans l’application ne déplace d’argent. C’est un reflet de ce que vo
 
 1. **Choisissez un dossier.** Sélectionnez un dossier dédié sur l’appareil, par exemple `Documents/Capital`. C’est là que toutes les données sont écrites. Un dossier qui contient déjà des données Capital s’ouvre directement.
 2. **Paramètres → Devise par défaut.** Les totaux et la Synthèse sont affichés dans cette devise.
-3. Si vous le souhaitez, saisissez dans les Paramètres des **clés de fournisseurs** pour les opérateurs qui offrent des limites plus élevées avec une clé gratuite (Alchemy, TronGrid, TON Center, CoinGecko). Chaque blockchain et chaque source de cours dispose d’une option par défaut sans clé.
+3. Si vous le souhaitez, saisissez dans les Paramètres des **clés de fournisseurs** pour les opérateurs qui offrent des limites plus élevées avec une clé gratuite (Alchemy, TronGrid, TON Center, CoinGecko). Chaque blockchain et chaque source de cours dispose d’une option par défaut sans clé. Les comptes de courtage nécessitent un **jeton d’accès** du courtier ; voir [Comptes de courtage et de forex]({{ page.base }}/accounts).
 
 ## Poches {#buckets}
 
@@ -28,6 +28,7 @@ Onglet Poches → **+**. Donnez à la poche un nom et une devise. Ouvrez-la pour
 
 - **Position manuelle** (*Manuel*) : un nom, un code de devise ou d’actif (EUR, USD, BTC, un symbole boursier que vous valorisez vous-même…) et une quantité. Utilisez-la pour les soldes bancaires, les espèces et tout ce que l’application ne peut pas lire.
 - **Position de portefeuille crypto** (*Portefeuille crypto*) : choisissez la blockchain (BTC, ETH, TON, TRX) et collez une adresse publique. À l’actualisation, l’application lit le solde natif et, pour ETH, TON et TRX, les jetons fongibles détenus à cette adresse.
+- **Compte de courtage** : choisissez le courtier (Interactive Brokers, OANDA, Trading 212 ou SnapTrade) et saisissez l’identifiant du compte ou de la requête. À l’actualisation, l’application lit la valeur totale du compte dans sa devise de référence. Le jeton d’accès se saisit une seule fois dans Paramètres → Comptes de courtage. Les étapes de configuration, avec des liens vers la documentation des courtiers, figurent sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
 
 Les montants acceptent le point ou la virgule comme séparateur décimal, sans séparateur de milliers. Chaque poche affiche les quantités natives et leur valeur dans votre devise par défaut. S’il manque un cours, le total est signalé comme incomplet ; une valeur en cache obsolète reste utilisable, avec un avertissement.
 
@@ -57,7 +58,7 @@ L’argent des versements prévus est appliqué après les poches actuelles, aux
 
 ## Actualisation
 
-L’icône d’actualisation en haut recharge tous les soldes de portefeuilles crypto et tous les cours. Une poche peut être actualisée seule. L’application s’actualise une fois au démarrage à froid ; au retour depuis l’arrière-plan, elle recharge seulement les fichiers locaux. L’actualisation nécessite une connexion Internet ; sans connexion, les valeurs précédentes sont conservées et signalées comme obsolètes.
+L’icône d’actualisation en haut recharge tous les soldes de portefeuilles crypto, toutes les valeurs de comptes de courtage et tous les cours. Une poche peut être actualisée seule. L’application s’actualise une fois au démarrage à froid ; au retour depuis l’arrière-plan, elle recharge seulement les fichiers locaux. L’actualisation nécessite une connexion Internet ; sans connexion, les valeurs précédentes sont conservées et signalées comme obsolètes.
 
 ## Sécurité {#security}
 

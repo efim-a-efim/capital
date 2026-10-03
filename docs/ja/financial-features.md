@@ -21,7 +21,7 @@ Capitalは個人向けの貯蓄管理アプリです。ユーザーがすでに�
 | フォームの機能 | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later（個人ローンの直接貸付、ローンの仲介、ペイデイローン、与信枠、給与前払い、マイクロファイナンス、後払い決済） | いかなる貸付も行わない |
-| Banking（銀行業務） | 口座、預金、口座へのアクセスはない。銀行残高はユーザーが手入力する |
+| Banking（銀行業務） | 口座、預金、口座へのアクセスはない。銀行残高はユーザーが手入力する。証券口座とFX口座の評価額は、ユーザーが作成したトークンを使い、ブローカー自身のレポート用インターフェースを通じて読み取る。アプリは注文、送金、出金を行えない |
 | Mobile payments and digital wallets, money transfer and wire services（モバイル決済とデジタルウォレット、送金・電信送金サービス） | お金の送金、受け取り、保管はできない。目標への配分は画面に表示される計算であり、何も移動しない |
 | Cryptocurrency wallet（暗号資産ウォレット） | ユーザーが貼り付けた公開アドレスの残高を読み取る。秘密鍵やシードフレーズを保持することはなく、トランザクションに署名したりブロードキャストしたりできないため、ウォレットではない |
 | Cryptocurrency exchange（暗号資産取引所） | 取引、注文の取り次ぎ、法定通貨からの入金手段はない |
@@ -37,9 +37,9 @@ Capitalは個人向けの貯蓄管理アプリです。ユーザーがすでに�
 
 Play の審査でアプリが金融機能を提供していると分類された場合、最も近い選択肢は **Other（その他）** で、説明は次のとおりです：
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 >
-> （読み取り専用の個人向け貯蓄管理アプリ。ユーザーは残高を入力するか、公開ブロックチェーンアドレスを貼り付けます。アプリは第三者のデータソースから残高と市場価格を取得し、貯蓄がユーザー自身の目標をどれだけ賄えるかを表示します。資産の預かり、鍵、トランザクション、貸付、取引、アドバイスはいずれもありません。）
+> （読み取り専用の個人向け貯蓄管理アプリ。ユーザーは残高を入力するか、公開ブロックチェーンアドレスを貼り付けるか、レポート用トークンで証券口座を接続します。アプリは第三者のデータソースから残高、口座の評価額、市場価格を取得し、貯蓄がユーザー自身の目標をどれだけ賄えるかを表示します。資産の預かり、鍵、トランザクション、貸付、取引、アドバイスはいずれもありません。）
 
 個人ローンアプリに関する国別の要件や、米国の暗号資産に関する質問は、これらの機能をいずれも選択していないため適用されません。
 
@@ -47,4 +47,5 @@ Play の審査でアプリが金融機能を提供していると分類された
 
 - 市場データは、ユーザーが選択した第三者の事業者から取得します（[プライバシーポリシー]({{ page.base }}/privacy) を参照）。アプリは「設定」に事業者の名前とサイトを表示します。
 - ウォレットの照会には、公開の読み取り専用ブロックチェーンAPIを使用します。
+- ブローカー口座（Interactive Brokers、OANDA、Trading 212、SnapTrade）は、ユーザーがブローカー自身のポータルで作成したトークンまたはキーで読み取ります。アプリが呼び出すのはレポート用のエンドポイントのみで、注文を出したり資金を動かしたりすることはできません。セットアップは[ブローカー・FX口座]({{ page.base }}/accounts)に記載されています。
 - アプリは完全に端末上で動作し、開発者が運営するサーバーはありません。

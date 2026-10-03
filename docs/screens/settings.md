@@ -14,6 +14,8 @@ title: Settings
 
 **Free data providers.** One row per data type, each with the operator in use: BTC, ETH, TON, TRX balances; ETH, TON, TRX token lists; crypto prices; fiat rates. Tap a row to pick another operator, switch token lookups **Off** for a chain, or enter an optional API key. Keys are stored encrypted on the device and sent only to the operator that issued them. **Test sources / refresh portfolio** queries every operator with the assets you actually hold and reports what failed. No operator is ever substituted silently.
 
+**Broker accounts.** The credentials of each supported broker (Interactive Brokers, OANDA, Trading 212, SnapTrade), stored encrypted like provider keys and sent only to that broker. The app reads account values with it and never places orders. **Setup guide for broker accounts** opens [Broker and forex accounts]({{ page.base }}/accounts).
+
 **Quotes and freshness.** Every cached quote with the time it was observed and fetched. Stale quotes stay usable and are marked on the Overview.
 
 **Security.** **Encryption** encrypts every file in the folder with a password; switching it off decrypts them. With encryption on you can **Set PIN**, enable **Use biometrics**, choose **Lock after time in background** and **Change password**. There is no password recovery. Ten wrong PINs remove the PIN; the password always works. See [Security]({{ page.base }}/manual#security).

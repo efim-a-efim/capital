@@ -21,7 +21,7 @@ Capital is a personal savings tracker. It records what the user already owns and
 | Feature in the form | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later | No lending of any kind |
-| Banking | No accounts, deposits or account access. Bank balances are typed in by the user |
+| Banking | No accounts, deposits or account access. Bank balances are typed in by the user. Brokerage and forex account values are read through the broker's own reporting interface with a token the user creates; the app cannot place orders, transfer or withdraw |
 | Mobile payments and digital wallets, money transfer and wire services | Cannot send, receive or hold money. Goal allocation is a calculation shown on screen; it moves nothing |
 | Cryptocurrency wallet | Reads the balance of public addresses the user pastes. It never holds private keys or seed phrases and cannot sign or broadcast transactions, so it is not a wallet |
 | Cryptocurrency exchange | No trading, no order routing, no fiat on-ramp |
@@ -37,7 +37,7 @@ The app also provides no in-app purchases and no paid features.
 
 If Play review classifies the app as offering a financial feature anyway, the closest option is **Other** with this description:
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 
 Country-specific requirements for personal loan apps, and the United States cryptocurrency questions, do not apply because none of those features is selected.
 
@@ -45,4 +45,5 @@ Country-specific requirements for personal loan apps, and the United States cryp
 
 - Market data comes from third-party operators selected by the user (see the [Privacy Policy]({{ page.base }}/privacy)). The app shows the operator's name and site in Settings.
 - Wallet queries use public, read-only blockchain APIs.
+- Broker accounts (Interactive Brokers, OANDA, Trading 212, SnapTrade) are read with a token or key the user creates in the broker's own portal; the app calls only reporting endpoints and cannot place orders or move money. The setup is documented on [Broker and forex accounts]({{ page.base }}/accounts).
 - The app runs entirely on the device and has no developer-operated server.

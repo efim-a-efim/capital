@@ -241,4 +241,113 @@ class ProviderTest {
         val result=route { when { it.url.host=="eth.blockscout.com" -> blockscout(Triple(real,"250000000","ERC-20")); it.url.host=="coins.llama.fi" -> Triple(402,"{}",null); else -> market(it) } }.refresh(p,null)
         assertNotNull(result.quotes.first { it.asset==asset }.error); assertTrue(result.unlisted.isEmpty())
     }
+    // --- broker accounts ---
+    private val ibHolding=Holding("ib","b","Broker","USD","10","123456",broker="Interactive Brokers")
+    private val oandaHolding=Holding("oa","b","Forex","USD",null,"001-001-1234567-001",broker="OANDA")
+    private fun statement(statements: String)=ok("""<FlexQueryResponse queryName="Capital" type="AF"><FlexStatements count="1">$statements</FlexStatements></FlexQueryResponse>""")
+    private fun one(total: String="12345.67",currency: String="USD",extra: String="")=statement("""<FlexStatement accountId="U1234567" fromDate="20261001" toDate="20261002" period="LastBusinessDay" whenGenerated="20261003;091500"><AccountInformation accountId="U1234567" currency="$currency"/><EquitySummaryInBase><EquitySummaryByReportDateInBase accountId="U1234567" reportDate="20261001" total="1.00"/><EquitySummaryByReportDateInBase accountId="U1234567" reportDate="20261002" total="$total"/>$extra</EquitySummaryInBase></FlexStatement>""")
+    private fun flexError(code: String,message: String)=ok("""<FlexStatementResponse timestamp="03 October, 2026 09:15 AM EDT"><Status>Warn</Status><ErrorCode>$code</ErrorCode><ErrorMessage>$message</ErrorMessage></FlexStatementResponse>""")
+    private val sent=ok("""<FlexStatementResponse timestamp="03 October, 2026 09:15 AM EDT"><Status>Success</Status><ReferenceCode>9876543210</ReferenceCode><Url>https://ndcdyn.interactivebrokers.com/AccountManagement/FlexWebService/GetStatement</Url></FlexStatementResponse>""")
+    @Test fun flexWebServicePollsUntilTheStatementIsReady()=runBlocking {
+        val polls=AtomicInteger(); val urls=mutableListOf<String>()
+        val provider=route { req ->
+            urls += req.url.toString()
+            assertEquals("Java",req.header("User-Agent"))
+            when(req.url.encodedPath) {
+                "/AccountManagement/FlexWebService/SendRequest" -> { assertEquals("3",req.url.queryParameter("v")); assertEquals("123456",req.url.queryParameter("q")); assertEquals("k",req.url.queryParameter("t")); sent }
+                "/AccountManagement/FlexWebService/GetStatement" -> { assertEquals("9876543210",req.url.queryParameter("q")); if(polls.incrementAndGet()<2) flexError("1019","Statement generation in progress. Please try again shortly.") else one("12345.67","EUR") }
+                else -> null
+            }
+        }
+        val h=provider.account(ibHolding)
+        assertEquals("EUR",h.asset); assertEquals("12345.67",h.quantity); assertEquals("Interactive Brokers",h.source); assertNull(h.error)
+        assertEquals(java.time.LocalDate.parse("2026-10-02").atStartOfDay().toInstant(java.time.ZoneOffset.UTC).toEpochMilli(),h.observedAt)
+        assertEquals(2,polls.get()); assertTrue(urls.all { it.startsWith("https://ndcdyn.interactivebrokers.com/") })
+    }
+    @Test fun flexErrorsAreReportedWithoutTheToken()=runBlocking {
+        val expired=route { req -> if(req.url.encodedPath.endsWith("SendRequest")) flexError("1012","Token has expired.") else null }
+        try { expired.account(ibHolding); fail("Expected failure") } catch(e: ProviderFailure) { assertEquals("Token has expired; generate a new one in Client Portal",e.message) }
+        val many=route { req -> if(req.url.encodedPath.endsWith("SendRequest")) sent else statement("""<FlexStatement accountId="U1"><EquitySummaryInBase><EquitySummaryByReportDateInBase reportDate="20261002" total="1" currency="USD"/></EquitySummaryInBase></FlexStatement><FlexStatement accountId="U2"/>""") }
+        try { many.account(ibHolding); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("2 accounts")) }
+        val noNav=route { req -> if(req.url.encodedPath.endsWith("SendRequest")) sent else statement("""<FlexStatement accountId="U1"><AccountInformation currency="USD"/></FlexStatement>""") }
+        try { noNav.account(ibHolding); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("Net Asset Value")) }
+        val negative=route { req -> if(req.url.encodedPath.endsWith("SendRequest")) sent else one("-5.00") }
+        try { negative.account(ibHolding); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("Negative")) }
+        val entity=route { req -> if(req.url.encodedPath.endsWith("SendRequest")) ok("""<!DOCTYPE x [<!ENTITY e "x">]><FlexStatementResponse><Status>Success</Status></FlexStatementResponse>""") else null }
+        try { entity.account(ibHolding); fail("Expected failure") } catch(_: IllegalArgumentException) { }
+        val noKey=Providers({ "" },client { 200 to "" })
+        try { noKey.account(ibHolding); fail("Expected failure") } catch(e: KeyArgument) { assertTrue(e.message!!.contains("Interactive Brokers")) }
+    }
+    @Test fun oandaSummaryGivesNavInAccountCurrency()=runBlocking {
+        val provider=route { req ->
+            assertEquals("Bearer k",req.header("Authorization"))
+            if(req.url.toString()=="https://api-fxtrade.oanda.com/v3/accounts/001-001-1234567-001/summary") ok("""{"account":{"id":"001-001-1234567-001","currency":"CHF","balance":"43650.78835","NAV":"43651.12345","unrealizedPL":"0.3451"},"lastTransactionID":"6356"}""") else null
+        }
+        val h=provider.account(oandaHolding)
+        assertEquals("CHF",h.asset); assertEquals("43651.12345",h.quantity); assertEquals("OANDA",h.source)
+        val other=route { ok("""{"account":{"id":"001-001-7654321-001","currency":"CHF","NAV":"1"}}""") }
+        try { other.account(oandaHolding); fail("Expected failure") } catch(_: IllegalArgumentException) { }
+    }
+    @Test fun refreshUpdatesAccountsAndFollowsTheirCurrency()=runBlocking {
+        val p=Portfolio(buckets=listOf(Bucket("b","B","USD")),holdings=listOf(oandaHolding,ibHolding),settings=Settings("USD",providers=providerChoices.mapValues { it.value.first() }+("Fiat" to "Frankfurter")))
+        val fiat=mutableListOf<String>()
+        val provider=route { req -> when {
+            req.url.host=="api-fxtrade.oanda.com" -> ok("""{"account":{"id":"001-001-1234567-001","currency":"CHF","NAV":"100.5"}}""")
+            req.url.encodedPath.endsWith("SendRequest") -> flexError("1015","Token is invalid.")
+            req.url.host=="api.frankfurter.dev" -> { fiat += req.url.queryParameter("quotes").orEmpty(); ok("""[{"base":"USD","quote":"CHF","date":"2026-10-02","rate":0.8}]""") }
+            else -> null
+        } }
+        val result=provider.refresh(p,null)
+        val oa=result.holdings.first { it.id=="oa" }; val ib=result.holdings.first { it.id=="ib" }
+        assertEquals("CHF",oa.asset); assertEquals("100.5",oa.quantity); assertNull(oa.error)
+        assertEquals("10",ib.quantity); assertEquals("Token is invalid",ib.error)
+        assertEquals(listOf("CHF"),fiat)
+        val merged=mergeObservations(p,p,result.holdings,result.quotes)
+        assertEquals("CHF",merged.holdings.first { it.id=="oa" }.asset)
+        assertEquals(0,BigDecimal("135.625").compareTo(merged.bucketValueOrNull("b","USD")!!))
+        assertEquals(1,result.errors.size)
+    }
+    private fun secrets(vararg pairs: Pair<String,String>): (String)->String = { name -> mapOf(*pairs)[name] ?: "" }
+    private fun routeWith(keys: (String)->String,reply: (Request)->Triple<Int,String,String?>?): Providers = Providers(keys,OkHttpClient.Builder().addInterceptor { chain ->
+        val (status,body,location)=reply(chain.request()) ?: Triple(404,"{}",null)
+        Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(status).message("test").apply { location?.let { header("Location",it) } }.body(body.toResponseBody()).build()
+    }.build(),0)
+    @Test fun trading212SummaryUsesBasicAuthAndTotalValue()=runBlocking {
+        val h=Holding("t","b","T212","EUR",null,"12345678",broker="Trading 212")
+        val provider=routeWith(secrets("Trading 212" to "KEY","Trading 212 secret" to "SECRET")) { req ->
+            assertEquals("Basic "+java.util.Base64.getEncoder().encodeToString("KEY:SECRET".toByteArray()),req.header("Authorization"))
+            if(req.url.toString()=="https://live.trading212.com/api/v0/equity/account/summary") ok("""{"cash":{"availableToTrade":10.5,"inPies":0,"reservedForOrders":0},"currency":"GBP","id":12345678,"investments":{"currentValue":990.25},"totalValue":1000.75}""") else null
+        }
+        val r=provider.account(h)
+        assertEquals("GBP",r.asset); assertEquals("1000.75",r.quantity); assertEquals("Trading 212",r.source)
+        try { routeWith(secrets("Trading 212" to "KEY")) { null }.account(h); fail("Expected failure") } catch(e: KeyArgument) { assertTrue(e.message!!.contains("Trading 212")) }
+        try { routeWith(secrets("Trading 212" to "KEY","Trading 212 secret" to "S")) { ok("""{"currency":"GBP","id":99,"totalValue":1}""") }.account(h); fail("Expected failure") } catch(_: IllegalArgumentException) { }
+    }
+    private fun snapSignature(canonical: String,secret: String): String {
+        val mac=javax.crypto.Mac.getInstance("HmacSHA256").apply { init(javax.crypto.spec.SecretKeySpec(secret.toByteArray(),"HmacSHA256")) }
+        return java.util.Base64.getEncoder().encodeToString(mac.doFinal(canonical.toByteArray()))
+    }
+    @Test fun snapTradeRequestsAreSignedAndReadTheAccountTotal()=runBlocking {
+        val id="8b5f262d-4bb9-365d-888a-202bd3b15fa1"
+        val h=Holding("s","b","Snap","USD",null,id,broker="SnapTrade")
+        val paths=mutableListOf<String>()
+        val provider=routeWith(secrets("SnapTrade" to "CLIENT","SnapTrade consumer key" to "CONSUMER")) { req ->
+            paths += req.url.encodedPath+(if(req.method=="POST") " POST" else "")
+            val query=req.url.encodedQuery.orEmpty(); assertTrue(query.matches(Regex("clientId=CLIENT&timestamp=[0-9]{10}")))
+            assertEquals(snapSignature("""{"content":null,"path":"${req.url.encodedPath}","query":"$query"}""","CONSUMER"),req.header("Signature"))
+            when(req.url.encodedPath) {
+                "/api/v1/accounts/$id" -> ok("""{"id":"${id.uppercase()}","name":"Robinhood Individual","balance":{"total":{"amount":15363.23,"currency":"USD"}}}""")
+                "/api/v1/accounts" -> ok("""[{"id":"$id","institution_name":"Robinhood","name":"Individual","number":"Q6542138443"},{"id":"zzz","institution_name":"X","name":"","number":""}]""")
+                "/api/v1/snapTrade/login" -> ok("""{"redirectURI":"https://app.snaptrade.com/snapTrade/redeemToken?token=abc","sessionId":"cf371bb4"}""")
+                else -> null
+            }
+        }
+        val r=provider.account(h)
+        assertEquals("USD",r.asset); assertEquals("15363.23",r.quantity)
+        assertEquals(listOf(id to "Robinhood · Individual · Q6542138443","zzz" to "X"),provider.accounts("SnapTrade"))
+        assertEquals("https://app.snaptrade.com/snapTrade/redeemToken?token=abc",provider.snapTradeLogin())
+        assertTrue(paths.last().endsWith("POST"))
+        val unsynced=routeWith(secrets("SnapTrade" to "CLIENT","SnapTrade consumer key" to "CONSUMER")) { ok("""{"id":"$id","balance":{"total":null}}""") }
+        try { unsynced.account(h); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("sync")) }
+    }
 }

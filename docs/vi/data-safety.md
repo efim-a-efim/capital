@@ -12,7 +12,7 @@ class: doc
 
 ## Cách ứng dụng xử lý dữ liệu
 
-Capital không có backend. Mọi thứ người dùng nhập đều nằm trong một thư mục trên thiết bị. Dữ liệu duy nhất từng rời khỏi thiết bị là những gì ứng dụng gửi, theo lệnh của người dùng, đến các nhà cung cấp dữ liệu bên thứ ba mà người dùng chọn trong Cài đặt: địa chỉ ví công khai, mã định danh hợp đồng token, mã tiền tệ và khóa API người dùng đã nhập cho nhà cung cấp đó (nếu có). Nhà cung cấp trả lời yêu cầu; ứng dụng lưu số dư và giá nhận được trên thiết bị và không giữ bản sao nào của yêu cầu. Không SDK nào trong ứng dụng tự gửi dữ liệu về máy chủ: các thư viện phụ thuộc chỉ gồm AndroidX, Kotlin, OkHttp, Bouncy Castle và ZXing (tạo mã QR, ngoại tuyến). Màn hình ủng hộ hiển thị các địa chỉ cố định được tích hợp sẵn trong ứng dụng và không gửi đi bất cứ thứ gì.
+Capital không có backend. Mọi thứ người dùng nhập đều nằm trong một thư mục trên thiết bị. Dữ liệu duy nhất từng rời khỏi thiết bị là những gì ứng dụng gửi, theo lệnh của người dùng, đến các nhà cung cấp dữ liệu bên thứ ba mà người dùng chọn trong Cài đặt và các nhà môi giới có tài khoản người dùng kết nối: địa chỉ ví công khai, mã định danh hợp đồng token, mã tiền tệ, mọi khóa API người dùng đã nhập cho nhà cung cấp đó, và với tài khoản môi giới là mã truy cập người dùng đã tạo cùng mã tài khoản hoặc mã truy vấn. Nhà cung cấp trả lời yêu cầu; ứng dụng lưu số dư và giá nhận được trên thiết bị và không giữ bản sao nào của yêu cầu. Không SDK nào trong ứng dụng tự gửi dữ liệu về máy chủ: các thư viện phụ thuộc chỉ gồm AndroidX, Kotlin, OkHttp, Bouncy Castle và ZXing (tạo mã QR, ngoại tuyến). Màn hình ủng hộ hiển thị các địa chỉ cố định được tích hợp sẵn trong ứng dụng và không gửi đi bất cứ thứ gì.
 
 Google Play coi dữ liệu là *được thu thập* khi nó được truyền ra khỏi thiết bị, kể cả khi không có máy chủ nào của nhà phát triển tham gia và việc xử lý chỉ là tạm thời, nên phần khai báo không phải là "không thu thập gì". Đó là một loại dữ liệu duy nhất, được xử lý tạm thời và không bắt buộc.
 
@@ -34,13 +34,13 @@ Chọn đúng một loại.
 |---|---|---|---|---|---|---|
 | Financial info (Thông tin tài chính) | Other financial info (Thông tin tài chính khác) | Yes (Có) | No (Không) | **Yes** (Có) | **Optional** (Không bắt buộc) | App functionality (Chức năng của ứng dụng) |
 
-Phạm vi của loại này: các địa chỉ blockchain công khai mà người dùng theo dõi, các hợp đồng token tìm thấy trên đó và mã tiền tệ của các tài sản của người dùng. Chúng được truyền đến nhà cung cấp dữ liệu do người dùng chọn để lấy số dư và giá, được giữ trong bộ nhớ trong lúc xử lý yêu cầu, rồi bị loại bỏ.
+Phạm vi của loại này: các địa chỉ blockchain công khai mà người dùng theo dõi, các hợp đồng token tìm thấy trên đó mã tiền tệ của các tài sản của người dùng và mã của các tài khoản môi giới mà người dùng đã kết nối. Chúng được truyền đến nhà cung cấp dữ liệu do người dùng chọn để lấy số dư và giá, được giữ trong bộ nhớ trong lúc xử lý yêu cầu, rồi bị loại bỏ.
 
 Vì sao **không chia sẻ**: dữ liệu được truyền thẳng từ thiết bị đến nhà cung cấp mà người dùng đã chọn, trong lần làm mới do người dùng khởi động, sau khi ứng dụng đã cho người dùng biết trong Cài đặt nhà cung cấp nào sẽ được truy vấn và rằng yêu cầu sẽ tiết lộ địa chỉ và IP cho nhà cung cấp đó. Đây là trường hợp miễn trừ "hành động do người dùng khởi xướng, khi người dùng có thể dự đoán hợp lý rằng dữ liệu sẽ được chia sẻ". Nhà phát triển không nhận được gì và không có nhà cung cấp dịch vụ nào.
 
 Vì sao **không bắt buộc**: ứng dụng dùng được đầy đủ chỉ với tài sản nhập thủ công. Địa chỉ và khóa API là do người dùng tự chọn nhập.
 
-Khóa API người dùng nhập chỉ được gửi đến nhà cung cấp đã cấp khóa đó. Chúng là thông tin xác thực của người dùng cho chính dịch vụ của nhà cung cấp đó và không được khai báo là một loại dữ liệu người dùng riêng; nếu người đánh giá hỏi, hãy mô tả chúng như trên.
+Khóa API và mã truy cập nhà môi giới do người dùng nhập chỉ được gửi đến nhà cung cấp hoặc nhà môi giới đã cấp chúng. Chúng là thông tin xác thực của người dùng cho chính dịch vụ của nhà cung cấp đó và không được khai báo là một loại dữ liệu người dùng riêng; nếu người đánh giá hỏi, hãy mô tả chúng như trên.
 
 ### Các loại **không** thu thập
 

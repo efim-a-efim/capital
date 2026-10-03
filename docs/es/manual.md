@@ -20,7 +20,7 @@ Nada en la aplicación mueve dinero. Es un reflejo de lo que usted posee y una c
 
 1. **Elija una carpeta.** Seleccione una carpeta exclusiva en el dispositivo, por ejemplo `Documents/Capital`. Ahí se escribe cada registro. Una carpeta que ya contiene datos de Capital se abre directamente.
 2. **Ajustes → Moneda predeterminada.** Los totales y el Resumen se muestran en esa moneda.
-3. Si quiere, configure **claves de proveedores** en Ajustes para los operadores que ofrecen límites más altos con una clave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Cada red y cada fuente de precios tiene una opción predeterminada que no necesita clave.
+3. Si quiere, configure **claves de proveedores** en Ajustes para los operadores que ofrecen límites más altos con una clave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Cada red y cada fuente de precios tiene una opción predeterminada que no necesita clave. Las cuentas de bróker necesitan un **token de acceso** del bróker; consulte [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 
 ## Bolsillos {#buckets}
 
@@ -28,6 +28,7 @@ Pestaña Bolsillos → **+**. Asigne al bolsillo un nombre y una moneda. Ábralo
 
 - **Posición manual**: un nombre, un código de moneda o de activo (EUR, USD, BTC, el ticker de una acción que usted mismo valora…) y una cantidad. Úsela para saldos bancarios, efectivo y todo lo que la aplicación no puede leer.
 - **Posición de billetera**: elija la red (BTC, ETH, TON, TRX) y pegue una dirección pública. Al actualizar, la aplicación lee el saldo nativo y, en ETH, TON y TRX, los tokens fungibles de la dirección.
+- **Cuenta de bróker**: elija el bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade) e introduzca el Flex Query id o el ID de cuenta. Al actualizar, la aplicación lee el valor total de la cuenta en su moneda base. El token de acceso se introduce una sola vez en Ajustes → Cuentas de bróker. Los pasos de configuración, con enlaces a la documentación de los propios brókeres, están en [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 
 Los importes admiten punto o coma decimal, sin separadores de miles. Cada bolsillo muestra las cantidades en su moneda original y su valor en su moneda predeterminada. Si falta una cotización, el total se marca como incompleto; un valor en caché desactualizado sigue siendo utilizable, con una advertencia.
 
@@ -57,7 +58,7 @@ El dinero de los planes se aplica después de los bolsillos actuales, a las meta
 
 ## Actualizar
 
-El icono de actualizar de la parte superior vuelve a cargar todos los saldos de billeteras y precios. Un bolsillo se puede actualizar por separado. La aplicación actualiza una vez al iniciarse desde cero; al volver desde segundo plano solo recarga los archivos locales. Actualizar requiere conexión a internet; sin ella se conservan los valores anteriores, marcados como desactualizados.
+El icono de actualizar de la parte superior vuelve a cargar todos los saldos de billeteras, valores de cuentas de bróker y precios. Un bolsillo se puede actualizar por separado. La aplicación actualiza una vez al iniciarse desde cero; al volver desde segundo plano solo recarga los archivos locales. Actualizar requiere conexión a internet; sin ella se conservan los valores anteriores, marcados como desactualizados.
 
 ## Seguridad {#security}
 

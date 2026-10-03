@@ -14,7 +14,7 @@ class: doc
 
 - Capital has no user accounts, no analytics, no advertising, no crash reporting and no servers run by the developer. The developer never receives your data.
 - Your financial records are stored only on your device, in a folder you choose. You can encrypt them with a password.
-- The only network traffic is the requests the app makes, on your instruction, to the price and blockchain data operators you select in Settings. Those requests carry the public wallet addresses, token contracts and currency codes you track, and any API key you entered for that operator.
+- The only network traffic is the requests the app makes, on your instruction, to the price and blockchain data operators you select in Settings and to the brokers whose accounts you connect. Those requests carry the public wallet addresses, token contracts and currency codes you track, any API key you entered for that operator, and for a broker account the access token you created and the account or query id.
 
 ## What the app stores on your device
 
@@ -25,7 +25,7 @@ class: doc
 | Item | Purpose |
 |---|---|
 | Grant to the selected folder | Reopen the folder on the next launch |
-| Provider API keys you entered | Sent only to the operator that issued them; encrypted with a key held in Android Keystore; excluded from snapshots, exports and OS backups |
+| Provider API keys and broker access tokens you entered | Sent only to the operator or broker that issued them; encrypted with a key held in Android Keystore; excluded from snapshots, exports and OS backups |
 | Lock settings | Unlock the encrypted folder without the password: a copy of the data key, encrypted with a key derived from your PIN and bound to Android Keystore. The PIN itself is not stored |
 | Language and theme choice | Interface preferences |
 
@@ -41,6 +41,7 @@ Capital contacts only the operators you choose in Settings, only over HTTPS, and
 | Token contract addresses and asset ids | The crypto price operator you selected | Price the assets |
 | Currency codes | The fiat rate operator you selected | Convert between currencies |
 | The API key you entered for an operator | That operator only | Authenticate your own account with them |
+| The access token or API key and the account or query id of a broker account | That broker only (Interactive Brokers, OANDA, Trading 212 or SnapTrade) | Read the account's total value |
 
 Every operator also sees your IP address, as with any internet request. The operators are independent of the developer and process the request under their own terms and privacy policies, which are linked from Settings → Sources / attribution in the app:
 
@@ -52,6 +53,7 @@ Every operator also sees your IP address, as with any internet request. The oper
 | TRON and TRC-20 tokens | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Crypto prices | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Fiat rates | [Frankfurter](https://frankfurter.dev), [European Central Bank](https://www.ecb.europa.eu) |
+| Broker accounts | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Nothing is sent anywhere else. No data is sold, shared for advertising, or used to build profiles. Public blockchain queries disclose that the address you track is of interest to someone at your IP address; use a VPN if that matters to you.
 
@@ -59,6 +61,7 @@ Nothing is sent anywhere else. No data is sold, shared for advertising, or used 
 
 - It never asks for, stores or transmits private keys or seed phrases. It cannot sign or send transactions.
 - It never transfers money. Goal allocations are calculations shown to you and nothing else.
+- It never sends an order or an instruction to a broker. Broker access is used only to read the account value; see [Broker and forex accounts]({{ page.base }}/accounts).
 - It never contacts the developer. There is no telemetry, no update check inside the app, no push notifications.
 
 ## Permissions

@@ -21,7 +21,7 @@ Capital est une application de suivi de l’épargne personnelle. Elle enregistr
 | Fonctionnalité du formulaire | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later (prêteur direct de prêts personnels, intermédiaire de prêts, prêts sur salaire, ligne de crédit, avances sur salaire, microfinance, paiement différé) | Aucun prêt, sous quelque forme que ce soit |
-| Banking (Services bancaires) | Aucun compte, aucun dépôt, aucun accès à un compte. Les soldes bancaires sont saisis par l’utilisateur |
+| Banking (Services bancaires) | Aucun compte, aucun dépôt, aucun accès à un compte. Les soldes bancaires sont saisis par l’utilisateur. La valeur des comptes de courtage et de forex est lue via l’interface de rapports du courtier avec un jeton d’accès que l’utilisateur crée ; l’application ne peut ni passer d’ordres, ni transférer, ni retirer de fonds |
 | Mobile payments and digital wallets, money transfer and wire services (paiements mobiles et portefeuilles numériques, transferts d’argent et virements) | Ne peut ni envoyer, ni recevoir, ni détenir d’argent. L’affectation aux objectifs est un calcul affiché à l’écran ; elle ne déplace rien |
 | Cryptocurrency wallet (Portefeuille de cryptomonnaies) | Lit le solde des adresses publiques que l’utilisateur colle. L’application ne détient jamais de clés privées ni de phrases de récupération et ne peut ni signer ni diffuser de transactions : ce n’est donc pas un portefeuille |
 | Cryptocurrency exchange (Plateforme d’échange de cryptomonnaies) | Aucun trading, aucun routage d’ordres, aucune conversion de monnaie fiduciaire en cryptomonnaie |
@@ -37,9 +37,9 @@ L’application ne propose par ailleurs aucun achat intégré ni aucune fonction
 
 Si l’examen Google Play classe malgré tout l’application comme proposant une fonctionnalité financière, l’option la plus proche est **Other** (Autre), avec cette description :
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 >
-> (Application de suivi de l’épargne personnelle en lecture seule. Les utilisateurs saisissent leurs soldes ou collent des adresses blockchain publiques ; l’application récupère les soldes et les cours du marché auprès de sources de données tierces et montre comment l’épargne couvre les objectifs de l’utilisateur. Aucune conservation d’actifs, aucune clé, aucune transaction, aucun prêt, aucun trading, aucun conseil.)
+> (Application de suivi de l’épargne personnelle en lecture seule. Les utilisateurs saisissent leurs soldes, collent des adresses blockchain publiques ou connectent un compte de courtage avec un jeton de reporting ; l’application récupère les soldes, les valeurs de comptes et les cours du marché auprès de sources de données tierces et montre comment l’épargne couvre les objectifs de l’utilisateur. Aucune conservation d’actifs, aucune clé, aucune transaction, aucun prêt, aucun trading, aucun conseil.)
 
 Les exigences propres à certains pays pour les applications de prêt personnel, ainsi que les questions relatives aux cryptomonnaies pour les États-Unis, ne s’appliquent pas, car aucune de ces fonctionnalités n’est sélectionnée.
 
@@ -47,4 +47,5 @@ Les exigences propres à certains pays pour les applications de prêt personnel,
 
 - Les données de marché proviennent d’opérateurs tiers choisis par l’utilisateur (voir la [Politique de confidentialité]({{ page.base }}/privacy)). L’application affiche le nom et le site de l’opérateur dans les Paramètres.
 - Les requêtes sur les portefeuilles crypto utilisent des API blockchain publiques, en lecture seule.
+- Les comptes de courtage (Interactive Brokers, OANDA, Trading 212, SnapTrade) sont lus avec un jeton ou une clé que l’utilisateur crée dans le portail du courtier ; l’application n’appelle que des points d’accès de rapports et ne peut ni passer d’ordres ni déplacer d’argent. La configuration est décrite sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
 - L’application fonctionne entièrement sur l’appareil et ne dispose d’aucun serveur exploité par le développeur.

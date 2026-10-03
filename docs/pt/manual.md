@@ -20,7 +20,7 @@ Nada no app movimenta dinheiro. Ele é um espelho do que você possui e uma calc
 
 1. **Escolha uma pasta.** Selecione uma pasta exclusiva no dispositivo, por exemplo `Documents/Capital`. É nela que todos os registros são gravados. Uma pasta que já contém dados do Capital é aberta diretamente.
 2. **Ajustes → Moeda padrão.** Os totais e a Visão geral são exibidos nela.
-3. Se quiser, defina **chaves de provedores** em Ajustes para os operadores que oferecem limites maiores com uma chave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Toda rede e toda fonte de preços tem uma opção padrão que dispensa chave.
+3. Se quiser, defina **chaves de provedores** em Ajustes para os operadores que oferecem limites maiores com uma chave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Toda rede e toda fonte de preços tem uma opção padrão que dispensa chave. As contas de corretora exigem um **token de acesso** da corretora; veja [Contas de corretora e de forex]({{ page.base }}/accounts).
 
 ## Caixinhas {#buckets}
 
@@ -28,6 +28,7 @@ Aba Caixinhas → **+**. Dê à caixinha um nome e uma moeda. Abra-a para adicio
 
 - **Posição manual**: um nome, um código de moeda ou de ativo (EUR, USD, BTC, o ticker de uma ação que você mesmo avalia…) e uma quantidade. Use para saldos bancários, dinheiro em espécie, qualquer coisa que o app não consiga ler.
 - **Posição de carteira**: escolha a rede (BTC, ETH, TON, TRX) e cole um endereço público. Ao atualizar, o app lê o saldo nativo e, em ETH, TON e TRX, os tokens fungíveis do endereço.
+- **Conta de corretora**: escolha a corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) e informe o ID da conta ou da consulta. Ao atualizar, o app lê o valor total da conta na moeda base dela. O token de acesso é informado uma única vez em Ajustes → Contas de corretora. Os passos de configuração, com links para a documentação das próprias corretoras, estão em [Contas de corretora e de forex]({{ page.base }}/accounts).
 
 Os valores aceitam ponto ou vírgula como separador decimal, sem separadores de milhar. Cada caixinha mostra as quantidades nativas e o valor delas na sua moeda padrão. Se faltar uma cotação, o total é marcado como incompleto; um valor em cache desatualizado continua sendo usado, com um aviso.
 
@@ -57,7 +58,7 @@ O dinheiro dos planos é aplicado depois das caixinhas atuais, às metas em orde
 
 ## Atualização
 
-O ícone de atualizar no topo recarrega todos os saldos de carteiras e preços. Também é possível atualizar uma caixinha sozinha. O app atualiza uma vez ao ser iniciado do zero; ao voltar do segundo plano, ele apenas recarrega os arquivos locais. Atualizar exige internet; sem conexão, os valores anteriores são mantidos e marcados como desatualizados.
+O ícone de atualizar no topo recarrega todos os saldos de carteiras, valores de contas de corretora e preços. Também é possível atualizar uma caixinha sozinha. O app atualiza uma vez ao ser iniciado do zero; ao voltar do segundo plano, ele apenas recarrega os arquivos locais. Atualizar exige internet; sem conexão, os valores anteriores são mantidos e marcados como desatualizados.
 
 ## Segurança {#security}
 

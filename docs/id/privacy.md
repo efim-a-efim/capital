@@ -14,7 +14,7 @@ class: doc
 
 - Capital tidak memiliki akun pengguna, analitik, iklan, pelaporan error, maupun server yang dijalankan oleh developer. Developer tidak pernah menerima data Anda.
 - Catatan keuangan Anda hanya disimpan di perangkat Anda, di folder yang Anda pilih. Anda dapat mengenkripsinya dengan kata sandi.
-- Satu-satunya lalu lintas jaringan adalah permintaan yang dikirim aplikasi, atas perintah Anda, ke operator data harga dan blockchain yang Anda pilih di Pengaturan. Permintaan tersebut memuat alamat dompet publik, kontrak token, dan kode mata uang yang Anda pantau, serta kunci API yang Anda masukkan untuk operator tersebut.
+- Satu-satunya lalu lintas jaringan adalah permintaan yang dikirim aplikasi, atas perintah Anda, ke operator data harga dan blockchain yang Anda pilih di Pengaturan serta ke broker yang akunnya Anda hubungkan. Permintaan tersebut memuat alamat dompet publik, kontrak token, dan kode mata uang yang Anda pantau, kunci API apa pun yang Anda masukkan untuk operator tersebut, dan untuk akun broker, token akses yang Anda buat beserta ID akun atau ID query.
 
 ## Apa yang disimpan aplikasi di perangkat Anda
 
@@ -25,7 +25,7 @@ class: doc
 | Item | Tujuan |
 |---|---|
 | Izin akses ke folder yang dipilih | Membuka kembali folder saat aplikasi diluncurkan berikutnya |
-| Kunci API penyedia yang Anda masukkan | Hanya dikirim ke operator yang menerbitkannya; dienkripsi dengan kunci yang disimpan di Android Keystore; tidak disertakan dalam snapshot, ekspor, maupun cadangan sistem operasi |
+| Kunci API penyedia dan token akses broker yang Anda masukkan | Hanya dikirim ke operator atau broker yang menerbitkannya; dienkripsi dengan kunci yang disimpan di Android Keystore; tidak disertakan dalam snapshot, ekspor, maupun cadangan sistem operasi |
 | Pengaturan kunci | Membuka folder terenkripsi tanpa kata sandi: salinan kunci data, dienkripsi dengan kunci yang diturunkan dari PIN Anda dan terikat ke Android Keystore. PIN itu sendiri tidak disimpan |
 | Pilihan bahasa dan tema | Preferensi antarmuka |
 
@@ -41,6 +41,7 @@ Capital hanya menghubungi operator yang Anda pilih di Pengaturan, hanya melalui 
 | Alamat kontrak token dan ID aset | Operator harga kripto yang Anda pilih | Menentukan harga aset |
 | Kode mata uang | Operator kurs fiat yang Anda pilih | Mengonversi antarmata uang |
 | Kunci API yang Anda masukkan untuk suatu operator | Hanya operator tersebut | Mengautentikasi akun Anda sendiri di operator itu |
+| Token akses atau kunci API dan ID akun atau ID query dari akun broker | Hanya broker tersebut (Interactive Brokers, OANDA, Trading 212, atau SnapTrade) | Membaca total nilai akun |
 
 Setiap operator juga melihat alamat IP Anda, seperti pada permintaan internet mana pun. Operator tidak terkait dengan developer dan memproses permintaan berdasarkan ketentuan dan kebijakan privasi mereka sendiri, yang ditautkan dari Pengaturan → Sumber / atribusi di aplikasi:
 
@@ -52,6 +53,7 @@ Setiap operator juga melihat alamat IP Anda, seperti pada permintaan internet ma
 | TRON dan token TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Harga kripto | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Kurs fiat | [Frankfurter](https://frankfurter.dev), [Bank Sentral Eropa](https://www.ecb.europa.eu) |
+| Akun broker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Tidak ada data yang dikirim ke tempat lain. Tidak ada data yang dijual, dibagikan untuk iklan, atau dipakai untuk membuat profil. Kueri ke blockchain publik mengungkapkan bahwa alamat yang Anda pantau menarik bagi seseorang di alamat IP Anda; gunakan VPN jika hal itu penting bagi Anda.
 
@@ -59,6 +61,7 @@ Tidak ada data yang dikirim ke tempat lain. Tidak ada data yang dijual, dibagika
 
 - Aplikasi tidak pernah meminta, menyimpan, atau mengirim kunci privat maupun seed phrase. Aplikasi tidak dapat menandatangani atau mengirim transaksi.
 - Aplikasi tidak pernah mentransfer uang. Alokasi tujuan hanyalah perhitungan yang ditampilkan kepada Anda, tidak lebih.
+- Aplikasi tidak pernah mengirim order atau instruksi ke broker. Akses broker hanya dipakai untuk membaca nilai akun; lihat [Akun broker dan forex]({{ page.base }}/accounts).
 - Aplikasi tidak pernah menghubungi developer. Tidak ada telemetri, tidak ada pemeriksaan pembaruan di dalam aplikasi, tidak ada notifikasi push.
 
 ## Izin

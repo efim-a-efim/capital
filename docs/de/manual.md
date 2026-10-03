@@ -20,7 +20,7 @@ Die App bewegt kein Geld. Sie ist ein Spiegel dessen, was Sie besitzen, und ein 
 
 1. **Ordner wählen.** Wählen Sie einen eigenen Ordner auf dem Gerät, zum Beispiel `Documents/Capital`. Dort wird jeder Datensatz gespeichert. Ein Ordner, der bereits Capital-Daten enthält, wird direkt geöffnet.
 2. **Einstellungen → Standardwährung.** Summen und die Übersicht werden in dieser Währung angezeigt.
-3. Optional können Sie in den Einstellungen **Anbieterschlüssel** für Betreiber hinterlegen, die mit einem kostenlosen Schlüssel höhere Limits bieten (Alchemy, TronGrid, TON Center, CoinGecko). Für jede Chain und jede Preisquelle gibt es eine Standardquelle ohne Schlüssel.
+3. Optional können Sie in den Einstellungen **Anbieterschlüssel** für Betreiber hinterlegen, die mit einem kostenlosen Schlüssel höhere Limits bieten (Alchemy, TronGrid, TON Center, CoinGecko). Für jede Chain und jede Preisquelle gibt es eine Standardquelle ohne Schlüssel. Brokerkonten benötigen ein **Zugriffstoken** des Brokers; siehe [Broker- und Forex-Konten]({{ page.base }}/accounts).
 
 ## Töpfe {#buckets}
 
@@ -28,6 +28,7 @@ Tab „Töpfe“ → **+**. Geben Sie dem Topf einen Namen und eine Währung. Ö
 
 - **Manuelle Position**: ein Name, ein Währungs- oder Vermögenswert-Code (EUR, USD, BTC, ein Aktienticker, den Sie selbst bewerten …) und eine Menge. Verwenden Sie sie für Bankguthaben, Bargeld und alles, was die App nicht selbst auslesen kann.
 - **Wallet-Position**: Wählen Sie die Chain (BTC, ETH, TON, TRX) und fügen Sie eine öffentliche Adresse ein. Beim Aktualisieren liest die App das native Guthaben und bei ETH, TON und TRX auch die fungiblen Token auf der Adresse.
+- **Brokerkonto**: Wählen Sie den Broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) und geben Sie die Flex-Query-ID oder die Konto-ID ein. Beim Aktualisieren liest die App den Gesamtwert des Kontos in dessen Basiswährung. Das Zugriffstoken geben Sie einmal unter Einstellungen → Brokerkonten ein. Die Einrichtungsschritte mit Links zur Dokumentation der Broker finden Sie unter [Broker- und Forex-Konten]({{ page.base }}/accounts).
 
 Beträge akzeptieren Punkt oder Komma als Dezimaltrennzeichen, jedoch keine Tausendertrennzeichen. Jeder Topf zeigt native Mengen und deren Wert in Ihrer Standardwährung. Fehlt ein Kurs, wird die Summe als unvollständig gekennzeichnet; ein veralteter zwischengespeicherter Wert bleibt mit einem Hinweis nutzbar.
 
@@ -57,7 +58,7 @@ Geld aus Plänen wird nach den heutigen Töpfen angerechnet, und zwar auf die Zi
 
 ## Aktualisieren
 
-Das Aktualisieren-Symbol oben lädt alle Wallet-Guthaben und Kurse neu. Ein Topf lässt sich auch einzeln aktualisieren. Die App aktualisiert einmal bei einem Kaltstart; bei der Rückkehr aus dem Hintergrund werden nur die lokalen Dateien neu geladen. Zum Aktualisieren ist eine Internetverbindung nötig; ohne sie bleiben die bisherigen Werte erhalten und werden als veraltet gekennzeichnet.
+Das Aktualisieren-Symbol oben lädt alle Wallet-Guthaben, Brokerkontowerte und Kurse neu. Ein Topf lässt sich auch einzeln aktualisieren. Die App aktualisiert einmal bei einem Kaltstart; bei der Rückkehr aus dem Hintergrund werden nur die lokalen Dateien neu geladen. Zum Aktualisieren ist eine Internetverbindung nötig; ohne sie bleiben die bisherigen Werte erhalten und werden als veraltet gekennzeichnet.
 
 ## Sicherheit {#security}
 

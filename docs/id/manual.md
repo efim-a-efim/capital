@@ -20,7 +20,7 @@ Tidak ada apa pun di aplikasi ini yang memindahkan uang. Aplikasi ini hanya cerm
 
 1. **Pilih folder.** Pilih folder khusus di perangkat, misalnya `Documents/Capital`. Di sinilah semua data ditulis. Folder yang sudah berisi data Capital langsung terbuka.
 2. **Pengaturan → Mata uang default.** Total dan Ringkasan ditampilkan dalam mata uang ini.
-3. Jika perlu, atur **kunci penyedia** di Pengaturan untuk operator yang memberikan batas lebih tinggi dengan kunci gratis (Alchemy, TronGrid, TON Center, CoinGecko). Setiap jaringan dan sumber harga punya pilihan default tanpa kunci.
+3. Jika perlu, atur **kunci penyedia** di Pengaturan untuk operator yang memberikan batas lebih tinggi dengan kunci gratis (Alchemy, TronGrid, TON Center, CoinGecko). Setiap jaringan dan sumber harga punya pilihan default tanpa kunci. Akun broker memerlukan **token akses** dari broker; lihat [Akun broker dan forex]({{ page.base }}/accounts).
 
 ## Kantong {#buckets}
 
@@ -28,6 +28,7 @@ Tab Kantong → **+**. Beri kantong nama dan mata uang. Buka kantong untuk menam
 
 - **Aset manual**: nama, kode mata uang atau aset (EUR, USD, BTC, kode saham yang Anda nilai sendiri…) dan jumlah. Gunakan untuk saldo bank, uang tunai, dan apa pun yang tidak bisa dibaca aplikasi.
 - **Aset dompet**: pilih jaringan (BTC, ETH, TON, TRX) dan tempel satu alamat publik. Saat diperbarui, aplikasi membaca saldo native dan, untuk ETH, TON, dan TRX, token fungible di alamat tersebut.
+- **Akun broker**: pilih broker (Interactive Brokers, OANDA, Trading 212, atau SnapTrade) dan masukkan ID akun atau ID query. Saat diperbarui, aplikasi membaca total nilai akun dalam mata uang dasarnya. Token akses dimasukkan sekali di Pengaturan → Akun broker. Langkah penyiapan, beserta tautan ke dokumentasi resmi broker, ada di [Akun broker dan forex]({{ page.base }}/accounts).
 
 Jumlah dapat ditulis dengan titik atau koma desimal, tanpa pemisah ribuan. Setiap kantong menampilkan jumlah native dan nilainya dalam mata uang default Anda. Jika harga tidak tersedia, total ditandai belum lengkap; nilai tersimpan yang sudah usang tetap dapat dipakai dengan peringatan.
 
@@ -57,7 +58,7 @@ Uang dari rencana diterapkan setelah kantong yang ada hari ini, ke tujuan sesuai
 
 ## Pembaruan
 
-Ikon perbarui di bagian atas memuat ulang semua saldo dompet dan harga. Satu kantong juga dapat diperbarui sendiri. Aplikasi melakukan pembaruan sekali saat baru dibuka; kembali dari latar belakang hanya memuat ulang file lokal. Pembaruan memerlukan internet; tanpa internet, nilai sebelumnya tetap ada dan ditandai usang.
+Ikon perbarui di bagian atas memuat ulang semua saldo dompet, nilai akun broker, dan harga. Satu kantong juga dapat diperbarui sendiri. Aplikasi melakukan pembaruan sekali saat baru dibuka; kembali dari latar belakang hanya memuat ulang file lokal. Pembaruan memerlukan internet; tanpa internet, nilai sebelumnya tetap ada dan ditandai usang.
 
 ## Keamanan {#security}
 

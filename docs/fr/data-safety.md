@@ -12,7 +12,7 @@ class: doc
 
 ## Traitement des données par l’application
 
-Capital n’a pas de backend. Tout ce que l’utilisateur saisit reste dans un dossier sur l’appareil. Les seules données qui quittent l’appareil sont celles que l’application envoie, à la demande de l’utilisateur, aux opérateurs de données tiers qu’il sélectionne dans les Paramètres : adresses publiques de portefeuilles crypto, identifiants de contrats de jetons, codes de devise et toute clé API que l’utilisateur a saisie pour cet opérateur. Les opérateurs répondent à la requête ; l’application enregistre localement les soldes et les cours renvoyés et ne conserve aucune copie de la requête. Aucun SDK de l’application n’envoie de données à son éditeur : les dépendances se limitent à AndroidX, Kotlin, OkHttp, Bouncy Castle et ZXing (génération des codes QR, hors ligne). L’écran de dons affiche des adresses fixes intégrées à l’application et n’envoie rien.
+Capital n’a pas de backend. Tout ce que l’utilisateur saisit reste dans un dossier sur l’appareil. Les seules données qui quittent l’appareil sont celles que l’application envoie, à la demande de l’utilisateur, aux opérateurs de données tiers qu’il sélectionne dans les Paramètres et aux courtiers dont il connecte les comptes : adresses publiques de portefeuilles crypto, identifiants de contrats de jetons, codes de devise, toute clé API que l’utilisateur a saisie pour cet opérateur et, pour un compte de courtage, le jeton d’accès que l’utilisateur a créé ainsi que l’identifiant du compte ou de la requête. Les opérateurs répondent à la requête ; l’application enregistre localement les soldes et les cours renvoyés et ne conserve aucune copie de la requête. Aucun SDK de l’application n’envoie de données à son éditeur : les dépendances se limitent à AndroidX, Kotlin, OkHttp, Bouncy Castle et ZXing (génération des codes QR, hors ligne). L’écran de dons affiche des adresses fixes intégrées à l’application et n’envoie rien.
 
 Google Play considère des données comme *collectées* dès qu’elles sont transmises hors de l’appareil, même sans serveur du développeur et même si le traitement est éphémère ; la déclaration n’est donc pas « aucune donnée collectée ». Elle porte sur un seul type de données, éphémère et facultatif.
 
@@ -34,13 +34,13 @@ Sélectionnez exactement un type.
 |---|---|---|---|---|---|---|
 | Financial info (Informations financières) | Other financial info (Autres informations financières) | Yes (Oui) | No (Non) | **Yes** (Oui) | **Optional** (Facultatif) | App functionality (Fonctionnement de l’application) |
 
-Ce que couvre ce type : les adresses blockchain publiques que l’utilisateur suit, les contrats de jetons trouvés à ces adresses et les codes de devise des positions de l’utilisateur. Ils sont transmis à l’opérateur de données choisi par l’utilisateur afin d’obtenir les soldes et les cours, conservés en mémoire le temps de la requête, puis supprimés.
+Ce que couvre ce type : les adresses blockchain publiques que l’utilisateur suit, les contrats de jetons trouvés à ces adresses, les codes de devise des positions de l’utilisateur et les identifiants des comptes de courtage que l’utilisateur a connectés. Ils sont transmis à l’opérateur de données choisi par l’utilisateur afin d’obtenir les soldes et les cours, conservés en mémoire le temps de la requête, puis supprimés.
 
 Pourquoi **non partagées** : le transfert va directement de l’appareil à l’opérateur choisi par l’utilisateur, lors d’une actualisation que l’utilisateur a lui-même lancée, après que l’application lui a indiqué dans les Paramètres quel opérateur sera interrogé et que la requête révèle l’adresse et l’adresse IP à cet opérateur. C’est l’exception « user-initiated action where the user reasonably expects the data to be shared » (action initiée par l’utilisateur, qui s’attend raisonnablement à ce que les données soient partagées). Le développeur ne reçoit rien et n’a recours à aucun prestataire de services.
 
 Pourquoi **facultatif** : l’application est entièrement utilisable avec des positions manuelles uniquement. Les adresses et les clés API sont saisies par choix.
 
-Les clés API saisies par l’utilisateur sont envoyées uniquement à l’opérateur qui les a émises. Ce sont les identifiants de l’utilisateur pour le service propre à cet opérateur ; elles ne sont pas déclarées comme un type de données utilisateur distinct. Si un examinateur pose la question, décrivez-les comme ci-dessus.
+Les clés API et les jetons d’accès de courtiers saisis par l’utilisateur sont envoyés uniquement à l’opérateur ou au courtier qui les a émis. Ce sont les identifiants de l’utilisateur pour le service propre à cet opérateur ; elles ne sont pas déclarées comme un type de données utilisateur distinct. Si un examinateur pose la question, décrivez-les comme ci-dessus.
 
 ### Types **non** collectés
 

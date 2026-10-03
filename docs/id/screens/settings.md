@@ -14,6 +14,8 @@ title: Pengaturan
 
 **Penyedia data gratis.** Satu baris per jenis data, masing-masing dengan operator yang sedang dipakai: saldo BTC, ETH, TON, TRX; daftar token ETH, TON, TRX; harga kripto; kurs fiat. Ketuk baris untuk memilih operator lain, mengatur pencarian token ke **Nonaktif** untuk suatu jaringan, atau memasukkan kunci API opsional. Kunci disimpan terenkripsi di perangkat dan hanya dikirim ke operator yang menerbitkannya. **Uji sumber / perbarui portofolio** mengueri setiap operator dengan aset yang benar-benar Anda miliki dan melaporkan apa yang gagal. Tidak ada operator yang pernah diganti secara diam-diam.
 
+**Akun broker.** Kredensial setiap broker yang didukung (Interactive Brokers, OANDA, Trading 212, SnapTrade), disimpan terenkripsi seperti kunci penyedia dan hanya dikirim ke broker tersebut. Aplikasi membaca nilai akun dengannya dan tidak pernah membuat order. **Panduan penyiapan akun broker** membuka [Akun broker dan forex]({{ page.base }}/accounts).
+
 **Harga dan waktu pembaruan.** Setiap harga tersimpan beserta waktu diamati dan diambilnya. Harga yang usang tetap dapat dipakai dan ditandai di Ringkasan.
 
 **Keamanan.** **Enkripsi** mengenkripsi semua file di folder dengan kata sandi; menonaktifkannya akan mendekripsi file-file tersebut. Dengan enkripsi aktif, Anda dapat **Atur PIN**, mengaktifkan **Gunakan biometrik**, memilih **Kunci otomatis setelah di latar belakang**, dan **Ubah kata sandi**. Kata sandi tidak dapat dipulihkan. Sepuluh kali PIN salah akan menghapus PIN; kata sandi selalu berfungsi. Lihat [Keamanan]({{ page.base }}/manual#security).

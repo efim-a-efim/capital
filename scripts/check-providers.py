@@ -22,18 +22,29 @@ checks = [
     ("TronGrid TRC-20", "https://api.trongrid.io/v1/accounts/TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7", None),
     ("DefiLlama", "https://coins.llama.fi/prices/current/coingecko:bitcoin,ethereum:0xdac17f958d2ee523a2206206994597c13d831ec7,tron:TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t,ton:EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs", None),
     ("CoinPaprika contract", "https://api.coinpaprika.com/v1/contracts/eth-ethereum/0xdac17f958d2ee523a2206206994597c13d831ec7", None),
+    # Brokers need a user token; a bogus token proves the endpoint answers in the documented form.
+    ("Interactive Brokers Flex", "https://ndcdyn.interactivebrokers.com/AccountManagement/FlexWebService/SendRequest?t=0&q=0&v=3", None),
+    ("OANDA v20", "https://api-fxtrade.oanda.com/v3/accounts", None),
+    ("Trading 212", "https://live.trading212.com/api/v0/equity/account/summary", None),
+    ("SnapTrade", "https://api.snaptrade.com/api/v1/", None),
 ]
+expected_errors={"OANDA v20": 401, "Trading 212": 401}
 results=[]
 for name,url,body in checks:
-    req=urllib.request.Request(url,data=json.dumps(body).encode() if body else None,headers={"Content-Type":"application/json","User-Agent":"Capital/0.1"})
+    req=urllib.request.Request(url,data=json.dumps(body).encode() if body else None,headers={"Content-Type":"application/json","User-Agent":"Java" if "interactivebrokers" in url else "Capital/0.1"})
     try:
         with urllib.request.urlopen(req,timeout=20) as response:
             text=response.read(8*1024*1024).decode()
-            payload=text if name=="ECB" else json.loads(text)
+            payload=text if name in ("ECB","Interactive Brokers Flex") else json.loads(text)
             results.append({"provider":name,"status":response.status,"sample":payload})
             print(name, response.status)
+    except urllib.error.HTTPError as exc:
+        if exc.code==expected_errors.get(name):
+            results.append({"provider":name,"status":exc.code,"expected":True}); print(name,exc.code,"(expected without a token)")
+        else:
+            results.append({"provider":name,"error":str(exc)}); print(name,str(exc))
     except Exception as exc:
         results.append({"provider":name,"error":str(exc)})
         print(name,str(exc))
 Path(".tools/provider-smoke.json").write_text(json.dumps(results,indent=2))
-print("Alchemy, TronGrid, CoinGecko Demo: require user keys; not live-tested.")
+print("Alchemy, TronGrid, CoinGecko Demo, Interactive Brokers, OANDA, Trading 212, SnapTrade: require user keys or tokens; not live-tested beyond reachability.")

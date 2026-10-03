@@ -21,7 +21,7 @@ O Capital é um app pessoal para acompanhar economias. Ele registra o que o usu�
 | Recurso no formulário | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later (credor direto de empréstimo pessoal, intermediador de empréstimos, empréstimos de curto prazo, linha de crédito, adiantamento salarial, microfinanças, compre agora e pague depois) | Nenhum tipo de empréstimo |
-| Banking (serviços bancários) | Sem contas, depósitos ou acesso a contas. Os saldos bancários são digitados pelo usuário |
+| Banking (serviços bancários) | Sem contas, depósitos ou acesso a contas. Os saldos bancários são digitados pelo usuário. Os valores de contas de corretora e de forex são lidos pela interface de relatórios da própria corretora, com um token que o usuário cria; o app não consegue enviar ordens, transferir nem sacar |
 | Mobile payments and digital wallets, money transfer and wire services (pagamentos móveis e carteiras digitais, transferência de dinheiro e remessas) | Não consegue enviar, receber nem guardar dinheiro. A alocação para metas é um cálculo exibido na tela; não movimenta nada |
 | Cryptocurrency wallet (carteira de criptomoedas) | Lê o saldo de endereços públicos colados pelo usuário. Nunca guarda chaves privadas nem frases-semente e não consegue assinar nem transmitir transações, portanto não é uma carteira |
 | Cryptocurrency exchange (corretora de criptomoedas) | Sem negociação, sem roteamento de ordens, sem entrada de moeda fiduciária |
@@ -37,9 +37,9 @@ O app também não oferece compras no app nem recursos pagos.
 
 Se a revisão do Play classificar o app como oferecendo algum recurso financeiro mesmo assim, a opção mais próxima é **Other** (Outro) com esta descrição:
 
-> Read-only personal savings tracker. Users type in their balances or paste public blockchain addresses; the app fetches balances and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
+> Read-only personal savings tracker. Users type in their balances, paste public blockchain addresses or connect a brokerage account with a reporting token; the app fetches balances, account values and market prices from third-party data sources and shows how the savings cover the user's own goals. No custody, no keys, no transactions, no lending, no trading, no advice.
 
-Tradução: app pessoal, somente leitura, para acompanhar economias. Os usuários digitam seus saldos ou colam endereços públicos de blockchain; o app obtém saldos e preços de mercado de fontes de dados terceiras e mostra como as economias cobrem as metas do próprio usuário. Sem custódia, sem chaves, sem transações, sem empréstimos, sem negociação, sem consultoria.
+Tradução: app pessoal, somente leitura, para acompanhar economias. Os usuários digitam seus saldos, colam endereços públicos de blockchain ou conectam uma conta de corretora com um token de relatórios; o app obtém saldos, valores de contas e preços de mercado de fontes de dados terceiras e mostra como as economias cobrem as metas do próprio usuário. Sem custódia, sem chaves, sem transações, sem empréstimos, sem negociação, sem consultoria.
 
 Os requisitos específicos por país para apps de empréstimo pessoal e as perguntas sobre criptomoedas para os Estados Unidos não se aplicam, porque nenhum desses recursos foi selecionado.
 
@@ -47,4 +47,5 @@ Os requisitos específicos por país para apps de empréstimo pessoal e as pergu
 
 - Os dados de mercado vêm de operadores terceiros selecionados pelo usuário (veja a [Política de Privacidade]({{ page.base }}/privacy)). O app mostra o nome e o site do operador em Ajustes.
 - As consultas de carteiras usam APIs públicas de blockchain, somente leitura.
+- As contas de corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) são lidas com um token ou uma chave que o usuário cria no portal da própria corretora; o app chama apenas endpoints de relatórios e não consegue enviar ordens nem movimentar dinheiro. A configuração está documentada em [Contas de corretora e de forex]({{ page.base }}/accounts).
 - O app roda inteiramente no dispositivo e não tem servidor operado pelo desenvolvedor.

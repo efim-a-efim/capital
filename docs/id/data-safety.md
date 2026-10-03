@@ -12,7 +12,7 @@ class: doc
 
 ## Cara aplikasi menangani data
 
-Capital tidak memiliki backend. Semua yang dimasukkan pengguna tetap berada di folder pada perangkat. Satu-satunya data yang pernah keluar dari perangkat adalah data yang dikirim aplikasi, atas perintah pengguna, ke operator data pihak ketiga yang dipilih pengguna di Pengaturan: alamat dompet publik, ID kontrak token, kode mata uang, dan kunci API yang dimasukkan pengguna untuk operator tersebut. Operator menjawab permintaan; aplikasi menyimpan saldo dan harga yang diterima secara lokal dan tidak menyimpan salinan permintaannya. Tidak ada SDK di aplikasi yang mengirim data ke pihak mana pun: dependensinya hanya AndroidX, Kotlin, OkHttp, Bouncy Castle, dan ZXing (render QR, offline). Layar tip menampilkan alamat statis yang tertanam di aplikasi dan tidak mengirim apa pun.
+Capital tidak memiliki backend. Semua yang dimasukkan pengguna tetap berada di folder pada perangkat. Satu-satunya data yang pernah keluar dari perangkat adalah data yang dikirim aplikasi, atas perintah pengguna, ke operator data pihak ketiga yang dipilih pengguna di Pengaturan dan ke broker yang akunnya dihubungkan pengguna: alamat dompet publik, ID kontrak token, kode mata uang, kunci API apa pun yang dimasukkan pengguna untuk operator tersebut, dan untuk akun broker, token akses yang dibuat pengguna beserta ID akun atau ID query. Operator menjawab permintaan; aplikasi menyimpan saldo dan harga yang diterima secara lokal dan tidak menyimpan salinan permintaannya. Tidak ada SDK di aplikasi yang mengirim data ke pihak mana pun: dependensinya hanya AndroidX, Kotlin, OkHttp, Bouncy Castle, dan ZXing (render QR, offline). Layar tip menampilkan alamat statis yang tertanam di aplikasi dan tidak mengirim apa pun.
 
 Google Play menganggap data *dikumpulkan* ketika data itu dikirim keluar dari perangkat, meskipun tidak melibatkan server developer dan pemrosesannya bersifat sementara, sehingga deklarasinya bukan "tidak mengumpulkan apa pun". Yang dideklarasikan adalah satu jenis data yang bersifat sementara dan opsional.
 
@@ -34,13 +34,13 @@ Pilih tepat satu jenis.
 |---|---|---|---|---|---|---|
 | Info keuangan (Financial info) | Info keuangan lainnya (Other financial info) | Yes (Ya) | No (Tidak) | **Yes** (Ya) | **Optional** (Opsional) | Fungsi aplikasi (App functionality) |
 
-Cakupan jenis ini: alamat blockchain publik yang dipantau pengguna, kontrak token yang ditemukan di alamat tersebut, dan kode mata uang dari aset pengguna. Data ini dikirim ke operator data yang dipilih pengguna agar saldo dan harga dapat diambil, disimpan di memori selama permintaan berlangsung, lalu dibuang.
+Cakupan jenis ini: alamat blockchain publik yang dipantau pengguna, kontrak token yang ditemukan di alamat tersebut, kode mata uang dari aset pengguna, dan ID akun broker yang dihubungkan pengguna. Data ini dikirim ke operator data yang dipilih pengguna agar saldo dan harga dapat diambil, disimpan di memori selama permintaan berlangsung, lalu dibuang.
 
 Mengapa **tidak dibagikan**: transfer berlangsung langsung dari perangkat ke operator yang dipilih pengguna, pada pembaruan yang dimulai oleh pengguna, setelah aplikasi memberi tahu pengguna di Pengaturan operator mana yang akan dikueri dan bahwa permintaan tersebut mengungkapkan alamat dan IP kepada operator itu. Ini adalah pengecualian "tindakan yang dimulai pengguna ketika pengguna secara wajar mengharapkan data dibagikan". Developer tidak menerima apa pun dan tidak memiliki penyedia layanan.
 
 Mengapa **opsional**: aplikasi dapat digunakan sepenuhnya hanya dengan aset manual. Alamat dan kunci API dimasukkan atas pilihan pengguna.
 
-Kunci API yang dimasukkan pengguna hanya dikirim ke operator yang menerbitkannya. Kunci itu adalah kredensial pengguna untuk layanan milik operator tersebut dan tidak dideklarasikan sebagai jenis data pengguna tersendiri; jika peninjau bertanya, jelaskan seperti di atas.
+Kunci API dan token akses broker yang dimasukkan pengguna hanya dikirim ke operator atau broker yang menerbitkannya. Kunci itu adalah kredensial pengguna untuk layanan milik operator tersebut dan tidak dideklarasikan sebagai jenis data pengguna tersendiri; jika peninjau bertanya, jelaskan seperti di atas.
 
 ### Jenis yang **tidak** dikumpulkan
 

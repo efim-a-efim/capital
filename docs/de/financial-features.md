@@ -21,7 +21,7 @@ Capital ist ein persönlicher Spar-Tracker. Die App erfasst, was der Nutzer bere
 | Funktion im Formular | Capital |
 |---|---|
 | Personal loan direct lender, loan facilitator, payday loans, line of credit, earned wage advances, microfinance, buy now pay later (Direktkreditgeber für Privatkredite, Kreditvermittler, Kurzzeitkredite, Kreditlinie, Lohnvorschüsse, Mikrofinanzierung, „Jetzt kaufen, später bezahlen“) | Keinerlei Kreditvergabe |
-| Banking (Bankdienstleistungen) | Keine Konten, keine Einlagen, kein Kontozugriff. Bankguthaben gibt der Nutzer selbst ein |
+| Banking (Bankdienstleistungen) | Keine Konten, keine Einlagen, kein Kontozugriff. Bankguthaben gibt der Nutzer selbst ein. Werte von Depot- und Forex-Konten werden über die eigene Reporting-Schnittstelle des Brokers mit einem vom Nutzer erstellten Token gelesen; die App kann keine Orders erteilen, nichts überweisen und nichts abheben |
 | Mobile payments and digital wallets, money transfer and wire services (Mobile Zahlungen und digitale Geldbörsen, Geldtransfer- und Überweisungsdienste) | Kann kein Geld senden, empfangen oder verwahren. Die Zielzuordnung ist eine auf dem Bildschirm angezeigte Berechnung; sie bewegt nichts |
 | Cryptocurrency wallet (Kryptowährungs-Wallet) | Liest das Guthaben öffentlicher Adressen, die der Nutzer einfügt. Die App verwahrt niemals private Schlüssel oder Seed-Phrasen und kann keine Transaktionen signieren oder übertragen; sie ist daher keine Wallet |
 | Cryptocurrency exchange (Kryptowährungsbörse) | Kein Handel, keine Orderweiterleitung, kein Fiat-Einstieg (On-Ramp) |
@@ -37,7 +37,7 @@ Die App bietet außerdem keine In-App-Käufe und keine kostenpflichtigen Funktio
 
 Stuft die Play-Prüfung die App dennoch als Anbieter einer Finanzfunktion ein, ist die passendste Option **Other** (Sonstiges) mit dieser Beschreibung:
 
-> Schreibgeschützter persönlicher Spar-Tracker. Nutzer geben ihre Guthaben ein oder fügen öffentliche Blockchain-Adressen ein; die App ruft Guthaben und Marktpreise von Datenquellen Dritter ab und zeigt, wie die Ersparnisse die eigenen Ziele des Nutzers abdecken. Keine Verwahrung, keine Schlüssel, keine Transaktionen, keine Kreditvergabe, kein Handel, keine Beratung.
+> Schreibgeschützter persönlicher Spar-Tracker. Nutzer geben ihre Guthaben ein, fügen öffentliche Blockchain-Adressen ein oder verbinden ein Depotkonto über ein Reporting-Token; die App ruft Guthaben, Kontowerte und Marktpreise von Datenquellen Dritter ab und zeigt, wie die Ersparnisse die eigenen Ziele des Nutzers abdecken. Keine Verwahrung, keine Schlüssel, keine Transaktionen, keine Kreditvergabe, kein Handel, keine Beratung.
 
 Länderspezifische Anforderungen für Privatkredit-Apps und die Fragen zu Kryptowährungen für die Vereinigten Staaten gelten nicht, da keine dieser Funktionen ausgewählt ist.
 
@@ -45,4 +45,5 @@ Länderspezifische Anforderungen für Privatkredit-Apps und die Fragen zu Krypto
 
 - Marktdaten stammen von Drittbetreibern, die der Nutzer auswählt (siehe [Datenschutzerklärung]({{ page.base }}/privacy)). Die App zeigt Namen und Website des Betreibers in den Einstellungen an.
 - Wallet-Abfragen nutzen öffentliche, schreibgeschützte Blockchain-APIs.
+- Brokerkonten (Interactive Brokers, OANDA, Trading 212, SnapTrade) werden mit einem Token oder Schlüssel gelesen, das der Nutzer im eigenen Portal des Brokers erstellt; die App ruft nur Reporting-Endpunkte auf und kann weder Orders erteilen noch Geld bewegen. Die Einrichtung ist unter [Broker- und Forex-Konten]({{ page.base }}/accounts) dokumentiert.
 - Die App läuft vollständig auf dem Gerät und hat keinen vom Entwickler betriebenen Server.

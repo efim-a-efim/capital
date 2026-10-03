@@ -14,7 +14,7 @@ class: doc
 
 - Capital hat keine Benutzerkonten, keine Analyse, keine Werbung, keine Absturzberichte und keine vom Entwickler betriebenen Server. Der Entwickler erhält Ihre Daten nie.
 - Ihre Finanzdaten werden ausschließlich auf Ihrem Gerät gespeichert, in einem Ordner Ihrer Wahl. Sie können sie mit einem Passwort verschlüsseln.
-- Der einzige Netzwerkverkehr sind die Anfragen, die die App auf Ihre Veranlassung an die Betreiber von Preis- und Blockchain-Daten sendet, die Sie in den Einstellungen auswählen. Diese Anfragen enthalten die öffentlichen Wallet-Adressen, Token-Verträge und Währungscodes, die Sie erfassen, sowie gegebenenfalls einen API-Schlüssel, den Sie für diesen Betreiber eingegeben haben.
+- Der einzige Netzwerkverkehr sind die Anfragen, die die App auf Ihre Veranlassung an die Betreiber von Preis- und Blockchain-Daten sendet, die Sie in den Einstellungen auswählen, sowie an die Broker, deren Konten Sie verbinden. Diese Anfragen enthalten die öffentlichen Wallet-Adressen, Token-Verträge und Währungscodes, die Sie erfassen, gegebenenfalls einen API-Schlüssel, den Sie für diesen Betreiber eingegeben haben, und bei einem Brokerkonto das von Ihnen erstellte Zugriffstoken sowie die Konto- oder Query-ID.
 
 ## Was die App auf Ihrem Gerät speichert
 
@@ -25,7 +25,7 @@ class: doc
 | Element | Zweck |
 |---|---|
 | Berechtigung für den gewählten Ordner | Ordner beim nächsten Start wieder öffnen |
-| Von Ihnen eingegebene API-Schlüssel der Anbieter | Werden nur an den Betreiber gesendet, der sie ausgegeben hat; mit einem im Android Keystore gehaltenen Schlüssel verschlüsselt; von Snapshots, Exporten und Systembackups ausgeschlossen |
+| Von Ihnen eingegebene API-Schlüssel der Anbieter und Zugriffstoken der Broker | Werden nur an den Betreiber oder Broker gesendet, der sie ausgegeben hat; mit einem im Android Keystore gehaltenen Schlüssel verschlüsselt; von Snapshots, Exporten und Systembackups ausgeschlossen |
 | Sperreinstellungen | Entsperren des verschlüsselten Ordners ohne Passwort: eine Kopie des Datenschlüssels, verschlüsselt mit einem aus Ihrer PIN abgeleiteten und an den Android Keystore gebundenen Schlüssel. Die PIN selbst wird nicht gespeichert |
 | Sprach- und Designauswahl | Einstellungen der Benutzeroberfläche |
 
@@ -41,6 +41,7 @@ Capital kontaktiert nur die Betreiber, die Sie in den Einstellungen wählen, nur
 | Token-Vertragsadressen und Asset-IDs | Der von Ihnen gewählte Betreiber für Kryptopreise | Vermögenswerte bewerten |
 | Währungscodes | Der von Ihnen gewählte Betreiber für Wechselkurse | Zwischen Währungen umrechnen |
 | Der API-Schlüssel, den Sie für einen Betreiber eingegeben haben | Nur dieser Betreiber | Ihr eigenes Konto bei diesem Betreiber authentifizieren |
+| Das Zugriffstoken oder der API-Schlüssel und die Konto- oder Query-ID eines Brokerkontos | Nur dieser Broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Den Gesamtwert des Kontos lesen |
 
 Wie bei jeder Internetanfrage sieht jeder Betreiber auch Ihre IP-Adresse. Die Betreiber sind vom Entwickler unabhängig und verarbeiten die Anfrage nach ihren eigenen Bedingungen und Datenschutzrichtlinien, die in der App unter Einstellungen → Quellen / Nachweise verlinkt sind:
 
@@ -52,6 +53,7 @@ Wie bei jeder Internetanfrage sieht jeder Betreiber auch Ihre IP-Adresse. Die Be
 | TRON und TRC-20-Token | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Kryptopreise | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Wechselkurse | [Frankfurter](https://frankfurter.dev), [Europäische Zentralbank](https://www.ecb.europa.eu) |
+| Brokerkonten | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Nichts wird anderswohin gesendet. Keine Daten werden verkauft, für Werbung weitergegeben oder zur Profilbildung verwendet. Öffentliche Blockchain-Abfragen verraten, dass sich jemand unter Ihrer IP-Adresse für die erfasste Adresse interessiert; verwenden Sie ein VPN, wenn Ihnen das wichtig ist.
 
@@ -59,6 +61,7 @@ Nichts wird anderswohin gesendet. Keine Daten werden verkauft, für Werbung weit
 
 - Sie fragt niemals nach privaten Schlüsseln oder Seed-Phrasen, speichert oder überträgt sie nicht. Sie kann keine Transaktionen signieren oder senden.
 - Sie überweist niemals Geld. Zielzuordnungen sind Berechnungen, die Ihnen angezeigt werden, und nichts weiter.
+- Sie sendet niemals einen Auftrag oder eine Anweisung an einen Broker. Der Brokerzugang dient nur dazu, den Kontowert zu lesen; siehe [Broker- und Forex-Konten]({{ page.base }}/accounts).
 - Sie kontaktiert niemals den Entwickler. Es gibt keine Telemetrie, keine Update-Prüfung in der App und keine Push-Benachrichtigungen.
 
 ## Berechtigungen

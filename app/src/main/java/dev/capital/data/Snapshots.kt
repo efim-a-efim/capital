@@ -10,7 +10,7 @@ import kotlinx.serialization.json.int
 import java.security.MessageDigest
 
 val json = Json { encodeDefaults = true; ignoreUnknownKeys = false }
-const val SCHEMA = 4
+const val SCHEMA = 5
 const val MAX_FILE_BYTES = 8 * 1024 * 1024
 class FutureSchema : IllegalArgumentException(tr("This folder needs a newer Capital version. No data was changed."))
 @Serializable data class Revision(val schema: Int = SCHEMA, val id: String = id(), val parents: List<String> = emptyList(), val createdAt: Long = System.currentTimeMillis(), val data: Portfolio)

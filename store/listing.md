@@ -32,7 +32,7 @@ Savings in buckets, goals with due dates, plans that show when each goal closes.
 Capital shows where your savings stand against what you are saving for.
 
 BUCKETS
-Put each place you keep money into a bucket: a savings account, cash, a brokerage, a crypto wallet. Type quantities in by hand, or paste a public wallet address (BTC, ETH, TON, TRX) and let the app read the balance and tokens. Every bucket is valued in your default currency.
+Put each place you keep money into a bucket: a savings account, cash, a brokerage, a crypto wallet. Type quantities in by hand, paste a public wallet address (BTC, ETH, TON, TRX) and let the app read the balance and tokens, or connect a brokerage account (Interactive Brokers, OANDA, Trading 212, or many others through SnapTrade) with a token and let the app read its value. Every bucket is valued in your default currency.
 
 GOALS
 Give each goal a target and a due date, then connect the buckets that may fund it, with limits if you like. Goals with earlier dates are funded first; drag goals that share a date to set their order. The app shows what each goal has, what it still needs, and marks it Funded, Funded in time or Not funded.
@@ -50,7 +50,7 @@ PRIVATE BY DESIGN
 • Wallets are read-only: the app never asks for a private key or seed phrase and cannot send anything.
 
 DATA SOURCES YOU CHOOSE
-Bitcoin: Blockstream or mempool.space. Ethereum: PublicNode or Alchemy, tokens from Blockscout or Ethplorer. TON: TON Center or TonAPI. TRON: TronGrid or PublicNode. Prices: DefiLlama, CoinGecko or CoinPaprika. Fiat rates: Frankfurter or the European Central Bank. Every source is selectable; keyless defaults work out of the box.
+Bitcoin: Blockstream or mempool.space. Ethereum: PublicNode or Alchemy, tokens from Blockscout or Ethplorer. TON: TON Center or TonAPI. TRON: TronGrid or PublicNode. Prices: DefiLlama, CoinGecko or CoinPaprika. Fiat rates: Frankfurter or the European Central Bank. Broker accounts: Interactive Brokers (Flex Web Service), OANDA (v20 API), Trading 212 and SnapTrade, read-only. Every source is selectable; keyless defaults work out of the box.
 
 Tokens are identified by contract address, never by name, and only count when your price source lists that exact contract – so a fake "USDT" on your address is never counted.
 
@@ -63,12 +63,9 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 ## Release notes (≤500, per release)
 
 ```
-• Plans tab with archived plans
-• Funded / Funded in time / Not funded badges on goals
-• Planned money tops up goals after real buckets
-• Interface in 15 languages, selectable in Settings
-• Help button opens the documentation for the current screen
-• Signed with the permanent release key
+• Broker accounts: connect Interactive Brokers, OANDA, Trading 212 or SnapTrade accounts with a read-only token or key; the app reads the account value on refresh
+• Setup guide per broker on the site, in 15 languages
+• Settings → Broker accounts for the credentials, stored encrypted on the device
 ```
 
 ## App content answers

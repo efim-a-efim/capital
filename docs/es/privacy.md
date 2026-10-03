@@ -14,7 +14,7 @@ class: doc
 
 - Capital no tiene cuentas de usuario, analíticas, publicidad, informes de errores ni servidores gestionados por el desarrollador. El desarrollador nunca recibe sus datos.
 - Sus registros financieros se guardan únicamente en su dispositivo, en una carpeta que usted elige. Puede cifrarlos con una contraseña.
-- El único tráfico de red son las solicitudes que la aplicación envía, siguiendo sus instrucciones, a los operadores de datos de precios y de blockchain que usted elige en Ajustes. Esas solicitudes incluyen las direcciones públicas de billeteras, los contratos de tokens y los códigos de moneda que usted sigue, y cualquier clave API que haya introducido para ese operador.
+- El único tráfico de red son las solicitudes que la aplicación envía, siguiendo sus instrucciones, a los operadores de datos de precios y de blockchain que usted elige en Ajustes y a los brókeres cuyas cuentas conecta. Esas solicitudes incluyen las direcciones públicas de billeteras, los contratos de tokens y los códigos de moneda que usted sigue, cualquier clave API que haya introducido para ese operador y, en una cuenta de bróker, el token de acceso que creó y el ID de la cuenta o de la consulta.
 
 ## Qué guarda la aplicación en su dispositivo
 
@@ -25,7 +25,7 @@ class: doc
 | Elemento | Finalidad |
 |---|---|
 | Permiso de acceso a la carpeta elegida | Volver a abrir la carpeta en el siguiente inicio |
-| Claves API de proveedores que usted introdujo | Se envían solo al operador que las emitió; cifradas con una clave guardada en Android Keystore; excluidas de las instantáneas, las exportaciones y las copias de seguridad del sistema |
+| Claves API de proveedores y tokens de acceso de brókeres que usted introdujo | Se envían solo al operador o bróker que los emitió; cifradas con una clave guardada en Android Keystore; excluidas de las instantáneas, las exportaciones y las copias de seguridad del sistema |
 | Ajustes de bloqueo | Desbloquear la carpeta cifrada sin la contraseña: una copia de la clave de datos, cifrada con una clave derivada de su PIN y vinculada a Android Keystore. El PIN en sí no se guarda |
 | Idioma y tema elegidos | Preferencias de la interfaz |
 
@@ -41,6 +41,7 @@ Capital se comunica solo con los operadores que usted elige en Ajustes, solo med
 | Direcciones de contratos de tokens e identificadores de activos | El operador de precios de criptomonedas que usted eligió | Obtener el precio de los activos |
 | Códigos de moneda | El operador de tipos de cambio fiat que usted eligió | Convertir entre monedas |
 | La clave API que usted introdujo para un operador | Solo ese operador | Autenticar su propia cuenta en ese operador |
+| El token de acceso o la clave de API y el ID de cuenta o de consulta de una cuenta de bróker | Solo ese bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Leer el valor total de la cuenta |
 
 Como en cualquier solicitud por internet, cada operador ve además su dirección IP. Los operadores son independientes del desarrollador y tratan la solicitud según sus propias condiciones y políticas de privacidad, enlazadas en la aplicación desde Ajustes → Fuentes / atribución:
 
@@ -52,6 +53,7 @@ Como en cualquier solicitud por internet, cada operador ve además su dirección
 | TRON y tokens TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Precios de criptomonedas | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tipos de cambio fiat | [Frankfurter](https://frankfurter.dev), [Banco Central Europeo](https://www.ecb.europa.eu) |
+| Cuentas de bróker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 No se envía nada a ningún otro sitio. Ningún dato se vende, se comparte con fines publicitarios ni se usa para crear perfiles. Las consultas a blockchains públicas revelan que alguien con su dirección IP tiene interés en la dirección que usted sigue; use una VPN si eso le importa.
 
@@ -59,6 +61,7 @@ No se envía nada a ningún otro sitio. Ningún dato se vende, se comparte con f
 
 - Nunca pide, guarda ni transmite claves privadas ni frases semilla. No puede firmar ni enviar transacciones.
 - Nunca transfiere dinero. Las asignaciones a metas son cálculos que se le muestran a usted y nada más.
+- Nunca envía una orden ni una instrucción a un bróker. El acceso al bróker se usa solo para leer el valor de la cuenta; consulte [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 - Nunca se comunica con el desarrollador. No hay telemetría, ni comprobación de actualizaciones dentro de la aplicación, ni notificaciones push.
 
 ## Permisos

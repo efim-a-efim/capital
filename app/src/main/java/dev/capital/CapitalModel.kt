@@ -182,6 +182,14 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         catch(e: Exception) { return@launch done(null,e.safeMessage()) }
         done(list,null)
     } }
+    /** Lists a broker's accounts for the holding editor; persists nothing. */
+    fun fetchAccounts(broker: String,done: (List<Pair<String,String>>?,String?)->Unit) { viewModelScope.launch {
+        try { done(providers.accounts(broker),null) } catch(e: CancellationException) { throw e } catch(e: Exception) { done(null,e.safeMessage()) }
+    } }
+    /** Opens SnapTrade's Connection Portal for the user's own SnapTrade account. */
+    fun connectSnapTrade(open: (String)->Unit) { viewModelScope.launch {
+        try { open(providers.snapTradeLogin()) } catch(e: CancellationException) { throw e } catch(e: Exception) { notice(e.safeMessage()) }
+    } }
     fun saveKey(provider: String,value: String): Boolean = try { secrets.put(provider,value); notice(tr("{0} key saved on this device",provider)); true } catch(e: Exception) { notice(e.message ?: tr("Could not save key")); false }
     fun export(uri: Uri,plaintext: Boolean=false)=viewModelScope.launch {
         if(plaintext && mutable.value.encrypted) return@launch notice(tr("Enter the password to export without encryption"))

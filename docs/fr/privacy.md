@@ -14,7 +14,7 @@ class: doc
 
 - Capital n’a ni comptes utilisateur, ni outils d’analyse, ni publicité, ni rapports de plantage, ni serveurs exploités par le développeur. Le développeur ne reçoit jamais vos données.
 - Vos données financières sont enregistrées uniquement sur votre appareil, dans un dossier de votre choix. Vous pouvez les chiffrer avec un mot de passe.
-- Le seul trafic réseau est constitué des requêtes que l’application envoie, à votre demande, aux opérateurs de données de cours et de blockchain que vous choisissez dans les Paramètres. Ces requêtes contiennent les adresses publiques de portefeuilles crypto, les contrats de jetons et les codes de devise que vous suivez, ainsi que toute clé API que vous avez saisie pour cet opérateur.
+- Le seul trafic réseau est constitué des requêtes que l’application envoie, à votre demande, aux opérateurs de données de cours et de blockchain que vous choisissez dans les Paramètres, ainsi qu’aux courtiers dont vous connectez les comptes. Ces requêtes contiennent les adresses publiques de portefeuilles crypto, les contrats de jetons et les codes de devise que vous suivez, toute clé API que vous avez saisie pour cet opérateur et, pour un compte de courtage, le jeton d’accès que vous avez créé ainsi que l’identifiant du compte ou de la requête.
 
 ## Ce que l’application enregistre sur votre appareil
 
@@ -25,7 +25,7 @@ class: doc
 | Élément | Finalité |
 |---|---|
 | Autorisation d’accès au dossier sélectionné | Rouvrir le dossier au lancement suivant |
-| Clés API de fournisseurs que vous avez saisies | Envoyées uniquement à l’opérateur qui les a émises ; chiffrées avec une clé conservée dans Android Keystore ; exclues des instantanés, des exports et des sauvegardes du système |
+| Clés API de fournisseurs et jetons d’accès de courtiers que vous avez saisis | Envoyés uniquement à l’opérateur ou au courtier qui les a émis ; chiffrées avec une clé conservée dans Android Keystore ; exclues des instantanés, des exports et des sauvegardes du système |
 | Paramètres de verrouillage | Déverrouiller le dossier chiffré sans le mot de passe : une copie de la clé des données, chiffrée avec une clé dérivée de votre PIN et liée à Android Keystore. Le PIN lui-même n’est pas enregistré |
 | Choix de la langue et du thème | Préférences d’interface |
 
@@ -41,6 +41,7 @@ Capital contacte uniquement les opérateurs que vous choisissez dans les Paramè
 | Adresses de contrats de jetons et identifiants d’actifs | L’opérateur de cours crypto que vous avez sélectionné | Obtenir le cours des actifs |
 | Codes de devise | L’opérateur de taux de change que vous avez sélectionné | Convertir entre devises |
 | La clé API que vous avez saisie pour un opérateur | Cet opérateur uniquement | Vous authentifier sur votre propre compte chez lui |
+| Le jeton d’accès ou la clé API et l’identifiant du compte ou de la requête d’un compte de courtage | Ce courtier uniquement (Interactive Brokers, OANDA, Trading 212 ou SnapTrade) | Lire la valeur totale du compte |
 
 Chaque opérateur voit aussi votre adresse IP, comme pour toute requête sur Internet. Les opérateurs sont indépendants du développeur et traitent la requête selon leurs propres conditions et politiques de confidentialité, accessibles depuis Paramètres → Sources / crédits dans l’application :
 
@@ -52,6 +53,7 @@ Chaque opérateur voit aussi votre adresse IP, comme pour toute requête sur Int
 | TRON et jetons TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Cours des cryptomonnaies | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Taux de change des devises | [Frankfurter](https://frankfurter.dev), [Banque centrale européenne](https://www.ecb.europa.eu) |
+| Comptes de courtage | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
 
 Rien n’est envoyé ailleurs. Aucune donnée n’est vendue, partagée à des fins publicitaires ni utilisée pour établir des profils. Les requêtes sur des blockchains publiques révèlent que l’adresse que vous suivez intéresse quelqu’un situé à votre adresse IP ; utilisez un VPN si cela compte pour vous.
 
@@ -59,6 +61,7 @@ Rien n’est envoyé ailleurs. Aucune donnée n’est vendue, partagée à des f
 
 - Elle ne demande, n’enregistre ni ne transmet jamais de clés privées ni de phrases de récupération. Elle ne peut ni signer ni envoyer de transactions.
 - Elle ne transfère jamais d’argent. Les affectations aux objectifs sont des calculs qui vous sont affichés, rien de plus.
+- Elle n’envoie jamais d’ordre ni d’instruction à un courtier. L’accès au courtier sert uniquement à lire la valeur du compte ; voir [Comptes de courtage et de forex]({{ page.base }}/accounts).
 - Elle ne contacte jamais le développeur. Il n’y a ni télémétrie, ni vérification des mises à jour intégrée à l’application, ni notifications push.
 
 ## Autorisations

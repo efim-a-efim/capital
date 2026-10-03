@@ -12,7 +12,7 @@ class: doc
 
 ## How the app handles data
 
-Capital has no backend. Everything the user enters stays in a folder on the device. The only data that ever leaves the device is what the app sends, on the user's instruction, to the third-party data operators the user selects in Settings: public wallet addresses, token contract ids, currency codes and any API key the user entered for that operator. The operators answer the request; the app stores the returned balances and prices locally and keeps no copy of the request. No SDK in the app phones home: dependencies are AndroidX, Kotlin, OkHttp, Bouncy Castle and ZXing (QR rendering, offline) only. The tip screen shows static addresses baked into the app and sends nothing.
+Capital has no backend. Everything the user enters stays in a folder on the device. The only data that ever leaves the device is what the app sends, on the user's instruction, to the third-party data operators the user selects in Settings and the brokers whose accounts the user connects: public wallet addresses, token contract ids, currency codes, any API key the user entered for that operator, and for a broker account the access token the user created and the account or query id. The operators answer the request; the app stores the returned balances and prices locally and keeps no copy of the request. No SDK in the app phones home: dependencies are AndroidX, Kotlin, OkHttp, Bouncy Castle and ZXing (QR rendering, offline) only. The tip screen shows static addresses baked into the app and sends nothing.
 
 Google Play counts data as *collected* when it is transmitted off the device, even when no developer server is involved and the processing is ephemeral, so the declaration is not "collects nothing". It is a single ephemeral, optional data type.
 
@@ -34,13 +34,13 @@ Select exactly one type.
 |---|---|---|---|---|---|---|
 | Financial info | Other financial info | Yes | No | **Yes** | **Optional** | App functionality |
 
-What the type covers: public blockchain addresses the user tracks, the token contracts found on them, and the currency codes of the user's holdings. They are transmitted to the data operator the user selected so that balances and prices can be fetched, held in memory for the request, and discarded.
+What the type covers: public blockchain addresses the user tracks, the token contracts found on them, the currency codes of the user's holdings, and the ids of the broker accounts the user connected. They are transmitted to the data operator the user selected so that balances and prices can be fetched, held in memory for the request, and discarded.
 
 Why **not shared**: the transfer goes directly from the device to the operator the user chose, on a refresh the user started, after the app told the user in Settings which operator will be queried and that the request discloses the address and IP to that operator. This is the "user-initiated action where the user reasonably expects the data to be shared" exemption. The developer receives nothing and has no service providers.
 
 Why **optional**: the app is fully usable with manual holdings only. Addresses and API keys are entered by choice.
 
-API keys entered by the user are sent only to the operator that issued them. They are the user's credentials for that operator's own service and are not declared as a separate user data type; if a reviewer asks, describe them as above.
+API keys and broker access tokens entered by the user are sent only to the operator or broker that issued them. They are the user's credentials for that operator's own service and are not declared as a separate user data type; if a reviewer asks, describe them as above.
 
 ### Types that are **not** collected
 

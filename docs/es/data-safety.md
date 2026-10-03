@@ -12,7 +12,7 @@ class: doc
 
 ## Cómo trata los datos la aplicación
 
-Capital no tiene backend. Todo lo que introduce el usuario se queda en una carpeta del dispositivo. Los únicos datos que salen del dispositivo son los que la aplicación envía, siguiendo las instrucciones del usuario, a los operadores de datos externos que el usuario elige en Ajustes: direcciones públicas de billeteras, identificadores de contratos de tokens, códigos de moneda y cualquier clave API que el usuario haya introducido para ese operador. Los operadores responden a la solicitud; la aplicación guarda localmente los saldos y precios recibidos y no conserva ninguna copia de la solicitud. Ningún SDK de la aplicación envía datos por su cuenta: las dependencias son únicamente AndroidX, Kotlin, OkHttp, Bouncy Castle y ZXing (generación de códigos QR, sin conexión). La pantalla de propinas muestra direcciones fijas incluidas en la aplicación y no envía nada.
+Capital no tiene backend. Todo lo que introduce el usuario se queda en una carpeta del dispositivo. Los únicos datos que salen del dispositivo son los que la aplicación envía, siguiendo las instrucciones del usuario, a los operadores de datos externos que el usuario elige en Ajustes y a los brókeres cuyas cuentas conecta el usuario: direcciones públicas de billeteras, identificadores de contratos de tokens, códigos de moneda, cualquier clave API que el usuario haya introducido para ese operador y, en una cuenta de bróker, el token de acceso que el usuario creó y el ID de la cuenta o de la consulta. Los operadores responden a la solicitud; la aplicación guarda localmente los saldos y precios recibidos y no conserva ninguna copia de la solicitud. Ningún SDK de la aplicación envía datos por su cuenta: las dependencias son únicamente AndroidX, Kotlin, OkHttp, Bouncy Castle y ZXing (generación de códigos QR, sin conexión). La pantalla de propinas muestra direcciones fijas incluidas en la aplicación y no envía nada.
 
 Google Play considera que los datos se *recogen* (collected) cuando se transmiten fuera del dispositivo, aunque no intervenga ningún servidor del desarrollador y el tratamiento sea efímero, así que la declaración no es «no recoge nada». Se trata de un único tipo de datos, efímero y opcional.
 
@@ -34,13 +34,13 @@ Seleccione exactamente un tipo.
 |---|---|---|---|---|---|---|
 | Financial info (Información financiera) | Other financial info (Otra información financiera) | Yes (Sí) | No | **Yes** (Sí) | **Optional** (Opcional) | App functionality (Funcionalidad de la aplicación) |
 
-Qué abarca el tipo: las direcciones públicas de blockchain que sigue el usuario, los contratos de tokens encontrados en ellas y los códigos de moneda de las posiciones del usuario. Se transmiten al operador de datos que eligió el usuario para obtener saldos y precios, se mantienen en memoria durante la solicitud y se descartan.
+Qué abarca el tipo: las direcciones públicas de blockchain que sigue el usuario, los contratos de tokens encontrados en ellas los códigos de moneda de las posiciones del usuario y los ID de las cuentas de bróker que el usuario conectó. Se transmiten al operador de datos que eligió el usuario para obtener saldos y precios, se mantienen en memoria durante la solicitud y se descartan.
 
 Por qué **no se comparten**: la transferencia va directamente del dispositivo al operador que eligió el usuario, en una actualización iniciada por el usuario, después de que la aplicación le haya indicado en Ajustes qué operador se consultará y que la solicitud revela la dirección y la IP a ese operador. Es la excepción de «acción iniciada por el usuario en la que este espera razonablemente que los datos se compartan». El desarrollador no recibe nada y no tiene proveedores de servicios.
 
 Por qué son **opcionales**: la aplicación se puede usar por completo solo con posiciones manuales. Las direcciones y las claves API se introducen de forma voluntaria.
 
-Las claves API que introduce el usuario se envían solo al operador que las emitió. Son las credenciales del usuario para el propio servicio de ese operador y no se declaran como un tipo de datos de usuario aparte; si un revisor lo pregunta, descríbalas como se indica aquí.
+Las claves API y los tokens de acceso de brókeres que introduce el usuario se envían solo al operador o bróker que los emitió. Son las credenciales del usuario para el propio servicio de ese operador y no se declaran como un tipo de datos de usuario aparte; si un revisor lo pregunta, descríbalas como se indica aquí.
 
 ### Tipos que **no** se recogen
 

@@ -12,7 +12,7 @@ class: doc
 
 ## Wie die App mit Daten umgeht
 
-Capital hat kein Backend. Alles, was der Nutzer eingibt, bleibt in einem Ordner auf dem Gerät. Die einzigen Daten, die das Gerät jemals verlassen, sind die, die die App auf Anweisung des Nutzers an die Datenbetreiber von Drittanbietern sendet, die der Nutzer in den Einstellungen auswählt: öffentliche Wallet-Adressen, Token-Vertrags-IDs, Währungscodes sowie gegebenenfalls ein API-Schlüssel, den der Nutzer für diesen Betreiber eingegeben hat. Die Betreiber beantworten die Anfrage; die App speichert die zurückgegebenen Guthaben und Kurse lokal und behält keine Kopie der Anfrage. Kein SDK in der App sendet Daten nach Hause: Die Abhängigkeiten sind ausschließlich AndroidX, Kotlin, OkHttp, Bouncy Castle und ZXing (QR-Darstellung, offline). Der Trinkgeld-Bildschirm zeigt fest in die App eingebaute, statische Adressen und sendet nichts.
+Capital hat kein Backend. Alles, was der Nutzer eingibt, bleibt in einem Ordner auf dem Gerät. Die einzigen Daten, die das Gerät jemals verlassen, sind die, die die App auf Anweisung des Nutzers an die Datenbetreiber von Drittanbietern sendet, die der Nutzer in den Einstellungen auswählt, und an die Broker, deren Konten der Nutzer verbindet: öffentliche Wallet-Adressen, Token-Vertrags-IDs, Währungscodes, gegebenenfalls ein API-Schlüssel, den der Nutzer für diesen Betreiber eingegeben hat, und bei einem Brokerkonto das vom Nutzer erstellte Zugriffstoken sowie die Konto- oder Query-ID. Die Betreiber beantworten die Anfrage; die App speichert die zurückgegebenen Guthaben und Kurse lokal und behält keine Kopie der Anfrage. Kein SDK in der App sendet Daten nach Hause: Die Abhängigkeiten sind ausschließlich AndroidX, Kotlin, OkHttp, Bouncy Castle und ZXing (QR-Darstellung, offline). Der Trinkgeld-Bildschirm zeigt fest in die App eingebaute, statische Adressen und sendet nichts.
 
 Google Play wertet Daten als *erhoben*, sobald sie vom Gerät übertragen werden – auch wenn kein Server des Entwicklers beteiligt ist und die Verarbeitung nur flüchtig erfolgt. Die Angabe lautet daher nicht „erhebt nichts“. Es handelt sich um einen einzigen, flüchtig verarbeiteten, optionalen Datentyp.
 
@@ -34,13 +34,13 @@ Wählen Sie genau einen Typ aus.
 |---|---|---|---|---|---|---|
 | Finanzinformationen | Sonstige Finanzinformationen | Ja | Nein | **Ja** | **Optional** | App-Funktionen |
 
-Was der Typ umfasst: öffentliche Blockchain-Adressen, die der Nutzer erfasst, die darauf gefundenen Token-Verträge und die Währungscodes der Positionen des Nutzers. Sie werden an den vom Nutzer gewählten Datenbetreiber übertragen, damit Guthaben und Kurse abgerufen werden können, für die Dauer der Anfrage im Arbeitsspeicher gehalten und danach verworfen.
+Was der Typ umfasst: öffentliche Blockchain-Adressen, die der Nutzer erfasst, die darauf gefundenen Token-Verträge die Währungscodes der Positionen des Nutzers und die IDs der Brokerkonten, die der Nutzer verbunden hat. Sie werden an den vom Nutzer gewählten Datenbetreiber übertragen, damit Guthaben und Kurse abgerufen werden können, für die Dauer der Anfrage im Arbeitsspeicher gehalten und danach verworfen.
 
 Warum **nicht weitergegeben**: Die Übertragung erfolgt direkt vom Gerät an den vom Nutzer gewählten Betreiber, bei einer vom Nutzer gestarteten Aktualisierung, nachdem die App den Nutzer in den Einstellungen darüber informiert hat, welcher Betreiber abgefragt wird und dass die Anfrage diesem Betreiber die Adresse und die IP-Adresse offenlegt. Das ist die Ausnahme für eine „vom Nutzer initiierte Aktion, bei der der Nutzer vernünftigerweise erwartet, dass die Daten weitergegeben werden“. Der Entwickler erhält nichts und hat keine Dienstleister.
 
 Warum **optional**: Die App ist allein mit manuellen Positionen vollständig nutzbar. Adressen und API-Schlüssel werden freiwillig eingegeben.
 
-Vom Nutzer eingegebene API-Schlüssel werden nur an den Betreiber gesendet, der sie ausgegeben hat. Sie sind die Zugangsdaten des Nutzers für den eigenen Dienst dieses Betreibers und werden nicht als eigener Nutzerdatentyp angegeben; falls ein Prüfer nachfragt, beschreiben Sie sie wie oben.
+Vom Nutzer eingegebene API-Schlüssel und Broker-Zugriffstoken werden nur an den Betreiber oder Broker gesendet, der sie ausgegeben hat. Sie sind die Zugangsdaten des Nutzers für den eigenen Dienst dieses Betreibers und werden nicht als eigener Nutzerdatentyp angegeben; falls ein Prüfer nachfragt, beschreiben Sie sie wie oben.
 
 ### Typen, die **nicht** erhoben werden
 
