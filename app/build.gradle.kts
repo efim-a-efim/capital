@@ -10,8 +10,8 @@ android {
         applicationId = "dev.capital"
         minSdk = 26
         targetSdk = 37
-        versionCode = 12
-        versionName = "2.5.1"
+        versionCode = 13
+        versionName = "2.6.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Tip screen with the developer's wallet addresses. `-Pcapital.tips=false` leaves it out, for the Google Play bundle.
         buildConfigField("boolean", "TIPS", (findProperty("capital.tips") ?: "true").toString())
