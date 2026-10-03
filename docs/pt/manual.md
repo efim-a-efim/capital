@@ -20,7 +20,7 @@ Nada no app movimenta dinheiro. Ele é um espelho do que você possui e uma calc
 
 1. **Escolha uma pasta.** Selecione uma pasta exclusiva no dispositivo, por exemplo `Documents/Capital`. É nela que todos os registros são gravados. Uma pasta que já contém dados do Capital é aberta diretamente.
 2. **Ajustes → Moeda padrão.** Os totais e a Visão geral são exibidos nela.
-3. Se quiser, defina **chaves de provedores** em Ajustes para os operadores que oferecem limites maiores com uma chave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Toda rede e toda fonte de preços tem uma opção padrão que dispensa chave. As contas de corretora exigem um **token de acesso** da corretora; veja [Contas de corretora e de forex]({{ page.base }}/accounts).
+3. Se quiser, defina **chaves de provedores** em Ajustes para os operadores que oferecem limites maiores com uma chave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Toda rede e toda fonte de preços tem uma opção padrão que dispensa chave. As contas de corretora exigem um **token de acesso** da corretora, informado na aba Corretoras; veja [Contas de corretora e de forex]({{ page.base }}/accounts).
 
 ## Caixinhas {#buckets}
 
@@ -28,7 +28,7 @@ Aba Caixinhas → **+**. Dê à caixinha um nome e uma moeda. Abra-a para adicio
 
 - **Posição manual**: um nome, um código de moeda ou de ativo (EUR, USD, BTC, o ticker de uma ação que você mesmo avalia…) e uma quantidade. Use para saldos bancários, dinheiro em espécie, qualquer coisa que o app não consiga ler.
 - **Posição de carteira**: escolha a rede (BTC, ETH, TON, TRX) e cole um endereço público. Ao atualizar, o app lê o saldo nativo e, em ETH, TON e TRX, os tokens fungíveis do endereço.
-- **Conta de corretora**: escolha a corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) e informe o ID da conta ou da consulta. Ao atualizar, o app lê o valor total da conta na moeda base dela. O token de acesso é informado uma única vez em Ajustes → Contas de corretora. Os passos de configuração, com links para a documentação das próprias corretoras, estão em [Contas de corretora e de forex]({{ page.base }}/accounts).
+- **Conta de corretora**: escolha uma das contas adicionadas na aba Corretoras. Ao atualizar, o app lê o valor total da conta na moeda base dela. Uma conta pode ser vinculada a uma só caixinha.
 
 Os valores aceitam ponto ou vírgula como separador decimal, sem separadores de milhar. Cada caixinha mostra as quantidades nativas e o valor delas na sua moeda padrão. Se faltar uma cotação, o total é marcado como incompleto; um valor em cache desatualizado continua sendo usado, com um aviso.
 
@@ -55,6 +55,10 @@ Use **Arquivar** para manter uma meta sem contabilizá-la. As metas arquivadas f
 Aba Planos → **+**. Uma economia planejada é um valor que você pretende adicionar em determinada data, por exemplo o que você guarda do salário no fim de cada mês. Os planos não fazem parte das suas economias; eles apenas estendem a projeção: "as economias planejadas concluem esta meta em 30 de out. de 2026 · no prazo".
 
 O dinheiro dos planos é aplicado depois das caixinhas atuais, às metas em ordem de vencimento, então ele só completa o que ainda está em aberto. Quando a data de um plano passa, ele vai para a seção **Arquivada** e deixa de ser contabilizado: ou você já transferiu o dinheiro para uma caixinha e o app o vê lá, ou o plano não se concretizou. Altere a data para o futuro para reativá-lo; exclua-o se não fizer mais sentido.
+
+## Corretoras
+
+Aba Corretoras → **+**. Uma conta de corretora é uma conexão somente leitura: escolha a corretora (Interactive Brokers, OANDA, Trading 212 ou SnapTrade), informe o ID da conta ou da consulta e salve; o token ou a chave da corretora é informado uma única vez em **Credenciais**, na mesma aba, e vale para todas as contas dessa corretora. A aba lista cada conta com o último valor e a caixinha à qual está vinculada. **Ignorar saldos menores que** um valor na sua moeda padrão (1 por padrão) faz um saldo residual contar como 0 na caixinha. Vincule-a a uma caixinha com **Adicionar posição → Conta de corretora**; exclua a posição para desvincular, exclua a conta para remover a conexão. Os passos de configuração, com links para a documentação das próprias corretoras, estão em [Contas de corretora e de forex]({{ page.base }}/accounts).
 
 ## Atualização
 

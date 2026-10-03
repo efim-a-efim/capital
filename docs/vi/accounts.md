@@ -22,7 +22,7 @@ Capital chỉ kết nối với các giao diện có thông tin xác thực dài
 ## Trước khi bắt đầu {#before-you-start}
 
 - **Những gì rời khỏi thiết bị.** Mỗi lần làm mới, ứng dụng gửi mã truy cập và mã tài khoản hoặc mã truy vấn của bạn đến nhà môi giới đó qua HTTPS. Nhà môi giới thấy địa chỉ IP của bạn, như với mọi yêu cầu khác.
-- **Nơi lưu thông tin xác thực.** Cài đặt → Tài khoản môi giới. Chúng được mã hóa bằng khóa lưu trong Android Keystore, không bao giờ được ghi vào thư mục dữ liệu của bạn và không nằm trong bản xuất hay bản sao lưu của hệ thống. Một bộ thông tin xác thực cho mỗi nhà môi giới dùng được cho mọi tài khoản bạn thêm ở nhà môi giới đó.
+- **Nơi lưu thông tin xác thực.** Thẻ Môi giới → Thông tin xác thực. Chúng được mã hóa bằng khóa lưu trong Android Keystore, không bao giờ được ghi vào thư mục dữ liệu của bạn và không nằm trong bản xuất hay bản sao lưu của hệ thống. Một bộ thông tin xác thực cho mỗi nhà môi giới dùng được cho mọi tài khoản bạn thêm ở nhà môi giới đó.
 - **Những gì được lưu trong thư mục của bạn.** Mã tài khoản, giá trị đọc được gần nhất và thời điểm đọc. Không có gì khác từ nhà môi giới.
 - **Giao diện của nhà môi giới có thể thay đổi.** Các bước dưới đây khớp với trang web của các nhà môi giới tính đến tháng 10 năm 2026. Nhà môi giới thỉnh thoảng đổi tên menu và dời các thiết lập, nên khi bạn làm theo, một bước có thể trông hơi khác. Tài liệu của chính nhà môi giới, được liên kết trong từng phần, là nguồn chính thức: nếu một bước ở đây không còn khớp, hãy tìm cùng thuật ngữ đó trên trang của nhà môi giới.
 
@@ -51,11 +51,12 @@ Truy vấn phải bao gồm đúng một tài khoản. Nếu bạn có các tài
 
 ### 3. Kết nối trong Capital
 
-1. **Cài đặt → Tài khoản môi giới → Mã truy cập: Interactive Brokers**, dán mã và lưu.
-2. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, **Nhà môi giới** thành Interactive Brokers, nhập **Flex Query id** và lưu.
-3. Nhấn **Làm mới**. Lần chạy đầu tiên mất tới nửa phút vì báo cáo được tạo theo yêu cầu.
+1. **Môi giới → Thông tin xác thực → Mã truy cập: Interactive Brokers**, dán mã và lưu.
+2. **Môi giới → +**: nhập tên, đặt **Nhà môi giới** thành Interactive Brokers, nhập **Flex Query id** và lưu.
+3. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, chọn tài khoản và lưu.
+4. Nhấn **Làm mới**. Lần chạy đầu tiên mất tới nửa phút vì báo cáo được tạo theo yêu cầu.
 
-Khi mã truy cập hết hạn, lần làm mới báo *Mã truy cập đã hết hạn; hãy tạo mã mới trong Client Portal*: hãy tạo mã mới và dán vào Cài đặt. Interactive Brokers cho phép mỗi giây một yêu cầu báo cáo và mười yêu cầu mỗi phút cho một mã truy cập, mức mà một lần làm mới không bao giờ vượt quá.
+Khi mã truy cập hết hạn, lần làm mới báo *Mã truy cập đã hết hạn; hãy tạo mã mới trong Client Portal*: hãy tạo mã mới và dán vào mục Thông tin xác thực. Interactive Brokers cho phép mỗi giây một yêu cầu báo cáo và mười yêu cầu mỗi phút cho một mã truy cập, mức mà một lần làm mới không bao giờ vượt quá.
 
 Tài liệu của Interactive Brokers: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ Mã tài khoản v20 có dạng `001-001-1234567-001`, có dấu gạch nối. N
 
 ### 3. Kết nối trong Capital
 
-1. **Cài đặt → Tài khoản môi giới → Mã truy cập: OANDA**, dán mã và lưu.
-2. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, **Nhà môi giới** thành OANDA, nhập **Mã tài khoản OANDA** và lưu.
-3. Nhấn **Làm mới**.
+1. **Môi giới → Thông tin xác thực → Mã truy cập: OANDA**, dán mã và lưu.
+2. **Môi giới → +**: nhập tên, đặt **Nhà môi giới** thành OANDA, nhập **Mã tài khoản OANDA** và lưu.
+3. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, chọn tài khoản và lưu.
+4. Nhấn **Làm mới**.
 
 Tài khoản ký quỹ có NAV âm được báo là lỗi chứ không được tính vào tiền tiết kiệm.
 
@@ -97,9 +99,10 @@ Capital gọi **account summary** (tóm tắt tài khoản) của Trading 212 Pu
 
 ### 2. Kết nối trong Capital
 
-1. **Cài đặt → Tài khoản môi giới → Khóa API: Trading 212** và **Mã bí mật API: Trading 212**, dán từng giá trị.
-2. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, **Nhà môi giới** thành Trading 212, nhập **Số tài khoản Trading 212** (mã tài khoản hiển thị trong ứng dụng, chỉ gồm chữ số) và lưu.
-3. Nhấn **Làm mới**. Trading 212 cho phép một yêu cầu tóm tắt mỗi 5 giây.
+1. **Môi giới → Thông tin xác thực → Khóa API: Trading 212** và **Mã bí mật API: Trading 212**, dán từng giá trị.
+2. **Môi giới → +**: nhập tên, đặt **Nhà môi giới** thành Trading 212, nhập **Số tài khoản Trading 212** (mã tài khoản hiển thị trong ứng dụng, chỉ gồm chữ số) và lưu.
+3. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, chọn tài khoản và lưu.
+4. Nhấn **Làm mới**. Trading 212 cho phép một yêu cầu tóm tắt mỗi 5 giây.
 
 Tài liệu của Trading 212: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ Những gì được gửi: client id của bạn và, dưới dạng chữ ký,
 
 ### 2. Kết nối trong Capital
 
-1. **Cài đặt → Tài khoản môi giới → Client id: SnapTrade** và **Consumer key: SnapTrade**, dán từng giá trị.
-2. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới** và **Nhà môi giới** thành SnapTrade.
+1. **Môi giới → Thông tin xác thực → Client id: SnapTrade** và **Consumer key: SnapTrade**, dán từng giá trị.
+2. **Môi giới → +**: nhập tên và đặt **Nhà môi giới** thành SnapTrade.
 3. Nhấn **Kết nối nhà môi giới qua SnapTrade**. SnapTrade Connection Portal mở trong trình duyệt; hãy đăng nhập nhà môi giới của bạn tại đó (liên kết có hiệu lực trong 5 phút). Sau đó quay lại Capital.
-4. Nhấn **Lấy tài khoản** và chọn tài khoản; mã của nó điền vào trường **Mã tài khoản SnapTrade**. Lưu, rồi **Làm mới**.
+4. Nhấn **Lấy tài khoản** và chọn tài khoản; mã của nó điền vào trường **Mã tài khoản SnapTrade**. Lưu.
+5. Mở hũ, **Thêm tài sản**, đặt **Theo dõi** thành **Tài khoản môi giới**, chọn tài khoản và lưu, rồi **Làm mới**.
 
 Tài khoản mà SnapTrade chưa đồng bộ xong sẽ báo *SnapTrade chưa có tổng giá trị cho tài khoản này*; hãy làm mới lại sau.
 
@@ -140,7 +144,7 @@ Nhiều nhà môi giới trong số này được [SnapTrade](#snaptrade) bao ph
 
 | Thông báo | Cách xử lý |
 |---|---|
-| *Interactive Brokers cần mã truy cập của bạn trong Cài đặt → Tài khoản môi giới* / *OANDA cần mã truy cập của bạn …* | Dán mã truy cập, khóa hoặc client id trong Cài đặt → Tài khoản môi giới. |
+| *Interactive Brokers cần thông tin xác thực trên màn hình Môi giới* / *OANDA cần thông tin xác thực …* | Dán mã truy cập, khóa hoặc client id trong mục Thông tin xác thực ở thẻ Môi giới. |
 | *Mã truy cập đã hết hạn; hãy tạo mã mới trong Client Portal* | Tạo mã Flex Web Service mới và dán vào. |
 | *Mã truy cập không hợp lệ* | Sao chép lại mã; mã mới thay thế mã cũ. |
 | *Mã truy cập bị giới hạn cho một địa chỉ IP khác* | Tạo mã không giới hạn IP. |

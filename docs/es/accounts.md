@@ -22,7 +22,7 @@ Capital se conecta solo a interfaces cuyas credenciales son de larga duración: 
 ## Antes de empezar {#before-you-start}
 
 - **Qué sale del dispositivo.** En cada actualización la aplicación envía su token de acceso y el ID de la cuenta o de la consulta a ese bróker, mediante HTTPS. El bróker ve su dirección IP, como en cualquier solicitud.
-- **Dónde se guardan las credenciales.** Ajustes → Cuentas de bróker. Se cifran con una clave guardada en Android Keystore, nunca se escriben en su carpeta de datos y quedan fuera de las exportaciones y de las copias de seguridad del sistema. Un conjunto de credenciales por bróker sirve para todas las cuentas que añada de ese bróker.
+- **Dónde se guardan las credenciales.** Pestaña Brókeres → Credenciales. Se cifran con una clave guardada en Android Keystore, nunca se escriben en su carpeta de datos y quedan fuera de las exportaciones y de las copias de seguridad del sistema. Un conjunto de credenciales por bróker sirve para todas las cuentas que añada de ese bróker.
 - **Qué se guarda en su carpeta.** El ID de la cuenta, el último valor leído y cuándo se leyó. Nada más del bróker.
 - **Las pantallas del bróker pueden cambiar.** Los pasos siguientes corresponden a los sitios web de los brókeres en octubre de 2026. Los brókeres renombran menús y cambian las opciones de sitio de vez en cuando, así que un paso puede verse algo distinto cuando lo siga. La documentación del propio bróker, enlazada en cada sección, es la fuente de referencia: si un paso de aquí ya no coincide, busque el mismo término en la página del bróker.
 
@@ -51,11 +51,12 @@ La consulta debe abarcar una sola cuenta. Si tiene cuentas vinculadas o una estr
 
 ### 3. Conéctelo en Capital
 
-1. **Ajustes → Cuentas de bróker → Token de acceso: Interactive Brokers**, pegue el token y guarde.
-2. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, **Bróker** en Interactive Brokers, introduzca el **Flex Query id** y guarde.
-3. Pulse **Actualizar**. La primera vez tarda hasta medio minuto porque el informe se genera bajo demanda.
+1. **Brókeres → Credenciales → Token de acceso: Interactive Brokers**, pegue el token y guarde.
+2. **Brókeres → +**: introduzca un nombre, ponga **Bróker** en Interactive Brokers, introduzca el **Flex Query id** y guarde.
+3. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, elija la cuenta y guarde.
+4. Pulse **Actualizar**. La primera vez tarda hasta medio minuto porque el informe se genera bajo demanda.
 
-Cuando el token caduca, la actualización informa *El token ha caducado; genere uno nuevo en Client Portal*: genere un token nuevo y péguelo en Ajustes. Interactive Brokers permite una solicitud de informe por segundo y diez por minuto desde un mismo token, límite que una actualización nunca supera.
+Cuando el token caduca, la actualización informa *El token ha caducado; genere uno nuevo en Client Portal*: genere un token nuevo y péguelo en Credenciales. Interactive Brokers permite una solicitud de informe por segundo y diez por minuto desde un mismo token, límite que una actualización nunca supera.
 
 Documentación de Interactive Brokers: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ El ID de cuenta v20 tiene la forma `001-001-1234567-001`, con guiones. Aparece e
 
 ### 3. Conéctelo en Capital
 
-1. **Ajustes → Cuentas de bróker → Token de acceso: OANDA**, pegue el token y guarde.
-2. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, **Bróker** en OANDA, introduzca el **ID de cuenta de OANDA** y guarde.
-3. Pulse **Actualizar**.
+1. **Brókeres → Credenciales → Token de acceso: OANDA**, pegue el token y guarde.
+2. **Brókeres → +**: introduzca un nombre, ponga **Bróker** en OANDA, introduzca el **ID de cuenta de OANDA** y guarde.
+3. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, elija la cuenta y guarde.
+4. Pulse **Actualizar**.
 
 Una cuenta de margen cuyo NAV es negativo se notifica como un error en lugar de contarse como ahorros.
 
@@ -97,9 +99,10 @@ Capital llama al **resumen de la cuenta** (account summary) de la API pública d
 
 ### 2. Conéctelo en Capital
 
-1. **Ajustes → Cuentas de bróker → Clave de API: Trading 212** y **Secreto de API: Trading 212**, pegue cada valor.
-2. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, **Bróker** en Trading 212, introduzca el **Número de cuenta de Trading 212** (el ID de cuenta que muestra la aplicación, solo dígitos) y guarde.
-3. Pulse **Actualizar**. Trading 212 permite una solicitud de resumen cada 5 segundos.
+1. **Brókeres → Credenciales → Clave de API: Trading 212** y **Secreto de API: Trading 212**, pegue cada valor.
+2. **Brókeres → +**: introduzca un nombre, ponga **Bróker** en Trading 212, introduzca el **Número de cuenta de Trading 212** (el ID de cuenta que muestra la aplicación, solo dígitos) y guarde.
+3. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, elija la cuenta y guarde.
+4. Pulse **Actualizar**. Trading 212 permite una solicitud de resumen cada 5 segundos.
 
 Documentación de Trading 212: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ Qué se envía: su ID de cliente y, como firma, nada de la clave de consumidor e
 
 ### 2. Conéctelo en Capital
 
-1. **Ajustes → Cuentas de bróker → ID de cliente: SnapTrade** y **Clave de consumidor: SnapTrade**, pegue cada valor.
-2. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker** y **Bróker** en SnapTrade.
+1. **Brókeres → Credenciales → ID de cliente: SnapTrade** y **Clave de consumidor: SnapTrade**, pegue cada valor.
+2. **Brókeres → +**: introduzca un nombre y ponga **Bróker** en SnapTrade.
 3. Pulse **Conectar un bróker a través de SnapTrade**. El SnapTrade Connection Portal se abre en el navegador; inicie sesión allí en su bróker (el enlace es válido durante 5 minutos). Vuelva a Capital.
-4. Pulse **Obtener cuentas** y elija la cuenta; su ID rellena el campo **ID de cuenta de SnapTrade**. Guarde y pulse **Actualizar**.
+4. Pulse **Obtener cuentas** y elija la cuenta; su ID rellena el campo **ID de cuenta de SnapTrade**. Guarde.
+5. Abra el bolsillo, **Añadir posición**, ponga **Seguimiento** en **Cuenta de bróker**, elija la cuenta y guarde, y después pulse **Actualizar**.
 
 Una cuenta que SnapTrade aún no ha terminado de sincronizar informa *SnapTrade aún no tiene un valor total para esta cuenta*; actualice de nuevo más tarde.
 
@@ -140,7 +144,7 @@ Muchos de estos brókeres están cubiertos por [SnapTrade](#snaptrade). En otro 
 
 | Mensaje | Qué hacer |
 |---|---|
-| *Interactive Brokers necesita su token de acceso en Ajustes → Cuentas de bróker* / *OANDA necesita su token de acceso …* | Pegue el token, la clave o el ID de cliente en Ajustes → Cuentas de bróker. |
+| *Interactive Brokers necesita sus credenciales en la pantalla Brókeres* / *OANDA necesita sus credenciales …* | Pegue el token, la clave o el ID de cliente en Credenciales, en la pestaña Brókeres. |
 | *El token ha caducado; genere uno nuevo en Client Portal* | Genere un token nuevo del Flex Web Service y péguelo. |
 | *El token no es válido* | Copie el token de nuevo; un token nuevo sustituye al anterior. |
 | *El token está restringido a otra dirección IP* | Genere el token sin restricción de IP. |

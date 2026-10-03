@@ -18,7 +18,7 @@ title: Chi tiết hũ
 
 - **Thủ công**: tên, mã tiền tệ hoặc mã tài sản và số lượng. Dùng cho bất cứ thứ gì ứng dụng không tự đọc được.
 - **Ví**: chọn chuỗi (BTC, ETH, TON, TRX) và dán một địa chỉ công khai. Khi làm mới, ứng dụng đọc số dư gốc và, trên ETH, TON và TRX, cả các token có thể thay thế trên địa chỉ đó. Mở lại trình chỉnh sửa và nhấn **Lấy token** để xem chúng và tắt những token bạn không muốn tính vào.
-- **Tài khoản môi giới**: chọn nhà môi giới (Interactive Brokers, OANDA, Trading 212, SnapTrade) và nhập mã tài khoản hoặc mã truy vấn; với SnapTrade, **Lấy tài khoản** liệt kê các tài khoản đã kết nối để bạn chọn. Khi làm mới, ứng dụng đọc tổng giá trị của tài khoản theo tiền tệ cơ sở của tài khoản; mã truy cập được nhập trong Cài đặt → Tài khoản môi giới. **Hướng dẫn thiết lập tài khoản môi giới** mở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts), nơi liệt kê các bước cho từng nhà môi giới.
+- **Tài khoản môi giới**: chọn một trong các tài khoản đã thêm ở màn hình [Môi giới]({{ page.base }}/screens/brokers); để trống tên để dùng tên của tài khoản. Khi làm mới, ứng dụng đọc tổng giá trị của tài khoản theo tiền tệ cơ sở của tài khoản. Một tài khoản chỉ có thể được liên kết với một hũ; xóa tài sản sẽ hủy liên kết mà không xóa tài khoản.
 
 **Token và "không tính".** Token được nhận diện bằng địa chỉ hợp đồng. Token chỉ được tính khi nguồn giá của bạn có niêm yết đúng hợp đồng đó; nếu không, nó được liệt kê là *Token không xác định · không tính* và không được cộng vào tổng. Nhờ vậy, một đồng "USDT" giả được airdrop vào ví sẽ không lọt vào tiền tiết kiệm của bạn.
 

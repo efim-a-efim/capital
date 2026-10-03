@@ -37,8 +37,17 @@ fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
     val observedAt: Long? = null, val fetchedAt: Long? = null, val source: String = "Manual",
     val error: String? = null, val tokens: List<Token> = emptyList(), val tokensError: String? = null,
     val excluded: List<String> = emptyList(),
-    /** Broker of an account holding; `address` then holds the account or query id and `asset` the account's base currency. */
+    /** Schema 5 only: broker of an account holding. Snapshots are migrated to `accountId` on open; validate() rejects it. */
     val broker: String? = null,
+    /** Link to a broker account; `asset`, `quantity`, times, `source` and `error` then mirror that account (see [Portfolio.linked]). */
+    val accountId: String? = null,
+)
+/** A read-only connection to a broker account: `address` is the account or query id, `asset` and `quantity` its last total value in its base currency. */
+@Serializable data class Account(
+    val id: String = id(), val name: String, val broker: String, val address: String,
+    val asset: String? = null, val quantity: String? = null, val observedAt: Long? = null, val fetchedAt: Long? = null, val error: String? = null,
+    /** When set, a balance below this amount in the default currency counts as 0 in the linked bucket (dust left in forgotten accounts). */
+    val ignoreBelow: String? = null,
 )
 val brokerChoices = listOf("Interactive Brokers", "OANDA", "Trading 212", "SnapTrade")
 /** Credentials entered in Settings per broker; the first is the token or key, the rest its companions. Names are Secrets keys. */
@@ -101,16 +110,22 @@ val providerChoices = linkedMapOf(
     val buckets: List<Bucket> = emptyList(), val holdings: List<Holding> = emptyList(),
     val goals: List<Goal> = emptyList(), val connections: List<Connection> = emptyList(),
     val quotes: List<Quote> = emptyList(), val settings: Settings = Settings(),
-    val planned: List<Planned> = emptyList(),
+    val planned: List<Planned> = emptyList(), val accounts: List<Account> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000) { tr("File exceeds personal portfolio limits") }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000) { tr("File exceeds personal portfolio limits") }
         fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { tr("Duplicate or invalid identifiers") } }
-        unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id })
+        unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id }); unique(accounts.map { it.id })
         require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { tr("Duplicate or invalid identifiers") }
         require(validAsset(settings.currency) && settings.theme in listOf("System", "Light", "Dark")) { tr("Invalid settings") }
         require(settings.providers.keys == providerChoices.keys && settings.providers.all { (k,v) -> v in providerChoices.getValue(k) }) { tr("Unsupported provider") }
         val owners = mutableSetOf<String>()
+        accounts.forEach { a ->
+            require(a.name.isNotBlank() && a.name.length <= 120 && accountId(a.broker, a.address) == a.address) { tr("Invalid broker account") }
+            require(a.asset == null || (a.asset.matches(Regex("[A-Z]{3}")) && validAsset(a.asset) && a.asset !in Chain.entries.map { it.name })) { tr("Invalid broker account") }
+            a.quantity?.decimal(); a.ignoreBelow?.decimal()
+            require(owners.add("${a.broker}:${a.address}")) { tr("Account already exists") }
+        }
         buckets.forEach { require(it.name.isNotBlank() && it.name.length <= 120 && validAsset(it.currency)) { tr("Invalid bucket") }
             require(it.targets.size <= 200) { tr("At most 200 targets") }
             it.targets.forEach { (k, v) ->
@@ -122,10 +137,12 @@ val providerChoices = linkedMapOf(
         holdings.forEach { h ->
             require(buckets.any { it.id == h.bucketId } && h.label.isNotBlank() && h.label.length <= 120 && validAsset(h.asset)) { tr("Invalid holding") }
             h.quantity?.decimal()
-            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.broker == null && h.asset != Chain.BTC.name)) { tr("Tokens need an ETH, TON or TRX wallet") }
-            if (h.broker != null) {
-                require(h.address != null && accountId(h.broker, h.address) == h.address && ':' !in h.asset && h.asset !in Chain.entries.map { it.name }) { tr("Invalid account holding") }
-                require(owners.add("${h.broker}:${h.address}")) { tr("Account already belongs to a bucket") }
+            require(h.broker == null) { tr("Invalid account holding") }
+            require((h.tokens.isEmpty() && h.excluded.isEmpty()) || (h.address != null && h.accountId == null && h.asset != Chain.BTC.name)) { tr("Tokens need an ETH, TON or TRX wallet") }
+            if (h.accountId != null) {
+                val a = accounts.find { it.id == h.accountId } ?: throw IllegalArgumentException(tr("Invalid account holding"))
+                require(h.address == null && (h.quantity == a.quantity || (a.ignoreBelow != null && h.quantity == "0")) && (a.asset == null || h.asset == a.asset) && ':' !in h.asset && h.asset !in Chain.entries.map { it.name }) { tr("Invalid account holding") }
+                require(owners.add("link:${a.id}")) { tr("Account already belongs to a bucket") }
             } else if (h.address != null) {
                 val chain = Chain.valueOf(h.asset)
                 require(h.tokens.size <= 100 && h.tokens.map { it.contract }.distinct().size == h.tokens.size) { tr("Invalid tokens") }
@@ -167,12 +184,25 @@ val providerChoices = linkedMapOf(
     /** Null when something in the bucket cannot be converted and nothing else adds value; otherwise the (possibly partial) sum. */
     fun bucketValueOrNull(bucketId: String, currency: String): BigDecimal? = bucketValue(bucketId, currency).takeUnless { it.signum() == 0 && incomplete(currency, bucketId) }
     fun incomplete(currency: String, bucketId: String? = null) = holdings.any { (bucketId == null || it.bucketId == bucketId) && (it.quantity == null || convert(it.quantity.decimal(), it.asset, currency) == null || tokenValue(it, currency) == null) }
+    /** Holdings linked to a broker account mirror its value, times and error; the currency falls back to the bucket's until the first refresh. */
+    fun linked(): Portfolio = copy(holdings = holdings.map { h ->
+        val a = h.accountId?.let { id -> accounts.find { it.id == id } } ?: return@map h
+        h.copy(asset = a.asset ?: buckets.find { it.id == h.bucketId }?.currency?.takeIf { ':' !in it && it !in Chain.entries.map { c -> c.name } } ?: "USD", quantity = if (ignored(a)) "0" else a.quantity, address = null, broker = null,
+            observedAt = a.observedAt, fetchedAt = a.fetchedAt, source = if (a.fetchedAt == null) "Not refreshed" else a.broker, error = a.error, tokens = emptyList(), tokensError = null, excluded = emptyList())
+    })
+    /** True when the account's last value, converted to the default currency, is below its threshold; unknown rates never ignore. */
+    fun ignored(a: Account): Boolean {
+        val floor = a.ignoreBelow?.decimal() ?: return false
+        val value = a.quantity?.decimal() ?: return false
+        return convert(value, a.asset ?: return false, settings.currency)?.let { it < floor } ?: false
+    }
     fun stale(now: Long = System.currentTimeMillis()): Boolean {
         val used = holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset, it.contract) } }.toSet()
-        return holdings.any { it.error != null || it.tokensError != null || (it.address != null && (it.fetchedAt == null || now - it.fetchedAt > 86_400_000)) } ||
+        return accounts.any { it.error != null || it.fetchedAt == null || now - it.fetchedAt > 86_400_000 } || holdings.any { it.error != null || it.tokensError != null || (it.address != null && (it.fetchedAt == null || now - it.fetchedAt > 86_400_000)) } ||
             quotes.any { (':' !in it.asset || it.asset in used) && (it.error != null || now - it.observedAt > (if (it.asset in Chain.entries.map { c -> c.name } || ':' in it.asset) 86_400_000L else 604_800_000L)) }
     }
     fun deleteBucket(id: String) = copy(buckets = buckets.filterNot { it.id == id }, holdings = holdings.filterNot { it.bucketId == id }, connections = connections.filterNot { it.bucketId == id })
+    fun deleteAccount(id: String) = copy(accounts = accounts.filterNot { it.id == id }, holdings = holdings.filterNot { it.accountId == id })
     fun deleteGoal(id: String) = copy(goals = goals.filterNot { it.id == id }, connections = connections.filterNot { it.goalId == id })
 }
 // Active goals by (due, old priority desc, list index) get priority count..1; archived get 0. List order is untouched.
@@ -187,6 +217,11 @@ fun Portfolio.moveGoal(id: String, up: Boolean): Portfolio {
     val at = row.indexOfFirst { it.id == id }
     val other = row.getOrNull(if (up) at - 1 else at + 1) ?: return this
     return copy(goals = goals.map { when (it.id) { g.id -> it.copy(priority = other.priority); other.id -> it.copy(priority = g.priority); else -> it } }).ranked()
+}
+/** Schema 5 kept broker accounts inside holdings; each becomes a broker account plus a holding linked to it. */
+fun Portfolio.withAccounts(): Portfolio {
+    val moved = holdings.filter { it.broker != null }.associate { h -> h.id to Account(name = h.label, broker = h.broker!!, address = h.address.orEmpty(), asset = h.asset.takeIf { h.fetchedAt != null }, quantity = h.quantity, observedAt = h.observedAt, fetchedAt = h.fetchedAt, error = h.error) }
+    return copy(accounts = accounts + moved.values, holdings = holdings.map { h -> moved[h.id]?.let { a -> h.copy(accountId = a.id, broker = null, address = null) } ?: h }).linked()
 }
 fun baseQuantity(units: String, chain: Chain): String {
     require(units.length <= 80 && units.matches(Regex("[0-9]+"))) { tr("Invalid balance response") }

@@ -35,13 +35,14 @@ fun parseRpc(body: JsonObject): String {
     if(body["error"] != null) throw ProviderFailure(tr("RPC rejected the request"))
     return body.string("result").also { require(it.matches(Regex("0x[0-9a-fA-F]+")) && it.length <= 82) { tr("Invalid RPC response") } }
 }
-fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet()): Portfolio {
-    val results=holdings.associateBy { it.id }
+fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList()): Portfolio {
+    val results=holdings.associateBy { it.id }; val read=accounts.associateBy { it.id }
     val merged=current.copy(
+        accounts=current.accounts.map { a -> read[a.id]?.takeIf { r -> requested.accounts.find { it.id == a.id }?.let { it.broker == a.broker && it.address == a.address } == true }?.let { r -> a.copy(asset=r.asset,quantity=r.quantity,observedAt=r.observedAt,fetchedAt=r.fetchedAt,error=r.error) } ?: a },
         holdings=current.holdings.map { h ->
             val old=requested.holdings.find { it.id == h.id }; val result=results[h.id]
-            if(old != null && result != null && old.address == h.address && old.broker == h.broker && old.asset == h.asset && current.settings.providers[h.asset] == requested.settings.providers[h.asset]) {
-                val native=h.copy(asset=if(h.broker != null) result.asset else h.asset,quantity=result.quantity,observedAt=result.observedAt,fetchedAt=result.fetchedAt,source=result.source,error=result.error)
+            if(old != null && result != null && old.address == h.address && old.asset == h.asset && current.settings.providers[h.asset] == requested.settings.providers[h.asset]) {
+                val native=h.copy(quantity=result.quantity,observedAt=result.observedAt,fetchedAt=result.fetchedAt,source=result.source,error=result.error)
                 val src="${h.asset} tokens"
                 if(current.settings.providers[src] == requested.settings.providers[src]) native.copy(tokens=result.tokens,tokensError=result.tokensError) else native
             } else h
@@ -49,9 +50,9 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
         quotes=if(current.settings.providers == requested.settings.providers) (current.quotes.associateBy { it.asset } + quotes.associateBy { it.asset }).values.filter { it.asset !in unlisted } else current.quotes,
     )
     val used=merged.holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } }.toSet()
-    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used })
+    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used }).linked()
 }
-data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet())
+data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList())
 // Contract lookups per refresh. DefiLlama answers in batches. CoinPaprika free tier: 60 requests per hour, a listed contract costs two.
 fun tokenLookups(provider: String) = when(provider) { "DefiLlama" -> 1000; "CoinPaprika" -> 10; else -> 30 }
 const val MIN_CONFIDENCE = "0.9"
@@ -308,7 +309,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         "1003","1021" -> tr("Statement is not available; retry later")
         else -> tr("Interactive Brokers error {0}",(code ?: "?")+(message?.let { " "+it.clean() } ?: ""))
     }
-    private fun brokerToken(broker: String,name: String=broker)=key(name).also { if(it.isBlank()) throw KeyArgument(tr("{0} needs your access token in Settings → Broker accounts",broker)) }
+    private fun brokerToken(broker: String,name: String=broker)=key(name).also { if(it.isBlank()) throw KeyArgument(tr("{0} needs its credentials on the Brokers screen",broker)) }
     /** SnapTrade signed request: HMAC-SHA256 of the canonical payload with the consumer key. GET when body is null. */
     private suspend fun snap(path: String,post: Boolean=false): String {
         val client=brokerToken("SnapTrade"); val secret=brokerToken("SnapTrade","SnapTrade consumer key")
@@ -361,8 +362,8 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         throw ProviderFailure(tr("Provider unavailable"))
     }
     /** Total account value in the account's base currency, read-only. */
-    suspend fun account(h: Holding): Holding {
-        val broker=requireNotNull(h.broker); val id=accountId(broker,requireNotNull(h.address)); val now=System.currentTimeMillis()
+    suspend fun account(a: Account): Account {
+        val broker=a.broker; val id=accountId(broker,a.address); val now=System.currentTimeMillis()
         val (currency,total,observed)=when(broker) {
             "OANDA" -> {
                 val a=obj("https://api-fxtrade.oanda.com/v3/accounts/$id/summary",headers=mapOf("Authorization" to "Bearer ${brokerToken(broker)}")).sub("account") ?: throw ProviderFailure(tr("Missing {0} in provider response","account"))
@@ -386,17 +387,17 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         require(currency.matches(Regex("[A-Z]{3}")) && validAsset(currency)) { tr("Unsupported account currency {0}",currency.clean()) }
         val value=total.trim().toBigDecimalOrNull() ?: throw ProviderFailure(tr("Invalid account value"))
         if(value.signum()<0) throw ProviderFailure(tr("Negative account value {0} is not supported",value.toPlainString()))
-        return h.copy(asset=currency,quantity=value.setScale(18,java.math.RoundingMode.DOWN).text().also { it.decimal() },observedAt=observed,fetchedAt=now,source=broker,error=null)
+        return a.copy(asset=currency,quantity=value.setScale(18,java.math.RoundingMode.DOWN).text().also { it.decimal() },observedAt=observed,fetchedAt=now,error=null)
     }
     suspend fun refresh(data: Portfolio,bucketId: String?): Observations {
-        val updated=mutableListOf<Holding>(); val quotes=mutableListOf<Quote>(); val errors=mutableListOf<String>()
+        val updated=mutableListOf<Holding>(); val quotes=mutableListOf<Quote>(); val errors=mutableListOf<String>(); val read=mutableListOf<Account>()
+        // A bucket refresh covers the accounts linked into that bucket; a full refresh covers every account.
+        for(a in data.accounts.filter { a -> bucketId==null || data.holdings.any { it.bucketId==bucketId && it.accountId==a.id } }) {
+            read += try { account(a) }
+            catch(e: CancellationException) { throw e }
+            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",a.name,message); a.copy(error=message) }
+        }
         for(h in data.holdings.filter { it.address != null && (bucketId==null || it.bucketId==bucketId) }) {
-            if(h.broker != null) {
-                updated += try { account(h) }
-                catch(e: CancellationException) { throw e }
-                catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",h.label,message); h.copy(error=message) }
-                continue
-            }
             var r=try { balance(h,data.settings.providers.getValue(h.asset)) }
             catch(e: CancellationException) { throw e }
             catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",h.label,message); h.copy(error=message) }
@@ -409,7 +410,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             updated += r
         }
         // Account holdings may come back in another currency than stored; its rate is fetched in the same refresh.
-        val assets=(data.holdings.filter { bucketId==null || it.bucketId==bucketId }.map { it.asset }+updated.map { it.asset }+data.buckets.map { it.currency }+data.goals.map { it.currency }+data.settings.currency).toSet()-"USD"
+        val assets=(data.holdings.filter { bucketId==null || it.bucketId==bucketId }.map { it.asset }+read.mapNotNull { it.asset }+data.buckets.map { it.currency }+data.goals.map { it.currency }+data.settings.currency).toSet()-"USD"
         val native=Chain.entries.map { it.name }.toSet()
         fun failedQuote(asset: String,e: Exception) {
             val message=e.safeMessage(); errors += tr("{0}: {1}",asset,message)
@@ -466,7 +467,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             val asset=tokenAsset(h.asset,t.contract); val i=info[asset]
             t.copy(decimals=t.decimals ?: i?.first,symbol=t.symbol.ifBlank { i?.second ?: "" },checkedAt=if(asset in looked) now else t.checkedAt)
         }) }
-        return Observations(final,quotes,errors,unlisted)
+        return Observations(final,quotes,errors,unlisted,read)
     }
 }
 fun Exception.safeMessage(): String = when(this) {

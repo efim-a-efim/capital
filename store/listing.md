@@ -63,9 +63,9 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 ## Release notes (≤500, per release)
 
 ```
-• Broker accounts: connect Interactive Brokers, OANDA, Trading 212 or SnapTrade accounts with a read-only token or key; the app reads the account value on refresh
-• Setup guide per broker on the site, in 15 languages
-• Settings → Broker accounts for the credentials, stored encrypted on the device
+• Brokers tab: broker accounts have their own screen with their credentials; a bucket links an account with Add holding → Broker account
+• Existing broker holdings are moved to the Brokers tab automatically
+• Site: a Brokers screen page and updated setup guide, in 15 languages
 ```
 
 ## App content answers

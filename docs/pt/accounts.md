@@ -22,7 +22,7 @@ O Capital se conecta apenas a interfaces cujas credenciais têm vida longa: um t
 ## Antes de começar {#before-you-start}
 
 - **O que sai do dispositivo.** A cada atualização, o app envia seu token de acesso e o ID da conta ou da consulta a essa corretora, por HTTPS. A corretora vê seu endereço IP, como em qualquer solicitação.
-- **Onde as credenciais ficam guardadas.** Ajustes → Contas de corretora. Elas são criptografadas com uma chave mantida no Android Keystore, nunca são gravadas na sua pasta de dados e ficam de fora das exportações e dos backups do sistema. Um conjunto de credenciais por corretora vale para todas as contas que você adicionar dessa corretora.
+- **Onde as credenciais ficam guardadas.** Aba Corretoras → Credenciais. Elas são criptografadas com uma chave mantida no Android Keystore, nunca são gravadas na sua pasta de dados e ficam de fora das exportações e dos backups do sistema. Um conjunto de credenciais por corretora vale para todas as contas que você adicionar dessa corretora.
 - **O que fica armazenado na sua pasta.** O ID da conta, o último valor lido e quando ele foi lido. Nada mais da corretora.
 - **As telas da corretora podem mudar.** Os passos abaixo correspondem aos sites das corretoras em outubro de 2026. As corretoras renomeiam menus e mudam configurações de lugar de tempos em tempos, então um passo pode parecer um pouco diferente quando você o seguir. A documentação da própria corretora, com link em cada seção, é a fonte oficial: se um passo daqui não corresponder mais, procure o mesmo termo na página da corretora.
 
@@ -51,11 +51,12 @@ A consulta deve abranger uma única conta. Se você tem contas vinculadas ou uma
 
 ### 3. Conecte no Capital
 
-1. **Ajustes → Contas de corretora → Token de acesso: Interactive Brokers**, cole o token e salve.
-2. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, **Corretora** como Interactive Brokers, informe o **ID da Flex Query** e salve.
-3. Pressione **Atualizar**. A primeira execução leva até meio minuto, porque o relatório é gerado sob demanda.
+1. **Corretoras → Credenciais → Token de acesso: Interactive Brokers**, cole o token e salve.
+2. **Corretoras → +**: informe um nome, defina **Corretora** como Interactive Brokers, informe o **ID da Flex Query** e salve.
+3. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, escolha a conta e salve.
+4. Pressione **Atualizar**. A primeira execução leva até meio minuto, porque o relatório é gerado sob demanda.
 
-Quando o token expira, a atualização informa *O token expirou; gere um novo no Client Portal*: gere um novo token e cole-o em Ajustes. A Interactive Brokers permite uma solicitação de relatório por segundo e dez por minuto com o mesmo token, limite que uma atualização nunca excede.
+Quando o token expira, a atualização informa *O token expirou; gere um novo no Client Portal*: gere um novo token e cole-o em Credenciais. A Interactive Brokers permite uma solicitação de relatório por segundo e dez por minuto com o mesmo token, limite que uma atualização nunca excede.
 
 Documentação da Interactive Brokers: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ O ID de conta da v20 tem o formato `001-001-1234567-001`, com hifens. Ele aparec
 
 ### 3. Conecte no Capital
 
-1. **Ajustes → Contas de corretora → Token de acesso: OANDA**, cole o token e salve.
-2. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, **Corretora** como OANDA, informe o **ID da conta OANDA** e salve.
-3. Pressione **Atualizar**.
+1. **Corretoras → Credenciais → Token de acesso: OANDA**, cole o token e salve.
+2. **Corretoras → +**: informe um nome, defina **Corretora** como OANDA, informe o **ID da conta OANDA** e salve.
+3. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, escolha a conta e salve.
+4. Pressione **Atualizar**.
 
 Uma conta de margem com NAV negativo é informada como erro, e não contabilizada como economias.
 
@@ -97,9 +99,10 @@ O Capital chama o **resumo da conta** (account summary) da API pública da Tradi
 
 ### 2. Conecte no Capital
 
-1. **Ajustes → Contas de corretora → Chave de API: Trading 212** e **Segredo de API: Trading 212**, cole cada valor.
-2. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, **Corretora** como Trading 212, informe o **Número da conta Trading 212** (o ID da conta mostrado no app, somente dígitos) e salve.
-3. Pressione **Atualizar**. A Trading 212 permite uma solicitação de resumo a cada 5 segundos.
+1. **Corretoras → Credenciais → Chave de API: Trading 212** e **Segredo de API: Trading 212**, cole cada valor.
+2. **Corretoras → +**: informe um nome, defina **Corretora** como Trading 212, informe o **Número da conta Trading 212** (o ID da conta mostrado no app, somente dígitos) e salve.
+3. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, escolha a conta e salve.
+4. Pressione **Atualizar**. A Trading 212 permite uma solicitação de resumo a cada 5 segundos.
 
 Documentação da Trading 212: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ O que é enviado: seu ID de cliente e, como assinatura, nada da chave de consumi
 
 ### 2. Conecte no Capital
 
-1. **Ajustes → Contas de corretora → ID de cliente: SnapTrade** e **Chave de consumidor: SnapTrade**, cole cada valor.
-2. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora** e **Corretora** como SnapTrade.
+1. **Corretoras → Credenciais → ID de cliente: SnapTrade** e **Chave de consumidor: SnapTrade**, cole cada valor.
+2. **Corretoras → +**: informe um nome e defina **Corretora** como SnapTrade.
 3. Pressione **Conectar uma corretora pelo SnapTrade**. O Connection Portal do SnapTrade abre no navegador; faça login na sua corretora por lá (o link vale por 5 minutos). Volte ao Capital.
-4. Pressione **Buscar contas** e escolha a conta; o ID dela preenche o campo **ID da conta do SnapTrade**. Salve e depois pressione **Atualizar**.
+4. Pressione **Buscar contas** e escolha a conta; o ID dela preenche o campo **ID da conta do SnapTrade**. Salve.
+5. Abra a caixinha, **Adicionar posição**, defina **Acompanhamento** como **Conta de corretora**, escolha a conta e salve; depois pressione **Atualizar**.
 
 Uma conta que o SnapTrade ainda não terminou de sincronizar informa *O SnapTrade ainda não tem valor total para esta conta*; atualize de novo mais tarde.
 
@@ -140,7 +144,7 @@ Muitas dessas corretoras são cobertas pelo [SnapTrade](#snaptrade). Caso contr�
 
 | Mensagem | O que fazer |
 |---|---|
-| *Interactive Brokers precisa do seu token de acesso em Ajustes → Contas de corretora* / *OANDA precisa do seu token de acesso …* | Cole o token, a chave ou o ID de cliente em Ajustes → Contas de corretora. |
+| *Interactive Brokers precisa das credenciais na tela Corretoras* / *OANDA precisa das credenciais …* | Cole o token, a chave ou o ID de cliente em Credenciais, na aba Corretoras. |
 | *O token expirou; gere um novo no Client Portal* | Gere um novo token do Flex Web Service e cole-o. |
 | *Token inválido* | Copie o token de novo; um novo token substitui o antigo. |
 | *O token é restrito a outro endereço IP* | Gere o token sem restrição de IP. |

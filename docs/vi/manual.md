@@ -20,7 +20,7 @@ Bạn giữ tiền ở nhiều nơi: tài khoản tiết kiệm, tiền mặt, t
 
 1. **Chọn thư mục.** Hãy chọn một thư mục riêng trên thiết bị, ví dụ `Documents/Capital`. Mọi bản ghi đều được ghi vào đây. Thư mục đã có dữ liệu Capital sẽ được mở ngay.
 2. **Cài đặt → Tiền tệ mặc định.** Các tổng số và màn hình Tổng quan được hiển thị theo tiền tệ này.
-3. Không bắt buộc: trong Cài đặt, nhập **khóa nhà cung cấp** cho những nhà cung cấp cho phép hạn mức cao hơn với khóa miễn phí (Alchemy, TronGrid, TON Center, CoinGecko). Mọi chuỗi và nguồn giá đều có lựa chọn mặc định không cần khóa. Tài khoản môi giới cần một **mã truy cập** từ nhà môi giới; xem [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
+3. Không bắt buộc: trong Cài đặt, nhập **khóa nhà cung cấp** cho những nhà cung cấp cho phép hạn mức cao hơn với khóa miễn phí (Alchemy, TronGrid, TON Center, CoinGecko). Mọi chuỗi và nguồn giá đều có lựa chọn mặc định không cần khóa. Tài khoản môi giới cần một **mã truy cập** từ nhà môi giới, nhập ở thẻ Môi giới; xem [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
 
 ## Hũ {#buckets}
 
@@ -28,7 +28,7 @@ Thẻ Hũ → **+**. Đặt tên và chọn tiền tệ cho hũ. Mở hũ để 
 
 - **Tài sản thủ công**: tên, mã tiền tệ hoặc mã tài sản (EUR, USD, BTC, mã cổ phiếu do bạn tự định giá…) và số lượng. Dùng cho số dư ngân hàng, tiền mặt, bất cứ thứ gì ứng dụng không tự đọc được.
 - **Tài sản dạng ví**: chọn chuỗi (BTC, ETH, TON, TRX) và dán một địa chỉ công khai. Khi làm mới, ứng dụng đọc số dư gốc và, với ETH, TON và TRX, cả các token có thể thay thế trên địa chỉ đó.
-- **Tài khoản môi giới**: chọn nhà môi giới (Interactive Brokers, OANDA, Trading 212, SnapTrade) và nhập mã tài khoản hoặc mã truy vấn. Khi làm mới, ứng dụng đọc tổng giá trị của tài khoản theo tiền tệ cơ sở của nó. Mã truy cập chỉ cần nhập một lần trong Cài đặt → Tài khoản môi giới. Các bước thiết lập, kèm liên kết đến tài liệu của chính các nhà môi giới, nằm ở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
+- **Tài khoản môi giới**: chọn một trong các tài khoản đã thêm ở thẻ Môi giới. Khi làm mới, ứng dụng đọc tổng giá trị của tài khoản theo tiền tệ cơ sở của nó. Một tài khoản chỉ có thể được liên kết với một hũ.
 
 Số tiền có thể dùng dấu chấm hoặc dấu phẩy thập phân, không dùng dấu phân tách nhóm. Mỗi hũ hiển thị số lượng theo đơn vị gốc và giá trị theo tiền tệ mặc định của bạn. Nếu thiếu giá, tổng số được đánh dấu là chưa đầy đủ; giá trị cũ đã lưu đệm vẫn được dùng kèm cảnh báo.
 
@@ -55,6 +55,10 @@ Cách phân bổ tiền:
 Thẻ Kế hoạch → **+**. Khoản tiết kiệm dự kiến là số tiền bạn định thêm vào một ngày cụ thể, ví dụ phần lương để dành vào cuối mỗi tháng. Kế hoạch không thuộc tiền tiết kiệm của bạn; chúng chỉ kéo dài phần dự báo: "Các khoản tiết kiệm dự kiến sẽ hoàn thành mục tiêu này vào 30 thg 10, 2026 · đúng hạn".
 
 Tiền từ kế hoạch được áp dụng sau các hũ hiện có, cho các mục tiêu theo thứ tự hạn hoàn thành, nên nó chỉ bù vào phần còn thiếu. Khi ngày của một kế hoạch đã qua, kế hoạch chuyển sang mục **Đã lưu trữ** và không còn được tính: hoặc bạn đã chuyển tiền vào một hũ và ứng dụng thấy nó ở đó, hoặc kế hoạch đã không thực hiện. Sửa ngày sang tương lai để kích hoạt lại; xóa nếu kế hoạch không còn cần.
+
+## Môi giới
+
+Thẻ Môi giới → **+**. Tài khoản môi giới là một kết nối chỉ đọc: chọn nhà môi giới (Interactive Brokers, OANDA, Trading 212 hoặc SnapTrade), nhập mã tài khoản hoặc mã truy vấn rồi lưu; mã truy cập hoặc khóa của nhà môi giới chỉ cần nhập một lần trong mục **Thông tin xác thực** ở cùng thẻ và dùng được cho mọi tài khoản của nhà môi giới đó. Thẻ liệt kê từng tài khoản cùng giá trị gần nhất và hũ mà nó được liên kết. **Bỏ qua số dư nhỏ hơn** một số tiền theo tiền tệ mặc định của bạn (mặc định là 1) khiến số dư lẻ được tính là 0 trong hũ. Hãy liên kết tài khoản với một hũ qua **Thêm tài sản → Tài khoản môi giới**; xóa tài sản để hủy liên kết, xóa tài khoản để gỡ kết nối. Các bước thiết lập, kèm liên kết đến tài liệu của chính các nhà môi giới, nằm ở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
 
 ## Làm mới
 

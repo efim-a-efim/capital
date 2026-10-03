@@ -14,7 +14,7 @@ title: Ajustes
 
 **Proveedores de datos gratuitos.** Una fila por tipo de datos, cada una con el operador en uso: saldos BTC, ETH, TON y TRX; listas de tokens ETH, TON y TRX; precios de criptomonedas; tipos de cambio fiat. Toque una fila para elegir otro operador, poner en **Desactivado** las consultas de tokens de una red o introducir una clave API opcional. Las claves se guardan cifradas en el dispositivo y solo se envían al operador que las emitió. **Probar fuentes / actualizar cartera** consulta a cada operador con los activos que realmente posee e informa de lo que ha fallado. Nunca se sustituye un operador por otro sin avisar.
 
-**Cuentas de bróker.** Las credenciales de cada bróker compatible (Interactive Brokers, OANDA, Trading 212, SnapTrade), guardadas cifradas como las claves de proveedores y enviadas solo a ese bróker. La aplicación lee con él los valores de las cuentas y nunca da órdenes. **Guía de configuración de cuentas de bróker** abre [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
+**Brókeres.** Las cuentas de bróker y sus credenciales tienen su propia pantalla: [Brókeres]({{ page.base }}/screens/brokers).
 
 **Cotizaciones y vigencia.** Cada cotización en caché con la hora en que se observó y se obtuvo. Las cotizaciones desactualizadas siguen siendo utilizables y se marcan en el Resumen.
 

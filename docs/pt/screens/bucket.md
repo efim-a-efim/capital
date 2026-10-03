@@ -18,7 +18,7 @@ title: Caixinha
 
 - **Manual**: um nome, um código de moeda ou de ativo e a quantidade. Use para tudo o que o app não consegue ler.
 - **Carteira**: escolha a rede (BTC, ETH, TON, TRX) e cole um endereço público. Ao atualizar, o app lê o saldo nativo e, em ETH, TON e TRX, os tokens fungíveis desse endereço. Abra o editor de novo e toque em **Buscar tokens** para vê-los e desativar os que você não quer contabilizar.
-- **Conta de corretora**: escolha a corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) e informe o ID da conta ou da consulta; no SnapTrade, **Buscar contas** lista as contas conectadas para você escolher. Ao atualizar, o app lê o valor total da conta na moeda base dela; o token de acesso é informado em Ajustes → Contas de corretora. **Guia de configuração das contas de corretora** abre [Contas de corretora e de forex]({{ page.base }}/accounts), que lista os passos de cada corretora.
+- **Conta de corretora**: escolha uma das contas adicionadas na tela [Corretoras]({{ page.base }}/screens/brokers); deixe o nome em branco para usar o nome da conta. Ao atualizar, o app lê o valor total da conta na moeda base dela. Uma conta pode ser vinculada a uma só caixinha; excluir a posição a desvincula sem excluir a conta.
 
 **Tokens e "não contabilizado".** Um token é identificado pelo endereço do contrato. Ele só é contabilizado quando a sua fonte de preços lista exatamente aquele contrato; caso contrário, aparece como *Token desconhecido · não contabilizado* e fica fora dos totais. É isso que impede que um "USDT" falso recebido por airdrop entre nas suas economias.
 

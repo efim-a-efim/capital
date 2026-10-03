@@ -22,7 +22,7 @@ Capital connects only to interfaces whose credentials are long-lived: a token or
 ## Before you start {#before-you-start}
 
 - **What leaves the device.** On every refresh the app sends your access token and the account or query id to that broker, over HTTPS. The broker sees your IP address, as with any request.
-- **Where the credentials are kept.** Settings → Broker accounts. They are encrypted with a key held in Android Keystore, are never written into your data folder, and are left out of exports and system backups. One set of credentials per broker covers every account you add for that broker.
+- **Where the credentials are kept.** Brokers tab → Credentials. They are encrypted with a key held in Android Keystore, are never written into your data folder, and are left out of exports and system backups. One set of credentials per broker covers every account you add for that broker.
 - **What is stored in your folder.** The account id, the last value read and when it was read. Nothing else from the broker.
 - **The broker's screens may change.** The steps below match the brokers' web sites as of October 2026. Brokers rename menus and move settings from time to time, so a step may look a little different when you follow it. The broker's own documentation, linked in each section, is the authoritative source: if a step here no longer matches, look for the same term on the broker's page.
 
@@ -51,11 +51,12 @@ The query must cover one account. If you have linked accounts or an advisor stru
 
 ### 3. Connect it in Capital
 
-1. **Settings → Broker accounts → Access token: Interactive Brokers**, paste the token and save.
-2. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, **Broker** to Interactive Brokers, enter the **Flex Query id** and save.
-3. Press **Refresh**. The first run takes up to half a minute because the report is generated on request.
+1. **Brokers → Credentials → Access token: Interactive Brokers**, paste the token and save.
+2. **Brokers → +**: enter a name, set **Broker** to Interactive Brokers, enter the **Flex Query id** and save.
+3. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, choose the account and save.
+4. Press **Refresh**. The first run takes up to half a minute because the report is generated on request.
 
-When the token expires the refresh reports *Token has expired; generate a new one in Client Portal*: generate a new token and paste it in Settings. Interactive Brokers allows one report request per second and ten per minute from one token, which a refresh never exceeds.
+When the token expires the refresh reports *Token has expired; generate a new one in Client Portal*: generate a new token and paste it under Credentials. Interactive Brokers allows one report request per second and ten per minute from one token, which a refresh never exceeds.
 
 Interactive Brokers documentation: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ The v20 account id has the form `001-001-1234567-001`, with hyphens. It is liste
 
 ### 3. Connect it in Capital
 
-1. **Settings → Broker accounts → Access token: OANDA**, paste the token and save.
-2. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, **Broker** to OANDA, enter the **OANDA account id** and save.
-3. Press **Refresh**.
+1. **Brokers → Credentials → Access token: OANDA**, paste the token and save.
+2. **Brokers → +**: enter a name, set **Broker** to OANDA, enter the **OANDA account id** and save.
+3. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, choose the account and save.
+4. Press **Refresh**.
 
 A margin account whose NAV is negative is reported as an error rather than counted as savings.
 
@@ -97,9 +99,10 @@ Capital calls the **account summary** of the Trading 212 Public API and stores t
 
 ### 2. Connect it in Capital
 
-1. **Settings → Broker accounts → API key: Trading 212** and **API secret: Trading 212**, paste each value.
-2. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, **Broker** to Trading 212, enter the **Trading 212 account number** (the account id shown in the app, digits only) and save.
-3. Press **Refresh**. Trading 212 allows one summary request every 5 seconds.
+1. **Brokers → Credentials → API key: Trading 212** and **API secret: Trading 212**, paste each value.
+2. **Brokers → +**: enter a name, set **Broker** to Trading 212, enter the **Trading 212 account number** (the account id shown in the app, digits only) and save.
+3. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, choose the account and save.
+4. Press **Refresh**. Trading 212 allows one summary request every 5 seconds.
 
 Trading 212 documentation: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ What is sent: your client id and, as a signature, nothing of the consumer key it
 
 ### 2. Connect it in Capital
 
-1. **Settings → Broker accounts → Client id: SnapTrade** and **Consumer key: SnapTrade**, paste each value.
-2. Open the bucket, **Add holding**, set **Tracking** to **Broker account** and **Broker** to SnapTrade.
+1. **Brokers → Credentials → Client id: SnapTrade** and **Consumer key: SnapTrade**, paste each value.
+2. **Brokers → +**: enter a name and set **Broker** to SnapTrade.
 3. Press **Connect a brokerage through SnapTrade**. The SnapTrade Connection Portal opens in the browser; log in to your broker there (the link is valid for 5 minutes). Come back to Capital.
-4. Press **Fetch accounts** and choose the account; its id fills the **SnapTrade account id** field. Save, then **Refresh**.
+4. Press **Fetch accounts** and choose the account; its id fills the **SnapTrade account id** field. Save.
+5. Open the bucket, **Add holding**, set **Tracking** to **Broker account**, choose the account and save, then **Refresh**.
 
 An account that SnapTrade has not finished syncing yet reports *SnapTrade has no total value for this account yet*; refresh again later.
 
@@ -140,7 +144,7 @@ Many of these brokers are covered by [SnapTrade](#snaptrade). Otherwise enter th
 
 | Message | What to do |
 |---|---|
-| *Interactive Brokers needs your access token in Settings → Broker accounts* / *OANDA needs your access token …* | Paste the token, key or client id in Settings → Broker accounts. |
+| *Interactive Brokers needs its credentials on the Brokers screen* / *OANDA needs its credentials …* | Paste the token, key or client id under Credentials on the Brokers tab. |
 | *Token has expired; generate a new one in Client Portal* | Generate a new Flex Web Service token and paste it. |
 | *Token is invalid* | Copy the token again; a new token replaces the old one. |
 | *Token is restricted to another IP address* | Generate the token without an IP restriction. |

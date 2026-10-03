@@ -22,7 +22,7 @@ Capital hanya terhubung ke antarmuka yang kredensialnya berumur panjang: token a
 ## Sebelum mulai {#before-you-start}
 
 - **Apa yang keluar dari perangkat.** Pada setiap pembaruan, aplikasi mengirim token akses dan ID akun atau ID query ke broker tersebut melalui HTTPS. Broker melihat alamat IP Anda, seperti pada permintaan internet mana pun.
-- **Tempat kredensial disimpan.** Pengaturan → Akun broker. Kredensial dienkripsi dengan kunci yang disimpan di Android Keystore, tidak pernah ditulis ke folder data Anda, dan tidak disertakan dalam ekspor maupun cadangan sistem. Satu set kredensial per broker mencakup semua akun yang Anda tambahkan untuk broker itu.
+- **Tempat kredensial disimpan.** Tab Broker → Kredensial. Kredensial dienkripsi dengan kunci yang disimpan di Android Keystore, tidak pernah ditulis ke folder data Anda, dan tidak disertakan dalam ekspor maupun cadangan sistem. Satu set kredensial per broker mencakup semua akun yang Anda tambahkan untuk broker itu.
 - **Yang disimpan di folder Anda.** ID akun, nilai terakhir yang dibaca, dan waktu pembacaannya. Tidak ada yang lain dari broker.
 - **Tampilan situs broker dapat berubah.** Langkah di bawah ini sesuai dengan situs web broker per Oktober 2026. Broker sesekali mengganti nama menu dan memindahkan pengaturan, jadi sebuah langkah mungkin tampak sedikit berbeda saat Anda mengikutinya. Dokumentasi resmi broker, yang ditautkan di setiap bagian, adalah sumber yang berwenang: jika sebuah langkah di sini tidak lagi sesuai, cari istilah yang sama di halaman broker.
 
@@ -51,11 +51,12 @@ Query harus mencakup satu akun. Jika Anda memiliki akun tertaut atau struktur ad
 
 ### 3. Hubungkan di Capital
 
-1. **Pengaturan → Akun broker → Token akses: Interactive Brokers**, tempel token dan simpan.
-2. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, **Broker** ke Interactive Brokers, masukkan **Flex Query id** dan simpan.
-3. Tekan **Perbarui**. Proses pertama memakan waktu hingga setengah menit karena laporan dibuat berdasarkan permintaan.
+1. **Broker → Kredensial → Token akses: Interactive Brokers**, tempel token dan simpan.
+2. **Broker → +**: masukkan nama, atur **Broker** ke Interactive Brokers, masukkan **Flex Query id** dan simpan.
+3. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, pilih akun, lalu simpan.
+4. Tekan **Perbarui**. Proses pertama memakan waktu hingga setengah menit karena laporan dibuat berdasarkan permintaan.
 
-Jika token kedaluwarsa, pembaruan melaporkan *Token sudah kedaluwarsa; buat token baru di Client Portal*: buat token baru dan tempel di Pengaturan. Interactive Brokers mengizinkan satu permintaan laporan per detik dan sepuluh per menit dari satu token, batas yang tidak pernah dilampaui oleh satu pembaruan.
+Jika token kedaluwarsa, pembaruan melaporkan *Token sudah kedaluwarsa; buat token baru di Client Portal*: buat token baru dan tempel di bagian Kredensial. Interactive Brokers mengizinkan satu permintaan laporan per detik dan sepuluh per menit dari satu token, batas yang tidak pernah dilampaui oleh satu pembaruan.
 
 Dokumentasi Interactive Brokers: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ ID akun v20 berbentuk `001-001-1234567-001`, dengan tanda hubung. ID itu tercant
 
 ### 3. Hubungkan di Capital
 
-1. **Pengaturan → Akun broker → Token akses: OANDA**, tempel token dan simpan.
-2. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, **Broker** ke OANDA, masukkan **ID akun OANDA** dan simpan.
-3. Tekan **Perbarui**.
+1. **Broker → Kredensial → Token akses: OANDA**, tempel token dan simpan.
+2. **Broker → +**: masukkan nama, atur **Broker** ke OANDA, masukkan **ID akun OANDA** dan simpan.
+3. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, pilih akun, lalu simpan.
+4. Tekan **Perbarui**.
 
 Akun margin yang NAV-nya negatif dilaporkan sebagai kesalahan, bukan dihitung sebagai tabungan.
 
@@ -97,9 +99,10 @@ Capital memanggil **account summary** dari Trading 212 Public API dan menyimpan 
 
 ### 2. Hubungkan di Capital
 
-1. **Pengaturan → Akun broker → Kunci API: Trading 212** dan **Rahasia API: Trading 212**, tempel masing-masing nilai.
-2. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, **Broker** ke Trading 212, masukkan **Nomor akun Trading 212** (ID akun yang ditampilkan di aplikasi, hanya angka) dan simpan.
-3. Tekan **Perbarui**. Trading 212 mengizinkan satu permintaan summary setiap 5 detik.
+1. **Broker → Kredensial → Kunci API: Trading 212** dan **Rahasia API: Trading 212**, tempel masing-masing nilai.
+2. **Broker → +**: masukkan nama, atur **Broker** ke Trading 212, masukkan **Nomor akun Trading 212** (ID akun yang ditampilkan di aplikasi, hanya angka) dan simpan.
+3. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, pilih akun, lalu simpan.
+4. Tekan **Perbarui**. Trading 212 mengizinkan satu permintaan summary setiap 5 detik.
 
 Dokumentasi Trading 212: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ Yang dikirim: ID klien Anda dan, sebagai tanda tangan, tidak ada bagian dari kun
 
 ### 2. Hubungkan di Capital
 
-1. **Pengaturan → Akun broker → ID klien: SnapTrade** dan **Kunci konsumen: SnapTrade**, tempel masing-masing nilai.
-2. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker** dan **Broker** ke SnapTrade.
+1. **Broker → Kredensial → ID klien: SnapTrade** dan **Kunci konsumen: SnapTrade**, tempel masing-masing nilai.
+2. **Broker → +**: masukkan nama dan atur **Broker** ke SnapTrade.
 3. Tekan **Hubungkan broker melalui SnapTrade**. SnapTrade Connection Portal terbuka di browser; login ke broker Anda di sana (tautan berlaku 5 menit). Kembali ke Capital.
-4. Tekan **Muat akun** dan pilih akun; ID-nya mengisi kolom **ID akun SnapTrade**. Simpan, lalu **Perbarui**.
+4. Tekan **Muat akun** dan pilih akun; ID-nya mengisi kolom **ID akun SnapTrade**. Simpan.
+5. Buka kantong, **Tambah aset**, atur **Pelacakan** ke **Akun broker**, pilih akun, lalu simpan, kemudan **Perbarui**.
 
 Akun yang belum selesai disinkronkan oleh SnapTrade melaporkan *SnapTrade belum memiliki total nilai untuk akun ini*; perbarui lagi nanti.
 
@@ -140,7 +144,7 @@ Banyak dari broker ini dicakup oleh [SnapTrade](#snaptrade). Jika tidak, masukka
 
 | Pesan | Yang perlu dilakukan |
 |---|---|
-| *Interactive Brokers memerlukan token akses Anda di Pengaturan → Akun broker* / *OANDA memerlukan token akses Anda …* | Tempel token, kunci, atau ID klien di Pengaturan → Akun broker. |
+| *Interactive Brokers memerlukan kredensialnya di layar Broker* / *OANDA memerlukan kredensialnya …* | Tempel token, kunci, atau ID klien di bagian Kredensial pada tab Broker. |
 | *Token sudah kedaluwarsa; buat token baru di Client Portal* | Buat token Flex Web Service baru dan tempel. |
 | *Token tidak valid* | Salin token sekali lagi; token baru menggantikan yang lama. |
 | *Token dibatasi untuk alamat IP lain* | Buat token tanpa pembatasan IP. |

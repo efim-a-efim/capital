@@ -20,7 +20,7 @@ Nada en la aplicación mueve dinero. Es un reflejo de lo que usted posee y una c
 
 1. **Elija una carpeta.** Seleccione una carpeta exclusiva en el dispositivo, por ejemplo `Documents/Capital`. Ahí se escribe cada registro. Una carpeta que ya contiene datos de Capital se abre directamente.
 2. **Ajustes → Moneda predeterminada.** Los totales y el Resumen se muestran en esa moneda.
-3. Si quiere, configure **claves de proveedores** en Ajustes para los operadores que ofrecen límites más altos con una clave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Cada red y cada fuente de precios tiene una opción predeterminada que no necesita clave. Las cuentas de bróker necesitan un **token de acceso** del bróker; consulte [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
+3. Si quiere, configure **claves de proveedores** en Ajustes para los operadores que ofrecen límites más altos con una clave gratuita (Alchemy, TronGrid, TON Center, CoinGecko). Cada red y cada fuente de precios tiene una opción predeterminada que no necesita clave. Las cuentas de bróker necesitan un **token de acceso** del bróker, que se introduce en la pestaña Brókeres; consulte [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 
 ## Bolsillos {#buckets}
 
@@ -28,7 +28,7 @@ Pestaña Bolsillos → **+**. Asigne al bolsillo un nombre y una moneda. Ábralo
 
 - **Posición manual**: un nombre, un código de moneda o de activo (EUR, USD, BTC, el ticker de una acción que usted mismo valora…) y una cantidad. Úsela para saldos bancarios, efectivo y todo lo que la aplicación no puede leer.
 - **Posición de billetera**: elija la red (BTC, ETH, TON, TRX) y pegue una dirección pública. Al actualizar, la aplicación lee el saldo nativo y, en ETH, TON y TRX, los tokens fungibles de la dirección.
-- **Cuenta de bróker**: elija el bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade) e introduzca el Flex Query id o el ID de cuenta. Al actualizar, la aplicación lee el valor total de la cuenta en su moneda base. El token de acceso se introduce una sola vez en Ajustes → Cuentas de bróker. Los pasos de configuración, con enlaces a la documentación de los propios brókeres, están en [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
+- **Cuenta de bróker**: elija una de las cuentas añadidas en la pestaña Brókeres. Al actualizar, la aplicación lee el valor total de la cuenta en su moneda base. Una cuenta puede estar vinculada a un solo bolsillo.
 
 Los importes admiten punto o coma decimal, sin separadores de miles. Cada bolsillo muestra las cantidades en su moneda original y su valor en su moneda predeterminada. Si falta una cotización, el total se marca como incompleto; un valor en caché desactualizado sigue siendo utilizable, con una advertencia.
 
@@ -55,6 +55,10 @@ Cómo se asigna el dinero:
 Pestaña Planes → **+**. Un ahorro planificado es un importe que usted prevé añadir en una fecha, por ejemplo lo que ahorra de su sueldo a final de cada mes. Los planes no forman parte de sus ahorros; solo amplían la proyección: «los ahorros planificados completan esta meta el 30 de octubre de 2026 · a tiempo».
 
 El dinero de los planes se aplica después de los bolsillos actuales, a las metas por orden de fecha de vencimiento, de modo que solo completa lo que aún falta. Cuando la fecha de un plan ya ha pasado, este pasa a la sección **Archivada** y deja de contabilizarse: o bien ya movió ese dinero a un bolsillo y la aplicación lo ve allí, o bien el plan no se cumplió. Cambie la fecha a una futura para volver a activarlo; elimínelo si ya no sirve.
+
+## Brókeres
+
+Pestaña Brókeres → **+**. Una cuenta de bróker es una conexión de solo lectura: elija el bróker (Interactive Brokers, OANDA, Trading 212 o SnapTrade), introduzca el ID de la cuenta o de la consulta y guarde; el token o la clave del bróker se introduce una sola vez en **Credenciales**, en la misma pestaña, y sirve para todas las cuentas de ese bróker. La pestaña enumera cada cuenta con su último valor y el bolsillo al que está vinculada. **Ignorar saldos inferiores a** un importe en su moneda predeterminada (1 por defecto) hace que un saldo mínimo cuente como 0 en el bolsillo. Vincúlela a un bolsillo con **Añadir posición → Cuenta de bróker**; elimine la posición para desvincularla y elimine la cuenta para quitar la conexión. Los pasos de configuración, con enlaces a la documentación de los propios brókeres, están en [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 
 ## Actualizar
 

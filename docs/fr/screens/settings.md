@@ -14,7 +14,7 @@ title: Paramètres
 
 **Fournisseurs de données gratuits.** Une ligne par type de données, chacune avec l’opérateur utilisé : soldes BTC, ETH, TON, TRX ; listes de jetons ETH, TON, TRX ; cours des cryptomonnaies ; taux de change des devises. Touchez une ligne pour choisir un autre opérateur, mettre la recherche de jetons sur **Désactivé** pour une blockchain, ou saisir une clé API facultative. Les clés sont enregistrées chiffrées sur l’appareil et envoyées uniquement à l’opérateur qui les a émises. **Tester les sources / actualiser le portefeuille** interroge chaque opérateur avec les actifs que vous détenez réellement et signale ce qui a échoué. Aucun opérateur n’est jamais remplacé à votre insu.
 
-**Comptes de courtage.** Les identifiants de chaque courtier pris en charge (Interactive Brokers, OANDA, Trading 212, SnapTrade), enregistrés chiffré comme les clés de fournisseurs et envoyés uniquement à ce courtier. L’application s’en sert pour lire la valeur des comptes et ne passe jamais d’ordres. **Guide de configuration des comptes de courtage** ouvre [Comptes de courtage et de forex]({{ page.base }}/accounts).
+**Courtiers.** Les comptes de courtage et leurs identifiants ont leur propre écran : [Courtiers]({{ page.base }}/screens/brokers).
 
 **Cours et fraîcheur des données.** Chaque cours en cache avec sa date d’observation et de récupération. Les cours obsolètes restent utilisables et sont signalés dans la Synthèse.
 

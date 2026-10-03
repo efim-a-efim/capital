@@ -14,7 +14,7 @@ title: Cài đặt
 
 **Nhà cung cấp dữ liệu miễn phí.** Mỗi loại dữ liệu một dòng, kèm nhà cung cấp đang dùng: số dư BTC, ETH, TON, TRX; danh sách token ETH, TON, TRX; giá tiền mã hóa; tỷ giá tiền pháp định. Chạm vào một dòng để chọn nhà cung cấp khác, chuyển tra cứu token của một chuỗi sang **Tắt**, hoặc nhập khóa API không bắt buộc. Khóa được lưu mã hóa trên thiết bị và chỉ được gửi đến nhà cung cấp đã cấp khóa đó. **Kiểm tra nguồn / làm mới danh mục** truy vấn từng nhà cung cấp với những tài sản bạn thực sự nắm giữ và báo cáo những gì thất bại. Không nhà cung cấp nào bị âm thầm thay thế.
 
-**Tài khoản môi giới.** Thông tin xác thực của mỗi nhà môi giới được hỗ trợ (Interactive Brokers, OANDA, Trading 212, SnapTrade), được lưu mã hóa như khóa nhà cung cấp và chỉ được gửi đến nhà môi giới đó. Ứng dụng dùng nó để đọc giá trị tài khoản và không bao giờ đặt lệnh. **Hướng dẫn thiết lập tài khoản môi giới** mở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
+**Môi giới.** Các tài khoản môi giới và thông tin xác thực của chúng có màn hình riêng: [Môi giới]({{ page.base }}/screens/brokers).
 
 **Giá và độ cập nhật.** Mọi giá đã lưu đệm kèm thời điểm ghi nhận và thời điểm lấy về. Giá cũ vẫn được dùng và được đánh dấu trên màn hình Tổng quan.
 

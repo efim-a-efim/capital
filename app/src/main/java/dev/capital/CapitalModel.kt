@@ -133,7 +133,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         transaction.withLock {
             if(!isOpen) return@withLock
             if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Resolve storage issues before editing")); return@withLock }
-            try { persist(transform(mutable.value.data).ranked().validate()); onSaved() }
+            try { persist(transform(mutable.value.data).linked().ranked().validate()); onSaved() }
             catch(e: Exception) { notice(e.message ?: tr("Could not save")) }
         }
     }
@@ -150,7 +150,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         try { persist(mutable.value.data) } catch(e: Exception) { notice(e.message ?: tr("Save failed")) }
     } }
     fun resolve(revision: Revision)=viewModelScope.launch { transaction.withLock {
-        try { persist(revision.data.ranked(),true) } catch(e: Exception) { notice(e.message ?: tr("Conflict resolution failed")) }
+        try { persist(revision.data.linked().ranked(),true) } catch(e: Exception) { notice(e.message ?: tr("Conflict resolution failed")) }
     } }
     fun refresh(bucketId: String?=null) {
         if(refreshJob?.isActive==true || !isOpen || !mutable.value.ready || mutable.value.blocked || mutable.value.unsaved || !foreground) return
@@ -163,7 +163,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
                 val observations=providers.refresh(requested,bucketId)
                 transaction.withLock {
                     if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Refresh finished; resolve storage issues before retrying.")); return@withLock }
-                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted)) }
+                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted,observations.accounts)) }
                     notice(if(observations.errors.isEmpty()) tr("Refreshed. Shared rates may revalue other buckets.") else observations.errors.joinToString("\n"))
                 }
             } catch(e: CancellationException) { notice(tr("Refresh stopped. Cached values retained.")); throw e }

@@ -20,7 +20,7 @@ Rien dans l’application ne déplace d’argent. C’est un reflet de ce que vo
 
 1. **Choisissez un dossier.** Sélectionnez un dossier dédié sur l’appareil, par exemple `Documents/Capital`. C’est là que toutes les données sont écrites. Un dossier qui contient déjà des données Capital s’ouvre directement.
 2. **Paramètres → Devise par défaut.** Les totaux et la Synthèse sont affichés dans cette devise.
-3. Si vous le souhaitez, saisissez dans les Paramètres des **clés de fournisseurs** pour les opérateurs qui offrent des limites plus élevées avec une clé gratuite (Alchemy, TronGrid, TON Center, CoinGecko). Chaque blockchain et chaque source de cours dispose d’une option par défaut sans clé. Les comptes de courtage nécessitent un **jeton d’accès** du courtier ; voir [Comptes de courtage et de forex]({{ page.base }}/accounts).
+3. Si vous le souhaitez, saisissez dans les Paramètres des **clés de fournisseurs** pour les opérateurs qui offrent des limites plus élevées avec une clé gratuite (Alchemy, TronGrid, TON Center, CoinGecko). Chaque blockchain et chaque source de cours dispose d’une option par défaut sans clé. Les comptes de courtage nécessitent un **jeton d’accès** du courtier, saisi dans l’onglet Courtiers ; voir [Comptes de courtage et de forex]({{ page.base }}/accounts).
 
 ## Poches {#buckets}
 
@@ -28,7 +28,7 @@ Onglet Poches → **+**. Donnez à la poche un nom et une devise. Ouvrez-la pour
 
 - **Position manuelle** (*Manuel*) : un nom, un code de devise ou d’actif (EUR, USD, BTC, un symbole boursier que vous valorisez vous-même…) et une quantité. Utilisez-la pour les soldes bancaires, les espèces et tout ce que l’application ne peut pas lire.
 - **Position de portefeuille crypto** (*Portefeuille crypto*) : choisissez la blockchain (BTC, ETH, TON, TRX) et collez une adresse publique. À l’actualisation, l’application lit le solde natif et, pour ETH, TON et TRX, les jetons fongibles détenus à cette adresse.
-- **Compte de courtage** : choisissez le courtier (Interactive Brokers, OANDA, Trading 212 ou SnapTrade) et saisissez l’identifiant du compte ou de la requête. À l’actualisation, l’application lit la valeur totale du compte dans sa devise de référence. Le jeton d’accès se saisit une seule fois dans Paramètres → Comptes de courtage. Les étapes de configuration, avec des liens vers la documentation des courtiers, figurent sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
+- **Compte de courtage** : choisissez l’un des comptes ajoutés dans l’onglet Courtiers. À l’actualisation, l’application lit la valeur totale du compte dans sa devise de référence. Un compte ne peut être lié qu’à une seule poche.
 
 Les montants acceptent le point ou la virgule comme séparateur décimal, sans séparateur de milliers. Chaque poche affiche les quantités natives et leur valeur dans votre devise par défaut. S’il manque un cours, le total est signalé comme incomplet ; une valeur en cache obsolète reste utilisable, avec un avertissement.
 
@@ -55,6 +55,10 @@ Comment l’argent est affecté :
 Onglet Prévisions → **+**. Un versement prévu est un montant que vous comptez ajouter à une date donnée, par exemple la part de votre salaire que vous épargnez à la fin de chaque mois. Les versements prévus ne font pas partie de votre épargne ; ils prolongent seulement la projection : « Objectif atteint le 30 oct. 2026 grâce aux versements prévus · dans les temps ».
 
 L’argent des versements prévus est appliqué après les poches actuelles, aux objectifs par ordre d’échéance : il ne complète donc que ce qui reste à financer. Lorsque la date d’un versement prévu est passée, il passe dans la section **Archivé** et n’est plus compté : soit vous avez déjà versé l’argent dans une poche et l’application l’y voit, soit le versement n’a pas eu lieu. Reportez sa date dans le futur pour le réactiver ; supprimez-le s’il n’a plus lieu d’être.
+
+## Courtiers
+
+Onglet Courtiers → **+**. Un compte de courtage est une connexion en lecture seule : choisissez le courtier (Interactive Brokers, OANDA, Trading 212 ou SnapTrade), saisissez l’identifiant du compte ou de la requête et enregistrez ; le jeton ou la clé du courtier se saisit une seule fois sous **Identifiants**, dans le même onglet, et couvre tous les comptes de ce courtier. L’onglet liste chaque compte avec sa dernière valeur et la poche à laquelle il est lié. **Ignorer les soldes inférieurs à** un montant dans votre devise par défaut (1 par défaut) fait compter un solde négligeable pour 0 dans la poche. Liez-le à une poche avec **Ajouter une position → Compte de courtage** ; supprimez la position pour le délier, supprimez le compte pour retirer la connexion. Les étapes de configuration, avec des liens vers la documentation des courtiers, figurent sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
 
 ## Actualisation
 

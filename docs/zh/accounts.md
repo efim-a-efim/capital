@@ -22,7 +22,7 @@ Capital 只连接凭据长期有效的接口：您创建一次、在您撤销之
 ## 开始之前 {#before-you-start}
 
 - **哪些数据会离开设备。** 每次刷新时，应用会通过 HTTPS 把您的访问令牌以及账户 ID 或查询 ID 发送给该券商。与任何请求一样，券商能看到您的 IP 地址。
-- **凭据保存在哪里。** “设置”→“券商账户”。它使用保存在 Android Keystore 中的密钥加密，绝不会写入您的数据文件夹，也不包含在导出文件和系统备份中。每家券商一套凭据即可覆盖您为该券商添加的所有账户。
+- **凭据保存在哪里。** “券商”标签页 → “凭据”。它使用保存在 Android Keystore 中的密钥加密，绝不会写入您的数据文件夹，也不包含在导出文件和系统备份中。每家券商一套凭据即可覆盖您为该券商添加的所有账户。
 - **您的文件夹中保存什么。** 账户 ID、最近读取的价值及读取时间。券商的其他任何数据都不会保存。
 - **券商的界面可能会变化。** 下面的步骤与各券商网站截至 2026 年 10 月的界面一致。券商会不时重命名菜单、移动设置，所以您实际操作时某一步可能略有不同。每一节中链接的券商官方文档才是权威来源：如果这里的某一步与现状不符，请在券商页面上查找相同的术语。
 
@@ -53,11 +53,12 @@ Capital 使用 **Flex Web Service**，这是 Interactive Brokers 用于获取预
 
 ### 3. 在 Capital 中连接
 
-1. **设置 → 券商账户 → 访问令牌：Interactive Brokers**，粘贴令牌并保存。
-2. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，将 **券商** 设为 Interactive Brokers，输入 **Flex Query id** 并保存。
-3. 点击 **刷新**。首次运行最多需要半分钟，因为报表是按请求生成的。
+1. **券商 → 凭据 → 访问令牌：Interactive Brokers**，粘贴令牌并保存。
+2. **券商 → +**：输入名称，将 **券商** 设为 Interactive Brokers，输入 **Flex Query id** 并保存。
+3. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，选择该账户并保存。
+4. 点击 **刷新**。首次运行最多需要半分钟，因为报表是按请求生成的。
 
-令牌过期后，刷新会提示 *令牌已过期；请在 Client Portal 中重新生成*：请生成新令牌并粘贴到“设置”中。Interactive Brokers 允许同一令牌每秒一次、每分钟十次报表请求，刷新绝不会超过这一限制。
+令牌过期后，刷新会提示 *令牌已过期；请在 Client Portal 中重新生成*：请生成新令牌并粘贴到“凭据”下。Interactive Brokers 允许同一令牌每秒一次、每分钟十次报表请求，刷新绝不会超过这一限制。
 
 Interactive Brokers 文档：[Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [启用并创建访问令牌](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [创建 Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query 参考](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -79,9 +80,10 @@ v20 账户 ID 的形式为 `001-001-1234567-001`，带连字符。它在同一�
 
 ### 3. 在 Capital 中连接
 
-1. **设置 → 券商账户 → 访问令牌：OANDA**，粘贴令牌并保存。
-2. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，将 **券商** 设为 OANDA，输入 **OANDA 账户 ID** 并保存。
-3. 点击 **刷新**。
+1. **券商 → 凭据 → 访问令牌：OANDA**，粘贴令牌并保存。
+2. **券商 → +**：输入名称，将 **券商** 设为 OANDA，输入 **OANDA 账户 ID** 并保存。
+3. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，选择该账户并保存。
+4. 点击 **刷新**。
 
 净资产价值为负的保证金账户会被报告为错误，而不会计入储蓄。
 
@@ -99,9 +101,10 @@ Capital 调用 Trading 212 Public API 的 **账户摘要（account summary）**�
 
 ### 2. 在 Capital 中连接
 
-1. **设置 → 券商账户 → API 密钥：Trading 212** 和 **API 密文：Trading 212**，分别粘贴各个值。
-2. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，将 **券商** 设为 Trading 212，输入 **Trading 212 账号**（应用中显示的账户 ID，仅数字）并保存。
-3. 点击 **刷新**。Trading 212 允许每 5 秒一次摘要请求。
+1. **券商 → 凭据 → API 密钥：Trading 212** 和 **API 密文：Trading 212**，分别粘贴各个值。
+2. **券商 → +**：输入名称，将 **券商** 设为 Trading 212，输入 **Trading 212 账号**（应用中显示的账户 ID，仅数字）并保存。
+3. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，选择该账户并保存。
+4. 点击 **刷新**。Trading 212 允许每 5 秒一次摘要请求。
 
 Trading 212 文档：[Public API](https://docs.trading212.com/api) · [如何获取 API 密钥](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -118,10 +121,11 @@ Trading 212 文档：[Public API](https://docs.trading212.com/api) · [如何获
 
 ### 2. 在 Capital 中连接
 
-1. **设置 → 券商账户 → 客户端 ID：SnapTrade** 和 **消费者密钥：SnapTrade**，分别粘贴各个值。
-2. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，将 **券商** 设为 SnapTrade。
+1. **券商 → 凭据 → 客户端 ID：SnapTrade** 和 **消费者密钥：SnapTrade**，分别粘贴各个值。
+2. **券商 → +**：输入名称，将 **券商** 设为 SnapTrade。
 3. 点击 **通过 SnapTrade 连接券商**。SnapTrade Connection Portal 会在浏览器中打开；请在那里登录您的券商（链接有效期为 5 分钟）。然后返回 Capital。
-4. 点击 **获取账户** 并选择账户；其 ID 会填入 **SnapTrade 账户 ID** 字段。保存，然后点击 **刷新**。
+4. 点击 **获取账户** 并选择账户；其 ID 会填入 **SnapTrade 账户 ID** 字段。保存。
+5. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，选择该账户并保存，然后点击 **刷新**。
 
 SnapTrade 尚未完成同步的账户会提示 *SnapTrade 尚无此账户的总价值*；请稍后再刷新。
 
@@ -142,7 +146,7 @@ Capital 只连接满足以下条件的接口：可在手机上通过 HTTPS 使�
 
 | 提示信息 | 处理方法 |
 |---|---|
-| *Interactive Brokers 需要您在“设置”→“券商账户”中填写访问令牌* / *OANDA 需要您在“设置”→“券商账户”中填写访问令牌* | 在“设置”→“券商账户”中粘贴令牌、密钥或客户端 ID。 |
+| *Interactive Brokers 需要在“券商”页面填写凭据* / *OANDA 需要在“券商”页面填写凭据* | 在“券商”标签页的“凭据”下粘贴令牌、密钥或客户端 ID。 |
 | *令牌已过期；请在 Client Portal 中重新生成* | 生成新的 Flex Web Service 令牌并粘贴。 |
 | *令牌无效* | 重新复制令牌；新令牌会替换旧令牌。 |
 | *令牌仅限其他 IP 地址使用* | 生成不限制 IP 的令牌。 |

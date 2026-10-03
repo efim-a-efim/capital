@@ -274,29 +274,56 @@ class CoreTest {
             assertTrue(prio(r.data,"b")>prio(r.data,"a")); assertTrue(prio(r.data,"a")>prio(r.data,"late"))
         }
         val text=encodeRevision(Revision(data=p)); assertEquals(9,prio(decodeRevision(text).data,"late"))
-        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(6,p)) }
+        assertThrows(FutureSchema::class.java) { decodeRevision(oldPayload(SCHEMA+1,p)) }
     }
-    @Test fun accountHoldingsValidateAndAreUnique() {
-        val p=portfolio()
-        val ib=Holding("ib","b","Broker","USD",null,"123456",broker="Interactive Brokers")
-        val oanda=Holding("oa","b","Forex","EUR","1200.5","001-001-1234567-001",broker="OANDA")
-        p.copy(holdings=listOf(ib,oanda)).validate()
-        assertTrue(p.copy(holdings=listOf(ib)).incomplete("USD"))
-        eq("1200.5",p.copy(holdings=listOf(oanda),quotes=listOf(Quote("EUR","1","t",1,1))).bucketValueOrNull("b","EUR")!!)
-        assertTrue(p.copy(holdings=listOf(oanda)).stale())
-        rejects { p.copy(holdings=listOf(ib,ib.copy(id="ib2",bucketId="b"))).validate() }
-        rejects { p.copy(holdings=listOf(ib.copy(address="12 34"))).validate() }
-        rejects { p.copy(holdings=listOf(oanda.copy(address="123456"))).validate() }
-        rejects { p.copy(holdings=listOf(ib.copy(asset="BTC"))).validate() }
-        rejects { p.copy(holdings=listOf(ib.copy(broker="Robinhood"))).validate() }
-        rejects { p.copy(holdings=listOf(ib.copy(tokens=listOf(Token("0x"+"1".repeat(40),"","","1",6))))).validate() }
+    @Test fun accountsLinkIntoOneBucketAndMirrorTheirValue() {
+        val ib=Account("ib","Broker","Interactive Brokers","123456")
+        val oanda=Account("oa","Forex","OANDA","001-001-1234567-001","EUR","1200.5",5,6)
+        val p=portfolio().copy(accounts=listOf(ib,oanda),holdings=listOf(Holding("h1","b","Broker","USD",null,accountId="ib"),Holding("h2","b","Forex","USD",null,accountId="oa"))).linked().validate()
+        val h2=p.holdings.first { it.id=="h2" }
+        assertEquals("EUR",h2.asset); assertEquals("1200.5",h2.quantity); assertEquals("OANDA",h2.source); assertEquals(6L,h2.fetchedAt)
+        assertEquals("USD",p.holdings.first { it.id=="h1" }.asset); assertEquals("Not refreshed",p.holdings.first { it.id=="h1" }.source)
+        assertTrue(p.incomplete("USD"))
+        eq("1200.5",p.copy(holdings=p.holdings.filter { it.id=="h2" },quotes=listOf(Quote("EUR","1","t",1,1))).bucketValueOrNull("b","EUR")!!)
+        assertTrue(p.stale()); assertFalse(portfolio().copy(accounts=listOf(oanda.copy(fetchedAt=System.currentTimeMillis()))).stale())
+        rejects { p.copy(holdings=p.holdings+Holding("h3","b","Again","USD",null,accountId="oa")).linked().validate() }
+        rejects { p.copy(holdings=p.holdings+Holding("h3","b","Gone","USD",null,accountId="zz")).validate() }
+        rejects { p.copy(holdings=p.holdings.map { if(it.id=="h2") it.copy(quantity="1") else it }).validate() }
+        rejects { p.copy(accounts=p.accounts+ib.copy(id="ib2")).validate() }
+        rejects { p.copy(accounts=listOf(ib.copy(address="12 34"))).validate() }
+        rejects { p.copy(accounts=listOf(oanda.copy(address="123456"))).validate() }
+        rejects { p.copy(accounts=listOf(oanda.copy(asset="BTC"))).validate() }
+        rejects { p.copy(accounts=listOf(ib.copy(broker="Robinhood"))).validate() }
+        rejects { p.copy(accounts=listOf(ib.copy(name=" "))).validate() }
+        rejects { portfolio().copy(holdings=listOf(Holding("h","b","Old","USD",null,"123456",broker="Interactive Brokers"))).validate() }
+        assertEquals(listOf("oa"),p.deleteAccount("ib").accounts.map { it.id }); assertEquals(listOf("h2"),p.deleteAccount("ib").holdings.map { it.id })
+        // Dust: below the threshold in the default currency the linked holding counts as 0; without a rate nothing is ignored.
+        val dust=p.copy(settings=Settings("USD"),accounts=p.accounts.map { if(it.id=="oa") it.copy(ignoreBelow="1500") else it },quotes=listOf(Quote("EUR","1.1","t",1,1))).linked().validate()
+        assertTrue(dust.ignored(dust.accounts.first { it.id=="oa" })); assertEquals("0",dust.holdings.first { it.id=="h2" }.quantity)
+        assertEquals("1200.5",dust.copy(accounts=dust.accounts.map { it.copy(ignoreBelow="1000") }).linked().holdings.first { it.id=="h2" }.quantity)
+        assertEquals("1200.5",dust.copy(quotes=emptyList()).linked().holdings.first { it.id=="h2" }.quantity)
+        rejects { dust.copy(accounts=dust.accounts.map { it.copy(ignoreBelow="-1") }).validate() }
         assertEquals("001-001-1234567-001",accountId("OANDA"," 001-001-1234567-001 "))
         rejects { accountId("OANDA","0010011234567001") }
         rejects { accountId(null,"1") }
         assertEquals("8b5f262d-4bb9-365d-888a-202bd3b15fa1",accountId("SnapTrade","8B5F262D-4BB9-365D-888A-202BD3B15FA1"))
         assertEquals("42",accountId("Trading 212","42")); rejects { accountId("Trading 212","4-2") }
         assertEquals(listOf("Interactive Brokers","OANDA","Trading 212","SnapTrade"),brokerChoices); assertEquals(brokerChoices,brokerCredentials.keys.toList())
-        rejects { p.copy(holdings=listOf(Holding("s","b","S","USD",null,"live",broker="Saxo"))).validate() }
+        rejects { portfolio().copy(accounts=listOf(Account("s","S","Saxo","live"))).validate() }
+    }
+    @Test fun schemaFiveBrokerHoldingsBecomeAccounts() {
+        val p=portfolio().copy(holdings=listOf(Holding("w","b","W","ETH","0","0x"+"2".repeat(40)),Holding("ib","b","Broker","EUR","12.5","123456",observedAt=1,fetchedAt=2,source="Interactive Brokers",broker="Interactive Brokers"),Holding("oa","b","Forex","USD",null,"001-001-1234567-001",broker="OANDA")))
+        val obj=json.parseToJsonElement(json.encodeToString(Revision(data=p))).jsonObject
+        val old=JsonObject(obj+mapOf("schema" to JsonPrimitive(5),"data" to JsonObject(obj.getValue("data").jsonObject-"accounts")))
+        val payload=old.toString()
+        val r=decodeRevision(json.encodeToString(Envelope(payload,checksum(payload))))
+        assertEquals(5,r.schema); assertEquals(2,r.data.accounts.size)
+        val ib=r.data.accounts.first { it.broker=="Interactive Brokers" }; val oa=r.data.accounts.first { it.broker=="OANDA" }
+        assertEquals("123456",ib.address); assertEquals("EUR",ib.asset); assertEquals("12.5",ib.quantity); assertEquals(2L,ib.fetchedAt); assertNull(oa.asset)
+        val linked=r.data.holdings.first { it.id=="ib" }
+        assertEquals(ib.id,linked.accountId); assertNull(linked.broker); assertNull(linked.address); assertEquals("12.5",linked.quantity)
+        assertEquals("USD",r.data.holdings.first { it.id=="oa" }.asset); assertNull(r.data.holdings.first { it.id=="w" }.accountId)
+        r.data.validate()
     }
     @Test fun schemaFourOpensWithoutBrokers() {
         val p=portfolio().copy(holdings=listOf(Holding("w","b","W","ETH","0","0x"+"2".repeat(40))))
@@ -306,7 +333,7 @@ class CoreTest {
         val payload=old.toString()
         val r=decodeRevision(json.encodeToString(Envelope(payload,checksum(payload))))
         assertEquals(4,r.schema); assertNull(r.data.holdings.single().broker)
-        assertEquals(5,SCHEMA)
+        assertEquals(6,SCHEMA)
     }
     @Test fun schemaThreeOpensWithPortfolioDefaults() {
         val p=portfolio().let { it.copy(buckets=listOf(Bucket("b","Savings","USD",true,mapOf("USD" to "100"),true))) }

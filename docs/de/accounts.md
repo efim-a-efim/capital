@@ -22,7 +22,7 @@ Capital verbindet sich nur mit Schnittstellen, deren Zugangsdaten langlebig sind
 ## Bevor Sie beginnen {#before-you-start}
 
 - **Was das Gerät verlässt.** Bei jeder Aktualisierung sendet die App Ihr Zugriffstoken und die Konto- oder Query-ID per HTTPS an diesen Broker. Der Broker sieht Ihre IP-Adresse, wie bei jeder Anfrage.
-- **Wo die Zugangsdaten liegen.** Einstellungen → Brokerkonten. Sie werden mit einem im Android Keystore gehaltenen Schlüssel verschlüsselt, nie in Ihren Datenordner geschrieben und von Exporten und Systembackups ausgeschlossen. Ein Satz Zugangsdaten pro Broker gilt für alle Konten, die Sie für diesen Broker hinzufügen.
+- **Wo die Zugangsdaten liegen.** Tab „Broker“ → Zugangsdaten. Sie werden mit einem im Android Keystore gehaltenen Schlüssel verschlüsselt, nie in Ihren Datenordner geschrieben und von Exporten und Systembackups ausgeschlossen. Ein Satz Zugangsdaten pro Broker gilt für alle Konten, die Sie für diesen Broker hinzufügen.
 - **Was in Ihrem Ordner gespeichert wird.** Die Konto-ID, der zuletzt gelesene Wert und der Zeitpunkt des Lesens. Sonst nichts vom Broker.
 - **Die Oberflächen der Broker können sich ändern.** Die folgenden Schritte entsprechen den Websites der Broker mit Stand Oktober 2026. Broker benennen Menüs um und verschieben Einstellungen von Zeit zu Zeit, daher kann ein Schritt beim Nachvollziehen etwas anders aussehen. Maßgeblich ist die eigene Dokumentation des Brokers, die in jedem Abschnitt verlinkt ist: Stimmt ein Schritt hier nicht mehr, suchen Sie auf der Seite des Brokers nach demselben Begriff.
 
@@ -51,11 +51,12 @@ Die Query muss ein Konto abdecken. Wenn Sie verknüpfte Konten oder eine Berater
 
 ### 3. In Capital verbinden
 
-1. **Einstellungen → Brokerkonten → Zugriffstoken: Interactive Brokers**, fügen Sie das Token ein und speichern Sie.
-2. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, **Broker** auf Interactive Brokers, geben Sie die **Flex-Query-ID** ein und speichern Sie.
-3. Tippen Sie auf **Aktualisieren**. Der erste Durchlauf dauert bis zu einer halben Minute, weil der Bericht auf Anforderung erzeugt wird.
+1. **Broker → Zugangsdaten → Zugriffstoken: Interactive Brokers**, fügen Sie das Token ein und speichern Sie.
+2. **Broker → +**: Geben Sie einen Namen ein, stellen Sie **Broker** auf Interactive Brokers, geben Sie die **Flex-Query-ID** ein und speichern Sie.
+3. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, wählen Sie das Konto und speichern Sie.
+4. Tippen Sie auf **Aktualisieren**. Der erste Durchlauf dauert bis zu einer halben Minute, weil der Bericht auf Anforderung erzeugt wird.
 
-Läuft das Token ab, meldet die Aktualisierung *Token ist abgelaufen; erzeugen Sie im Client Portal einen neuen*: Erzeugen Sie ein neues Token und fügen Sie es in den Einstellungen ein. Interactive Brokers erlaubt pro Token eine Berichtsanfrage pro Sekunde und zehn pro Minute; eine Aktualisierung überschreitet das nie.
+Läuft das Token ab, meldet die Aktualisierung *Token ist abgelaufen; erzeugen Sie im Client Portal einen neuen*: Erzeugen Sie ein neues Token und fügen Sie es unter Zugangsdaten ein. Interactive Brokers erlaubt pro Token eine Berichtsanfrage pro Sekunde und zehn pro Minute; eine Aktualisierung überschreitet das nie.
 
 Dokumentation von Interactive Brokers: [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ Die v20-Konto-ID hat die Form `001-001-1234567-001`, mit Bindestrichen. Sie steh
 
 ### 3. In Capital verbinden
 
-1. **Einstellungen → Brokerkonten → Zugriffstoken: OANDA**, fügen Sie das Token ein und speichern Sie.
-2. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, **Broker** auf OANDA, geben Sie die **OANDA-Konto-ID** ein und speichern Sie.
-3. Tippen Sie auf **Aktualisieren**.
+1. **Broker → Zugangsdaten → Zugriffstoken: OANDA**, fügen Sie das Token ein und speichern Sie.
+2. **Broker → +**: Geben Sie einen Namen ein, stellen Sie **Broker** auf OANDA, geben Sie die **OANDA-Konto-ID** ein und speichern Sie.
+3. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, wählen Sie das Konto und speichern Sie.
+4. Tippen Sie auf **Aktualisieren**.
 
 Ein Margin-Konto mit negativem NAV wird als Fehler gemeldet und nicht als Ersparnis gezählt.
 
@@ -97,9 +99,10 @@ Capital ruft die **Kontozusammenfassung** (account summary) der Trading 212 Publ
 
 ### 2. In Capital verbinden
 
-1. **Einstellungen → Brokerkonten → API-Schlüssel: Trading 212** und **API-Secret: Trading 212**, fügen Sie jeden Wert ein.
-2. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, **Broker** auf Trading 212, geben Sie die **Trading-212-Kontonummer** ein (die in der App angezeigte Konto-ID, nur Ziffern) und speichern Sie.
-3. Tippen Sie auf **Aktualisieren**. Trading 212 erlaubt eine Zusammenfassungsanfrage alle 5 Sekunden.
+1. **Broker → Zugangsdaten → API-Schlüssel: Trading 212** und **API-Secret: Trading 212**, fügen Sie jeden Wert ein.
+2. **Broker → +**: Geben Sie einen Namen ein, stellen Sie **Broker** auf Trading 212, geben Sie die **Trading-212-Kontonummer** ein (die in der App angezeigte Konto-ID, nur Ziffern) und speichern Sie.
+3. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, wählen Sie das Konto und speichern Sie.
+4. Tippen Sie auf **Aktualisieren**. Trading 212 erlaubt eine Zusammenfassungsanfrage alle 5 Sekunden.
 
 Dokumentation von Trading 212: [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ Was gesendet wird: Ihre Client-ID und als Signatur, aber nicht der Consumer Key 
 
 ### 2. In Capital verbinden
 
-1. **Einstellungen → Brokerkonten → Client-ID: SnapTrade** und **Consumer Key: SnapTrade**, fügen Sie jeden Wert ein.
-2. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto** und **Broker** auf SnapTrade.
+1. **Broker → Zugangsdaten → Client-ID: SnapTrade** und **Consumer Key: SnapTrade**, fügen Sie jeden Wert ein.
+2. **Broker → +**: Geben Sie einen Namen ein und stellen Sie **Broker** auf SnapTrade.
 3. Tippen Sie auf **Broker über SnapTrade verbinden**. Das SnapTrade Connection Portal öffnet sich im Browser; melden Sie sich dort bei Ihrem Broker an (der Link ist 5 Minuten gültig). Kehren Sie zu Capital zurück.
-4. Tippen Sie auf **Konten abrufen** und wählen Sie das Konto; seine ID füllt das Feld **SnapTrade-Konto-ID**. Speichern Sie, dann **Aktualisieren**.
+4. Tippen Sie auf **Konten abrufen** und wählen Sie das Konto; seine ID füllt das Feld **SnapTrade-Konto-ID**. Speichern Sie.
+5. Öffnen Sie den Topf, **Position hinzufügen**, stellen Sie **Erfassung** auf **Brokerkonto**, wählen Sie das Konto und speichern Sie, dann **Aktualisieren**.
 
 Ein Konto, das SnapTrade noch nicht fertig synchronisiert hat, meldet *SnapTrade hat für dieses Konto noch keinen Gesamtwert*; aktualisieren Sie später erneut.
 
@@ -140,7 +144,7 @@ Viele dieser Broker deckt [SnapTrade](#snaptrade) ab. Andernfalls erfassen Sie d
 
 | Meldung | Was zu tun ist |
 |---|---|
-| *Interactive Brokers benötigt Ihr Zugriffstoken unter Einstellungen → Brokerkonten* / *OANDA benötigt Ihr Zugriffstoken …* | Fügen Sie Token, Schlüssel oder Client-ID unter Einstellungen → Brokerkonten ein. |
+| *Interactive Brokers benötigt seine Zugangsdaten auf dem Bildschirm „Broker“* / *OANDA benötigt seine Zugangsdaten …* | Fügen Sie Token, Schlüssel oder Client-ID unter Zugangsdaten im Tab „Broker“ ein. |
 | *Token ist abgelaufen; erzeugen Sie im Client Portal einen neuen* | Erzeugen Sie ein neues Flex-Web-Service-Token und fügen Sie es ein. |
 | *Token ist ungültig* | Kopieren Sie das Token erneut; ein neues Token ersetzt das alte. |
 | *Token ist auf eine andere IP-Adresse beschränkt* | Erzeugen Sie das Token ohne IP-Beschränkung. |

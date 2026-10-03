@@ -12,7 +12,7 @@ en:
   tip: Tip
   copy: Copy
   copied: Copied
-  screen_names: { start: Start, overview: Overview, buckets: Buckets, bucket: Bucket, goals: Goals, goal: Goal, plans: Plans, settings: Settings }
+  screen_names: { start: Start, overview: Overview, buckets: Buckets, bucket: Bucket, goals: Goals, goal: Goal, plans: Plans, brokers: Brokers, settings: Settings }
 zh:
   manual: 使用手册
   screens: 界面
@@ -26,7 +26,7 @@ zh:
   tip: 打赏
   copy: 复制
   copied: 已复制
-  screen_names: { start: 开始, overview: 概览, buckets: 储蓄罐, bucket: 储蓄罐详情, goals: 目标, goal: 目标详情, plans: 计划, settings: 设置 }
+  screen_names: { start: 开始, overview: 概览, buckets: 储蓄罐, bucket: 储蓄罐详情, goals: 目标, goal: 目标详情, plans: 计划, brokers: 券商, settings: 设置 }
 hi:
   manual: गाइड
   screens: स्क्रीन
@@ -40,7 +40,7 @@ hi:
   tip: टिप
   copy: कॉपी करें
   copied: कॉपी हो गया
-  screen_names: { start: शुरुआत, overview: ओवरव्यू, buckets: गुल्लकें, bucket: गुल्लक, goals: लक्ष्य, goal: लक्ष्य विवरण, plans: योजनाएँ, settings: सेटिंग }
+  screen_names: { start: शुरुआत, overview: ओवरव्यू, buckets: गुल्लकें, bucket: गुल्लक, goals: लक्ष्य, goal: लक्ष्य विवरण, plans: योजनाएँ, brokers: ब्रोकर, settings: सेटिंग }
 es:
   manual: Manual
   screens: Pantallas
@@ -54,7 +54,7 @@ es:
   tip: Propina
   copy: Copiar
   copied: Copiado
-  screen_names: { start: Inicio, overview: Resumen, buckets: Bolsillos, bucket: Bolsillo, goals: Metas, goal: Meta, plans: Planes, settings: Ajustes }
+  screen_names: { start: Inicio, overview: Resumen, buckets: Bolsillos, bucket: Bolsillo, goals: Metas, goal: Meta, plans: Planes, brokers: Brókeres, settings: Ajustes }
 ar:
   manual: الدليل
   screens: الشاشات
@@ -68,7 +68,7 @@ ar:
   tip: دعم
   copy: نسخ
   copied: تم النسخ
-  screen_names: { start: البدء, overview: نظرة عامة, buckets: الصناديق, bucket: الصندوق, goals: الأهداف, goal: الهدف, plans: الخطط, settings: الإعدادات }
+  screen_names: { start: البدء, overview: نظرة عامة, buckets: الصناديق, bucket: الصندوق, goals: الأهداف, goal: الهدف, plans: الخطط, brokers: الوسطاء, settings: الإعدادات }
 fr:
   manual: Manuel
   screens: Écrans
@@ -82,7 +82,7 @@ fr:
   tip: Soutenir
   copy: Copier
   copied: Copié
-  screen_names: { start: Démarrage, overview: Synthèse, buckets: Poches, bucket: Poche, goals: Objectifs, goal: Objectif, plans: Prévisions, settings: Paramètres }
+  screen_names: { start: Démarrage, overview: Synthèse, buckets: Poches, bucket: Poche, goals: Objectifs, goal: Objectif, plans: Prévisions, brokers: Courtiers, settings: Paramètres }
 bn:
   manual: ম্যানুয়াল
   screens: স্ক্রিন
@@ -96,7 +96,7 @@ bn:
   tip: টিপ
   copy: কপি করুন
   copied: কপি হয়েছে
-  screen_names: { start: শুরু, overview: সারসংক্ষেপ, buckets: তহবিল, bucket: তহবিলের বিবরণ, goals: লক্ষ্য, goal: লক্ষ্যের বিবরণ, plans: পরিকল্পনা, settings: সেটিংস }
+  screen_names: { start: শুরু, overview: সারসংক্ষেপ, buckets: তহবিল, bucket: তহবিলের বিবরণ, goals: লক্ষ্য, goal: লক্ষ্যের বিবরণ, plans: পরিকল্পনা, brokers: ব্রোকার, settings: সেটিংস }
 pt:
   manual: Manual
   screens: Telas
@@ -110,7 +110,7 @@ pt:
   tip: Gorjeta
   copy: Copiar
   copied: Copiado
-  screen_names: { start: Início, overview: Visão geral, buckets: Caixinhas, bucket: Caixinha, goals: Metas, goal: Meta, plans: Planos, settings: Ajustes }
+  screen_names: { start: Início, overview: Visão geral, buckets: Caixinhas, bucket: Caixinha, goals: Metas, goal: Meta, plans: Planos, brokers: Corretoras, settings: Ajustes }
 ru:
   manual: Руководство
   screens: Экраны
@@ -124,7 +124,7 @@ ru:
   tip: Поддержать
   copy: Копировать
   copied: Скопировано
-  screen_names: { start: Начало, overview: Обзор, buckets: Копилки, bucket: Копилка, goals: Цели, goal: Цель, plans: Планы, settings: Настройки }
+  screen_names: { start: Начало, overview: Обзор, buckets: Копилки, bucket: Копилка, goals: Цели, goal: Цель, plans: Планы, brokers: Брокеры, settings: Настройки }
 id:
   manual: Panduan
   screens: Layar
@@ -138,7 +138,7 @@ id:
   tip: Tip
   copy: Salin
   copied: Disalin
-  screen_names: { start: Awal, overview: Ringkasan, buckets: Kantong, bucket: Detail kantong, goals: Tujuan, goal: Detail tujuan, plans: Rencana, settings: Pengaturan }
+  screen_names: { start: Awal, overview: Ringkasan, buckets: Kantong, bucket: Detail kantong, goals: Tujuan, goal: Detail tujuan, plans: Rencana, brokers: Broker, settings: Pengaturan }
 ur:
   manual: ہدایت نامہ
   screens: اسکرینز
@@ -152,7 +152,7 @@ ur:
   tip: ٹپ
   copy: کاپی کریں
   copied: کاپی ہو گیا
-  screen_names: { start: آغاز, overview: جائزہ, buckets: گلک, bucket: گلک کی تفصیل, goals: اہداف, goal: ہدف, plans: منصوبے, settings: سیٹنگز }
+  screen_names: { start: آغاز, overview: جائزہ, buckets: گلک, bucket: گلک کی تفصیل, goals: اہداف, goal: ہدف, plans: منصوبے, brokers: بروکرز, settings: سیٹنگز }
 de:
   manual: Handbuch
   screens: Bildschirme
@@ -166,7 +166,7 @@ de:
   tip: Trinkgeld
   copy: Kopieren
   copied: Kopiert
-  screen_names: { start: Start, overview: Übersicht, buckets: Töpfe, bucket: Topf, goals: Ziele, goal: Ziel, plans: Pläne, settings: Einstellungen }
+  screen_names: { start: Start, overview: Übersicht, buckets: Töpfe, bucket: Topf, goals: Ziele, goal: Ziel, plans: Pläne, brokers: Broker, settings: Einstellungen }
 ja:
   manual: マニュアル
   screens: 画面
@@ -180,7 +180,7 @@ ja:
   tip: チップ
   copy: コピー
   copied: コピーしました
-  screen_names: { start: スタート, overview: 概要, buckets: ポケット, bucket: ポケットの詳細, goals: 目標, goal: 目標の詳細, plans: 貯蓄予定, settings: 設定 }
+  screen_names: { start: スタート, overview: 概要, buckets: ポケット, bucket: ポケットの詳細, goals: 目標, goal: 目標の詳細, plans: 貯蓄予定, brokers: ブローカー, settings: 設定 }
 mr:
   manual: मार्गदर्शिका
   screens: स्क्रीन्स
@@ -194,7 +194,7 @@ mr:
   tip: टिप
   copy: कॉपी करा
   copied: कॉपी केले
-  screen_names: { start: सुरुवात, overview: आढावा, buckets: कप्पे, bucket: कप्पा, goals: उद्दिष्टे, goal: उद्दिष्ट, plans: योजना, settings: सेटिंग्ज }
+  screen_names: { start: सुरुवात, overview: आढावा, buckets: कप्पे, bucket: कप्पा, goals: उद्दिष्टे, goal: उद्दिष्ट, plans: योजना, brokers: ब्रोकर्स, settings: सेटिंग्ज }
 vi:
   manual: Hướng dẫn
   screens: Màn hình
@@ -208,4 +208,4 @@ vi:
   tip: Ủng hộ
   copy: Sao chép
   copied: Đã sao chép
-  screen_names: { start: Bắt đầu, overview: Tổng quan, buckets: Hũ, bucket: Chi tiết hũ, goals: Mục tiêu, goal: Chi tiết mục tiêu, plans: Kế hoạch, settings: Cài đặt }
+  screen_names: { start: Bắt đầu, overview: Tổng quan, buckets: Hũ, bucket: Chi tiết hũ, goals: Mục tiêu, goal: Chi tiết mục tiêu, plans: Kế hoạch, brokers: Môi giới, settings: Cài đặt }

@@ -23,4 +23,4 @@
 ## 5. Acceptance
 
 - [x] 5.1 Unit tests and debug build pass; emulator run of the editor, settings and rows.
-- [ ] 5.2 Settings screenshots recaptured per language (not done: the new section is below the fold; see acceptance.md).
+- [x] 5.2 Settings screenshots recaptured per language (not done: the new section is below the fold; see acceptance.md). (not recaptured: the Settings section sat below the fold; superseded by the Brokers screen)

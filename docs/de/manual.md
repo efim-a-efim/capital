@@ -20,7 +20,7 @@ Die App bewegt kein Geld. Sie ist ein Spiegel dessen, was Sie besitzen, und ein 
 
 1. **Ordner wählen.** Wählen Sie einen eigenen Ordner auf dem Gerät, zum Beispiel `Documents/Capital`. Dort wird jeder Datensatz gespeichert. Ein Ordner, der bereits Capital-Daten enthält, wird direkt geöffnet.
 2. **Einstellungen → Standardwährung.** Summen und die Übersicht werden in dieser Währung angezeigt.
-3. Optional können Sie in den Einstellungen **Anbieterschlüssel** für Betreiber hinterlegen, die mit einem kostenlosen Schlüssel höhere Limits bieten (Alchemy, TronGrid, TON Center, CoinGecko). Für jede Chain und jede Preisquelle gibt es eine Standardquelle ohne Schlüssel. Brokerkonten benötigen ein **Zugriffstoken** des Brokers; siehe [Broker- und Forex-Konten]({{ page.base }}/accounts).
+3. Optional können Sie in den Einstellungen **Anbieterschlüssel** für Betreiber hinterlegen, die mit einem kostenlosen Schlüssel höhere Limits bieten (Alchemy, TronGrid, TON Center, CoinGecko). Für jede Chain und jede Preisquelle gibt es eine Standardquelle ohne Schlüssel. Brokerkonten benötigen ein **Zugriffstoken** des Brokers, das Sie im Tab „Broker“ eingeben; siehe [Broker- und Forex-Konten]({{ page.base }}/accounts).
 
 ## Töpfe {#buckets}
 
@@ -28,7 +28,7 @@ Tab „Töpfe“ → **+**. Geben Sie dem Topf einen Namen und eine Währung. Ö
 
 - **Manuelle Position**: ein Name, ein Währungs- oder Vermögenswert-Code (EUR, USD, BTC, ein Aktienticker, den Sie selbst bewerten …) und eine Menge. Verwenden Sie sie für Bankguthaben, Bargeld und alles, was die App nicht selbst auslesen kann.
 - **Wallet-Position**: Wählen Sie die Chain (BTC, ETH, TON, TRX) und fügen Sie eine öffentliche Adresse ein. Beim Aktualisieren liest die App das native Guthaben und bei ETH, TON und TRX auch die fungiblen Token auf der Adresse.
-- **Brokerkonto**: Wählen Sie den Broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) und geben Sie die Flex-Query-ID oder die Konto-ID ein. Beim Aktualisieren liest die App den Gesamtwert des Kontos in dessen Basiswährung. Das Zugriffstoken geben Sie einmal unter Einstellungen → Brokerkonten ein. Die Einrichtungsschritte mit Links zur Dokumentation der Broker finden Sie unter [Broker- und Forex-Konten]({{ page.base }}/accounts).
+- **Brokerkonto**: Wählen Sie eines der Konten, die Sie im Tab „Broker“ hinzugefügt haben. Beim Aktualisieren liest die App den Gesamtwert des Kontos in dessen Basiswährung. Ein Konto kann mit einem Topf verknüpft werden.
 
 Beträge akzeptieren Punkt oder Komma als Dezimaltrennzeichen, jedoch keine Tausendertrennzeichen. Jeder Topf zeigt native Mengen und deren Wert in Ihrer Standardwährung. Fehlt ein Kurs, wird die Summe als unvollständig gekennzeichnet; ein veralteter zwischengespeicherter Wert bleibt mit einem Hinweis nutzbar.
 
@@ -55,6 +55,10 @@ So wird das Geld zugeordnet:
 Tab „Pläne“ → **+**. Ein geplanter Sparbetrag ist ein Betrag, den Sie zu einem bestimmten Datum hinzufügen möchten, zum Beispiel die monatliche Sparrate vom Gehalt am Monatsende. Pläne gehören nicht zu Ihren Ersparnissen; sie verlängern nur die Prognose: „Mit geplanten Sparbeträgen am 30.10.2026 finanziert · rechtzeitig“.
 
 Geld aus Plänen wird nach den heutigen Töpfen angerechnet, und zwar auf die Ziele in der Reihenfolge ihrer Fälligkeit. So füllt es nur auf, was noch offen ist. Ist das Datum eines Plans verstrichen, wandert er in den Bereich **Archiviert** und wird nicht mehr berücksichtigt: Entweder haben Sie das Geld bereits in einen Topf überführt und die App sieht es dort, oder der Plan wurde nicht umgesetzt. Setzen Sie das Datum in die Zukunft, um ihn wieder zu aktivieren; löschen Sie ihn, wenn er hinfällig ist.
+
+## Broker
+
+Tab „Broker“ → **+**. Ein Brokerkonto ist eine reine Lesezugriffsverbindung: Wählen Sie den Broker (Interactive Brokers, OANDA, Trading 212 oder SnapTrade), geben Sie die Konto- oder Query-ID ein und speichern Sie; das Token oder der Schlüssel des Brokers wird einmal unter **Zugangsdaten** im selben Tab eingegeben und gilt für alle Konten dieses Brokers. Der Tab listet jedes Konto mit seinem letzten Wert und dem Topf, mit dem es verknüpft ist. **Salden unter diesem Betrag ignorieren** mit einem Betrag in Ihrer Standardwährung (standardmäßig 1) lässt einen Kleinstsaldo im Topf als 0 zählen. Verknüpfen Sie es mit einem Topf über **Position hinzufügen → Brokerkonto**; löschen Sie die Position, um die Verknüpfung zu lösen, und löschen Sie das Konto, um die Verbindung zu entfernen. Die Einrichtungsschritte mit Links zur Dokumentation der Broker finden Sie unter [Broker- und Forex-Konten]({{ page.base }}/accounts).
 
 ## Aktualisieren
 

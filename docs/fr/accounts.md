@@ -22,7 +22,7 @@ Capital se connecte uniquement à des interfaces dont les identifiants sont de l
 ## Avant de commencer {#before-you-start}
 
 - **Ce qui quitte l’appareil.** À chaque actualisation, l’application envoie votre jeton d’accès et l’identifiant du compte ou de la requête à ce courtier, en HTTPS. Le courtier voit votre adresse IP, comme pour toute requête.
-- **Où les identifiants sont conservés.** Paramètres → Comptes de courtage. Ils sont chiffrés avec une clé conservée dans Android Keystore, ne sont jamais écrits dans votre dossier de données et sont exclus des exports et des sauvegardes du système. Un seul jeu d’identifiants par courtier couvre tous les comptes que vous ajoutez chez ce courtier.
+- **Où les identifiants sont conservés.** Onglet Courtiers → Identifiants. Ils sont chiffrés avec une clé conservée dans Android Keystore, ne sont jamais écrits dans votre dossier de données et sont exclus des exports et des sauvegardes du système. Un seul jeu d’identifiants par courtier couvre tous les comptes que vous ajoutez chez ce courtier.
 - **Ce qui est enregistré dans votre dossier.** L’identifiant du compte, la dernière valeur lue et la date de lecture. Rien d’autre en provenance du courtier.
 - **Les écrans du courtier peuvent changer.** Les étapes ci-dessous correspondent aux sites Web des courtiers en octobre 2026. Les courtiers renomment des menus et déplacent des réglages de temps à autre ; une étape peut donc sembler un peu différente lorsque vous la suivez. La documentation du courtier, indiquée dans chaque section, fait foi : si une étape ne correspond plus, cherchez le même terme sur la page du courtier.
 
@@ -51,11 +51,12 @@ La requête doit couvrir un seul compte. Si vous avez des comptes liés ou une s
 
 ### 3. Le connecter dans Capital
 
-1. **Paramètres → Comptes de courtage → Jeton d’accès : Interactive Brokers**, collez le jeton d’accès et enregistrez.
-2. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, **Courtier** sur Interactive Brokers, saisissez le **Flex Query id** et enregistrez.
-3. Appuyez sur **Actualiser**. La première exécution prend jusqu’à une demi-minute, car le rapport est généré à la demande.
+1. **Courtiers → Identifiants → Jeton d’accès : Interactive Brokers**, collez le jeton d’accès et enregistrez.
+2. **Courtiers → +** : saisissez un nom, réglez **Courtier** sur Interactive Brokers, saisissez le **Flex Query id** et enregistrez.
+3. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, choisissez le compte et enregistrez.
+4. Appuyez sur **Actualiser**. La première exécution prend jusqu’à une demi-minute, car le rapport est généré à la demande.
 
-Lorsque le jeton d’accès expire, l’actualisation affiche *Le jeton d’accès a expiré ; générez-en un nouveau dans Client Portal* : générez un nouveau jeton d’accès et collez-le dans les Paramètres. Interactive Brokers autorise une demande de rapport par seconde et dix par minute pour un même jeton, ce qu’une actualisation ne dépasse jamais.
+Lorsque le jeton d’accès expire, l’actualisation affiche *Le jeton d’accès a expiré ; générez-en un nouveau dans Client Portal* : générez un nouveau jeton d’accès et collez-le sous Identifiants. Interactive Brokers autorise une demande de rapport par seconde et dix par minute pour un même jeton, ce qu’une actualisation ne dépasse jamais.
 
 Documentation d’Interactive Brokers : [Flex Web Service](https://www.interactivebrokers.com/docs/web-api/flex-web-service/introduction) · [Enable and create the access token](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/enable-and-create-access-token) · [Create a Flex Query](https://www.interactivebrokers.com/docs/web-api/flex-web-service/client-portal-configuration/create-a-flex-query) · [Activity Flex Query reference](https://www.ibkrguides.com/reportingreference/reportguide/activity%20flex%20query%20reference.htm) · [Net Asset Value (NAV) Summary in Base](https://www.ibkrguides.com/reportingreference/reportguide/net%20asset%20value%20%28nav%29%20summary%20in%20base.htm)
 
@@ -77,9 +78,10 @@ L’identifiant de compte v20 a la forme `001-001-1234567-001`, avec des traits 
 
 ### 3. Le connecter dans Capital
 
-1. **Paramètres → Comptes de courtage → Jeton d’accès : OANDA**, collez le jeton d’accès et enregistrez.
-2. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, **Courtier** sur OANDA, saisissez l’**Identifiant de compte OANDA** et enregistrez.
-3. Appuyez sur **Actualiser**.
+1. **Courtiers → Identifiants → Jeton d’accès : OANDA**, collez le jeton d’accès et enregistrez.
+2. **Courtiers → +** : saisissez un nom, réglez **Courtier** sur OANDA, saisissez l’**Identifiant de compte OANDA** et enregistrez.
+3. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, choisissez le compte et enregistrez.
+4. Appuyez sur **Actualiser**.
 
 Un compte sur marge dont la NAV est négative est signalé comme une erreur au lieu d’être compté comme de l’épargne.
 
@@ -97,9 +99,10 @@ Capital appelle le **résumé de compte** (account summary) de l’API publique 
 
 ### 2. La connecter dans Capital
 
-1. **Paramètres → Comptes de courtage → Clé API : Trading 212** et **Secret API : Trading 212**, collez chaque valeur.
-2. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, **Courtier** sur Trading 212, saisissez le **Numéro de compte Trading 212** (l’identifiant de compte affiché dans l’application, chiffres uniquement) et enregistrez.
-3. Appuyez sur **Actualiser**. Trading 212 autorise une demande de résumé toutes les 5 secondes.
+1. **Courtiers → Identifiants → Clé API : Trading 212** et **Secret API : Trading 212**, collez chaque valeur.
+2. **Courtiers → +** : saisissez un nom, réglez **Courtier** sur Trading 212, saisissez le **Numéro de compte Trading 212** (l’identifiant de compte affiché dans l’application, chiffres uniquement) et enregistrez.
+3. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, choisissez le compte et enregistrez.
+4. Appuyez sur **Actualiser**. Trading 212 autorise une demande de résumé toutes les 5 secondes.
 
 Documentation de Trading 212 : [Public API](https://docs.trading212.com/api) · [How to get your API key](https://helpcentre.trading212.com/hc/en-us/articles/14584770928157-Trading-212-API-key)
 
@@ -116,10 +119,11 @@ Ce qui est envoyé : votre client id et, en guise de signature, rien du consumer
 
 ### 2. La connecter dans Capital
 
-1. **Paramètres → Comptes de courtage → Identifiant client : SnapTrade** et **Clé consumer : SnapTrade**, collez chaque valeur.
-2. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage** et **Courtier** sur SnapTrade.
+1. **Courtiers → Identifiants → Identifiant client : SnapTrade** et **Clé consumer : SnapTrade**, collez chaque valeur.
+2. **Courtiers → +** : saisissez un nom et réglez **Courtier** sur SnapTrade.
 3. Appuyez sur **Connecter un courtier via SnapTrade**. La Connection Portal de SnapTrade s’ouvre dans le navigateur ; connectez-vous à votre courtier à cet endroit (le lien est valable 5 minutes). Revenez dans Capital.
-4. Appuyez sur **Récupérer les comptes** et choisissez le compte ; son identifiant remplit le champ **Identifiant de compte SnapTrade**. Enregistrez, puis **Actualiser**.
+4. Appuyez sur **Récupérer les comptes** et choisissez le compte ; son identifiant remplit le champ **Identifiant de compte SnapTrade**. Enregistrez.
+5. Ouvrez la poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, choisissez le compte et enregistrez, puis **Actualiser**.
 
 Un compte que SnapTrade n’a pas encore fini de synchroniser signale *SnapTrade n’a pas encore de valeur totale pour ce compte* ; actualisez à nouveau plus tard.
 
@@ -140,7 +144,7 @@ Beaucoup de ces courtiers sont couverts par [SnapTrade](#snaptrade). Sinon, sais
 
 | Message | Que faire |
 |---|---|
-| *Interactive Brokers nécessite votre jeton d’accès dans Paramètres → Comptes de courtage* / *OANDA nécessite votre jeton d’accès …* | Collez le jeton, la clé ou le client id dans Paramètres → Comptes de courtage. |
+| *Interactive Brokers nécessite ses identifiants sur l’écran Courtiers* / *OANDA nécessite ses identifiants …* | Collez le jeton, la clé ou le client id sous Identifiants dans l’onglet Courtiers. |
 | *Le jeton d’accès a expiré ; générez-en un nouveau dans Client Portal* | Générez un nouveau jeton d’accès Flex Web Service et collez-le. |
 | *Jeton d’accès invalide* | Copiez à nouveau le jeton d’accès ; un nouveau jeton remplace l’ancien. |
 | *Le jeton d’accès est limité à une autre adresse IP* | Générez le jeton d’accès sans restriction d’adresse IP. |

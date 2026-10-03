@@ -10,7 +10,7 @@ import kotlinx.serialization.json.int
 import java.security.MessageDigest
 
 val json = Json { encodeDefaults = true; ignoreUnknownKeys = false }
-const val SCHEMA = 5
+const val SCHEMA = 6
 const val MAX_FILE_BYTES = 8 * 1024 * 1024
 class FutureSchema : IllegalArgumentException(tr("This folder needs a newer Capital version. No data was changed."))
 @Serializable data class Revision(val schema: Int = SCHEMA, val id: String = id(), val parents: List<String> = emptyList(), val createdAt: Long = System.currentTimeMillis(), val data: Portfolio)
@@ -31,7 +31,7 @@ fun decodeRevision(text: String): Revision {
     return json.decodeFromString<Revision>(envelope.payload).let { r ->
         // schema 1 lacks the token source keys; a no-op when all keys exist
         r.copy(data=r.data.copy(settings=r.data.settings.copy(providers=providerChoices.mapValues { it.value.first() }+r.data.settings.providers)))
-    }.let { r -> if(schema < 3) r.copy(data=r.data.ranked()) else r }.also {
+    }.let { r -> if(schema < 3) r.copy(data=r.data.ranked()) else r }.let { r -> if(schema < 6) r.copy(data=r.data.withAccounts()) else r }.also {
         require(it.id.length in 1..100 && it.id !in it.parents && it.parents.distinct().size == it.parents.size && it.parents.size <= 1000) { tr("Invalid revision ancestry") }
         it.data.validate()
     }

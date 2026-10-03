@@ -14,7 +14,7 @@ title: Ajustes
 
 **Provedores de dados gratuitos.** Uma linha por tipo de dado, cada uma com o operador em uso: saldos BTC, ETH, TON, TRX; listas de tokens ETH, TON, TRX; preços de cripto; câmbio de moedas fiduciárias. Toque em uma linha para escolher outro operador, deixar a consulta de tokens de uma rede como **Desativado** ou informar uma chave de API opcional. As chaves são armazenadas criptografadas no dispositivo e enviadas apenas ao operador que as emitiu. **Testar fontes / atualizar portfólio** consulta todos os operadores com os ativos que você realmente possui e informa o que falhou. Nenhum operador é substituído em silêncio.
 
-**Contas de corretora.** As credenciais de cada corretora compatível (Interactive Brokers, OANDA, Trading 212, SnapTrade), armazenadas criptografadas como as chaves de provedores e enviadas apenas a essa corretora. O app lê os valores das contas com elas e nunca envia ordens. **Guia de configuração das contas de corretora** abre [Contas de corretora e de forex]({{ page.base }}/accounts).
+**Corretoras.** As contas de corretora e as credenciais delas têm tela própria: [Corretoras]({{ page.base }}/screens/brokers).
 
 **Cotações e atualização.** Todas as cotações em cache, com o horário em que foram observadas e obtidas. Cotações desatualizadas continuam utilizáveis e são sinalizadas na Visão geral.
 

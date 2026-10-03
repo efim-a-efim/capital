@@ -18,7 +18,7 @@ title: Bucket
 
 - **Manual**: a name, a currency or asset code and the quantity. Use it for anything the app cannot read.
 - **Wallet**: pick the chain (BTC, ETH, TON, TRX) and paste one public address. The app reads the native balance on refresh and, on ETH, TON and TRX, the fungible tokens on that address. Open the editor again and press **Fetch tokens** to see them and switch off the ones you do not want counted.
-- **Broker account**: pick the broker (Interactive Brokers, OANDA, Trading 212 or SnapTrade) and enter the account or query id; for SnapTrade, **Fetch accounts** lists the connected accounts to choose from. On refresh the app reads the account's total value in the account's base currency; the access token is entered in Settings → Broker accounts. **Setup guide for broker accounts** opens [Broker and forex accounts]({{ page.base }}/accounts), which lists the steps for each broker.
+- **Broker account**: choose one of the accounts added on the [Brokers]({{ page.base }}/screens/brokers) screen; leave the name blank to use the account's name. On refresh the app reads the account's total value in the account's base currency. One account can be linked into one bucket; deleting the holding unlinks it without deleting the account.
 
 **Tokens and "not counted".** A token is identified by its contract address. It counts only when your price source lists that exact contract; otherwise it is listed as *Unknown token · not counted* and stays out of the totals. This is what keeps an airdropped fake "USDT" out of your savings.
 
