@@ -10,7 +10,7 @@ class: doc
 
 Capital can read the total value of a brokerage or forex account the same way it reads a crypto wallet. You add the account to a bucket as a holding of type **Broker account**, and every refresh fetches the account's net asset value in the account's base currency. The app only reads: it uses the broker's reporting interface with a token you create yourself, it never places, changes or cancels an order, and it never moves money.
 
-Capital connects only to interfaces whose credentials are long-lived: a token or key you create once and that stays valid until you revoke it (or, for Interactive Brokers, until the expiry you chose, up to a year). Supported today:
+Capital connects only to interfaces whose credentials are long-lived: a token or key you create once and that stays valid until you revoke it, until an expiry you chose, or for at least several months (T-Invest tokens lapse after three months without use, ALOR tokens after a year). Every broker below is available whatever language the app is set to. Supported today:
 
 | Broker | Interface used | What is read |
 |---|---|---|
@@ -18,6 +18,16 @@ Capital connects only to interfaces whose credentials are long-lived: a token or
 | [OANDA](#oanda) | v20 REST API, fxTrade live accounts | Net asset value at the time of the refresh, in the account's currency |
 | [Trading 212](#trading-212) | Public API, Invest and Stocks ISA accounts | Total account value at the time of the refresh, in the account's primary currency |
 | [SnapTrade](#snaptrade) | SnapTrade Personal, an aggregator covering many brokers | Total account value as the broker reports it to SnapTrade, in the account's currency |
+| [Alpaca](#alpaca) | Trading API, live accounts | Equity (cash plus positions), in US dollars |
+| [Tradier](#tradier) | Brokerage API | Total equity, in US dollars |
+| [tastytrade](#tastytrade) | Open API with a personal OAuth grant | Net liquidating value, in US dollars |
+| [Public.com](#public) | Individual API | Total account value, in US dollars |
+| [eToro](#etoro) | Public API | Balance of the chosen account (for a trading account: cash plus invested positions), in its currency |
+| [Indexa Capital](#indexa-capital) | REST API, read-only token | Portfolio total on the last valuation date, in the account's currency |
+| [T-Invest](#t-invest) | T-Invest API (T-Bank) | Total portfolio value, in roubles |
+| [ALOR](#alor) | ALOR OpenAPI | Portfolio valuation on the Moscow Exchange, in roubles |
+| [Capital.com](#capital-com) | Public API, live accounts | Balance including open profit and loss, in the account's currency |
+| [Akahu](#akahu) | Akahu personal app, a New Zealand aggregator | Balance of a connected account (Sharesies, Hatch, Kernel, KiwiSaver and others), in its currency |
 
 ## Before you start {#before-you-start}
 
@@ -129,6 +139,156 @@ An account that SnapTrade has not finished syncing yet reports *SnapTrade has no
 
 SnapTrade documentation: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Connecting an account in Capital {#connect}
+
+The sections below say how to create the credential at each broker. In Capital the steps are the same for all of them:
+
+1. **Brokers → Credentials**: press the broker's credential buttons and paste each value.
+2. **Brokers → +**: enter a name, choose the **Broker**, then press **Fetch accounts** and pick the account (or type its id) and save.
+3. Open a bucket, **Add holding**, set **Tracking** to **Broker account**, choose the account and save. Press **Refresh**.
+
+## Alpaca {#alpaca}
+
+Alpaca issues a key id and a secret per account; they stay valid until you regenerate them. Only live accounts are read: keys of a paper account do not work against the live API.
+
+1. Log in to the [Alpaca dashboard](https://app.alpaca.markets), switch to your live account and, on the home page, under **API Keys**, press **Generate New Keys**.
+2. Copy the **API Key ID** and the **Secret Key**; the secret is shown once.
+3. In Capital paste them as **API key: Alpaca** and **API secret: Alpaca**, then follow [Connecting an account](#connect). **Fetch accounts** shows the account number of the key.
+
+Alpaca documentation: [Authentication](https://docs.alpaca.markets/docs/authentication) · [Get account](https://docs.alpaca.markets/reference/getaccount-1)
+
+## Tradier {#tradier}
+
+The API token from your Tradier settings never expires.
+
+1. Log in to Tradier and open [Settings → API Access](https://web.tradier.com/user/api). Copy the **API Access Token** of your brokerage account (not the sandbox token).
+2. In Capital paste it as **Access token: Tradier**, then follow [Connecting an account](#connect).
+
+Tradier documentation: [Authentication](https://docs.tradier.com/docs/authentication) · [Get balances](https://docs.tradier.com/reference/brokerage-api-accounts-get-account-balance)
+
+## tastytrade {#tastytrade}
+
+tastytrade uses a personal OAuth grant: you create an application for yourself and a grant whose refresh token never expires. Capital trades it for a 15-minute access token on each refresh.
+
+1. On [my.tastytrade.com](https://my.tastytrade.com) open **Manage → My Profile → API → OAuth Applications** and press **+ New OAuth client**. Give it a name, any HTTPS redirect URI (for example `https://capital.fimych.dev`) and only the **read** scope. Save and copy the **Client Secret**; it is shown once.
+2. Press **Manage** next to the application, then **Create Grant**, and copy the **refresh token**.
+3. In Capital paste them as **Refresh token: tastytrade** and **Client secret: tastytrade**, then follow [Connecting an account](#connect).
+
+tastytrade documentation: [OAuth2 and personal grants](https://developer.tastytrade.com/docs/authentication/oauth2) · [Balances](https://developer.tastytrade.com/reference/balances-and-positions/getAccountsAccountNumberBalances)
+
+## Public.com {#public}
+
+Public's Individual API is meant for your own accounts. The secret key is long-lived and revocable; Capital trades it for a five-minute access token on each refresh.
+
+1. In Public's web app open the **API** page of your settings and generate a **secret key**.
+2. In Capital paste it as **Secret key: Public.com**, then follow [Connecting an account](#connect).
+
+Public documentation: [Quickstart](https://public.com/api/docs/quickstart) · [Access tokens](https://public.com/api/docs/resources/authorization/create-personal-access-token) · [Portfolio](https://public.com/api/docs/resources/account-details/get-account-portfolio-v2)
+
+## eToro {#etoro}
+
+eToro keys are long-lived; you can give them an expiry date and an IP list, and you can make them read-only. Your eToro account must be verified.
+
+1. In eToro open **Settings → Trading → API Key Management** and press **Create New Key**. Choose the **Real** environment, the **Read** permission, no IP list, and optionally an expiration date. Confirm with the SMS code.
+2. Copy the **Public API Key** and the **User Key**; the user key is shown once.
+3. In Capital paste them as **Public API key: eToro** and **User key: eToro**, then follow [Connecting an account](#connect). **Fetch accounts** lists your trading, cash and other eToro accounts.
+
+eToro documentation: [Authentication](https://api-portal.etoro.com/core/getting-started/authentication) · [Balances](https://api-portal.etoro.com/api-reference/balances/get-aggregated-balances) · [Getting started](https://builders.etoro.com/get-started)
+
+## Indexa Capital {#indexa-capital}
+
+The token from Indexa's private area is read-only. It is tied to your e-mail, password and device: after a password change, generate it again.
+
+1. In Indexa's private area open **User settings → Applications** and copy the token.
+2. In Capital paste it as **Access token: Indexa Capital**, then follow [Connecting an account](#connect). Pension and investment accounts are both listed.
+
+Indexa values funds once per business day; the observation date is that valuation date.
+
+Indexa Capital documentation: [REST API](https://indexacapital.com/en/api-rest-v1) · [Connecting with the API](https://support.indexacapital.com/es/esp/api-conectar)
+
+## T-Invest {#t-invest}
+
+T-Bank's T-Invest API accepts a token you issue in the investment settings. A token lapses three months after its last use and must be used within seven days of issue; a weekly refresh keeps it alive. Choose a **read-only** token.
+
+1. Open the [T-Invest settings](https://www.tbank.ru/invest/settings/) and issue a **T-Invest API token** for the exchange with **read-only** access (all accounts or one). Confirmation of trades by code must be off to issue it. Copy the token; it is shown once.
+2. In Capital paste it as **Access token: T-Invest**, then follow [Connecting an account](#connect).
+
+T-Bank serves this API under the Russian Trusted Root CA, which Android does not include. Capital trusts that certificate for the T-Invest API address only (`invest-public-api.tbank.ru`), and no other connection.
+
+T-Invest documentation: [Tokens](https://developer.tbank.ru/invest/intro/intro/token) · [GetPortfolio](https://developer.tbank.ru/invest/api/operations-service-get-portfolio)
+
+## ALOR {#alor}
+
+ALOR issues a refresh token valid for one year; Capital trades it for a 30-minute access token on each refresh. ALOR offers no read-only token: the token could trade, Capital only reads.
+
+1. Sign in to the [ALOR developer portal](https://alor.dev), bind your trading account, open **API Access Tokens** and press **Create Token**. Copy the refresh token.
+2. In Capital paste it as **Refresh token: ALOR**, then follow [Connecting an account](#connect). **Fetch accounts** lists the portfolios of the account (stock market D…, currency market G…, derivatives 7500…); add one per portfolio.
+
+ALOR documentation: [Refresh token](https://alor.dev/docs/en/api/access/authorization/refresh-token) · [Access token](https://alor.dev/docs/en/api/access/authorization/access-token)
+
+## Capital.com {#capital-com}
+
+Capital.com keys are valid for one year by default, or until the date you choose. They carry trading rights (Capital.com has no read-only keys); Capital only reads. A key has its own password, which is not your account password.
+
+1. Turn on two-factor authentication, then open **Settings → API integrations** and press **Generate API key**. Give it a label and a **custom password**, keep or set the expiry, and confirm with the 2FA code. Copy the key; it is shown once.
+2. In Capital paste **API key: Capital.com**, your login e-mail as **Login e-mail: Capital.com** and the custom password as **API key password: Capital.com**, then follow [Connecting an account](#connect). Only live accounts are read.
+
+Capital.com documentation: [Public API](https://open-api.capital.com/)
+
+## Akahu {#akahu}
+
+[Akahu](https://www.akahu.nz) connects New Zealand banks, investment platforms and KiwiSaver schemes; a free personal app reads your own accounts. Akahu refreshes the data about once a day.
+
+1. Sign up at [my.akahu.nz](https://my.akahu.nz) and connect your providers (for example Sharesies, Hatch, Kernel, Simplicity, Milford or your KiwiSaver scheme).
+2. Open the **Developers** page, accept the developer terms and copy the **App ID Token** and the **User Access Token**.
+3. In Capital paste them as **App ID token: Akahu** and **User access token: Akahu**, then follow [Connecting an account](#connect).
+
+Akahu documentation: [Personal apps](https://developers.akahu.nz/docs/personal-apps) · [Accounts](https://developers.akahu.nz/reference/get_accounts) · [Supported providers](https://developers.akahu.nz/docs/integrations)
+
+## Popular brokers by market {#by-market}
+
+How the most used brokers in the markets of Capital's languages can be connected, as of October 2026. *Direct* means a section above; *SnapTrade* means through [SnapTrade](#snaptrade); otherwise the reason it cannot be read, and the balance can be kept as a **Manual** holding.
+
+| Market | Broker | How |
+|---|---|---|
+| United States | Interactive Brokers, Alpaca, Tradier, tastytrade, Public.com | Direct |
+| United States | Fidelity, Charles Schwab, Vanguard, Robinhood, E\*TRADE, Webull, TradeStation, Empower, Wells Fargo, Chase | SnapTrade |
+| United States | Merrill, SoFi, Firstrade, Betterment, Wealthfront, Acorns, M1 | No public API |
+| Canada | Questrade, Wealthsimple, TD Direct Investing, BMO InvestorLine, CIBC Investor's Edge, Webull Canada | SnapTrade |
+| Canada | RBC Direct Investing, Scotia iTRADE, National Bank Direct Brokerage | No public API |
+| United Kingdom and Ireland | Trading 212, eToro, Interactive Brokers | Direct |
+| United Kingdom and Ireland | AJ Bell | SnapTrade |
+| United Kingdom and Ireland | Hargreaves Lansdown, Interactive Investor, Freetrade, Vanguard UK, Nutmeg, Moneybox | No public API |
+| United Kingdom and Ireland | IG | Not possible: every session needs the account password |
+| Europe | Indexa Capital (Spain), eToro, Trading 212, Interactive Brokers | Direct |
+| Europe | DEGIRO, BUX | SnapTrade |
+| Europe | Trade Republic, Scalable Capital, MyInvestor, Bourse Direct, Boursorama, flatex, ING, Revolut | No public API for investments |
+| Europe | XTB | Not possible: the API was closed in March 2025 |
+| Europe | Saxo, comdirect | Not possible: only short-lived tokens or TAN sessions |
+| Europe | Bitpanda, Freedom24 | Not possible: the API returns no total account value |
+| Russia and Kazakhstan | T-Invest, ALOR | Direct |
+| Russia and Kazakhstan | BCS | Not possible: no total value, and its token expires after 90 days |
+| Russia and Kazakhstan | Finam | Not yet: the currency of the account value is not documented |
+| Russia and Kazakhstan | Sber, VTB, Alfa-Investments, Halyk Finance, Freedom Broker | No public API, or no total value in it |
+| India | Zerodha, Upstox | SnapTrade (SEBI rules end API sessions daily, so the connection needs frequent renewal) |
+| India | Groww, Angel One, ICICI Direct, Dhan, Kotak Neo, HDFC Securities, 5paisa | Not possible: SEBI rules end every API session daily |
+| Pakistan and Bangladesh | All exchange brokers | No public API |
+| China, Hong Kong and Taiwan | moomoo | SnapTrade |
+| China, Hong Kong and Taiwan | Futu, Tiger Brokers, Longbridge | Not yet: key lifetime or response format not fully documented, or keys cannot be limited to reading |
+| China, Hong Kong and Taiwan | East Money, Huatai, CITIC, Yuanta, Fubon | No public web API (desktop terminals or certificate SDKs only) |
+| Japan | OANDA Japan (accounts that qualify for API access) | Direct, as OANDA |
+| Japan | SBI Securities, Rakuten Securities, Monex, Matsui | No public API |
+| Australia and New Zealand | CommSec, Stake | SnapTrade |
+| Australia and New Zealand | Sharesies, Hatch, Kernel, Simplicity, KiwiSaver schemes | Akahu (New Zealand accounts) |
+| Middle East and Africa | eToro | Direct |
+| Middle East and Africa | Al Rajhi Capital, SNB Capital, Derayah, EFG Hermes, Thndr, Sarwa, Baraka, EasyEquities | No public API for individuals |
+| Southeast Asia | Stockbit, Ajaib, Bibit, IPOT, VPS | No public API |
+| Southeast Asia | SSI, TCBS, DNSE | Not possible: 8-hour tokens with a one-time code, or cash balance only |
+| Latin America | XP, Nubank, Inter, BTG Pactual, Itaú, GBM, InvertirOnline, Fintual | No public API for individuals, or password-only logins |
+| Forex and CFD | OANDA, Capital.com | Direct |
+| Forex and CFD | MetaTrader brokers (XM, Exness, Pepperstone, IC Markets, Admirals) | Not possible: no HTTPS read access |
+| Forex and CFD | cTrader brokers, FXCM, Forex.com | Not possible: app registration, deprecated API or password logins |
+
 ## Other brokers {#other-brokers}
 
 Capital connects only to interfaces that work from a phone over HTTPS with a token you can create yourself and that read without being able to trade. That rules out, for now:
@@ -157,5 +317,8 @@ Many of these brokers are covered by [SnapTrade](#snaptrade). Otherwise enter th
 | *SnapTrade has no total value for this account yet; sync the connection and retry* | SnapTrade has not synced the brokerage yet; refresh again later. |
 | *No accounts connected yet. Connect a brokerage through SnapTrade first.* | Open the Connection Portal from the editor and connect a broker. |
 | *Negative account value … is not supported* | The account is in debit; it adds nothing to your savings. |
+| *tastytrade rejected the refresh token or client secret; create a new grant* | Create a new grant for the application and paste its refresh token; check the client secret. |
+| *Capital.com did not open a session; check the API key, login and key password* | The key, the e-mail or the key's custom password is wrong, or the key has expired. |
+| *Account not found; choose it again* | The broker no longer lists this account; edit it and pick it from **Fetch accounts**. |
 
 The previous value stays visible after any of these, marked stale.

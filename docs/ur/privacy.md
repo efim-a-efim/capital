@@ -41,7 +41,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | ٹوکن کنٹریکٹ ایڈریس اور اثاثوں کی ID | آپ کا منتخب کردہ کرپٹو قیمت آپریٹر | اثاثوں کی قیمت معلوم کرنا |
 | کرنسی کوڈ | آپ کا منتخب کردہ فیاٹ ریٹ آپریٹر | کرنسیوں کے درمیان تبدیلی |
 | کسی آپریٹر کے لیے آپ کی درج کردہ API کلید | صرف وہی آپریٹر | اس کے ہاں آپ کے اپنے اکاؤنٹ کی تصدیق |
-| بروکر اکاؤنٹ کا ایکسیس ٹوکن یا API کلید اور اکاؤنٹ یا کوئری id | صرف وہی بروکر (Interactive Brokers، OANDA، Trading 212 یا SnapTrade) | اکاؤنٹ کی کل مالیت پڑھنا |
+| بروکر اکاؤنٹ کا ایکسیس ٹوکن یا API کلید اور اکاؤنٹ یا کوئری id | صرف وہی بروکر (دیکھیں [بروکر اور فاریکس اکاؤنٹس]({{ page.base }}/accounts)) | اکاؤنٹ کی کل مالیت پڑھنا |
 
 ہر انٹرنیٹ درخواست کی طرح ہر آپریٹر آپ کا IP ایڈریس بھی دیکھتا ہے۔ آپریٹرز ڈویلپر سے آزاد ہیں اور درخواست کو اپنی شرائط اور رازداری کی پالیسیوں کے تحت پراسیس کرتے ہیں، جن کے لنکس ایپ میں سیٹنگز ← ذرائع / حوالہ جات میں موجود ہیں:
 
@@ -53,7 +53,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | TRON اور TRC-20 ٹوکنز | [TronGrid](https://www.trongrid.io)، [PublicNode](https://publicnode.com) |
 | کرپٹو قیمتیں | [DefiLlama](https://defillama.com)، [CoinGecko](https://www.coingecko.com)، [CoinPaprika](https://coinpaprika.com) |
 | فیاٹ ریٹس | [Frankfurter](https://frankfurter.dev)، [یورپی مرکزی بینک](https://www.ecb.europa.eu) |
-| بروکر اکاؤنٹس | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com) |
+| بروکر اکاؤنٹس | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com)، [Alpaca](https://alpaca.markets)، [Tradier](https://tradier.com)، [tastytrade](https://tastytrade.com)، [Public.com](https://public.com)، [eToro](https://www.etoro.com)، [Indexa Capital](https://indexacapital.com)، [T-Invest](https://www.tbank.ru/invest/)، [ALOR](https://www.alorbroker.ru)، [Capital.com](https://capital.com)، [Akahu](https://www.akahu.nz) |
 
 اس کے علاوہ کہیں کچھ نہیں بھیجا جاتا۔ کوئی ڈیٹا فروخت نہیں کیا جاتا، اشتہارات کے لیے شیئر نہیں کیا جاتا، اور نہ ہی پروفائل بنانے میں استعمال ہوتا ہے۔ عوامی بلاک چین سوالات سے یہ ظاہر ہوتا ہے کہ آپ کے IP ایڈریس پر کوئی شخص آپ کے ٹریک کردہ ایڈریس میں دلچسپی رکھتا ہے؛ اگر یہ آپ کے لیے اہم ہے تو VPN استعمال کریں۔
 

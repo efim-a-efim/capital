@@ -41,7 +41,7 @@ Capital chỉ liên hệ với các nhà cung cấp bạn chọn trong Cài đ�
 | Địa chỉ hợp đồng token và mã định danh tài sản | Nhà cung cấp giá tiền mã hóa bạn đã chọn | Định giá tài sản |
 | Mã tiền tệ | Nhà cung cấp tỷ giá tiền pháp định bạn đã chọn | Quy đổi giữa các loại tiền tệ |
 | Khóa API bạn đã nhập cho một nhà cung cấp | Chỉ nhà cung cấp đó | Xác thực tài khoản của chính bạn với họ |
-| Mã truy cập hoặc khóa API và mã tài khoản hoặc mã truy vấn của một tài khoản môi giới | Chỉ nhà môi giới đó (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Đọc tổng giá trị của tài khoản |
+| Mã truy cập hoặc khóa API và mã tài khoản hoặc mã truy vấn của một tài khoản môi giới | Chỉ nhà môi giới đó (xem [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts)) | Đọc tổng giá trị của tài khoản |
 
 Như với mọi yêu cầu qua Internet, mỗi nhà cung cấp cũng thấy địa chỉ IP của bạn. Các nhà cung cấp độc lập với nhà phát triển và xử lý yêu cầu theo điều khoản và chính sách quyền riêng tư của riêng họ; các liên kết đến đó có trong ứng dụng tại Cài đặt → Nguồn / ghi công:
 
@@ -53,7 +53,7 @@ Như với mọi yêu cầu qua Internet, mỗi nhà cung cấp cũng thấy đ�
 | TRON và token TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Giá tiền mã hóa | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tỷ giá tiền pháp định | [Frankfurter](https://frankfurter.dev), [Ngân hàng Trung ương châu Âu](https://www.ecb.europa.eu) |
-| Tài khoản môi giới | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| Tài khoản môi giới | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 Không có gì được gửi đi nơi khác. Không có dữ liệu nào bị bán, chia sẻ cho mục đích quảng cáo hay dùng để lập hồ sơ người dùng. Các truy vấn blockchain công khai tiết lộ rằng ai đó ở địa chỉ IP của bạn quan tâm đến địa chỉ bạn đang theo dõi; hãy dùng VPN nếu điều đó quan trọng với bạn.
 

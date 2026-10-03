@@ -10,7 +10,7 @@ class: doc
 
 Capital 可以像读取加密货币钱包一样，读取证券或外汇账户的总价值。您把账户作为类型为 **券商账户** 的持仓添加到某个储蓄罐，每次刷新都会获取该账户以其基础货币计的净资产价值（net asset value）。应用只读取：它通过券商的报表接口、使用您自己创建的令牌访问，绝不会下单、修改或撤销订单，也绝不会转移资金。
 
-Capital 只连接凭据长期有效的接口：您创建一次、在您撤销之前一直有效的令牌或密钥（对于 Interactive Brokers，则是在您选择的到期日之前有效，最长一年）。目前支持：
+Capital 只连接凭据长期有效的接口：您创建一次的令牌或密钥，在您撤销之前、在您选择的到期日之前，或至少数月内一直有效（T-Invest 令牌在三个月未使用后失效，ALOR 令牌在一年后失效）。无论应用设置为哪种语言，下列所有券商都可使用。目前支持：
 
 | 券商 | 使用的接口 | 读取的内容 |
 |---|---|---|
@@ -18,6 +18,16 @@ Capital 只连接凭据长期有效的接口：您创建一次、在您撤销之
 | [OANDA](#oanda) | v20 REST API，fxTrade 真实账户 | 刷新时的净资产价值，以账户货币计 |
 | [Trading 212](#trading-212) | Public API，Invest 和 Stocks ISA 账户 | 刷新时的账户总价值，以账户的主货币计 |
 | [SnapTrade](#snaptrade) | SnapTrade Personal，覆盖众多券商的聚合服务 | 券商报告给 SnapTrade 的账户总价值，以账户货币计 |
+| [Alpaca](#alpaca) | Trading API，真实账户 | 权益（现金加持仓），以美元计 |
+| [Tradier](#tradier) | Brokerage API | 总权益，以美元计 |
+| [tastytrade](#tastytrade) | Open API，使用个人 OAuth 授权 | 净清算价值，以美元计 |
+| [Public.com](#public) | Individual API | 账户总价值，以美元计 |
+| [eToro](#etoro) | Public API | 所选账户的余额（交易账户为现金加已投资持仓），以其货币计 |
+| [Indexa Capital](#indexa-capital) | REST API，只读令牌 | 最近估值日的投资组合总额，以账户货币计 |
+| [T-Invest](#t-invest) | T-Invest API（T-Bank） | 投资组合总价值，以卢布计 |
+| [ALOR](#alor) | ALOR OpenAPI | 莫斯科交易所的投资组合估值，以卢布计 |
+| [Capital.com](#capital-com) | Public API，真实账户 | 含未平仓盈亏的余额，以账户货币计 |
+| [Akahu](#akahu) | Akahu 个人应用，新西兰的聚合服务 | 已连接账户（Sharesies、Hatch、Kernel、KiwiSaver 等）的余额，以其货币计 |
 
 ## 开始之前 {#before-you-start}
 
@@ -131,6 +141,156 @@ SnapTrade 尚未完成同步的账户会提示 *SnapTrade 尚无此账户的总�
 
 SnapTrade 文档：[Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [支持的券商](https://snaptrade.com/brokerage-integrations) · [定价](https://snaptrade.com/pricing)
 
+## 在 Capital 中连接账户 {#connect}
+
+下面各节说明如何在各券商处创建凭据。在 Capital 中，所有券商的步骤都相同：
+
+1. **券商 → 凭据**：点击该券商的凭据按钮，并粘贴每个值。
+2. **券商 → +**：输入名称，选择 **券商**，然后点击 **获取账户** 并选择账户（或输入其 ID），保存。
+3. 打开储蓄罐，**添加持仓**，将 **跟踪方式** 设为 **券商账户**，选择该账户并保存。点击 **刷新**。
+
+## Alpaca {#alpaca}
+
+Alpaca 为每个账户签发一个密钥 ID 和一个密文；在您重新生成之前一直有效。只读取真实账户：模拟账户的密钥无法用于真实 API。
+
+1. 登录 [Alpaca dashboard](https://app.alpaca.markets)，切换到您的真实账户，在主页的 **API Keys** 下点击 **Generate New Keys**。
+2. 复制 **API Key ID** 和 **Secret Key**；密文只显示一次。
+3. 在 Capital 中把它们粘贴为 **API 密钥：Alpaca** 和 **API 密文：Alpaca**，然后按照[在 Capital 中连接账户](#connect)操作。**获取账户** 会显示该密钥对应的账号。
+
+Alpaca 文档：[Authentication](https://docs.alpaca.markets/docs/authentication) · [Get account](https://docs.alpaca.markets/reference/getaccount-1)
+
+## Tradier {#tradier}
+
+Tradier 设置中的 API 令牌永不过期。
+
+1. 登录 Tradier，打开 [Settings → API Access](https://web.tradier.com/user/api)。复制您的券商账户（而非沙盒）的 **API Access Token**。
+2. 在 Capital 中把它粘贴为 **访问令牌：Tradier**，然后按照[在 Capital 中连接账户](#connect)操作。
+
+Tradier 文档：[Authentication](https://docs.tradier.com/docs/authentication) · [Get balances](https://docs.tradier.com/reference/brokerage-api-accounts-get-account-balance)
+
+## tastytrade {#tastytrade}
+
+tastytrade 使用个人 OAuth 授权：您为自己创建一个应用，以及一个刷新令牌永不过期的授权。Capital 每次刷新时用它换取一个 15 分钟有效的访问令牌。
+
+1. 在 [my.tastytrade.com](https://my.tastytrade.com) 打开 **Manage → My Profile → API → OAuth Applications**，点击 **+ New OAuth client**。填写名称、任意 HTTPS 重定向 URI（例如 `https://capital.fimych.dev` ），并且只选择 **read** 权限范围。保存并复制 **Client Secret**；它只显示一次。
+2. 点击应用旁的 **Manage**，再点击 **Create Grant**，并复制 **refresh token**。
+3. 在 Capital 中把它们粘贴为 **刷新令牌：tastytrade** 和 **客户端密文：tastytrade**，然后按照[在 Capital 中连接账户](#connect)操作。
+
+tastytrade 文档：[OAuth2 and personal grants](https://developer.tastytrade.com/docs/authentication/oauth2) · [Balances](https://developer.tastytrade.com/reference/balances-and-positions/getAccountsAccountNumberBalances)
+
+## Public.com {#public}
+
+Public 的 Individual API 供您本人的账户使用。秘密密钥长期有效且可撤销；Capital 每次刷新时用它换取一个五分钟有效的访问令牌。
+
+1. 在 Public 的网页应用中打开设置里的 **API** 页面，并生成一个 **secret key**。
+2. 在 Capital 中把它粘贴为 **秘密密钥：Public.com**，然后按照[在 Capital 中连接账户](#connect)操作。
+
+Public 文档：[Quickstart](https://public.com/api/docs/quickstart) · [Access tokens](https://public.com/api/docs/resources/authorization/create-personal-access-token) · [Portfolio](https://public.com/api/docs/resources/account-details/get-account-portfolio-v2)
+
+## eToro {#etoro}
+
+eToro 密钥长期有效；您可以为其设置到期日期和 IP 列表，也可以将其设为只读。您的 eToro 账户必须已通过验证。
+
+1. 在 eToro 中打开 **Settings → Trading → API Key Management**，点击 **Create New Key**。选择 **Real** 环境、**Read** 权限、不设 IP 列表，并可选择设置到期日期。用短信验证码确认。
+2. 复制 **Public API Key** 和 **User Key**；用户密钥只显示一次。
+3. 在 Capital 中把它们粘贴为 **公开 API 密钥：eToro** 和 **用户密钥：eToro**，然后按照[在 Capital 中连接账户](#connect)操作。**获取账户** 会列出您的交易账户、现金账户及其他 eToro 账户。
+
+eToro 文档：[Authentication](https://api-portal.etoro.com/core/getting-started/authentication) · [Balances](https://api-portal.etoro.com/api-reference/balances/get-aggregated-balances) · [Getting started](https://builders.etoro.com/get-started)
+
+## Indexa Capital {#indexa-capital}
+
+Indexa 私人区域中的令牌是只读的。它与您的邮箱、密码和设备绑定：更改密码后，请重新生成。
+
+1. 在 Indexa 的私人区域打开 **用户设置 → 应用**（User settings → Applications），并复制令牌。
+2. 在 Capital 中把它粘贴为 **访问令牌：Indexa Capital**，然后按照[在 Capital 中连接账户](#connect)操作。养老金账户和投资账户都会列出。
+
+Indexa 每个工作日对基金估值一次；观察日期即该估值日。
+
+Indexa Capital 文档：[REST API](https://indexacapital.com/en/api-rest-v1) · [Connecting with the API](https://support.indexacapital.com/es/esp/api-conectar)
+
+## T-Invest {#t-invest}
+
+T-Bank 的 T-Invest API 接受您在投资设置中签发的令牌。令牌在最后一次使用三个月后失效，并且必须在签发后七天内使用；每周刷新一次可使其保持有效。请选择 **只读** 令牌。
+
+1. 打开 [T-Invest 设置](https://www.tbank.ru/invest/settings/)，为交易所签发一个 **只读** 权限（所有账户或单个账户）的 **T-Invest API 令牌**。签发时必须关闭“通过验证码确认交易”。复制令牌；它只显示一次。
+2. 在 Capital 中把它粘贴为 **访问令牌：T-Invest**，然后按照[在 Capital 中连接账户](#connect)操作。
+
+T-Bank 使用俄罗斯 Trusted Root CA（Russian Trusted Root CA）为该 API 提供服务，而 Android 并不内置该证书。Capital 仅对 T-Invest API 地址（`invest-public-api.tbank.ru`）信任该证书，对其他任何连接都不信任。
+
+T-Invest 文档：[Tokens](https://developer.tbank.ru/invest/intro/intro/token) · [GetPortfolio](https://developer.tbank.ru/invest/api/operations-service-get-portfolio)
+
+## ALOR {#alor}
+
+ALOR 签发有效期为一年的刷新令牌；Capital 每次刷新时用它换取一个 30 分钟有效的访问令牌。ALOR 不提供只读令牌：该令牌可以交易，而 Capital 只读取。
+
+1. 登录 [ALOR 开发者门户](https://alor.dev)，绑定您的交易账户，打开 **API Access Tokens** 并点击 **Create Token**。复制刷新令牌。
+2. 在 Capital 中把它粘贴为 **刷新令牌：ALOR**，然后按照[在 Capital 中连接账户](#connect)操作。**获取账户** 会列出该账户的投资组合（股票市场 D…、外汇市场 G…、衍生品 7500…）；每个投资组合添加一个账户。
+
+ALOR 文档：[Refresh token](https://alor.dev/docs/en/api/access/authorization/refresh-token) · [Access token](https://alor.dev/docs/en/api/access/authorization/access-token)
+
+## Capital.com {#capital-com}
+
+Capital.com 的密钥默认有效期为一年，或到您选择的日期为止。它们带有交易权限（Capital.com 没有只读密钥）；Capital 只读取。密钥有自己的密码，它不是您的账户密码。
+
+1. 开启双重验证，然后打开 **Settings → API integrations** 并点击 **Generate API key**。为其设置标签和 **自定义密码**，保留或设置到期日，并用双重验证码确认。复制密钥；它只显示一次。
+2. 在 Capital 中粘贴 **API 密钥：Capital.com**，把您的登录邮箱粘贴为 **登录邮箱：Capital.com**，把自定义密码粘贴为 **API 密钥密码：Capital.com**，然后按照[在 Capital 中连接账户](#connect)操作。只读取真实账户。
+
+Capital.com 文档：[Public API](https://open-api.capital.com/)
+
+## Akahu {#akahu}
+
+[Akahu](https://www.akahu.nz) 连接新西兰的银行、投资平台和 KiwiSaver 计划；免费的个人应用可读取您自己的账户。Akahu 大约每天刷新一次数据。
+
+1. 在 [my.akahu.nz](https://my.akahu.nz) 注册并连接您的服务商（例如 Sharesies、Hatch、Kernel、Simplicity、Milford 或您的 KiwiSaver 计划）。
+2. 打开 **Developers** 页面，接受开发者条款，并复制 **App ID Token** 和 **User Access Token**。
+3. 在 Capital 中把它们粘贴为 **应用 ID 令牌：Akahu** 和 **用户访问令牌：Akahu**，然后按照[在 Capital 中连接账户](#connect)操作。
+
+Akahu 文档：[Personal apps](https://developers.akahu.nz/docs/personal-apps) · [Accounts](https://developers.akahu.nz/reference/get_accounts) · [Supported providers](https://developers.akahu.nz/docs/integrations)
+
+## 热门券商（按市场） {#by-market}
+
+Capital 所支持语言对应市场中最常用的券商可以如何连接，截至 2026 年 10 月。*直连* 表示上文有对应小节；*SnapTrade* 表示通过 [SnapTrade](#snaptrade)；其他情况则说明无法读取的原因，余额可作为 **手动** 持仓保存。
+
+| 市场 | 券商 | 方式 |
+|---|---|---|
+| 美国 | Interactive Brokers, Alpaca, Tradier, tastytrade, Public.com | 直连 |
+| 美国 | Fidelity, Charles Schwab, Vanguard, Robinhood, E\*TRADE, Webull, TradeStation, Empower, Wells Fargo, Chase | SnapTrade |
+| 美国 | Merrill, SoFi, Firstrade, Betterment, Wealthfront, Acorns, M1 | 无公开 API |
+| 加拿大 | Questrade, Wealthsimple, TD Direct Investing, BMO InvestorLine, CIBC Investor's Edge, Webull Canada | SnapTrade |
+| 加拿大 | RBC Direct Investing, Scotia iTRADE, National Bank Direct Brokerage | 无公开 API |
+| 英国和爱尔兰 | Trading 212, eToro, Interactive Brokers | 直连 |
+| 英国和爱尔兰 | AJ Bell | SnapTrade |
+| 英国和爱尔兰 | Hargreaves Lansdown, Interactive Investor, Freetrade, Vanguard UK, Nutmeg, Moneybox | 无公开 API |
+| 英国和爱尔兰 | IG | 无法支持：每次会话都需要账户密码 |
+| 欧洲 | Indexa Capital (Spain), eToro, Trading 212, Interactive Brokers | 直连 |
+| 欧洲 | DEGIRO, BUX | SnapTrade |
+| 欧洲 | Trade Republic, Scalable Capital, MyInvestor, Bourse Direct, Boursorama, flatex, ING, Revolut | 投资业务无公开 API |
+| 欧洲 | XTB | 无法支持：API 已于 2025 年 3 月关闭 |
+| 欧洲 | Saxo, comdirect | 无法支持：仅有短期令牌或 TAN 会话 |
+| 欧洲 | Bitpanda, Freedom24 | 无法支持：API 不返回账户总价值 |
+| 俄罗斯和哈萨克斯坦 | T-Invest, ALOR | 直连 |
+| 俄罗斯和哈萨克斯坦 | BCS | 无法支持：没有总价值，且其令牌 90 天后过期 |
+| 俄罗斯和哈萨克斯坦 | Finam | 暂不支持：账户价值的货币未在文档中说明 |
+| 俄罗斯和哈萨克斯坦 | Sber, VTB, Alfa-Investments, Halyk Finance, Freedom Broker | 无公开 API，或其中没有总价值 |
+| 印度 | Zerodha, Upstox | SnapTrade（SEBI 规定每天终止 API 会话，因此连接需要频繁续期） |
+| 印度 | Groww, Angel One, ICICI Direct, Dhan, Kotak Neo, HDFC Securities, 5paisa | 无法支持：SEBI 规定每个 API 会话每天终止 |
+| 巴基斯坦和孟加拉国 | 所有交易所券商 | 无公开 API |
+| 中国大陆、香港和台湾 | moomoo | SnapTrade |
+| 中国大陆、香港和台湾 | Futu, Tiger Brokers, Longbridge | 暂不支持：密钥有效期或响应格式未完整说明，或密钥无法限定为只读 |
+| 中国大陆、香港和台湾 | East Money, Huatai, CITIC, Yuanta, Fubon | 无公开网页 API（仅有桌面终端或证书 SDK） |
+| 日本 | OANDA Japan（符合 API 访问条件的账户） | 直连，同 OANDA |
+| 日本 | SBI Securities, Rakuten Securities, Monex, Matsui | 无公开 API |
+| 澳大利亚和新西兰 | CommSec, Stake | SnapTrade |
+| 澳大利亚和新西兰 | Sharesies, Hatch, Kernel, Simplicity, KiwiSaver schemes | Akahu（新西兰账户） |
+| 中东和非洲 | eToro | 直连 |
+| 中东和非洲 | Al Rajhi Capital, SNB Capital, Derayah, EFG Hermes, Thndr, Sarwa, Baraka, EasyEquities | 个人无公开 API |
+| 东南亚 | Stockbit, Ajaib, Bibit, IPOT, VPS | 无公开 API |
+| 东南亚 | SSI, TCBS, DNSE | 无法支持：8 小时令牌且需一次性验证码，或仅有现金余额 |
+| 拉丁美洲 | XP, Nubank, Inter, BTG Pactual, Itaú, GBM, InvertirOnline, Fintual | 个人无公开 API，或仅支持密码登录 |
+| 外汇和差价合约 | OANDA, Capital.com | 直连 |
+| 外汇和差价合约 | MetaTrader brokers (XM, Exness, Pepperstone, IC Markets, Admirals) | 无法支持：没有 HTTPS 读取接口 |
+| 外汇和差价合约 | cTrader brokers, FXCM, Forex.com | 无法支持：需要注册应用、API 已弃用或仅支持密码登录 |
+
 ## 其他券商 {#other-brokers}
 
 Capital 只连接满足以下条件的接口：可在手机上通过 HTTPS 使用，令牌可由您自己创建，且只能读取、无法交易。因此目前不支持：
@@ -159,5 +319,8 @@ Capital 只连接满足以下条件的接口：可在手机上通过 HTTPS 使�
 | *SnapTrade 尚无此账户的总价值；请同步连接后重试* | SnapTrade 尚未同步该券商；请稍后再刷新。 |
 | *尚未连接任何账户。请先通过 SnapTrade 连接券商。* | 在编辑器中打开 Connection Portal 并连接券商。 |
 | *不支持负的账户价值 …* | 账户处于借方；它不会为您的储蓄增加任何内容。 |
+| *tastytrade 拒绝了刷新令牌或客户端密文；请创建新的授权* | 为该应用创建新的授权并粘贴其刷新令牌；检查客户端密文。 |
+| *Capital.com 未能建立会话；请检查 API 密钥、登录名和密钥密码* | 密钥、邮箱或密钥的自定义密码有误，或密钥已过期。 |
+| *未找到账户；请重新选择* | 券商不再列出此账户；请编辑它，并从 **获取账户** 中选择。 |
 
 以上任何一种情况下，之前的数值仍会显示，并标记为已过期。

@@ -63,8 +63,8 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 ## Release notes (≤500, per release)
 
 ```
-• Broker integrations are now plugins: a documented contract for adding brokers (BROKER-PLUGINS.md); the four existing brokers ported
-• Account editor adapts to the broker: account picker and connect button only where the broker offers them
+• New brokers: Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com and Akahu (New Zealand)
+• Setup guide per broker and a list of popular brokers by market, in 15 languages
 ```
 
 ## App content answers

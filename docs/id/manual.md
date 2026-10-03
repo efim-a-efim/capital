@@ -58,7 +58,7 @@ Uang dari rencana diterapkan setelah kantong yang ada hari ini, ke tujuan sesuai
 
 ## Broker
 
-Tab Broker → **+**. Akun broker adalah koneksi hanya-baca: pilih broker (Interactive Brokers, OANDA, Trading 212, atau SnapTrade), masukkan ID akun atau ID query, lalu simpan; token atau kunci broker dimasukkan sekali di bagian **Kredensial** pada tab yang sama dan berlaku untuk semua akun broker tersebut. Tab ini mencantumkan setiap akun beserta nilai terakhirnya dan kantong tempat akun itu terhubung. **Abaikan saldo kurang dari** jumlah dalam mata uang default Anda (default 1) membuat saldo receh dihitung 0 di kantong. Hubungkan akun ke kantong lewat **Tambah aset → Akun broker**; hapus aset untuk memutus hubungan, hapus akun untuk menghapus koneksi. Langkah penyiapan, dengan tautan ke dokumentasi resmi para broker, ada di [Akun broker dan forex]({{ page.base }}/accounts).
+Tab Broker → **+**. Akun broker adalah koneksi hanya-baca: pilih broker (daftarnya ada di [Akun broker dan forex]({{ page.base }}/accounts)), masukkan ID akun atau ID query, lalu simpan; token atau kunci broker dimasukkan sekali di bagian **Kredensial** pada tab yang sama dan berlaku untuk semua akun broker tersebut. Tab ini mencantumkan setiap akun beserta nilai terakhirnya dan kantong tempat akun itu terhubung. **Abaikan saldo kurang dari** jumlah dalam mata uang default Anda (default 1) membuat saldo receh dihitung 0 di kantong. Hubungkan akun ke kantong lewat **Tambah aset → Akun broker**; hapus aset untuk memutus hubungan, hapus akun untuk menghapus koneksi. Langkah penyiapan, dengan tautan ke dokumentasi resmi para broker, ada di [Akun broker dan forex]({{ page.base }}/accounts).
 
 ## Pembaruan
 

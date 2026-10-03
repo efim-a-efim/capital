@@ -10,7 +10,7 @@ class: doc
 
 Capital peut lire la valeur totale d’un compte de courtage ou de forex comme il lit un portefeuille crypto. Vous ajoutez le compte à une poche sous la forme d’une position de type **Compte de courtage**, et chaque actualisation récupère la valeur nette d’inventaire (net asset value, NAV) du compte dans sa devise de référence. L’application se contente de lire : elle utilise l’interface de rapports du courtier avec un jeton d’accès que vous créez vous-même, ne passe, ne modifie ni n’annule jamais d’ordre, et ne déplace jamais d’argent.
 
-Capital se connecte uniquement à des interfaces dont les identifiants sont de longue durée : un jeton ou une clé que vous créez une fois et qui reste valable jusqu’à ce que vous le révoquiez (ou, pour Interactive Brokers, jusqu’à l’expiration que vous avez choisie, d’un an au maximum). Pris en charge actuellement :
+Capital se connecte uniquement à des interfaces dont les identifiants sont de longue durée : un jeton ou une clé que vous créez une fois et qui reste valable jusqu’à ce que vous le révoquiez, jusqu’à une expiration que vous avez choisie, ou pendant des mois au moins (les jetons T-Invest expirent après trois mois sans utilisation, ceux d’ALOR après un an). Tous les courtiers ci-dessous sont disponibles quelle que soit la langue de l’application. Pris en charge actuellement :
 
 | Courtier | Interface utilisée | Ce qui est lu |
 |---|---|---|
@@ -18,6 +18,16 @@ Capital se connecte uniquement à des interfaces dont les identifiants sont de l
 | [OANDA](#oanda) | API REST v20, comptes fxTrade réels | Valeur nette d’inventaire au moment de l’actualisation, dans la devise du compte |
 | [Trading 212](#trading-212) | API publique, comptes Invest et Stocks ISA | Valeur totale du compte au moment de l’actualisation, dans la devise principale du compte |
 | [SnapTrade](#snaptrade) | SnapTrade Personal, un agrégateur qui couvre de nombreux courtiers | Valeur totale du compte telle que le courtier la déclare à SnapTrade, dans la devise du compte |
+| [Alpaca](#alpaca) | Trading API, comptes réels | Equity (liquidités plus positions), en dollars américains |
+| [Tradier](#tradier) | Brokerage API | Equity totale, en dollars américains |
+| [tastytrade](#tastytrade) | Open API avec une autorisation OAuth personnelle | Valeur nette de liquidation, en dollars américains |
+| [Public.com](#public) | Individual API | Valeur totale du compte, en dollars américains |
+| [eToro](#etoro) | API publique | Solde du compte choisi (pour un compte de trading : liquidités plus positions investies), dans sa devise |
+| [Indexa Capital](#indexa-capital) | API REST, jeton en lecture seule | Total du portefeuille à la dernière date de valorisation, dans la devise du compte |
+| [T-Invest](#t-invest) | T-Invest API (T-Bank) | Valeur totale du portefeuille, en roubles |
+| [ALOR](#alor) | ALOR OpenAPI | Valorisation du portefeuille à la Bourse de Moscou, en roubles |
+| [Capital.com](#capital-com) | API publique, comptes réels | Solde incluant les profits et pertes ouverts, dans la devise du compte |
+| [Akahu](#akahu) | Application personnelle Akahu, un agrégateur néo-zélandais | Solde d’un compte connecté (Sharesies, Hatch, Kernel, KiwiSaver et autres), dans sa devise |
 
 ## Avant de commencer {#before-you-start}
 
@@ -129,6 +139,156 @@ Un compte que SnapTrade n’a pas encore fini de synchroniser signale *SnapTrade
 
 Documentation de SnapTrade : [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Connecter un compte dans Capital {#connect}
+
+Les sections ci-dessous indiquent comment créer l’identifiant chez chaque courtier. Dans Capital, les étapes sont les mêmes pour tous :
+
+1. **Courtiers → Identifiants** : appuyez sur les boutons d’identifiants du courtier et collez chaque valeur.
+2. **Courtiers → +** : saisissez un nom, choisissez le **Courtier**, puis appuyez sur **Récupérer les comptes**, choisissez le compte (ou saisissez son identifiant) et enregistrez.
+3. Ouvrez une poche, **Ajouter une position**, réglez **Suivi** sur **Compte de courtage**, choisissez le compte et enregistrez. Appuyez sur **Actualiser**.
+
+## Alpaca {#alpaca}
+
+Alpaca émet un identifiant de clé et un secret par compte ; ils restent valables jusqu’à ce que vous les régénériez. Seuls les comptes réels sont lus : les clés d’un compte paper ne fonctionnent pas avec l’API réelle.
+
+1. Connectez-vous au [tableau de bord Alpaca](https://app.alpaca.markets), passez à votre compte réel puis, sur la page d’accueil, sous **API Keys**, appuyez sur **Generate New Keys**.
+2. Copiez l’**API Key ID** et la **Secret Key** ; le secret n’est affiché qu’une fois.
+3. Dans Capital, collez-les comme **Clé API : Alpaca** et **Secret API : Alpaca**, puis suivez [Connecter un compte](#connect). **Récupérer les comptes** affiche le numéro de compte de la clé.
+
+Documentation d’Alpaca : [Authentication](https://docs.alpaca.markets/docs/authentication) · [Get account](https://docs.alpaca.markets/reference/getaccount-1)
+
+## Tradier {#tradier}
+
+Le jeton d’API de vos réglages Tradier n’expire jamais.
+
+1. Connectez-vous à Tradier et ouvrez [Settings → API Access](https://web.tradier.com/user/api). Copiez l’**API Access Token** de votre compte de courtage (pas le jeton du bac à sable).
+2. Dans Capital, collez-le comme **Jeton d’accès : Tradier**, puis suivez [Connecter un compte](#connect).
+
+Documentation de Tradier : [Authentication](https://docs.tradier.com/docs/authentication) · [Get balances](https://docs.tradier.com/reference/brokerage-api-accounts-get-account-balance)
+
+## tastytrade {#tastytrade}
+
+tastytrade utilise une autorisation OAuth personnelle (grant) : vous créez une application pour vous-même et une autorisation dont le jeton d’actualisation n’expire jamais. Capital l’échange contre un jeton d’accès de 15 minutes à chaque actualisation.
+
+1. Sur [my.tastytrade.com](https://my.tastytrade.com), ouvrez **Manage → My Profile → API → OAuth Applications** et appuyez sur **+ New OAuth client**. Donnez-lui un nom, une URI de redirection HTTPS quelconque (par exemple `https://capital.fimych.dev`) et uniquement le périmètre (scope) **read**. Enregistrez et copiez le **Client Secret** ; il n’est affiché qu’une fois.
+2. Appuyez sur **Manage** à côté de l’application, puis sur **Create Grant**, et copiez le **jeton d’actualisation** (refresh token).
+3. Dans Capital, collez-les comme **Jeton d’actualisation : tastytrade** et **Secret client : tastytrade**, puis suivez [Connecter un compte](#connect).
+
+Documentation de tastytrade : [OAuth2 and personal grants](https://developer.tastytrade.com/docs/authentication/oauth2) · [Balances](https://developer.tastytrade.com/reference/balances-and-positions/getAccountsAccountNumberBalances)
+
+## Public.com {#public}
+
+L’Individual API de Public est conçue pour vos propres comptes. La clé secrète est de longue durée et révocable ; Capital l’échange contre un jeton d’accès de cinq minutes à chaque actualisation.
+
+1. Dans l’application Web de Public, ouvrez la page **API** de vos réglages et générez une **clé secrète**.
+2. Dans Capital, collez-la comme **Clé secrète : Public.com**, puis suivez [Connecter un compte](#connect).
+
+Documentation de Public : [Quickstart](https://public.com/api/docs/quickstart) · [Access tokens](https://public.com/api/docs/resources/authorization/create-personal-access-token) · [Portfolio](https://public.com/api/docs/resources/account-details/get-account-portfolio-v2)
+
+## eToro {#etoro}
+
+Les clés eToro sont de longue durée ; vous pouvez leur donner une date d’expiration et une liste d’adresses IP, et les rendre en lecture seule. Votre compte eToro doit être vérifié.
+
+1. Dans eToro, ouvrez **Settings → Trading → API Key Management** et appuyez sur **Create New Key**. Choisissez l’environnement **Real**, l’autorisation **Read**, aucune liste d’adresses IP et, si vous le souhaitez, une date d’expiration. Confirmez avec le code reçu par SMS.
+2. Copiez la **Public API Key** et la **User Key** ; la clé utilisateur n’est affichée qu’une fois.
+3. Dans Capital, collez-les comme **Clé API publique : eToro** et **Clé utilisateur : eToro**, puis suivez [Connecter un compte](#connect). **Récupérer les comptes** liste vos comptes eToro de trading, de liquidités et autres.
+
+Documentation d’eToro : [Authentication](https://api-portal.etoro.com/core/getting-started/authentication) · [Balances](https://api-portal.etoro.com/api-reference/balances/get-aggregated-balances) · [Getting started](https://builders.etoro.com/get-started)
+
+## Indexa Capital {#indexa-capital}
+
+Le jeton de l’espace privé d’Indexa est en lecture seule. Il est lié à votre e-mail, à votre mot de passe et à votre appareil : après un changement de mot de passe, générez-le à nouveau.
+
+1. Dans l’espace privé d’Indexa, ouvrez **Réglages utilisateur → Applications** et copiez le jeton.
+2. Dans Capital, collez-le comme **Jeton d’accès : Indexa Capital**, puis suivez [Connecter un compte](#connect). Les comptes de retraite et d’investissement sont tous deux listés.
+
+Indexa valorise les fonds une fois par jour ouvré ; la date d’observation est cette date de valorisation.
+
+Documentation d’Indexa Capital : [REST API](https://indexacapital.com/en/api-rest-v1) · [Connecting with the API](https://support.indexacapital.com/es/esp/api-conectar)
+
+## T-Invest {#t-invest}
+
+La T-Invest API de T-Bank accepte un jeton que vous émettez dans les réglages d’investissement. Un jeton expire trois mois après sa dernière utilisation et doit être utilisé dans les sept jours suivant son émission ; une actualisation hebdomadaire le maintient actif. Choisissez un jeton en **lecture seule**.
+
+1. Ouvrez les [réglages T-Invest](https://www.tbank.ru/invest/settings/) et émettez un **jeton d’API T-Invest** pour la bourse avec un accès en **lecture seule** (tous les comptes ou un seul). La confirmation des opérations par code doit être désactivée pour l’émettre. Copiez le jeton ; il n’est affiché qu’une fois.
+2. Dans Capital, collez-le comme **Jeton d’accès : T-Invest**, puis suivez [Connecter un compte](#connect).
+
+T-Bank sert cette API sous l’autorité de certification Russian Trusted Root CA, qu’Android n’inclut pas. Capital fait confiance à ce certificat uniquement pour l’adresse de la T-Invest API (`invest-public-api.tbank.ru`), et pour aucune autre connexion.
+
+Documentation de T-Invest : [Tokens](https://developer.tbank.ru/invest/intro/intro/token) · [GetPortfolio](https://developer.tbank.ru/invest/api/operations-service-get-portfolio)
+
+## ALOR {#alor}
+
+ALOR émet un jeton d’actualisation valable un an ; Capital l’échange contre un jeton d’accès de 30 minutes à chaque actualisation. ALOR ne propose pas de jeton en lecture seule : le jeton pourrait passer des ordres, Capital se contente de lire.
+
+1. Connectez-vous au [portail développeur d’ALOR](https://alor.dev), liez votre compte de trading, ouvrez **API Access Tokens** et appuyez sur **Create Token**. Copiez le jeton d’actualisation.
+2. Dans Capital, collez-le comme **Jeton d’actualisation : ALOR**, puis suivez [Connecter un compte](#connect). **Récupérer les comptes** liste les portefeuilles du compte (marché actions D…, marché des changes G…, dérivés 7500…) ; ajoutez-en un par portefeuille.
+
+Documentation d’ALOR : [Refresh token](https://alor.dev/docs/en/api/access/authorization/refresh-token) · [Access token](https://alor.dev/docs/en/api/access/authorization/access-token)
+
+## Capital.com {#capital-com}
+
+Les clés Capital.com sont valables un an par défaut, ou jusqu’à la date que vous choisissez. Elles portent des droits de trading (Capital.com n’a pas de clés en lecture seule) ; Capital se contente de lire. Une clé a son propre mot de passe, qui n’est pas celui de votre compte.
+
+1. Activez l’authentification à deux facteurs, puis ouvrez **Settings → API integrations** et appuyez sur **Generate API key**. Donnez-lui un libellé et un **mot de passe personnalisé**, gardez ou réglez l’expiration, et confirmez avec le code 2FA. Copiez la clé ; elle n’est affichée qu’une fois.
+2. Dans Capital, collez **Clé API : Capital.com**, votre e-mail de connexion comme **E-mail de connexion : Capital.com** et le mot de passe personnalisé comme **Mot de passe de la clé API : Capital.com**, puis suivez [Connecter un compte](#connect). Seuls les comptes réels sont lus.
+
+Documentation de Capital.com : [Public API](https://open-api.capital.com/)
+
+## Akahu {#akahu}
+
+[Akahu](https://www.akahu.nz) connecte des banques, des plateformes d’investissement et des régimes KiwiSaver néo-zélandais ; une application personnelle gratuite lit vos propres comptes. Akahu actualise les données environ une fois par jour.
+
+1. Inscrivez-vous sur [my.akahu.nz](https://my.akahu.nz) et connectez vos fournisseurs (par exemple Sharesies, Hatch, Kernel, Simplicity, Milford ou votre régime KiwiSaver).
+2. Ouvrez la page **Developers**, acceptez les conditions pour développeurs et copiez l’**App ID Token** et le **User Access Token**.
+3. Dans Capital, collez-les comme **Jeton d’ID d’application : Akahu** et **Jeton d’accès utilisateur : Akahu**, puis suivez [Connecter un compte](#connect).
+
+Documentation d’Akahu : [Personal apps](https://developers.akahu.nz/docs/personal-apps) · [Accounts](https://developers.akahu.nz/reference/get_accounts) · [Supported providers](https://developers.akahu.nz/docs/integrations)
+
+## Courtiers populaires par marché {#by-market}
+
+Comment se connecter aux courtiers les plus utilisés sur les marchés des langues de Capital, en octobre 2026. *Direct* renvoie à une section ci-dessus ; *SnapTrade* signifie via [SnapTrade](#snaptrade) ; sinon, la raison pour laquelle le courtier ne peut pas être lu, et le solde peut être conservé comme position **Manuelle**.
+
+| Marché | Courtier | Comment |
+|---|---|---|
+| États-Unis | Interactive Brokers, Alpaca, Tradier, tastytrade, Public.com | Direct |
+| États-Unis | Fidelity, Charles Schwab, Vanguard, Robinhood, E\*TRADE, Webull, TradeStation, Empower, Wells Fargo, Chase | SnapTrade |
+| États-Unis | Merrill, SoFi, Firstrade, Betterment, Wealthfront, Acorns, M1 | Pas d’API publique |
+| Canada | Questrade, Wealthsimple, TD Direct Investing, BMO InvestorLine, CIBC Investor's Edge, Webull Canada | SnapTrade |
+| Canada | RBC Direct Investing, Scotia iTRADE, National Bank Direct Brokerage | Pas d’API publique |
+| Royaume-Uni et Irlande | Trading 212, eToro, Interactive Brokers | Direct |
+| Royaume-Uni et Irlande | AJ Bell | SnapTrade |
+| Royaume-Uni et Irlande | Hargreaves Lansdown, Interactive Investor, Freetrade, Vanguard UK, Nutmeg, Moneybox | Pas d’API publique |
+| Royaume-Uni et Irlande | IG | Impossible : chaque session exige le mot de passe du compte |
+| Europe | Indexa Capital (Espagne), eToro, Trading 212, Interactive Brokers | Direct |
+| Europe | DEGIRO, BUX | SnapTrade |
+| Europe | Trade Republic, Scalable Capital, MyInvestor, Bourse Direct, Boursorama, flatex, ING, Revolut | Pas d’API publique pour les investissements |
+| Europe | XTB | Impossible : l’API a été fermée en mars 2025 |
+| Europe | Saxo, comdirect | Impossible : uniquement des jetons de courte durée ou des sessions TAN |
+| Europe | Bitpanda, Freedom24 | Impossible : l’API ne renvoie pas la valeur totale du compte |
+| Russie et Kazakhstan | T-Invest, ALOR | Direct |
+| Russie et Kazakhstan | BCS | Impossible : pas de valeur totale, et son jeton expire après 90 jours |
+| Russie et Kazakhstan | Finam | Pas encore : la devise de la valeur du compte n’est pas documentée |
+| Russie et Kazakhstan | Sber, VTB, Alfa-Investments, Halyk Finance, Freedom Broker | Pas d’API publique, ou pas de valeur totale dans celle-ci |
+| Inde | Zerodha, Upstox | SnapTrade (les règles de la SEBI mettent fin chaque jour aux sessions d’API ; la connexion doit donc être renouvelée souvent) |
+| Inde | Groww, Angel One, ICICI Direct, Dhan, Kotak Neo, HDFC Securities, 5paisa | Impossible : les règles de la SEBI mettent fin chaque jour à toute session d’API |
+| Pakistan et Bangladesh | Tous les courtiers de la bourse | Pas d’API publique |
+| Chine, Hong Kong et Taïwan | moomoo | SnapTrade |
+| Chine, Hong Kong et Taïwan | Futu, Tiger Brokers, Longbridge | Pas encore : durée de vie des clés ou format de réponse mal documentés, ou clés non limitables à la lecture |
+| Chine, Hong Kong et Taïwan | East Money, Huatai, CITIC, Yuanta, Fubon | Pas d’API Web publique (terminaux de bureau ou SDK à certificat uniquement) |
+| Japon | OANDA Japan (comptes éligibles à l’accès API) | Direct, comme OANDA |
+| Japon | SBI Securities, Rakuten Securities, Monex, Matsui | Pas d’API publique |
+| Australie et Nouvelle-Zélande | CommSec, Stake | SnapTrade |
+| Australie et Nouvelle-Zélande | Sharesies, Hatch, Kernel, Simplicity, régimes KiwiSaver | Akahu (comptes néo-zélandais) |
+| Moyen-Orient et Afrique | eToro | Direct |
+| Moyen-Orient et Afrique | Al Rajhi Capital, SNB Capital, Derayah, EFG Hermes, Thndr, Sarwa, Baraka, EasyEquities | Pas d’API publique pour les particuliers |
+| Asie du Sud-Est | Stockbit, Ajaib, Bibit, IPOT, VPS | Pas d’API publique |
+| Asie du Sud-Est | SSI, TCBS, DNSE | Impossible : jetons de 8 heures avec code à usage unique, ou solde de liquidités uniquement |
+| Amérique latine | XP, Nubank, Inter, BTG Pactual, Itaú, GBM, InvertirOnline, Fintual | Pas d’API publique pour les particuliers, ou connexions par mot de passe uniquement |
+| Forex et CFD | OANDA, Capital.com | Direct |
+| Forex et CFD | Courtiers MetaTrader (XM, Exness, Pepperstone, IC Markets, Admirals) | Impossible : pas d’accès en lecture HTTPS |
+| Forex et CFD | Courtiers cTrader, FXCM, Forex.com | Impossible : enregistrement d’application, API obsolète ou connexions par mot de passe |
+
 ## Autres courtiers {#other-brokers}
 
 Capital se connecte uniquement à des interfaces qui fonctionnent depuis un téléphone en HTTPS, avec un jeton d’accès que vous pouvez créer vous-même et qui permettent de lire sans pouvoir trader. Cela exclut, pour l’instant :
@@ -157,5 +317,8 @@ Beaucoup de ces courtiers sont couverts par [SnapTrade](#snaptrade). Sinon, sais
 | *SnapTrade n’a pas encore de valeur totale pour ce compte ; synchronisez la connexion et réessayez* | SnapTrade n’a pas encore synchronisé le courtier ; actualisez à nouveau plus tard. |
 | *Aucun compte connecté pour l’instant. Connectez d’abord un courtier via SnapTrade.* | Ouvrez la Connection Portal depuis l’éditeur et connectez un courtier. |
 | *La valeur de compte négative … n’est pas prise en charge* | Le compte est à découvert ; il n’ajoute rien à votre épargne. |
+| *tastytrade a rejeté le jeton d’actualisation ou le secret client ; créez une nouvelle autorisation (grant)* | Créez une nouvelle autorisation pour l’application et collez son jeton d’actualisation ; vérifiez le secret client. |
+| *Capital.com n’a pas ouvert de session ; vérifiez la clé API, l’e-mail de connexion et le mot de passe de la clé* | La clé, l’e-mail ou le mot de passe personnalisé de la clé est erroné, ou la clé a expiré. |
+| *Compte introuvable ; choisissez-le à nouveau* | Le courtier ne liste plus ce compte ; modifiez-le et choisissez-le dans **Récupérer les comptes**. |
 
 La valeur précédente reste affichée après chacun de ces messages, signalée comme obsolète.

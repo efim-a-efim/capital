@@ -47,5 +47,5 @@ Les exigences propres à certains pays pour les applications de prêt personnel,
 
 - Les données de marché proviennent d’opérateurs tiers choisis par l’utilisateur (voir la [Politique de confidentialité]({{ page.base }}/privacy)). L’application affiche le nom et le site de l’opérateur dans les Paramètres.
 - Les requêtes sur les portefeuilles crypto utilisent des API blockchain publiques, en lecture seule.
-- Les comptes de courtage (Interactive Brokers, OANDA, Trading 212, SnapTrade) sont lus avec un jeton ou une clé que l’utilisateur crée dans le portail du courtier ; l’application n’appelle que des points d’accès de rapports et ne peut ni passer d’ordres ni déplacer d’argent. La configuration est décrite sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
+- Les comptes de courtage (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) sont lus avec un jeton ou une clé que l’utilisateur crée dans le portail du courtier ; l’application n’appelle que des points d’accès de rapports et ne peut ni passer d’ordres ni déplacer d’argent. La configuration est décrite sur [Comptes de courtage et de forex]({{ page.base }}/accounts).
 - L’application fonctionne entièrement sur l’appareil et ne dispose d’aucun serveur exploité par le développeur.

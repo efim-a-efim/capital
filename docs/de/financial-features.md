@@ -45,5 +45,5 @@ Länderspezifische Anforderungen für Privatkredit-Apps und die Fragen zu Krypto
 
 - Marktdaten stammen von Drittbetreibern, die der Nutzer auswählt (siehe [Datenschutzerklärung]({{ page.base }}/privacy)). Die App zeigt Namen und Website des Betreibers in den Einstellungen an.
 - Wallet-Abfragen nutzen öffentliche, schreibgeschützte Blockchain-APIs.
-- Brokerkonten (Interactive Brokers, OANDA, Trading 212, SnapTrade) werden mit einem Token oder Schlüssel gelesen, das der Nutzer im eigenen Portal des Brokers erstellt; die App ruft nur Reporting-Endpunkte auf und kann weder Orders erteilen noch Geld bewegen. Die Einrichtung ist unter [Broker- und Forex-Konten]({{ page.base }}/accounts) dokumentiert.
+- Brokerkonten (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) werden mit einem Token oder Schlüssel gelesen, das der Nutzer im eigenen Portal des Brokers erstellt; die App ruft nur Reporting-Endpunkte auf und kann weder Orders erteilen noch Geld bewegen. Die Einrichtung ist unter [Broker- und Forex-Konten]({{ page.base }}/accounts) dokumentiert.
 - Die App läuft vollständig auf dem Gerät und hat keinen vom Entwickler betriebenen Server.

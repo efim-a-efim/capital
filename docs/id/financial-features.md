@@ -47,5 +47,5 @@ Persyaratan khusus negara untuk aplikasi pinjaman pribadi, serta pertanyaan tent
 
 - Data pasar berasal dari operator pihak ketiga yang dipilih pengguna (lihat [Kebijakan Privasi]({{ page.base }}/privacy)). Aplikasi menampilkan nama dan situs operator di Pengaturan.
 - Kueri dompet menggunakan API blockchain publik yang hanya membaca data.
-- Akun broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) dibaca dengan token atau kunci yang dibuat pengguna di portal milik broker; aplikasi hanya memanggil endpoint pelaporan dan tidak dapat membuat order atau memindahkan uang. Penyiapannya didokumentasikan di [Akun broker dan forex]({{ page.base }}/accounts).
+- Akun broker (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) dibaca dengan token atau kunci yang dibuat pengguna di portal milik broker; aplikasi hanya memanggil endpoint pelaporan dan tidak dapat membuat order atau memindahkan uang. Penyiapannya didokumentasikan di [Akun broker dan forex]({{ page.base }}/accounts).
 - Aplikasi berjalan sepenuhnya di perangkat dan tidak memiliki server yang dijalankan developer.

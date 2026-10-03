@@ -45,5 +45,5 @@ Các yêu cầu riêng theo quốc gia đối với ứng dụng cho vay cá nh�
 
 - Dữ liệu thị trường đến từ các nhà cung cấp bên thứ ba do người dùng chọn (xem [Chính sách quyền riêng tư]({{ page.base }}/privacy)). Ứng dụng hiển thị tên và trang web của nhà cung cấp trong Cài đặt.
 - Truy vấn ví dùng các API blockchain công khai, chỉ đọc.
-- Tài khoản môi giới (Interactive Brokers, OANDA, Trading 212, SnapTrade) được đọc bằng mã truy cập hoặc khóa do người dùng tạo trong cổng thông tin của chính nhà môi giới; ứng dụng chỉ gọi các điểm cuối báo cáo và không thể đặt lệnh hay chuyển tiền. Cách thiết lập được nêu tại [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
+- Tài khoản môi giới (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) được đọc bằng mã truy cập hoặc khóa do người dùng tạo trong cổng thông tin của chính nhà môi giới; ứng dụng chỉ gọi các điểm cuối báo cáo và không thể đặt lệnh hay chuyển tiền. Cách thiết lập được nêu tại [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
 - Ứng dụng chạy hoàn toàn trên thiết bị và không có máy chủ nào do nhà phát triển vận hành.

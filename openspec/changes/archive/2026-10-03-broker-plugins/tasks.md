@@ -13,4 +13,4 @@
 ## 3. Verification and release
 
 - [x] 3.1 Unit tests, instrumentation test, manual check of the account editor per broker on the emulator.
-- [ ] 3.2 Release v2.8.0 through the release workflow.
+- [x] 3.2 Released as v2.9.0 (v2.8.0 was tagged by mistake on the previous commit and never built).

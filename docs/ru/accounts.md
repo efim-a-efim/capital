@@ -10,7 +10,7 @@ class: doc
 
 Capital умеет читать общую стоимость брокерского или форекс-счёта так же, как баланс криптокошелька. Вы добавляете счёт в копилку как актив типа **Брокерский счёт**, и при каждом обновлении приложение загружает чистую стоимость активов (net asset value) счёта в его базовой валюте. Приложение только читает: оно использует интерфейс отчётности брокера с токеном, который вы создаёте сами, никогда не отправляет, не меняет и не отменяет ордера и никогда не перемещает деньги.
 
-Capital подключается только к интерфейсам с долгоживущими учётными данными: токеном или ключом, который вы создаёте один раз и который действует, пока вы его не отзовёте (а для Interactive Brokers — до выбранной вами даты истечения, не более года). Сейчас поддерживаются:
+Capital подключается только к интерфейсам с долгоживущими учётными данными: токеном или ключом, который вы создаёте один раз и который действует, пока вы его не отзовёте, до выбранной вами даты истечения или не менее нескольких месяцев (токены T-Invest перестают действовать через три месяца без использования, токены ALOR — через год). Каждый из перечисленных ниже брокеров доступен при любом языке приложения. Сейчас поддерживаются:
 
 | Брокер | Используемый интерфейс | Что читается |
 |---|---|---|
@@ -18,6 +18,16 @@ Capital подключается только к интерфейсам с до�
 | [OANDA](#oanda) | v20 REST API, реальные счета fxTrade | Чистая стоимость активов на момент обновления в валюте счёта |
 | [Trading 212](#trading-212) | Public API, счета Invest и Stocks ISA | Общая стоимость счёта на момент обновления в основной валюте счёта |
 | [SnapTrade](#snaptrade) | SnapTrade Personal, агрегатор, охватывающий многих брокеров | Общая стоимость счёта в том виде, как брокер передаёт её в SnapTrade, в валюте счёта |
+| [Alpaca](#alpaca) | Trading API, реальные счета | Капитал счёта (деньги плюс позиции) в долларах США |
+| [Tradier](#tradier) | Brokerage API | Общий капитал в долларах США |
+| [tastytrade](#tastytrade) | Open API с личным OAuth grant | Чистая ликвидационная стоимость в долларах США |
+| [Public.com](#public) | Individual API | Общая стоимость счёта в долларах США |
+| [eToro](#etoro) | Public API | Баланс выбранного счёта (для торгового счёта: деньги плюс вложенные позиции) в его валюте |
+| [Indexa Capital](#indexa-capital) | REST API, токен только для чтения | Итог портфеля на дату последней оценки в валюте счёта |
+| [T-Invest](#t-invest) | T-Invest API (T-Bank) | Общая стоимость портфеля в рублях |
+| [ALOR](#alor) | ALOR OpenAPI | Оценка портфеля на Московской бирже в рублях |
+| [Capital.com](#capital-com) | Public API, реальные счета | Баланс с учётом открытой прибыли и убытка в валюте счёта |
+| [Akahu](#akahu) | Личное приложение Akahu, агрегатор Новой Зеландии | Баланс подключённого счёта (Sharesies, Hatch, Kernel, KiwiSaver и другие) в его валюте |
 
 ## Прежде чем начать {#before-you-start}
 
@@ -129,6 +139,156 @@ Capital вызывает **сводку по счёту** (account summary) в T
 
 Документация SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Подключение счёта в Capital {#connect}
+
+Ниже описано, как создать учётные данные у каждого брокера. В Capital шаги одинаковы для всех:
+
+1. **Брокеры → Учётные данные**: нажмите кнопки учётных данных брокера и вставьте каждое значение.
+2. **Брокеры → +**: введите название, выберите **Брокер**, затем нажмите **Загрузить счета** и выберите счёт (или введите его ID) и сохраните.
+3. Откройте копилку, **Добавить актив**, в поле **Способ учёта** выберите **Брокерский счёт**, выберите счёт и сохраните. Нажмите **Обновить**.
+
+## Alpaca {#alpaca}
+
+Alpaca выдаёт идентификатор ключа и секрет для каждого счёта; они действуют, пока вы не создадите их заново. Читаются только реальные счета: ключи бумажного (paper) счёта с реальным API не работают.
+
+1. Войдите на [панель Alpaca](https://app.alpaca.markets), переключитесь на реальный счёт и на главной странице в разделе **API Keys** нажмите **Generate New Keys**.
+2. Скопируйте **API Key ID** и **Secret Key**; секрет показывается один раз.
+3. В Capital вставьте их как **API key: Alpaca** и **API secret: Alpaca**, затем выполните шаги из раздела [Подключение счёта](#connect). **Загрузить счета** показывает номер счёта этого ключа.
+
+Документация Alpaca: [Authentication](https://docs.alpaca.markets/docs/authentication) · [Get account](https://docs.alpaca.markets/reference/getaccount-1)
+
+## Tradier {#tradier}
+
+API-токен из настроек Tradier не истекает.
+
+1. Войдите в Tradier и откройте [Settings → API Access](https://web.tradier.com/user/api). Скопируйте **API Access Token** вашего брокерского счёта (не токен песочницы).
+2. В Capital вставьте его как **Токен доступа: Tradier**, затем выполните шаги из раздела [Подключение счёта](#connect).
+
+Документация Tradier: [Authentication](https://docs.tradier.com/docs/authentication) · [Get balances](https://docs.tradier.com/reference/brokerage-api-accounts-get-account-balance)
+
+## tastytrade {#tastytrade}
+
+tastytrade использует личный OAuth grant: вы создаёте приложение для себя и grant, refresh-токен которого не истекает. При каждом обновлении Capital обменивает его на access-токен со сроком 15 минут.
+
+1. На [my.tastytrade.com](https://my.tastytrade.com) откройте **Manage → My Profile → API → OAuth Applications** и нажмите **+ New OAuth client**. Задайте имя, любой HTTPS redirect URI (например, `https://capital.fimych.dev`) и только область **read**. Сохраните и скопируйте **Client Secret**; он показывается один раз.
+2. Нажмите **Manage** рядом с приложением, затем **Create Grant** и скопируйте **refresh token**.
+3. В Capital вставьте их как **Токен обновления: tastytrade** и **Client secret: tastytrade**, затем выполните шаги из раздела [Подключение счёта](#connect).
+
+Документация tastytrade: [OAuth2 and personal grants](https://developer.tastytrade.com/docs/authentication/oauth2) · [Balances](https://developer.tastytrade.com/reference/balances-and-positions/getAccountsAccountNumberBalances)
+
+## Public.com {#public}
+
+Individual API от Public предназначен для ваших собственных счетов. Секретный ключ долгоживущий и отзываемый; при каждом обновлении Capital обменивает его на access-токен со сроком пять минут.
+
+1. В веб-приложении Public откройте страницу **API** в настройках и создайте **секретный ключ**.
+2. В Capital вставьте его как **Секретный ключ: Public.com**, затем выполните шаги из раздела [Подключение счёта](#connect).
+
+Документация Public: [Quickstart](https://public.com/api/docs/quickstart) · [Access tokens](https://public.com/api/docs/resources/authorization/create-personal-access-token) · [Portfolio](https://public.com/api/docs/resources/account-details/get-account-portfolio-v2)
+
+## eToro {#etoro}
+
+Ключи eToro долгоживущие; для них можно задать дату истечения и список IP-адресов, а также сделать их только для чтения. Ваш счёт eToro должен быть верифицирован.
+
+1. В eToro откройте **Settings → Trading → API Key Management** и нажмите **Create New Key**. Выберите среду **Real**, разрешение **Read**, без списка IP-адресов и при желании дату истечения. Подтвердите кодом из SMS.
+2. Скопируйте **Public API Key** и **User Key**; пользовательский ключ показывается один раз.
+3. В Capital вставьте их как **Public API key: eToro** и **User key: eToro**, затем выполните шаги из раздела [Подключение счёта](#connect). **Загрузить счета** показывает ваши торговые, денежные и другие счета eToro.
+
+Документация eToro: [Authentication](https://api-portal.etoro.com/core/getting-started/authentication) · [Balances](https://api-portal.etoro.com/api-reference/balances/get-aggregated-balances) · [Getting started](https://builders.etoro.com/get-started)
+
+## Indexa Capital {#indexa-capital}
+
+Токен из личного кабинета Indexa доступен только для чтения. Он привязан к вашему e-mail, паролю и устройству: после смены пароля создайте его заново.
+
+1. В личном кабинете Indexa откройте **Настройки пользователя → Приложения** (User settings → Applications) и скопируйте токен.
+2. В Capital вставьте его как **Токен доступа: Indexa Capital**, затем выполните шаги из раздела [Подключение счёта](#connect). Пенсионные и инвестиционные счета показываются вместе.
+
+Indexa оценивает фонды раз в рабочий день; дата наблюдения — это дата такой оценки.
+
+Документация Indexa Capital: [REST API](https://indexacapital.com/en/api-rest-v1) · [Connecting with the API](https://support.indexacapital.com/es/esp/api-conectar)
+
+## T-Invest {#t-invest}
+
+T-Invest API банка T-Bank принимает токен, который вы выпускаете в настройках инвестиций. Токен перестаёт действовать через три месяца после последнего использования и должен быть использован в течение семи дней после выпуска; еженедельное обновление поддерживает его в рабочем состоянии. Выбирайте токен **только для чтения**.
+
+1. Откройте [настройки T-Invest](https://www.tbank.ru/invest/settings/) и выпустите **токен T-Invest API** для биржи с доступом **только для чтения** (все счета или один). Для выпуска подтверждение сделок кодом должно быть отключено. Скопируйте токен; он показывается один раз.
+2. В Capital вставьте его как **Токен доступа: T-Invest**, затем выполните шаги из раздела [Подключение счёта](#connect).
+
+T-Bank обслуживает этот API под российским Trusted Root CA, которого нет в Android. Capital доверяет этому сертификату только для адреса T-Invest API (`invest-public-api.tbank.ru`) и ни для каких других подключений.
+
+Документация T-Invest: [Tokens](https://developer.tbank.ru/invest/intro/intro/token) · [GetPortfolio](https://developer.tbank.ru/invest/api/operations-service-get-portfolio)
+
+## ALOR {#alor}
+
+ALOR выдаёт refresh-токен со сроком действия один год; при каждом обновлении Capital обменивает его на access-токен со сроком 30 минут. У ALOR нет токена только для чтения: токен мог бы торговать, а Capital только читает.
+
+1. Войдите на [портал разработчиков ALOR](https://alor.dev), привяжите торговый счёт, откройте **API Access Tokens** и нажмите **Create Token**. Скопируйте refresh-токен.
+2. В Capital вставьте его как **Токен обновления: ALOR**, затем выполните шаги из раздела [Подключение счёта](#connect). **Загрузить счета** показывает портфели счёта (фондовый рынок D…, валютный рынок G…, срочный рынок 7500…); добавьте по одному на каждый портфель.
+
+Документация ALOR: [Refresh token](https://alor.dev/docs/en/api/access/authorization/refresh-token) · [Access token](https://alor.dev/docs/en/api/access/authorization/access-token)
+
+## Capital.com {#capital-com}
+
+Ключи Capital.com действуют один год по умолчанию или до выбранной вами даты. Они дают торговые права (read-only-ключей у Capital.com нет); Capital только читает. У ключа есть собственный пароль, который не совпадает с паролем от вашего аккаунта.
+
+1. Включите двухфакторную аутентификацию, затем откройте **Settings → API integrations** и нажмите **Generate API key**. Задайте метку и **собственный пароль**, оставьте или измените срок действия и подтвердите кодом 2FA. Скопируйте ключ; он показывается один раз.
+2. В Capital вставьте **API key: Capital.com**, ваш логин (e-mail) как **Логин (e-mail): Capital.com** и собственный пароль как **Пароль API key: Capital.com**, затем выполните шаги из раздела [Подключение счёта](#connect). Читаются только реальные счета.
+
+Документация Capital.com: [Public API](https://open-api.capital.com/)
+
+## Akahu {#akahu}
+
+[Akahu](https://www.akahu.nz) объединяет банки, инвестиционные платформы и схемы KiwiSaver Новой Зеландии; бесплатное личное приложение читает ваши собственные счета. Akahu обновляет данные примерно раз в сутки.
+
+1. Зарегистрируйтесь на [my.akahu.nz](https://my.akahu.nz) и подключите своих провайдеров (например, Sharesies, Hatch, Kernel, Simplicity, Milford или вашу схему KiwiSaver).
+2. Откройте страницу **Developers**, примите условия для разработчиков и скопируйте **App ID Token** и **User Access Token**.
+3. В Capital вставьте их как **App ID token: Akahu** и **Токен доступа пользователя: Akahu**, затем выполните шаги из раздела [Подключение счёта](#connect).
+
+Документация Akahu: [Personal apps](https://developers.akahu.nz/docs/personal-apps) · [Accounts](https://developers.akahu.nz/reference/get_accounts) · [Supported providers](https://developers.akahu.nz/docs/integrations)
+
+## Популярные брокеры по рынкам {#by-market}
+
+Как можно подключить самых популярных брокеров на рынках, для которых есть языки Capital, по состоянию на октябрь 2026 года. *Напрямую* означает раздел выше; *SnapTrade* — через [SnapTrade](#snaptrade); в остальных случаях указана причина, по которой счёт нельзя прочитать, а остаток можно вести как актив **Вручную**.
+
+| Рынок | Брокер | Как |
+|---|---|---|
+| США | Interactive Brokers, Alpaca, Tradier, tastytrade, Public.com | Напрямую |
+| США | Fidelity, Charles Schwab, Vanguard, Robinhood, E\*TRADE, Webull, TradeStation, Empower, Wells Fargo, Chase | SnapTrade |
+| США | Merrill, SoFi, Firstrade, Betterment, Wealthfront, Acorns, M1 | Нет публичного API |
+| Канада | Questrade, Wealthsimple, TD Direct Investing, BMO InvestorLine, CIBC Investor's Edge, Webull Canada | SnapTrade |
+| Канада | RBC Direct Investing, Scotia iTRADE, National Bank Direct Brokerage | Нет публичного API |
+| Великобритания и Ирландия | Trading 212, eToro, Interactive Brokers | Напрямую |
+| Великобритания и Ирландия | AJ Bell | SnapTrade |
+| Великобритания и Ирландия | Hargreaves Lansdown, Interactive Investor, Freetrade, Vanguard UK, Nutmeg, Moneybox | Нет публичного API |
+| Великобритания и Ирландия | IG | Невозможно: для каждой сессии нужен пароль от аккаунта |
+| Европа | Indexa Capital (Испания), eToro, Trading 212, Interactive Brokers | Напрямую |
+| Европа | DEGIRO, BUX | SnapTrade |
+| Европа | Trade Republic, Scalable Capital, MyInvestor, Bourse Direct, Boursorama, flatex, ING, Revolut | Нет публичного API для инвестиций |
+| Европа | XTB | Невозможно: API закрыт в марте 2025 года |
+| Европа | Saxo, comdirect | Невозможно: только короткоживущие токены или сессии с TAN |
+| Европа | Bitpanda, Freedom24 | Невозможно: API не возвращает общую стоимость счёта |
+| Россия и Казахстан | T-Invest, ALOR | Напрямую |
+| Россия и Казахстан | BCS | Невозможно: нет общей стоимости, а токен истекает через 90 дней |
+| Россия и Казахстан | Finam | Пока нет: валюта стоимости счёта не документирована |
+| Россия и Казахстан | Sber, VTB, Alfa-Investments, Halyk Finance, Freedom Broker | Нет публичного API или общей стоимости в нём |
+| Индия | Zerodha, Upstox | SnapTrade (правила SEBI завершают API-сессии ежедневно, поэтому подключение нужно часто обновлять) |
+| Индия | Groww, Angel One, ICICI Direct, Dhan, Kotak Neo, HDFC Securities, 5paisa | Невозможно: правила SEBI завершают каждую API-сессию ежедневно |
+| Пакистан и Бангладеш | Все биржевые брокеры | Нет публичного API |
+| Китай, Гонконг и Тайвань | moomoo | SnapTrade |
+| Китай, Гонконг и Тайвань | Futu, Tiger Brokers, Longbridge | Пока нет: срок действия ключа или формат ответа не полностью документированы, либо ключи нельзя ограничить чтением |
+| Китай, Гонконг и Тайвань | East Money, Huatai, CITIC, Yuanta, Fubon | Нет публичного веб-API (только настольные терминалы или SDK с сертификатами) |
+| Япония | OANDA Japan (счета, подходящие для доступа к API) | Напрямую, как OANDA |
+| Япония | SBI Securities, Rakuten Securities, Monex, Matsui | Нет публичного API |
+| Австралия и Новая Зеландия | CommSec, Stake | SnapTrade |
+| Австралия и Новая Зеландия | Sharesies, Hatch, Kernel, Simplicity, схемы KiwiSaver | Akahu (счета в Новой Зеландии) |
+| Ближний Восток и Африка | eToro | Напрямую |
+| Ближний Восток и Африка | Al Rajhi Capital, SNB Capital, Derayah, EFG Hermes, Thndr, Sarwa, Baraka, EasyEquities | Нет публичного API для частных лиц |
+| Юго-Восточная Азия | Stockbit, Ajaib, Bibit, IPOT, VPS | Нет публичного API |
+| Юго-Восточная Азия | SSI, TCBS, DNSE | Невозможно: 8-часовые токены с одноразовым кодом или только денежный остаток |
+| Латинская Америка | XP, Nubank, Inter, BTG Pactual, Itaú, GBM, InvertirOnline, Fintual | Нет публичного API для частных лиц или вход только по паролю |
+| Форекс и CFD | OANDA, Capital.com | Напрямую |
+| Форекс и CFD | Брокеры MetaTrader (XM, Exness, Pepperstone, IC Markets, Admirals) | Невозможно: нет доступа на чтение по HTTPS |
+| Форекс и CFD | Брокеры cTrader, FXCM, Forex.com | Невозможно: регистрация приложения, устаревший API или вход по паролю |
+
 ## Другие брокеры {#other-brokers}
 
 Capital подключается только к интерфейсам, которые работают с телефона по HTTPS, с токеном, который вы можете создать сами, и которые позволяют читать данные без возможности торговать. Пока это исключает:
@@ -157,5 +317,8 @@ Capital подключается только к интерфейсам, кот�
 | *У SnapTrade пока нет общей стоимости этого счёта; синхронизируйте подключение и повторите* | SnapTrade ещё не синхронизировал брокера; обновите позже. |
 | *Счета пока не подключены. Сначала подключите брокера через SnapTrade.* | Откройте Connection Portal из редактора и подключите брокера. |
 | *Отрицательная стоимость счёта (…) не поддерживается* | Счёт в минусе; он ничего не добавляет к вашим сбережениям. |
+| *tastytrade отклонил токен обновления или client secret; создайте новый grant* | Создайте новый grant для приложения и вставьте его refresh-токен; проверьте client secret. |
+| *Capital.com не открыл сессию; проверьте API key, логин и пароль ключа* | Ключ, e-mail или собственный пароль ключа неверны, либо срок действия ключа истёк. |
+| *Счёт не найден; выберите его заново* | Брокер больше не показывает этот счёт; откройте его для редактирования и выберите из **Загрузить счета**. |
 
 После любого из этих сообщений прежнее значение остаётся на экране с пометкой об устаревании.

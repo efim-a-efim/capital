@@ -41,7 +41,7 @@ Capital सिर्फ़ उन्हीं ऑपरेटरों से �
 | टोकन कॉन्ट्रैक्ट पते और एसेट ID | आपका चुना हुआ क्रिप्टो भाव ऑपरेटर | एसेट का भाव जानना |
 | करेंसी कोड | आपका चुना हुआ फ़िएट दर ऑपरेटर | करेंसी के बीच कन्वर्ट करना |
 | किसी ऑपरेटर के लिए आपकी डाली गई API कुंजी | सिर्फ़ वही ऑपरेटर | उस ऑपरेटर के पास आपके अपने अकाउंट का प्रमाणीकरण |
-| ब्रोकर खाते का एक्सेस टोकन या API कुंजी और खाता या क्वेरी id | सिर्फ़ वही ब्रोकर (Interactive Brokers, OANDA, Trading 212 या SnapTrade) | खाते का कुल मूल्य पढ़ना |
+| ब्रोकर खाते का एक्सेस टोकन या API कुंजी और खाता या क्वेरी id | सिर्फ़ वही ब्रोकर ([ब्रोकर और फ़ॉरेक्स खाते]({{ page.base }}/accounts) देखें) | खाते का कुल मूल्य पढ़ना |
 
 हर इंटरनेट अनुरोध की तरह, हर ऑपरेटर आपका IP पता भी देखता है। ऑपरेटर डेवलपर से स्वतंत्र हैं और अनुरोध को अपनी शर्तों और गोपनीयता नीतियों के तहत प्रोसेस करते हैं, जिनके लिंक ऐप में सेटिंग → स्रोत / श्रेय में दिए गए हैं:
 
@@ -53,7 +53,7 @@ Capital सिर्फ़ उन्हीं ऑपरेटरों से �
 | TRON और TRC-20 टोकन | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | क्रिप्टो भाव | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | फ़िएट दरें | [Frankfurter](https://frankfurter.dev), [यूरोपीय सेंट्रल बैंक](https://www.ecb.europa.eu) |
-| ब्रोकर खाते | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| ब्रोकर खाते | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 इसके अलावा कहीं और कुछ नहीं भेजा जाता। कोई डेटा बेचा नहीं जाता, विज्ञापन के लिए साझा नहीं किया जाता और प्रोफ़ाइल बनाने में इस्तेमाल नहीं होता। सार्वजनिक ब्लॉकचेन क्वेरी से यह ज़ाहिर होता है कि आप जिस पते को ट्रैक करते हैं, उसमें आपके IP पते पर मौजूद किसी व्यक्ति की दिलचस्पी है; अगर यह आपके लिए मायने रखता है, तो VPN इस्तेमाल करें।
 

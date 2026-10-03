@@ -41,7 +41,7 @@ Capital 只联系您在“设置”中选择的运营方，只使用 HTTPS，并
 | 代币合约地址和资产 ID | 您选择的加密货币价格运营方 | 为资产定价 |
 | 货币代码 | 您选择的法定货币汇率运营方 | 在不同货币之间换算 |
 | 您为某个运营方填写的 API 密钥 | 仅限该运营方 | 用您自己在该运营方的账号进行身份验证 |
-| 券商账户的访问令牌或 API 密钥，以及账户 ID 或查询 ID | 仅限该券商（Interactive Brokers、OANDA、Trading 212 或 SnapTrade） | 读取账户的总价值 |
+| 券商账户的访问令牌或 API 密钥，以及账户 ID 或查询 ID | 仅限该券商（见[券商和外汇账户]({{ page.base }}/accounts)） | 读取账户的总价值 |
 
 与任何互联网请求一样，每个运营方也能看到您的 IP 地址。这些运营方独立于开发者，按照各自的条款和隐私政策处理请求，相关链接可在应用的“设置 → 数据来源/署名”中找到：
 
@@ -53,7 +53,7 @@ Capital 只联系您在“设置”中选择的运营方，只使用 HTTPS，并
 | TRON 和 TRC-20 代币 | [TronGrid](https://www.trongrid.io)、[PublicNode](https://publicnode.com) |
 | 加密货币价格 | [DefiLlama](https://defillama.com)、[CoinGecko](https://www.coingecko.com)、[CoinPaprika](https://coinpaprika.com) |
 | 法定货币汇率 | [Frankfurter](https://frankfurter.dev)、[欧洲中央银行](https://www.ecb.europa.eu) |
-| 券商账户 | [Interactive Brokers](https://www.interactivebrokers.com)、[OANDA](https://www.oanda.com)、[Trading 212](https://www.trading212.com)、[SnapTrade](https://snaptrade.com) |
+| 券商账户 | [Interactive Brokers](https://www.interactivebrokers.com)、[OANDA](https://www.oanda.com)、[Trading 212](https://www.trading212.com)、[SnapTrade](https://snaptrade.com)、[Alpaca](https://alpaca.markets)、[Tradier](https://tradier.com)、[tastytrade](https://tastytrade.com)、[Public.com](https://public.com)、[eToro](https://www.etoro.com)、[Indexa Capital](https://indexacapital.com)、[T-Invest](https://www.tbank.ru/invest/)、[ALOR](https://www.alorbroker.ru)、[Capital.com](https://capital.com)、[Akahu](https://www.akahu.nz) |
 
 数据不会发送到其他任何地方。数据不会被出售，不会为广告目的而共享，也不会用于建立用户画像。公开的区块链查询会暴露出：使用您 IP 地址的某个人对您跟踪的地址感兴趣；如果您介意，请使用 VPN。
 

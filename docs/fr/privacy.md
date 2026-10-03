@@ -41,7 +41,7 @@ Capital contacte uniquement les opérateurs que vous choisissez dans les Paramè
 | Adresses de contrats de jetons et identifiants d’actifs | L’opérateur de cours crypto que vous avez sélectionné | Obtenir le cours des actifs |
 | Codes de devise | L’opérateur de taux de change que vous avez sélectionné | Convertir entre devises |
 | La clé API que vous avez saisie pour un opérateur | Cet opérateur uniquement | Vous authentifier sur votre propre compte chez lui |
-| Le jeton d’accès ou la clé API et l’identifiant du compte ou de la requête d’un compte de courtage | Ce courtier uniquement (Interactive Brokers, OANDA, Trading 212 ou SnapTrade) | Lire la valeur totale du compte |
+| Le jeton d’accès ou la clé API et l’identifiant du compte ou de la requête d’un compte de courtage | Ce courtier uniquement (voir [Comptes de courtage et de forex]({{ page.base }}/accounts)) | Lire la valeur totale du compte |
 
 Chaque opérateur voit aussi votre adresse IP, comme pour toute requête sur Internet. Les opérateurs sont indépendants du développeur et traitent la requête selon leurs propres conditions et politiques de confidentialité, accessibles depuis Paramètres → Sources / crédits dans l’application :
 
@@ -53,7 +53,7 @@ Chaque opérateur voit aussi votre adresse IP, comme pour toute requête sur Int
 | TRON et jetons TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Cours des cryptomonnaies | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Taux de change des devises | [Frankfurter](https://frankfurter.dev), [Banque centrale européenne](https://www.ecb.europa.eu) |
-| Comptes de courtage | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| Comptes de courtage | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 Rien n’est envoyé ailleurs. Aucune donnée n’est vendue, partagée à des fins publicitaires ni utilisée pour établir des profils. Les requêtes sur des blockchains publiques révèlent que l’adresse que vous suivez intéresse quelqu’un situé à votre adresse IP ; utilisez un VPN si cela compte pour vous.
 

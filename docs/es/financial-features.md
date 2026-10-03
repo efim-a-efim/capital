@@ -45,5 +45,5 @@ Los requisitos específicos por país para aplicaciones de préstamos personales
 
 - Los datos de mercado proceden de operadores externos elegidos por el usuario (consulte la [Política de privacidad]({{ page.base }}/privacy)). La aplicación muestra en Ajustes el nombre y el sitio web de cada operador.
 - Las consultas de billeteras usan API públicas de blockchain de solo lectura.
-- Las cuentas de bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade) se leen con un token o una clave que el usuario crea en el propio portal del bróker; la aplicación llama solo a puntos de acceso de informes y no puede dar órdenes ni mover dinero. La configuración está documentada en [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
+- Las cuentas de bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) se leen con un token o una clave que el usuario crea en el propio portal del bróker; la aplicación llama solo a puntos de acceso de informes y no puede dar órdenes ni mover dinero. La configuración está documentada en [Cuentas de bróker y de divisas]({{ page.base }}/accounts).
 - La aplicación funciona íntegramente en el dispositivo y no tiene ningún servidor gestionado por el desarrollador.

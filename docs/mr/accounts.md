@@ -10,7 +10,7 @@ class: doc
 
 Capital ब्रोकरेज किंवा फॉरेक्स खात्याचे एकूण मूल्य क्रिप्टो वॉलेटप्रमाणेच वाचू शकते. तुम्ही खाते कप्प्यात **ब्रोकर खाते** प्रकारचे होल्डिंग म्हणून जोडता, आणि प्रत्येक रिफ्रेशला अॅप खात्याचे नेट अॅसेट व्हॅल्यू (NAV) खात्याच्या बेस चलनात मिळवते. अॅप फक्त वाचते: ते ब्रोकरचा रिपोर्टिंग इंटरफेस आणि तुम्ही स्वतः तयार केलेला टोकन वापरते, ते कधीही ऑर्डर देत नाही, बदलत नाही किंवा रद्द करत नाही, आणि पैसे हलवत नाही.
 
-Capital फक्त अशा इंटरफेसशी जोडते ज्यांची क्रेडेन्शियल्स दीर्घायुषी आहेत: तुम्ही एकदा तयार केलेला टोकन किंवा की, जो तुम्ही रद्द करेपर्यंत वैध राहतो (किंवा Interactive Brokers साठी, तुम्ही निवडलेल्या मुदतीपर्यंत, कमाल एक वर्ष). आज समर्थित:
+Capital फक्त अशा इंटरफेसशी जोडते ज्यांची क्रेडेन्शियल्स दीर्घायुषी आहेत: तुम्ही एकदा तयार केलेला टोकन किंवा की, जो तुम्ही रद्द करेपर्यंत, तुम्ही निवडलेल्या मुदतीपर्यंत किंवा किमान काही महिने वैध राहतो (T-Invest टोकन तीन महिने न वापरल्यास निष्क्रिय होतात, ALOR टोकन एका वर्षानंतर). खालील प्रत्येक ब्रोकर अॅपची भाषा कोणतीही असो उपलब्ध आहे. आज समर्थित:
 
 | ब्रोकर | वापरलेला इंटरफेस | काय वाचले जाते |
 |---|---|---|
@@ -18,6 +18,16 @@ Capital फक्त अशा इंटरफेसशी जोडते ज�
 | [OANDA](#oanda) | v20 REST API, fxTrade लाइव्ह खाती | रिफ्रेशच्या वेळचे नेट अॅसेट व्हॅल्यू, खात्याच्या चलनात |
 | [Trading 212](#trading-212) | Public API, Invest आणि Stocks ISA खाती | रिफ्रेशच्या वेळचे खात्याचे एकूण मूल्य, खात्याच्या मुख्य चलनात |
 | [SnapTrade](#snaptrade) | SnapTrade Personal, अनेक ब्रोकर समाविष्ट करणारा अॅग्रिगेटर | ब्रोकर SnapTrade ला कळवतो तसे खात्याचे एकूण मूल्य, खात्याच्या चलनात |
+| [Alpaca](#alpaca) | Trading API, लाइव्ह खाती | इक्विटी (रोख अधिक पोझिशन्स), अमेरिकी डॉलरमध्ये |
+| [Tradier](#tradier) | Brokerage API | एकूण इक्विटी, अमेरिकी डॉलरमध्ये |
+| [tastytrade](#tastytrade) | वैयक्तिक OAuth ग्रँटसह Open API | नेट लिक्विडेटिंग व्हॅल्यू, अमेरिकी डॉलरमध्ये |
+| [Public.com](#public) | Individual API | खात्याचे एकूण मूल्य, अमेरिकी डॉलरमध्ये |
+| [eToro](#etoro) | Public API | निवडलेल्या खात्याची शिल्लक (ट्रेडिंग खात्यासाठी: रोख अधिक गुंतवलेल्या पोझिशन्स), त्याच्या चलनात |
+| [Indexa Capital](#indexa-capital) | REST API, फक्त-वाचन टोकन | शेवटच्या मूल्यांकन तारखेचे पोर्टफोलिओ एकूण, खात्याच्या चलनात |
+| [T-Invest](#t-invest) | T-Invest API (T-Bank) | पोर्टफोलिओचे एकूण मूल्य, रूबलमध्ये |
+| [ALOR](#alor) | ALOR OpenAPI | मॉस्को एक्स्चेंजवरील पोर्टफोलिओ मूल्यांकन, रूबलमध्ये |
+| [Capital.com](#capital-com) | Public API, लाइव्ह खाती | खुल्या नफा-तोट्यासह शिल्लक, खात्याच्या चलनात |
+| [Akahu](#akahu) | Akahu वैयक्तिक अॅप, न्यूझीलंडचा अॅग्रिगेटर | जोडलेल्या खात्याची शिल्लक (Sharesies, Hatch, Kernel, KiwiSaver आणि इतर), त्याच्या चलनात |
 
 ## सुरू करण्यापूर्वी {#before-you-start}
 
@@ -129,6 +139,156 @@ Trading 212 दस्तऐवज: [Public API](https://docs.trading212.com/api)
 
 SnapTrade दस्तऐवज: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Capital मध्ये खाते जोडणे {#connect}
+
+खालील विभागांत प्रत्येक ब्रोकरकडे क्रेडेन्शियल कसे तयार करायचे ते सांगितले आहे. Capital मध्ये सर्वांसाठी पायऱ्या सारख्याच आहेत:
+
+1. **ब्रोकर्स → क्रेडेन्शियल्स**: ब्रोकरची क्रेडेन्शियल बटणे दाबा आणि प्रत्येक मूल्य पेस्ट करा.
+2. **ब्रोकर्स → +**: नाव टाका, **ब्रोकर** निवडा, मग **खाती मिळवा** दाबा आणि खाते निवडा (किंवा त्याचा id टाका) आणि सेव्ह करा.
+3. कप्पा उघडा, **होल्डिंग जोडा**, **ट्रॅकिंग** ला **ब्रोकर खाते** सेट करा, खाते निवडा आणि सेव्ह करा. **रिफ्रेश करा** दाबा.
+
+## Alpaca {#alpaca}
+
+Alpaca प्रत्येक खात्यासाठी एक की id आणि एक सिक्रेट देते; ती पुन्हा तयार करेपर्यंत वैध राहतात. फक्त लाइव्ह खाती वाचली जातात: पेपर खात्याच्या की लाइव्ह API वर चालत नाहीत.
+
+1. [Alpaca dashboard](https://app.alpaca.markets) मध्ये लॉग इन करा, तुमच्या लाइव्ह खात्यावर जा आणि मुख्य पानावर **API Keys** खाली **Generate New Keys** दाबा.
+2. **API Key ID** आणि **Secret Key** कॉपी करा; सिक्रेट एकदाच दाखवले जाते.
+3. Capital मध्ये ती **API की: Alpaca** आणि **API सिक्रेट: Alpaca** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा. **खाती मिळवा** कीचा खाते क्रमांक दाखवते.
+
+Alpaca दस्तऐवज: [Authentication](https://docs.alpaca.markets/docs/authentication) · [Get account](https://docs.alpaca.markets/reference/getaccount-1)
+
+## Tradier {#tradier}
+
+Tradier सेटिंग्जमधील API टोकन कधीही कालबाह्य होत नाही.
+
+1. Tradier मध्ये लॉग इन करा आणि [Settings → API Access](https://web.tradier.com/user/api) उघडा. तुमच्या ब्रोकरेज खात्याचा **API Access Token** कॉपी करा (सँडबॉक्स टोकन नव्हे).
+2. Capital मध्ये तो **अॅक्सेस टोकन: Tradier** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा.
+
+Tradier दस्तऐवज: [Authentication](https://docs.tradier.com/docs/authentication) · [Get balances](https://docs.tradier.com/reference/brokerage-api-accounts-get-account-balance)
+
+## tastytrade {#tastytrade}
+
+tastytrade वैयक्तिक OAuth ग्रँट वापरते: तुम्ही स्वतःसाठी एक अॅप्लिकेशन आणि एक ग्रँट तयार करता, ज्याचा रिफ्रेश टोकन कधीही कालबाह्य होत नाही. Capital प्रत्येक रिफ्रेशला त्याच्या बदल्यात 15 मिनिटांचा अॅक्सेस टोकन मिळवते.
+
+1. [my.tastytrade.com](https://my.tastytrade.com) वर **Manage → My Profile → API → OAuth Applications** उघडा आणि **+ New OAuth client** दाबा. नाव द्या, कोणताही HTTPS redirect URI (उदाहरणार्थ `https://capital.fimych.dev`) आणि फक्त **read** स्कोप निवडा. सेव्ह करा आणि **Client Secret** कॉपी करा; तो एकदाच दाखवला जातो.
+2. अॅप्लिकेशनच्या शेजारी **Manage** दाबा, मग **Create Grant**, आणि **refresh token** कॉपी करा.
+3. Capital मध्ये ते **रिफ्रेश टोकन: tastytrade** आणि **क्लायंट सिक्रेट: tastytrade** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा.
+
+tastytrade दस्तऐवज: [OAuth2 and personal grants](https://developer.tastytrade.com/docs/authentication/oauth2) · [Balances](https://developer.tastytrade.com/reference/balances-and-positions/getAccountsAccountNumberBalances)
+
+## Public.com {#public}
+
+Public चा Individual API तुमच्या स्वतःच्या खात्यांसाठी आहे. सिक्रेट की दीर्घायुषी आणि रद्द करता येणारी आहे; Capital प्रत्येक रिफ्रेशला तिच्या बदल्यात पाच मिनिटांचा अॅक्सेस टोकन मिळवते.
+
+1. Public च्या वेब अॅपमध्ये सेटिंग्जमधील **API** पान उघडा आणि **secret key** तयार करा.
+2. Capital मध्ये ती **सिक्रेट की: Public.com** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा.
+
+Public दस्तऐवज: [Quickstart](https://public.com/api/docs/quickstart) · [Access tokens](https://public.com/api/docs/resources/authorization/create-personal-access-token) · [Portfolio](https://public.com/api/docs/resources/account-details/get-account-portfolio-v2)
+
+## eToro {#etoro}
+
+eToro च्या की दीर्घायुषी आहेत; त्यांना समाप्ती तारीख आणि IP यादी देता येते, आणि त्या फक्त-वाचन करता येतात. तुमचे eToro खाते सत्यापित (verified) असले पाहिजे.
+
+1. eToro मध्ये **Settings → Trading → API Key Management** उघडा आणि **Create New Key** दाबा. **Real** वातावरण, **Read** परवानगी, IP यादी नाही, आणि हवी असल्यास समाप्ती तारीख निवडा. SMS कोडने पुष्टी करा.
+2. **Public API Key** आणि **User Key** कॉपी करा; user key एकदाच दाखवली जाते.
+3. Capital मध्ये त्या **सार्वजनिक API की: eToro** आणि **वापरकर्ता की: eToro** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा. **खाती मिळवा** तुमची ट्रेडिंग, रोख आणि इतर eToro खाती दाखवते.
+
+eToro दस्तऐवज: [Authentication](https://api-portal.etoro.com/core/getting-started/authentication) · [Balances](https://api-portal.etoro.com/api-reference/balances/get-aggregated-balances) · [Getting started](https://builders.etoro.com/get-started)
+
+## Indexa Capital {#indexa-capital}
+
+Indexa च्या खाजगी विभागातील टोकन फक्त-वाचन आहे. तो तुमचा ई-मेल, पासवर्ड आणि डिव्हाइस यांच्याशी जोडलेला असतो: पासवर्ड बदलल्यावर तो पुन्हा तयार करा.
+
+1. Indexa च्या खाजगी विभागात **वापरकर्ता सेटिंग्ज → अॅप्लिकेशन्स** उघडा आणि टोकन कॉपी करा.
+2. Capital मध्ये तो **अॅक्सेस टोकन: Indexa Capital** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा. पेन्शन आणि गुंतवणूक दोन्ही खाती दाखवली जातात.
+
+Indexa फंडांचे मूल्यांकन प्रत्येक व्यावसायिक दिवशी एकदा करते; निरीक्षण तारीख ही ती मूल्यांकन तारीख असते.
+
+Indexa Capital दस्तऐवज: [REST API](https://indexacapital.com/en/api-rest-v1) · [Connecting with the API](https://support.indexacapital.com/es/esp/api-conectar)
+
+## T-Invest {#t-invest}
+
+T-Bank चा T-Invest API तुम्ही गुंतवणूक सेटिंग्जमध्ये दिलेला टोकन स्वीकारतो. टोकन शेवटच्या वापरानंतर तीन महिन्यांनी निष्क्रिय होतो आणि दिल्यानंतर सात दिवसांत वापरला पाहिजे; आठवड्याला एकदा रिफ्रेश केल्यास तो चालू राहतो. **फक्त-वाचन** टोकन निवडा.
+
+1. [T-Invest सेटिंग्ज](https://www.tbank.ru/invest/settings/) उघडा आणि एक्स्चेंजसाठी **फक्त-वाचन** प्रवेशासह (सर्व खाती किंवा एक) **T-Invest API टोकन** द्या. तो देण्यासाठी कोडने ट्रेडची पुष्टी बंद असली पाहिजे. टोकन कॉपी करा; तो एकदाच दाखवला जातो.
+2. Capital मध्ये तो **अॅक्सेस टोकन: T-Invest** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा.
+
+T-Bank हा API रशियन Trusted Root CA अंतर्गत चालवते, जे Android मध्ये समाविष्ट नाही. Capital ते प्रमाणपत्र फक्त T-Invest API च्या पत्त्यासाठी (`invest-public-api.tbank.ru`) विश्वासार्ह मानते, इतर कोणत्याही कनेक्शनसाठी नाही.
+
+T-Invest दस्तऐवज: [Tokens](https://developer.tbank.ru/invest/intro/intro/token) · [GetPortfolio](https://developer.tbank.ru/invest/api/operations-service-get-portfolio)
+
+## ALOR {#alor}
+
+ALOR एक वर्ष वैध असलेला रिफ्रेश टोकन देते; Capital प्रत्येक रिफ्रेशला त्याच्या बदल्यात 30 मिनिटांचा अॅक्सेस टोकन मिळवते. ALOR फक्त-वाचन टोकन देत नाही: टोकनने ट्रेड करता येईल, Capital फक्त वाचते.
+
+1. [ALOR developer portal](https://alor.dev) वर साइन इन करा, तुमचे ट्रेडिंग खाते जोडा, **API Access Tokens** उघडा आणि **Create Token** दाबा. रिफ्रेश टोकन कॉपी करा.
+2. Capital मध्ये तो **रिफ्रेश टोकन: ALOR** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा. **खाती मिळवा** खात्याचे पोर्टफोलिओ दाखवते (शेअर बाजार D…, चलन बाजार G…, डेरिव्हेटिव्ह्ज 7500…); प्रत्येक पोर्टफोलिओसाठी एक जोडा.
+
+ALOR दस्तऐवज: [Refresh token](https://alor.dev/docs/en/api/access/authorization/refresh-token) · [Access token](https://alor.dev/docs/en/api/access/authorization/access-token)
+
+## Capital.com {#capital-com}
+
+Capital.com च्या की डीफॉल्टनुसार एक वर्ष वैध असतात, किंवा तुम्ही निवडलेल्या तारखेपर्यंत. त्यांना ट्रेडिंगचे अधिकार असतात (Capital.com कडे फक्त-वाचन की नाहीत); Capital फक्त वाचते. कीचा स्वतःचा पासवर्ड असतो, जो तुमच्या खात्याचा पासवर्ड नसतो.
+
+1. दोन-घटक प्रमाणीकरण चालू करा, मग **Settings → API integrations** उघडा आणि **Generate API key** दाबा. लेबल आणि **custom password** द्या, समाप्ती तारीख तशीच ठेवा किंवा निवडा, आणि 2FA कोडने पुष्टी करा. की कॉपी करा; ती एकदाच दाखवली जाते.
+2. Capital मध्ये **API की: Capital.com**, तुमचा लॉगिन ई-मेल **लॉगिन ई-मेल: Capital.com** म्हणून आणि custom password **API की पासवर्ड: Capital.com** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा. फक्त लाइव्ह खाती वाचली जातात.
+
+Capital.com दस्तऐवज: [Public API](https://open-api.capital.com/)
+
+## Akahu {#akahu}
+
+[Akahu](https://www.akahu.nz) न्यूझीलंडच्या बँका, गुंतवणूक प्लॅटफॉर्म आणि KiwiSaver योजना जोडते; मोफत वैयक्तिक अॅप तुमची स्वतःची खाती वाचते. Akahu डेटा साधारण दिवसातून एकदा रिफ्रेश करते.
+
+1. [my.akahu.nz](https://my.akahu.nz) वर साइन अप करा आणि तुमचे प्रदाते जोडा (उदाहरणार्थ Sharesies, Hatch, Kernel, Simplicity, Milford किंवा तुमची KiwiSaver योजना).
+2. **Developers** पान उघडा, डेव्हलपर अटी स्वीकारा आणि **App ID Token** व **User Access Token** कॉपी करा.
+3. Capital मध्ये ते **App ID टोकन: Akahu** आणि **वापरकर्ता अॅक्सेस टोकन: Akahu** म्हणून पेस्ट करा, मग [Capital मध्ये खाते जोडणे](#connect) चे अनुसरण करा.
+
+Akahu दस्तऐवज: [Personal apps](https://developers.akahu.nz/docs/personal-apps) · [Accounts](https://developers.akahu.nz/reference/get_accounts) · [Supported providers](https://developers.akahu.nz/docs/integrations)
+
+## बाजारानुसार लोकप्रिय ब्रोकर {#by-market}
+
+Capital च्या भाषांच्या बाजारांतील सर्वाधिक वापरले जाणारे ब्रोकर कसे जोडता येतात, ऑक्टोबर 2026 नुसार. *थेट* म्हणजे वरील विभाग; *SnapTrade* म्हणजे [SnapTrade](#snaptrade) द्वारे; अन्यथा ते वाचता न येण्याचे कारण, आणि शिल्लक **मॅन्युअल** होल्डिंग म्हणून ठेवता येते.
+
+| बाजार | ब्रोकर | कसे |
+|---|---|---|
+| अमेरिका | Interactive Brokers, Alpaca, Tradier, tastytrade, Public.com | थेट |
+| अमेरिका | Fidelity, Charles Schwab, Vanguard, Robinhood, E\*TRADE, Webull, TradeStation, Empower, Wells Fargo, Chase | SnapTrade |
+| अमेरिका | Merrill, SoFi, Firstrade, Betterment, Wealthfront, Acorns, M1 | सार्वजनिक API नाही |
+| कॅनडा | Questrade, Wealthsimple, TD Direct Investing, BMO InvestorLine, CIBC Investor's Edge, Webull Canada | SnapTrade |
+| कॅनडा | RBC Direct Investing, Scotia iTRADE, National Bank Direct Brokerage | सार्वजनिक API नाही |
+| युनायटेड किंग्डम आणि आयर्लंड | Trading 212, eToro, Interactive Brokers | थेट |
+| युनायटेड किंग्डम आणि आयर्लंड | AJ Bell | SnapTrade |
+| युनायटेड किंग्डम आणि आयर्लंड | Hargreaves Lansdown, Interactive Investor, Freetrade, Vanguard UK, Nutmeg, Moneybox | सार्वजनिक API नाही |
+| युनायटेड किंग्डम आणि आयर्लंड | IG | शक्य नाही: प्रत्येक सत्राला खात्याचा पासवर्ड लागतो |
+| युरोप | Indexa Capital (स्पेन), eToro, Trading 212, Interactive Brokers | थेट |
+| युरोप | DEGIRO, BUX | SnapTrade |
+| युरोप | Trade Republic, Scalable Capital, MyInvestor, Bourse Direct, Boursorama, flatex, ING, Revolut | गुंतवणुकीसाठी सार्वजनिक API नाही |
+| युरोप | XTB | शक्य नाही: API मार्च 2025 मध्ये बंद झाला |
+| युरोप | Saxo, comdirect | शक्य नाही: फक्त अल्पायुषी टोकन किंवा TAN सत्रे |
+| युरोप | Bitpanda, Freedom24 | शक्य नाही: API खात्याचे एकूण मूल्य देत नाही |
+| रशिया आणि कझाकस्तान | T-Invest, ALOR | थेट |
+| रशिया आणि कझाकस्तान | BCS | शक्य नाही: एकूण मूल्य नाही, आणि त्याचा टोकन 90 दिवसांनी कालबाह्य होतो |
+| रशिया आणि कझाकस्तान | Finam | अजून नाही: खात्याच्या मूल्याचे चलन दस्तऐवजात दिलेले नाही |
+| रशिया आणि कझाकस्तान | Sber, VTB, Alfa-Investments, Halyk Finance, Freedom Broker | सार्वजनिक API नाही, किंवा त्यात एकूण मूल्य नाही |
+| भारत | Zerodha, Upstox | SnapTrade (SEBI नियमांनुसार API सत्रे रोज संपतात, म्हणून कनेक्शन वारंवार नूतनीकरण करावे लागते) |
+| भारत | Groww, Angel One, ICICI Direct, Dhan, Kotak Neo, HDFC Securities, 5paisa | शक्य नाही: SEBI नियमांनुसार प्रत्येक API सत्र रोज संपते |
+| पाकिस्तान आणि बांगलादेश | सर्व एक्स्चेंज ब्रोकर | सार्वजनिक API नाही |
+| चीन, हाँगकाँग आणि तैवान | moomoo | SnapTrade |
+| चीन, हाँगकाँग आणि तैवान | Futu, Tiger Brokers, Longbridge | अजून नाही: कीचा कालावधी किंवा प्रतिसादाचे स्वरूप पूर्ण दस्तऐवजित नाही, किंवा की फक्त वाचनापुरत्या मर्यादित करता येत नाहीत |
+| चीन, हाँगकाँग आणि तैवान | East Money, Huatai, CITIC, Yuanta, Fubon | सार्वजनिक वेब API नाही (फक्त डेस्कटॉप टर्मिनल किंवा प्रमाणपत्र SDK) |
+| जपान | OANDA Japan (API प्रवेशासाठी पात्र खाती) | थेट, OANDA प्रमाणे |
+| जपान | SBI Securities, Rakuten Securities, Monex, Matsui | सार्वजनिक API नाही |
+| ऑस्ट्रेलिया आणि न्यूझीलंड | CommSec, Stake | SnapTrade |
+| ऑस्ट्रेलिया आणि न्यूझीलंड | Sharesies, Hatch, Kernel, Simplicity, KiwiSaver schemes | Akahu (न्यूझीलंडची खाती) |
+| मध्यपूर्व आणि आफ्रिका | eToro | थेट |
+| मध्यपूर्व आणि आफ्रिका | Al Rajhi Capital, SNB Capital, Derayah, EFG Hermes, Thndr, Sarwa, Baraka, EasyEquities | व्यक्तींसाठी सार्वजनिक API नाही |
+| आग्नेय आशिया | Stockbit, Ajaib, Bibit, IPOT, VPS | सार्वजनिक API नाही |
+| आग्नेय आशिया | SSI, TCBS, DNSE | शक्य नाही: एकदाच वापरायच्या कोडसह 8 तासांचे टोकन, किंवा फक्त रोख शिल्लक |
+| लॅटिन अमेरिका | XP, Nubank, Inter, BTG Pactual, Itaú, GBM, InvertirOnline, Fintual | व्यक्तींसाठी सार्वजनिक API नाही, किंवा फक्त पासवर्डने लॉगिन |
+| फॉरेक्स आणि CFD | OANDA, Capital.com | थेट |
+| फॉरेक्स आणि CFD | MetaTrader ब्रोकर (XM, Exness, Pepperstone, IC Markets, Admirals) | शक्य नाही: HTTPS वाचन प्रवेश नाही |
+| फॉरेक्स आणि CFD | cTrader ब्रोकर, FXCM, Forex.com | शक्य नाही: अॅप नोंदणी, कालबाह्य API किंवा पासवर्डने लॉगिन |
+
 ## इतर ब्रोकर {#other-brokers}
 
 Capital फक्त अशा इंटरफेसशी जोडते जे फोनवरून HTTPS द्वारे चालतात, ज्यासाठी तुम्ही स्वतः टोकन तयार करू शकता आणि जे ट्रेड करू न देता फक्त वाचू देतात. त्यामुळे सध्या हे वगळले जाते:
@@ -157,5 +317,8 @@ Capital फक्त अशा इंटरफेसशी जोडते ज�
 | *SnapTrade कडे या खात्याचे एकूण मूल्य अजून नाही; कनेक्शन सिंक करा आणि पुन्हा प्रयत्न करा* | SnapTrade ने ब्रोकरेज अजून सिंक केलेले नाही; नंतर पुन्हा रिफ्रेश करा. |
 | *अजून कोणतेही खाते जोडलेले नाही. आधी SnapTrade द्वारे ब्रोकरेज जोडा.* | एडिटरमधून Connection Portal उघडा आणि ब्रोकर जोडा. |
 | *खात्याचे ऋण मूल्य … समर्थित नाही* | खाते डेबिटमध्ये आहे; ते तुमच्या बचतीत काहीही भर घालत नाही. |
+| *tastytrade ने रिफ्रेश टोकन किंवा क्लायंट सिक्रेट नाकारला; नवीन ग्रँट तयार करा* | अॅप्लिकेशनसाठी नवीन ग्रँट तयार करा आणि त्याचा रिफ्रेश टोकन पेस्ट करा; क्लायंट सिक्रेट तपासा. |
+| *Capital.com ने सेशन उघडले नाही; API की, लॉगिन आणि की पासवर्ड तपासा* | की, ई-मेल किंवा कीचा custom पासवर्ड चुकीचा आहे, किंवा की कालबाह्य झाली आहे. |
+| *खाते सापडले नाही; ते पुन्हा निवडा* | ब्रोकर आता हे खाते दाखवत नाही; ते संपादित करा आणि **खाती मिळवा** मधून निवडा. |
 
 यांपैकी कोणतेही घडल्यावर मागील मूल्य दिसत राहते, जुने म्हणून चिन्हांकित.

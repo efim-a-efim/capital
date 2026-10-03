@@ -47,5 +47,5 @@ Capital 是一款个人储蓄追踪应用。它记录用户已经拥有的资产
 
 - 市场数据来自用户选择的第三方运营方（见[隐私政策]({{ page.base }}/privacy)）。应用会在“设置”中显示运营方的名称和网站。
 - 钱包查询使用公开的只读区块链 API。
-- 券商账户（Interactive Brokers、OANDA、Trading 212、SnapTrade）通过用户在券商自己的门户中创建的令牌或密钥读取；应用只调用报表接口，无法下单或转移资金。设置方法见[券商和外汇账户]({{ page.base }}/accounts)。
+- 券商账户（Interactive Brokers、OANDA、Trading 212、SnapTrade、Alpaca、Tradier、tastytrade、Public.com、eToro、Indexa Capital、T-Invest、ALOR、Capital.com、Akahu）通过用户在券商自己的门户中创建的令牌或密钥读取；应用只调用报表接口，无法下单或转移资金。设置方法见[券商和外汇账户]({{ page.base }}/accounts)。
 - 应用完全在设备上运行，没有开发者运营的服务器。

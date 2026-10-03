@@ -58,7 +58,7 @@ Tiền từ kế hoạch được áp dụng sau các hũ hiện có, cho các m
 
 ## Môi giới
 
-Thẻ Môi giới → **+**. Tài khoản môi giới là một kết nối chỉ đọc: chọn nhà môi giới (Interactive Brokers, OANDA, Trading 212 hoặc SnapTrade), nhập mã tài khoản hoặc mã truy vấn rồi lưu; mã truy cập hoặc khóa của nhà môi giới chỉ cần nhập một lần trong mục **Thông tin xác thực** ở cùng thẻ và dùng được cho mọi tài khoản của nhà môi giới đó. Thẻ liệt kê từng tài khoản cùng giá trị gần nhất và hũ mà nó được liên kết. **Bỏ qua số dư nhỏ hơn** một số tiền theo tiền tệ mặc định của bạn (mặc định là 1) khiến số dư lẻ được tính là 0 trong hũ. Hãy liên kết tài khoản với một hũ qua **Thêm tài sản → Tài khoản môi giới**; xóa tài sản để hủy liên kết, xóa tài khoản để gỡ kết nối. Các bước thiết lập, kèm liên kết đến tài liệu của chính các nhà môi giới, nằm ở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
+Thẻ Môi giới → **+**. Tài khoản môi giới là một kết nối chỉ đọc: chọn nhà môi giới (danh sách có tại [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts)), nhập mã tài khoản hoặc mã truy vấn rồi lưu; mã truy cập hoặc khóa của nhà môi giới chỉ cần nhập một lần trong mục **Thông tin xác thực** ở cùng thẻ và dùng được cho mọi tài khoản của nhà môi giới đó. Thẻ liệt kê từng tài khoản cùng giá trị gần nhất và hũ mà nó được liên kết. **Bỏ qua số dư nhỏ hơn** một số tiền theo tiền tệ mặc định của bạn (mặc định là 1) khiến số dư lẻ được tính là 0 trong hũ. Hãy liên kết tài khoản với một hũ qua **Thêm tài sản → Tài khoản môi giới**; xóa tài sản để hủy liên kết, xóa tài khoản để gỡ kết nối. Các bước thiết lập, kèm liên kết đến tài liệu của chính các nhà môi giới, nằm ở [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts).
 
 ## Làm mới
 

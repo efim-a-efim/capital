@@ -41,7 +41,7 @@ Capital kontaktiert nur die Betreiber, die Sie in den Einstellungen wählen, nur
 | Token-Vertragsadressen und Asset-IDs | Der von Ihnen gewählte Betreiber für Kryptopreise | Vermögenswerte bewerten |
 | Währungscodes | Der von Ihnen gewählte Betreiber für Wechselkurse | Zwischen Währungen umrechnen |
 | Der API-Schlüssel, den Sie für einen Betreiber eingegeben haben | Nur dieser Betreiber | Ihr eigenes Konto bei diesem Betreiber authentifizieren |
-| Das Zugriffstoken oder der API-Schlüssel und die Konto- oder Query-ID eines Brokerkontos | Nur dieser Broker (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Den Gesamtwert des Kontos lesen |
+| Das Zugriffstoken oder der API-Schlüssel und die Konto- oder Query-ID eines Brokerkontos | Nur dieser Broker (siehe [Broker- und Forex-Konten]({{ page.base }}/accounts)) | Den Gesamtwert des Kontos lesen |
 
 Wie bei jeder Internetanfrage sieht jeder Betreiber auch Ihre IP-Adresse. Die Betreiber sind vom Entwickler unabhängig und verarbeiten die Anfrage nach ihren eigenen Bedingungen und Datenschutzrichtlinien, die in der App unter Einstellungen → Quellen / Nachweise verlinkt sind:
 
@@ -53,7 +53,7 @@ Wie bei jeder Internetanfrage sieht jeder Betreiber auch Ihre IP-Adresse. Die Be
 | TRON und TRC-20-Token | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Kryptopreise | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Wechselkurse | [Frankfurter](https://frankfurter.dev), [Europäische Zentralbank](https://www.ecb.europa.eu) |
-| Brokerkonten | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| Brokerkonten | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 Nichts wird anderswohin gesendet. Keine Daten werden verkauft, für Werbung weitergegeben oder zur Profilbildung verwendet. Öffentliche Blockchain-Abfragen verraten, dass sich jemand unter Ihrer IP-Adresse für die erfasste Adresse interessiert; verwenden Sie ein VPN, wenn Ihnen das wichtig ist.
 

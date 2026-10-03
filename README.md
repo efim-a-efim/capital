@@ -51,7 +51,7 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 
 1. Choose a dedicated local folder, e.g. `Documents/CapitalTracker`. Existing Capital folders reopen directly.
 2. Settings → set default currency and optional provider keys.
-3. Add a bucket, then manual holdings, public wallet addresses or broker accounts added on the Brokers tab (Interactive Brokers, OANDA, Trading 212, SnapTrade; credentials under Credentials on that tab, steps on the site page `accounts`). Each broker is a plugin; see `BROKER-PLUGINS.md` to add one.
+3. Add a bucket, then manual holdings, public wallet addresses or broker accounts added on the Brokers tab (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu; credentials under Credentials on that tab, steps on the site page `accounts`). Each broker is a plugin; see `BROKER-PLUGINS.md` to add one.
 4. Add goals and connect their funding buckets. Goals with earlier dates fund first; drag goals that share a date to set their order.
 5. Add planned savings on the Plans tab to see when each goal closes.
 6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.

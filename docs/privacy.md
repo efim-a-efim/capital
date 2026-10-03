@@ -41,7 +41,7 @@ Capital contacts only the operators you choose in Settings, only over HTTPS, and
 | Token contract addresses and asset ids | The crypto price operator you selected | Price the assets |
 | Currency codes | The fiat rate operator you selected | Convert between currencies |
 | The API key you entered for an operator | That operator only | Authenticate your own account with them |
-| The access token or API key and the account or query id of a broker account | That broker only (Interactive Brokers, OANDA, Trading 212 or SnapTrade) | Read the account's total value |
+| The access token or API key and the account or query id of a broker account | That broker only (see [Broker and forex accounts]({{ page.base }}/accounts)) | Read the account's total value |
 
 Every operator also sees your IP address, as with any internet request. The operators are independent of the developer and process the request under their own terms and privacy policies, which are linked from Settings → Sources / attribution in the app:
 
@@ -53,7 +53,7 @@ Every operator also sees your IP address, as with any internet request. The oper
 | TRON and TRC-20 tokens | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Crypto prices | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Fiat rates | [Frankfurter](https://frankfurter.dev), [European Central Bank](https://www.ecb.europa.eu) |
-| Broker accounts | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| Broker accounts | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 Nothing is sent anywhere else. No data is sold, shared for advertising, or used to build profiles. Public blockchain queries disclose that the address you track is of interest to someone at your IP address; use a VPN if that matters to you.
 

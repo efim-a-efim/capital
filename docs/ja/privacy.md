@@ -41,7 +41,7 @@ Capitalが通信するのは、あなたが「設定」で選んだ事業者だ�
 | トークンのコントラクトアドレスと資産ID | 選択した暗号資産価格の事業者 | 資産の価格を取得するため |
 | 通貨コード | 選択した法定通貨レートの事業者 | 通貨間の換算のため |
 | 事業者用に入力したAPIキー | その事業者のみ | その事業者でのあなた自身のアカウントを認証するため |
-| ブローカー口座のアクセストークンまたはAPIキーと、口座ID（またはクエリID） | そのブローカーのみ（Interactive Brokers、OANDA、Trading 212またはSnapTrade） | 口座の評価額の合計を読み取るため |
+| ブローカー口座のアクセストークンまたはAPIキーと、口座ID（またはクエリID） | そのブローカーのみ（[ブローカー・FX口座]({{ page.base }}/accounts)を参照） | 口座の評価額の合計を読み取るため |
 
 どのインターネット通信とも同じく、各事業者にはあなたのIPアドレスも伝わります。事業者は開発者から独立しており、それぞれの利用規約とプライバシーポリシーに従ってリクエストを処理します。これらはアプリの「設定 → 取得元／クレジット」からリンクされています：
 
@@ -53,7 +53,7 @@ Capitalが通信するのは、あなたが「設定」で選んだ事業者だ�
 | TRONとTRC-20トークン | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | 暗号資産の価格 | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | 法定通貨のレート | [Frankfurter](https://frankfurter.dev), [欧州中央銀行](https://www.ecb.europa.eu) |
-| ブローカー口座 | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| ブローカー口座 | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 これら以外にデータが送信されることはありません。データを販売したり、広告目的で共有したり、プロファイルの作成に使ったりすることはありません。公開ブロックチェーンへの問い合わせにより、あなたのIPアドレスの誰かがそのアドレスに関心を持っていることが事業者に伝わります。それが気になる場合はVPNを使用してください。
 

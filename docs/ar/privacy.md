@@ -41,7 +41,7 @@ class: doc
 | عناوين عقود التوكنات ومعرّفات الأصول | مزود أسعار العملات الرقمية الذي اخترته | تسعير الأصول |
 | رموز العملات | مزود أسعار صرف العملات الورقية الذي اخترته | التحويل بين العملات |
 | مفتاح API الذي أدخلته لمزود ما | ذلك المزود فقط | مصادقة حسابك الخاص لديه |
-| رمز الوصول أو مفتاح API ومعرّف الحساب أو الاستعلام لحساب وساطة | ذلك الوسيط فقط (Interactive Brokers أو OANDA أو Trading 212 أو SnapTrade) | قراءة القيمة الإجمالية للحساب |
+| رمز الوصول أو مفتاح API ومعرّف الحساب أو الاستعلام لحساب وساطة | ذلك الوسيط فقط (راجع [حسابات الوساطة والفوركس]({{ page.base }}/accounts)) | قراءة القيمة الإجمالية للحساب |
 
 يرى كل مزود أيضًا عنوان IP الخاص بك، كما هو الحال مع أي طلب عبر الإنترنت. المزودون مستقلون عن المطوّر ويعالجون الطلب وفق شروطهم وسياسات الخصوصية الخاصة بهم، وروابطها موجودة في التطبيق ضمن الإعدادات ← المصادر / الإسناد:
 
@@ -53,7 +53,7 @@ class: doc
 | TRON وتوكنات TRC-20 | [TronGrid](https://www.trongrid.io)، [PublicNode](https://publicnode.com) |
 | أسعار العملات الرقمية | [DefiLlama](https://defillama.com)، [CoinGecko](https://www.coingecko.com)، [CoinPaprika](https://coinpaprika.com) |
 | أسعار صرف العملات الورقية | [Frankfurter](https://frankfurter.dev)، [البنك المركزي الأوروبي](https://www.ecb.europa.eu) |
-| حسابات الوساطة | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com) |
+| حسابات الوساطة | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com)، [Alpaca](https://alpaca.markets)، [Tradier](https://tradier.com)، [tastytrade](https://tastytrade.com)، [Public.com](https://public.com)، [eToro](https://www.etoro.com)، [Indexa Capital](https://indexacapital.com)، [T-Invest](https://www.tbank.ru/invest/)، [ALOR](https://www.alorbroker.ru)، [Capital.com](https://capital.com)، [Akahu](https://www.akahu.nz) |
 
 لا يُرسل شيء إلى أي مكان آخر. لا تُباع أي بيانات، ولا تُشارك لأغراض إعلانية، ولا تُستخدم لبناء ملفات تعريف. تكشف استعلامات البلوك تشين العامة أن العنوان الذي تتتبعه يهمّ شخصًا ما عند عنوان IP الخاص بك؛ استخدم VPN إن كان ذلك يهمّك.
 

@@ -18,6 +18,6 @@ title: Brokers
 
 **Linking it into a bucket.** Open the bucket, press **Add holding**, set **Tracking** to **Broker account** and choose the account; leave the name blank to use the account's name. One account can be in one bucket at a time. **Edit / move** on the holding moves it to another bucket; deleting the holding unlinks the account without deleting it.
 
-**Credentials.** The token or key of each supported broker (Interactive Brokers, OANDA, Trading 212, SnapTrade); one set per broker covers every account of that broker. They are encrypted with a key held in Android Keystore, never written into the data folder, left out of exports and system backups, and sent only to the broker that issued them. **Setup guide for broker accounts** opens [Broker and forex accounts]({{ page.base }}/accounts), which lists the steps for each broker.
+**Credentials.** The token or key of each supported broker; one set per broker covers every account of that broker. They are encrypted with a key held in Android Keystore, never written into the data folder, left out of exports and system backups, and sent only to the broker that issued them. **Setup guide for broker accounts** opens [Broker and forex accounts]({{ page.base }}/accounts), which lists the steps for each broker.
 
 **Refresh.** The refresh icon on this screen reads every account; the refresh on a bucket reads only the accounts linked into that bucket. An account that cannot be read keeps its last value and shows the broker's message under its row. The app only reads: it never places orders or moves money.

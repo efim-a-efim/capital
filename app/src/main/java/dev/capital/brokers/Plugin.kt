@@ -54,9 +54,15 @@ interface BrokerHost {
     val now: Long get() = System.currentTimeMillis()
 }
 object Brokers {
-    val all: List<BrokerPlugin> = listOf(InteractiveBrokers, Oanda, Trading212, SnapTrade)
+    val all: List<BrokerPlugin> = listOf(InteractiveBrokers, Oanda, Trading212, SnapTrade, Alpaca, Tradier, Tastytrade, PublicCom, EToro, IndexaCapital, TInvest, Alor, CapitalCom, Akahu)
     fun byName(name: String?): BrokerPlugin? = all.find { it.name == name }
     fun credential(key: String): Credential? = all.firstNotNullOfOrNull { p -> p.credentials.find { it.key == key } }
 }
 /** Text from a provider, safe to show: no control characters, bounded length. */
 internal fun String.clean() = filterNot { it.isISOControl() }.trim().take(40)
+/** Optional JSON members: null when absent or JSON null. */
+internal fun kotlinx.serialization.json.JsonObject.text(key: String): String? = get(key)?.takeIf { it !is kotlinx.serialization.json.JsonNull }?.let { (it as? kotlinx.serialization.json.JsonPrimitive)?.content }
+internal fun kotlinx.serialization.json.JsonObject.child(key: String): kotlinx.serialization.json.JsonObject? = get(key) as? kotlinx.serialization.json.JsonObject
+internal fun kotlinx.serialization.json.JsonObject.list(key: String): List<kotlinx.serialization.json.JsonObject> = (get(key) as? kotlinx.serialization.json.JsonArray)?.mapNotNull { it as? kotlinx.serialization.json.JsonObject }.orEmpty()
+/** Label from provider fields: cleaned, blanks dropped, joined with a middle dot; the id when nothing is left. */
+internal fun label(id: String, vararg parts: String?) = parts.filterNotNull().map { it.clean() }.filter { it.isNotBlank() }.distinct().joinToString(" · ").ifBlank { id }

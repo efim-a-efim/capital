@@ -27,8 +27,18 @@ checks = [
     ("OANDA v20", "https://api-fxtrade.oanda.com/v3/accounts", None),
     ("Trading 212", "https://live.trading212.com/api/v0/equity/account/summary", None),
     ("SnapTrade", "https://api.snaptrade.com/api/v1/", None),
+    ("Alpaca", "https://api.alpaca.markets/v2/account", None),
+    ("Tradier", "https://api.tradier.com/v1/user/profile", None),
+    ("tastytrade", "https://api.tastyworks.com/oauth/token", {"grant_type":"refresh_token","refresh_token":"x","client_secret":"y"}),
+    ("Public.com", "https://api.public.com/userapiauthservice/personal/access-tokens", {"validityInMinutes":5,"secret":"xxxxxxxx"}),
+    ("eToro", "https://public-api.etoro.com/api/v1/balances", None),
+    ("Indexa Capital", "https://api.indexacapital.com/users/me", None),
+    ("ALOR", "https://oauth.alor.ru/refresh", {"token":"x"}),
+    ("Capital.com", "https://api-capital.backend-capital.com/api/v1/session", {"identifier":"a@b.c","password":"x","encryptedPassword":False}),
+    ("Akahu", "https://api.akahu.io/v1/accounts", None),
 ]
-expected_errors={"OANDA v20": 401, "Trading 212": 401}
+# T-Invest (invest-public-api.tbank.ru) is not listed: it is served under the Russian Trusted Root CA, which only the app trusts for that host.
+expected_errors={"OANDA v20": 401, "Trading 212": 401, "Alpaca": 401, "Tradier": 401, "tastytrade": 400, "Public.com": 401, "eToro": 401, "Indexa Capital": 401, "ALOR": 403, "Capital.com": 400, "Akahu": 401}
 results=[]
 for name,url,body in checks:
     req=urllib.request.Request(url,data=json.dumps(body).encode() if body else None,headers={"Content-Type":"application/json","User-Agent":"Java" if "interactivebrokers" in url else "Capital/0.1"})
@@ -47,4 +57,4 @@ for name,url,body in checks:
         results.append({"provider":name,"error":str(exc)})
         print(name,str(exc))
 Path(".tools/provider-smoke.json").write_text(json.dumps(results,indent=2))
-print("Alchemy, TronGrid, CoinGecko Demo, Interactive Brokers, OANDA, Trading 212, SnapTrade: require user keys or tokens; not live-tested beyond reachability.")
+print("Alchemy, TronGrid, CoinGecko Demo and every broker: require user keys or tokens; not live-tested beyond reachability.")

@@ -58,7 +58,7 @@ Money from plans is applied after today's buckets, to the goals in due-date orde
 
 ## Brokers
 
-Brokers tab → **+**. A broker account is a read-only connection: pick the broker (Interactive Brokers, OANDA, Trading 212 or SnapTrade), enter the account or query id and save; the broker's token or key is entered once under **Credentials** on the same tab and covers every account of that broker. The tab lists each account with its last value and the bucket it is linked to. **Ignore balances less than** an amount in your default currency (1 by default) makes a dust balance count as 0 in the bucket. Link it into a bucket with **Add holding → Broker account**; delete the holding to unlink it, delete the account to remove the connection. The setup steps, with links to the brokers' own documentation, are on [Broker and forex accounts]({{ page.base }}/accounts).
+Brokers tab → **+**. A broker account is a read-only connection: pick the broker (the list is on [Broker and forex accounts]({{ page.base }}/accounts)), enter the account or query id and save; the broker's token or key is entered once under **Credentials** on the same tab and covers every account of that broker. The tab lists each account with its last value and the bucket it is linked to. **Ignore balances less than** an amount in your default currency (1 by default) makes a dust balance count as 0 in the bucket. Link it into a bucket with **Add holding → Broker account**; delete the holding to unlink it, delete the account to remove the connection. The setup steps, with links to the brokers' own documentation, are on [Broker and forex accounts]({{ page.base }}/accounts).
 
 ## Refresh
 

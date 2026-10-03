@@ -45,5 +45,5 @@ Country-specific requirements for personal loan apps, and the United States cryp
 
 - Market data comes from third-party operators selected by the user (see the [Privacy Policy]({{ page.base }}/privacy)). The app shows the operator's name and site in Settings.
 - Wallet queries use public, read-only blockchain APIs.
-- Broker accounts (Interactive Brokers, OANDA, Trading 212, SnapTrade) are read with a token or key the user creates in the broker's own portal; the app calls only reporting endpoints and cannot place orders or move money. The setup is documented on [Broker and forex accounts]({{ page.base }}/accounts).
+- Broker accounts (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) are read with a token or key the user creates in the broker's own portal; the app calls only reporting endpoints and cannot place orders or move money. The setup is documented on [Broker and forex accounts]({{ page.base }}/accounts).
 - The app runs entirely on the device and has no developer-operated server.

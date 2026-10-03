@@ -47,5 +47,5 @@ Os requisitos específicos por país para apps de empréstimo pessoal e as pergu
 
 - Os dados de mercado vêm de operadores terceiros selecionados pelo usuário (veja a [Política de Privacidade]({{ page.base }}/privacy)). O app mostra o nome e o site do operador em Ajustes.
 - As consultas de carteiras usam APIs públicas de blockchain, somente leitura.
-- As contas de corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade) são lidas com um token ou uma chave que o usuário cria no portal da própria corretora; o app chama apenas endpoints de relatórios e não consegue enviar ordens nem movimentar dinheiro. A configuração está documentada em [Contas de corretora e de forex]({{ page.base }}/accounts).
+- As contas de corretora (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu) são lidas com um token ou uma chave que o usuário cria no portal da própria corretora; o app chama apenas endpoints de relatórios e não consegue enviar ordens nem movimentar dinheiro. A configuração está documentada em [Contas de corretora e de forex]({{ page.base }}/accounts).
 - O app roda inteiramente no dispositivo e não tem servidor operado pelo desenvolvedor.

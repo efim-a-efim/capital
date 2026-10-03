@@ -41,7 +41,7 @@ Capital se comunica solo con los operadores que usted elige en Ajustes, solo med
 | Direcciones de contratos de tokens e identificadores de activos | El operador de precios de criptomonedas que usted eligió | Obtener el precio de los activos |
 | Códigos de moneda | El operador de tipos de cambio fiat que usted eligió | Convertir entre monedas |
 | La clave API que usted introdujo para un operador | Solo ese operador | Autenticar su propia cuenta en ese operador |
-| El token de acceso o la clave de API y el ID de cuenta o de consulta de una cuenta de bróker | Solo ese bróker (Interactive Brokers, OANDA, Trading 212, SnapTrade) | Leer el valor total de la cuenta |
+| El token de acceso o la clave de API y el ID de cuenta o de consulta de una cuenta de bróker | Solo ese bróker (véase [Cuentas de bróker y de divisas]({{ page.base }}/accounts)) | Leer el valor total de la cuenta |
 
 Como en cualquier solicitud por internet, cada operador ve además su dirección IP. Los operadores son independientes del desarrollador y tratan la solicitud según sus propias condiciones y políticas de privacidad, enlazadas en la aplicación desde Ajustes → Fuentes / atribución:
 
@@ -53,7 +53,7 @@ Como en cualquier solicitud por internet, cada operador ve además su dirección
 | TRON y tokens TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Precios de criptomonedas | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tipos de cambio fiat | [Frankfurter](https://frankfurter.dev), [Banco Central Europeo](https://www.ecb.europa.eu) |
-| Cuentas de bróker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com) |
+| Cuentas de bróker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 No se envía nada a ningún otro sitio. Ningún dato se vende, se comparte con fines publicitarios ni se usa para crear perfiles. Las consultas a blockchains públicas revelan que alguien con su dirección IP tiene interés en la dirección que usted sigue; use una VPN si eso le importa.
 
