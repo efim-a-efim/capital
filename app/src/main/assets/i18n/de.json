@@ -591,7 +591,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "Noch keine Konten verbunden. Verbinden Sie zuerst einen Broker über SnapTrade.",
  "Fetch accounts": "Konten abrufen",
  "Connect a brokerage through SnapTrade": "Broker über SnapTrade verbinden",
- "SnapTrade account": "SnapTrade-Konto",
  "Choose account": "Konto wählen",
  "SnapTrade account id": "SnapTrade-Konto-ID",
  "Trading 212 account number": "Trading-212-Kontonummer",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "Minimum in {0}",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "Ein Saldo unter diesem Betrag, umgerechnet mit den zwischengespeicherten Kursen, zählt im Topf als 0; der tatsächliche Wert bleibt hier sichtbar.",
  "Counted as 0: below {0}": "Zählt als 0: unter {0}",
- "Counted unless below {0}": "Zählt, außer unter {0}"
+ "Counted unless below {0}": "Zählt, außer unter {0}",
+ "No accounts found": "Keine Konten gefunden",
+ "Account id": "Konto-ID"
 }

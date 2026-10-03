@@ -1,5 +1,6 @@
 package dev.capital.domain
 
+import dev.capital.brokers.Brokers
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -49,27 +50,14 @@ fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
     /** When set, a balance below this amount in the default currency counts as 0 in the linked bucket (dust left in forgotten accounts). */
     val ignoreBelow: String? = null,
 )
-val brokerChoices = listOf("Interactive Brokers", "OANDA", "Trading 212", "SnapTrade")
-/** Credentials entered in Settings per broker; the first is the token or key, the rest its companions. Names are Secrets keys. */
-val brokerCredentials = linkedMapOf(
-    "Interactive Brokers" to listOf("Interactive Brokers"), "OANDA" to listOf("OANDA"),
-    "Trading 212" to listOf("Trading 212", "Trading 212 secret"), "SnapTrade" to listOf("SnapTrade", "SnapTrade consumer key"),
-)
-private val accountIdForms = mapOf(
-    "Interactive Brokers" to Regex("[0-9]{1,20}"), "OANDA" to Regex("[0-9]{3}-[0-9]{3}-[0-9]{1,12}-[0-9]{3}"), "Trading 212" to Regex("[0-9]{1,20}"),
-    "SnapTrade" to Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"),
-)
-/** Trimmed id in the broker's own form: Flex Query id, OANDA account id, Trading 212 account number, SnapTrade account id. */
+/** Broker names in the order the editor offers them; one plugin each, see dev.capital.brokers. */
+val brokerChoices: List<String> get() = Brokers.all.map { it.name }
+/** Secrets keys of the credentials per broker, the token or key first. */
+val brokerCredentials: Map<String, List<String>> get() = Brokers.all.associate { p -> p.name to p.credentials.map { it.key } }
+/** The account or query id in the broker's own form, or the plugin's validation message. */
 fun accountId(broker: String?, raw: String): String {
-    val form = accountIdForms[broker] ?: throw IllegalArgumentException(tr("Choose a supported broker"))
-    return raw.trim().let { if (broker == "SnapTrade") it.lowercase() else it }.also {
-        require(form.matches(it)) { when (broker) {
-            "OANDA" -> tr("Enter the OANDA account id, for example 001-001-1234567-001")
-            "Trading 212" -> tr("Enter the numeric Trading 212 account number")
-            "SnapTrade" -> tr("Choose a SnapTrade account or enter its id")
-            else -> tr("Enter the numeric Flex Query id")
-        } }
-    }
+    val plugin = Brokers.byName(broker) ?: throw IllegalArgumentException(tr("Choose a supported broker"))
+    return plugin.normalizeId(raw).also { require(plugin.idForm.matches(it)) { plugin.idError() } }
 }
 @Serializable data class Token(
     val contract: String, val symbol: String = "", val name: String = "", val units: String,

@@ -63,9 +63,8 @@ Capital is a tracker and a calculator. It never moves money, gives no advice and
 ## Release notes (≤500, per release)
 
 ```
-• Brokers tab: broker accounts have their own screen with their credentials; a bucket links an account with Add holding → Broker account
-• Existing broker holdings are moved to the Brokers tab automatically
-• Site: a Brokers screen page and updated setup guide, in 15 languages
+• Broker integrations are now plugins: a documented contract for adding brokers (BROKER-PLUGINS.md); the four existing brokers ported
+• Account editor adapts to the broker: account picker and connect button only where the broker offers them
 ```
 
 ## App content answers

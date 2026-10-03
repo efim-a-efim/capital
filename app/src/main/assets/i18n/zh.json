@@ -591,7 +591,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "尚未连接任何账户。请先通过 SnapTrade 连接券商。",
  "Fetch accounts": "获取账户",
  "Connect a brokerage through SnapTrade": "通过 SnapTrade 连接券商",
- "SnapTrade account": "SnapTrade 账户",
  "Choose account": "选择账户",
  "SnapTrade account id": "SnapTrade 账户 ID",
  "Trading 212 account number": "Trading 212 账号",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "最低金额（{0}）",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "低于此金额的余额（按缓存汇率换算）在储蓄罐中按 0 计算；真实价值仍会显示在此处。",
  "Counted as 0: below {0}": "按 0 计算：低于 {0}",
- "Counted unless below {0}": "除非低于 {0}，否则计入"
+ "Counted unless below {0}": "除非低于 {0}，否则计入",
+ "No accounts found": "未找到账户",
+ "Account id": "账户 ID"
 }

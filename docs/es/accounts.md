@@ -138,7 +138,7 @@ Capital se conecta solo a interfaces que funcionan desde un teléfono mediante H
 - Los brókeres cuya API emite solo tokens de corta duración mediante OAuth, por ejemplo Saxo Bank (los tokens de acceso duran 20 minutos; el 24-hour token del portal de desarrolladores sirve solo para el entorno de simulación).
 - Los bancos y brókeres sin API pública.
 
-Muchos de estos brókeres están cubiertos por [SnapTrade](#snaptrade). En otro caso, introduzca el saldo como una posición **Manual** y actualice la cifra cuando consulte su extracto. Si su bróker ofrece un punto de acceso HTTPS sencillo basado en token que lea el valor de la cuenta, [abra una incidencia]({{ site.repo }}/issues) con un enlace a su documentación.
+Muchos de estos brókeres están cubiertos por [SnapTrade](#snaptrade). En otro caso, introduzca el saldo como una posición **Manual** y actualice la cifra cuando consulte su extracto. Si su bróker ofrece un punto de acceso HTTPS sencillo basado en token que lea el valor de la cuenta, [abra una incidencia]({{ site.repo }}/issues) con un enlace a su documentación. Cada bróker de Capital es un pequeño complemento; los desarrolladores pueden añadir uno siguiendo [la guía de complementos]({{ site.repo }}/blob/main/BROKER-PLUGINS.md).
 
 ## Mensajes y qué hacer {#messages}
 

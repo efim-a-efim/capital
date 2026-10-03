@@ -138,7 +138,7 @@ Capital hanya terhubung ke antarmuka yang berfungsi dari ponsel melalui HTTPS de
 - Broker yang API-nya hanya menerbitkan token berumur pendek melalui OAuth, misalnya Saxo Bank (token akses berlaku 20 menit; token 24 jam dari portal pengembang hanya untuk lingkungan simulasi).
 - Bank dan broker tanpa API publik.
 
-Banyak dari broker ini dicakup oleh [SnapTrade](#snaptrade). Jika tidak, masukkan saldo tersebut sebagai aset **Manual** dan perbarui angkanya saat Anda memeriksa laporan rekening. Jika broker Anda menyediakan endpoint HTTPS berbasis token yang sederhana untuk membaca nilai akun, [buka issue]({{ site.repo }}/issues) beserta tautan ke dokumentasinya.
+Banyak dari broker ini dicakup oleh [SnapTrade](#snaptrade). Jika tidak, masukkan saldo tersebut sebagai aset **Manual** dan perbarui angkanya saat Anda memeriksa laporan rekening. Jika broker Anda menyediakan endpoint HTTPS berbasis token yang sederhana untuk membaca nilai akun, [buka issue]({{ site.repo }}/issues) beserta tautan ke dokumentasinya. Setiap broker di Capital adalah plugin kecil; developer dapat menambahkannya dengan mengikuti [panduan plugin]({{ site.repo }}/blob/main/BROKER-PLUGINS.md).
 
 ## Pesan dan tindakan yang perlu dilakukan {#messages}
 

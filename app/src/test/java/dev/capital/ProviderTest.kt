@@ -350,7 +350,7 @@ class ProviderTest {
         val r=provider.account(h)
         assertEquals("USD",r.asset); assertEquals("15363.23",r.quantity)
         assertEquals(listOf(id to "Robinhood · Individual · Q6542138443","zzz" to "X"),provider.accounts("SnapTrade"))
-        assertEquals("https://app.snaptrade.com/snapTrade/redeemToken?token=abc",provider.snapTradeLogin())
+        assertEquals("https://app.snaptrade.com/snapTrade/redeemToken?token=abc",provider.connect("SnapTrade"))
         assertTrue(paths.last().endsWith("POST"))
         val unsynced=routeWith(secrets("SnapTrade" to "CLIENT","SnapTrade consumer key" to "CONSUMER")) { ok("""{"id":"$id","balance":{"total":null}}""") }
         try { unsynced.account(h); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("sync")) }

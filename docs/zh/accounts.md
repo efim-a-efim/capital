@@ -140,7 +140,7 @@ Capital 只连接满足以下条件的接口：可在手机上通过 HTTPS 使�
 - 其 API 仅通过 OAuth 签发短期令牌的券商，例如 Saxo Bank（访问令牌的有效期为 20 分钟；开发者门户的 24 小时令牌仅适用于模拟环境）。
 - 没有公开 API 的银行和券商。
 
-其中许多券商可通过 [SnapTrade](#snaptrade) 接入。否则，请把余额作为 **手动** 持仓输入，并在核对对账单时更新数字。如果您的券商提供简单的、基于令牌的 HTTPS 接口，可读取账户价值，请[提交 issue]({{ site.repo }}/issues)，并附上其文档链接。
+其中许多券商可通过 [SnapTrade](#snaptrade) 接入。否则，请把余额作为 **手动** 持仓输入，并在核对对账单时更新数字。如果您的券商提供简单的、基于令牌的 HTTPS 接口，可读取账户价值，请[提交 issue]({{ site.repo }}/issues)，并附上其文档链接。Capital 中的每个券商都是一个小型插件；开发者可参考[插件指南]({{ site.repo }}/blob/main/BROKER-PLUGINS.md)自行添加。
 
 ## 提示信息及处理方法 {#messages}
 

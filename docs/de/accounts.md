@@ -138,7 +138,7 @@ Capital verbindet sich nur mit Schnittstellen, die vom Smartphone über HTTPS fu
 - Broker, deren API nur kurzlebige Token über OAuth ausstellt, zum Beispiel Saxo Bank (Zugriffstoken gelten 20 Minuten; das 24-Stunden-Token des Entwicklerportals gilt nur für die Simulationsumgebung).
 - Banken und Broker ohne öffentliche API.
 
-Viele dieser Broker deckt [SnapTrade](#snaptrade) ab. Andernfalls erfassen Sie das Guthaben als **manuelle** Position und aktualisieren Sie die Zahl, wenn Sie Ihren Kontoauszug prüfen. Bietet Ihr Broker einen einfachen tokenbasierten HTTPS-Endpunkt, der den Kontowert liest, [eröffnen Sie ein Issue]({{ site.repo }}/issues) mit einem Link zu dessen Dokumentation.
+Viele dieser Broker deckt [SnapTrade](#snaptrade) ab. Andernfalls erfassen Sie das Guthaben als **manuelle** Position und aktualisieren Sie die Zahl, wenn Sie Ihren Kontoauszug prüfen. Bietet Ihr Broker einen einfachen tokenbasierten HTTPS-Endpunkt, der den Kontowert liest, [eröffnen Sie ein Issue]({{ site.repo }}/issues) mit einem Link zu dessen Dokumentation. Jeder Broker in Capital ist ein kleines Plugin; Entwickler können einen hinzufügen, indem sie [der Plugin-Anleitung]({{ site.repo }}/blob/main/BROKER-PLUGINS.md) folgen.
 
 ## Meldungen und was zu tun ist {#messages}
 

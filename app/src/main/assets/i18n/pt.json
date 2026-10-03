@@ -499,7 +499,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "Nenhuma conta conectada ainda. Conecte primeiro uma corretora pelo SnapTrade.",
  "Fetch accounts": "Buscar contas",
  "Connect a brokerage through SnapTrade": "Conectar uma corretora pelo SnapTrade",
- "SnapTrade account": "Conta do SnapTrade",
  "SnapTrade account id": "ID da conta do SnapTrade",
  "Trading 212 account number": "Número da conta Trading 212",
  "OANDA account id": "ID da conta OANDA",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "Mínimo em {0}",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "Um saldo abaixo deste valor, convertido com as cotações em cache, conta como 0 na caixinha; o valor real continua visível aqui.",
  "Counted as 0: below {0}": "Contado como 0: abaixo de {0}",
- "Counted unless below {0}": "Contado, a menos que fique abaixo de {0}"
+ "Counted unless below {0}": "Contado, a menos que fique abaixo de {0}",
+ "No accounts found": "Nenhuma conta encontrada",
+ "Account id": "ID da conta"
 }

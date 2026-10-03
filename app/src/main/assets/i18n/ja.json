@@ -591,7 +591,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "接続された口座はまだありません。先にSnapTradeでブローカーを接続してください。",
  "Fetch accounts": "口座を取得",
  "Connect a brokerage through SnapTrade": "SnapTradeでブローカーを接続",
- "SnapTrade account": "SnapTrade口座",
  "Choose account": "口座を選択",
  "SnapTrade account id": "SnapTrade口座ID",
  "Trading 212 account number": "Trading 212口座番号",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "最小額（{0}）",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "この金額を下回る残高は、キャッシュされたレートで換算したうえで、ポケットでは0として集計されます。実際の評価額はここに表示されたままです。",
  "Counted as 0: below {0}": "0として集計：{0}未満",
- "Counted unless below {0}": "{0}未満でなければ集計"
+ "Counted unless below {0}": "{0}未満でなければ集計",
+ "No accounts found": "口座が見つかりません",
+ "Account id": "口座ID"
 }

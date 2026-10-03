@@ -58,6 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.capital.CapitalModel
 import dev.capital.data.Revision
 import dev.capital.Tips
+import dev.capital.brokers.Brokers
 import dev.capital.domain.*
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -83,11 +84,7 @@ private fun shown(v: String)=when(v) {
     else -> v
 }
 // Secrets names shown as buttons and dialog titles.
-private fun credentialLabel(name: String)=when(name) {
-    "Trading 212" -> tr("API key: Trading 212"); "Trading 212 secret" -> tr("API secret: Trading 212")
-    "SnapTrade" -> tr("Client id: SnapTrade"); "SnapTrade consumer key" -> tr("Consumer key: SnapTrade")
-    else -> tr("Access token: {0}",name)
-}
+private fun credentialLabel(name: String)=Brokers.credential(name)?.label?.invoke() ?: tr("Access token: {0}",name)
 private fun editorTitle(kind: String,new: Boolean)=when(kind) {
     "Settings" -> tr("Currency and appearance")
     "Bucket" -> if(new) tr("Add bucket") else tr("Edit bucket")
@@ -506,7 +503,7 @@ private val rtlType=Typography().run {
                                     }
                                     Note(tr("Your sync tool manages this folder. Snapshots are retained for recovery; API keys never leave device storage. Refresh happens only on cold startup or request."))
                                     Heading(tr("Sources / attribution"))
-                                    listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu", "Interactive Brokers" to "https://www.interactivebrokers.com", "OANDA" to "https://www.oanda.com", "Trading 212" to "https://www.trading212.com", "SnapTrade" to "https://snaptrade.com").forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(shown(name)) } }
+                                    (listOf("Blockstream" to "https://blockstream.info", "mempool.space" to "https://mempool.space", "PublicNode" to "https://publicnode.com", "Alchemy" to "https://alchemy.com", "TON Center" to "https://toncenter.com", "TonAPI" to "https://tonapi.io", "TronGrid" to "https://trongrid.io", "Blockscout" to "https://eth.blockscout.com", "Ethplorer" to "https://ethplorer.io", "DefiLlama" to "https://defillama.com", "Powered by CoinGecko" to "https://coingecko.com", "Powered by CoinPaprika" to "https://coinpaprika.com", "Frankfurter" to "https://frankfurter.dev", "European Central Bank" to "https://ecb.europa.eu")+Brokers.all.map { it.name to it.site }).forEach { (name,url) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(shown(name)) } }
                                     Heading(tr("Legal"))
                                     listOf(tr("Privacy Policy") to "privacy", tr("Data safety") to "data-safety", tr("Financial features") to "financial-features").forEach { (name,path) -> TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(I18n.siteUrl(path)))) }.onFailure { model.notice(tr("No browser available")) } }) { Text(name) } }
                                     // Read from the installed package, so it always matches the build that is running.
@@ -522,7 +519,7 @@ private val rtlType=Typography().run {
             }
         }
         editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens,onFetchAccounts=model::fetchAccounts,
-            onConnectSnapTrade={ model.connectSnapTrade { url -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } } }) }
+            onConnect={ broker -> model.connect(broker) { url -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } } }) }
         calculator?.let { id -> data.buckets.find { it.id==id }?.let { RebalanceDialog(it,data) { calculator=null } } }
         confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text(tr("Confirm change")) },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text(tr("Confirm")) } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text(tr("Cancel")) } }) }
         keyProvider?.let { provider -> KeyDialog(provider,onDismiss={ keyProvider=null },onSave={ if(model.saveKey(provider,it)) keyProvider=null }) }
@@ -582,7 +579,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit,onFetchAccounts: (String,(List<Pair<String,String>>?,String?)->Unit)->Unit,onConnectSnapTrade: ()->Unit) {
+@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit,onFetchAccounts: (String,(List<Pair<String,String>>?,String?)->Unit)->Unit,onConnect: (String)->Unit) {
     val b=data.buckets.find { it.id==editor.id }
     val h=data.holdings.find { it.id==editor.id }
     val g=data.goals.find { it.id==editor.id }
@@ -796,20 +793,16 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                             else -> field("quantity",tr("Current quantity · no grouping separators"),true)
                         }
                         "Account" -> {
-                            when(val broker=fields.getValue("broker")) {
-                                "SnapTrade" -> {
-                                    Actions {
-                                        OutlinedButton(onClick={ accountMessage=null; onFetchAccounts(broker) { list,message -> if(list!=null) { accounts=list; if(list.isEmpty()) accountMessage=tr("No accounts connected yet. Connect a brokerage through SnapTrade first.") } else accountMessage=message } },enabled=!saving,modifier=Modifier.heightIn(min=48.dp).testTag("fetch-accounts")) { Text(tr("Fetch accounts")) }
-                                        OutlinedButton(onClick=onConnectSnapTrade,enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Connect a brokerage through SnapTrade")) }
-                                    }
-                                    accountMessage?.let { Notice(it) }
-                                    accounts?.takeIf { it.isNotEmpty() }?.let { list -> Pick(tr("SnapTrade account"),fields["address"],list,!saving,tr("Choose account")) { fields["address"]=it; error=null } }
-                                    field("address",tr("SnapTrade account id"))
+                            val broker=fields.getValue("broker"); val plugin=Brokers.byName(broker)
+                            if(plugin!=null && (plugin.listsAccounts || plugin.connectLabel()!=null)) {
+                                Actions {
+                                    if(plugin.listsAccounts) OutlinedButton(onClick={ accountMessage=null; onFetchAccounts(broker) { list,message -> if(list!=null) { accounts=list; if(list.isEmpty()) accountMessage=plugin.noAccounts() } else accountMessage=message } },enabled=!saving,modifier=Modifier.heightIn(min=48.dp).testTag("fetch-accounts")) { Text(tr("Fetch accounts")) }
+                                    plugin.connectLabel()?.let { label -> OutlinedButton(onClick={ onConnect(broker) },enabled=!saving,modifier=Modifier.heightIn(min=48.dp)) { Text(label) } }
                                 }
-                                "Trading 212" -> field("address",tr("Trading 212 account number"))
-                                "OANDA" -> field("address",tr("OANDA account id"))
-                                else -> field("address",tr("Flex Query id"))
+                                accountMessage?.let { Notice(it) }
+                                accounts?.takeIf { it.isNotEmpty() }?.let { list -> Pick(tr("Broker account"),fields["address"],list,!saving,tr("Choose account")) { fields["address"]=it; error=null } }
                             }
+                            field("address",plugin?.idLabel() ?: tr("Account id"))
                             Note(tr("The currency and value come from the broker on refresh. Enter the access token under Credentials on the Brokers screen."))
                             val ignore=fields.getValue("ignore")=="true"
                             Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {

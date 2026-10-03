@@ -138,7 +138,7 @@ O Capital se conecta apenas a interfaces que funcionam a partir de um celular po
 - Corretoras cuja API emite apenas tokens de vida curta por meio de OAuth, por exemplo o Saxo Bank (os tokens de acesso duram 20 minutos; o token de 24 horas do portal de desenvolvedores vale apenas para o ambiente de simulação).
 - Bancos e corretoras sem API pública.
 
-Muitas dessas corretoras são cobertas pelo [SnapTrade](#snaptrade). Caso contrário, informe o saldo como uma posição **Manual** e atualize o número quando conferir seu extrato. Se a sua corretora oferecer um endpoint HTTPS simples, baseado em token, que leia o valor da conta, [abra uma issue]({{ site.repo }}/issues) com um link para a documentação dele.
+Muitas dessas corretoras são cobertas pelo [SnapTrade](#snaptrade). Caso contrário, informe o saldo como uma posição **Manual** e atualize o número quando conferir seu extrato. Se a sua corretora oferecer um endpoint HTTPS simples, baseado em token, que leia o valor da conta, [abra uma issue]({{ site.repo }}/issues) com um link para a documentação dele. Cada corretora no Capital é um pequeno plugin; desenvolvedores podem adicionar uma seguindo [o guia de plugins]({{ site.repo }}/blob/main/BROKER-PLUGINS.md).
 
 ## Mensagens e o que fazer {#messages}
 

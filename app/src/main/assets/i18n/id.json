@@ -591,7 +591,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "Belum ada akun yang terhubung. Hubungkan broker melalui SnapTrade terlebih dahulu.",
  "Fetch accounts": "Muat akun",
  "Connect a brokerage through SnapTrade": "Hubungkan broker melalui SnapTrade",
- "SnapTrade account": "Akun SnapTrade",
  "Choose account": "Pilih akun",
  "SnapTrade account id": "ID akun SnapTrade",
  "Trading 212 account number": "Nomor akun Trading 212",
@@ -617,5 +616,7 @@
   "Minimum in {0}": "Minimum dalam {0}",
   "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "Saldo di bawah jumlah ini, dikonversi dengan kurs tersimpan, dihitung 0 di kantong; nilai sebenarnya tetap terlihat di sini.",
   "Counted as 0: below {0}": "Dihitung 0: di bawah {0}",
-  "Counted unless below {0}": "Dihitung kecuali di bawah {0}"
+  "Counted unless below {0}": "Dihitung kecuali di bawah {0}",
+  "No accounts found": "Tidak ada akun ditemukan",
+  "Account id": "ID akun"
 }

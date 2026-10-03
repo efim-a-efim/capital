@@ -303,12 +303,6 @@ class CoreTest {
         assertEquals("1200.5",dust.copy(accounts=dust.accounts.map { it.copy(ignoreBelow="1000") }).linked().holdings.first { it.id=="h2" }.quantity)
         assertEquals("1200.5",dust.copy(quotes=emptyList()).linked().holdings.first { it.id=="h2" }.quantity)
         rejects { dust.copy(accounts=dust.accounts.map { it.copy(ignoreBelow="-1") }).validate() }
-        assertEquals("001-001-1234567-001",accountId("OANDA"," 001-001-1234567-001 "))
-        rejects { accountId("OANDA","0010011234567001") }
-        rejects { accountId(null,"1") }
-        assertEquals("8b5f262d-4bb9-365d-888a-202bd3b15fa1",accountId("SnapTrade","8B5F262D-4BB9-365D-888A-202BD3B15FA1"))
-        assertEquals("42",accountId("Trading 212","42")); rejects { accountId("Trading 212","4-2") }
-        assertEquals(listOf("Interactive Brokers","OANDA","Trading 212","SnapTrade"),brokerChoices); assertEquals(brokerChoices,brokerCredentials.keys.toList())
         rejects { portfolio().copy(accounts=listOf(Account("s","S","Saxo","live"))).validate() }
     }
     @Test fun schemaFiveBrokerHoldingsBecomeAccounts() {

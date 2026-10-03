@@ -499,7 +499,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "لا توجد حسابات مربوطة بعد. اربط وسيطًا عبر SnapTrade أولًا.",
  "Fetch accounts": "جلب الحسابات",
  "Connect a brokerage through SnapTrade": "ربط وسيط عبر SnapTrade",
- "SnapTrade account": "حساب SnapTrade",
  "SnapTrade account id": "معرّف حساب SnapTrade",
  "Trading 212 account number": "رقم حساب Trading 212",
  "OANDA account id": "معرّف حساب OANDA",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "الحد الأدنى بالعملة {0}",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "الرصيد الأقل من هذا المبلغ، بعد تحويله بالأسعار المخزّنة، يُحتسب 0 في الصندوق؛ وتبقى القيمة الفعلية ظاهرة هنا.",
  "Counted as 0: below {0}": "يُحتسب 0: أقل من {0}",
- "Counted unless below {0}": "يُحتسب ما لم يكن أقل من {0}"
+ "Counted unless below {0}": "يُحتسب ما لم يكن أقل من {0}",
+ "No accounts found": "لم يُعثر على أي حسابات",
+ "Account id": "معرّف الحساب"
 }

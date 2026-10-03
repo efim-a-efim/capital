@@ -499,7 +499,6 @@
  "No accounts connected yet. Connect a brokerage through SnapTrade first.": "अभी कोई खाता जुड़ा नहीं है। पहले SnapTrade के ज़रिए ब्रोकरेज जोड़ें।",
  "Fetch accounts": "खाते प्राप्त करें",
  "Connect a brokerage through SnapTrade": "SnapTrade के ज़रिए ब्रोकरेज जोड़ें",
- "SnapTrade account": "SnapTrade खाता",
  "SnapTrade account id": "SnapTrade खाता id",
  "Trading 212 account number": "Trading 212 खाता नंबर",
  "OANDA account id": "OANDA खाता id",
@@ -617,5 +616,7 @@
  "Minimum in {0}": "न्यूनतम ({0} में)",
  "A balance below this amount, converted with the cached rates, counts as 0 in the bucket; the real value stays visible here.": "इस राशि से कम बैलेंस, कैश की गई दरों से बदलने पर, गुल्लक में 0 गिना जाता है; असली मूल्य यहाँ दिखता रहता है।",
  "Counted as 0: below {0}": "0 गिना गया: {0} से कम",
- "Counted unless below {0}": "गिना जाता है, जब तक {0} से कम न हो"
+ "Counted unless below {0}": "गिना जाता है, जब तक {0} से कम न हो",
+ "No accounts found": "कोई खाता नहीं मिला",
+ "Account id": "खाता id"
 }

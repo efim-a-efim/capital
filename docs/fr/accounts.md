@@ -138,7 +138,7 @@ Capital se connecte uniquement à des interfaces qui fonctionnent depuis un tél
 - Les courtiers dont l’API ne délivre que des jetons de courte durée via OAuth, par exemple Saxo Bank (les jetons d’accès durent 20 minutes ; le jeton de 24 heures du portail développeur ne couvre que l’environnement de simulation).
 - Les banques et courtiers sans API publique.
 
-Beaucoup de ces courtiers sont couverts par [SnapTrade](#snaptrade). Sinon, saisissez le solde comme une position **Manuel** et mettez le chiffre à jour lorsque vous consultez votre relevé. Si votre courtier propose un point d’accès HTTPS simple, à jeton, qui lit la valeur du compte, [ouvrez un ticket]({{ site.repo }}/issues) avec un lien vers sa documentation.
+Beaucoup de ces courtiers sont couverts par [SnapTrade](#snaptrade). Sinon, saisissez le solde comme une position **Manuel** et mettez le chiffre à jour lorsque vous consultez votre relevé. Si votre courtier propose un point d’accès HTTPS simple, à jeton, qui lit la valeur du compte, [ouvrez un ticket]({{ site.repo }}/issues) avec un lien vers sa documentation. Chaque courtier dans Capital est un petit plugin ; les développeurs peuvent en ajouter un en suivant [le guide des plugins]({{ site.repo }}/blob/main/BROKER-PLUGINS.md).
 
 ## Messages et que faire {#messages}
 

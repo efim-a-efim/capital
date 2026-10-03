@@ -22,4 +22,4 @@
 ## 5. Verification
 
 - [x] 5.1 Unit tests (`testDebugUnitTest`), instrumentation test on the emulator, manual flow on the emulator (add account, link, refresh error, delete).
-- [ ] 5.2 Release v2.7.0 through the release workflow.
+- [x] 5.2 Release v2.7.0 through the release workflow.

@@ -186,9 +186,9 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun fetchAccounts(broker: String,done: (List<Pair<String,String>>?,String?)->Unit) { viewModelScope.launch {
         try { done(providers.accounts(broker),null) } catch(e: CancellationException) { throw e } catch(e: Exception) { done(null,e.safeMessage()) }
     } }
-    /** Opens SnapTrade's Connection Portal for the user's own SnapTrade account. */
-    fun connectSnapTrade(open: (String)->Unit) { viewModelScope.launch {
-        try { open(providers.snapTradeLogin()) } catch(e: CancellationException) { throw e } catch(e: Exception) { notice(e.safeMessage()) }
+    /** Opens the broker's authorization page (for example SnapTrade's Connection Portal) in the browser. */
+    fun connect(broker: String,open: (String)->Unit) { viewModelScope.launch {
+        try { open(providers.connect(broker)) } catch(e: CancellationException) { throw e } catch(e: Exception) { notice(e.safeMessage()) }
     } }
     fun saveKey(provider: String,value: String): Boolean = try { secrets.put(provider,value); notice(tr("{0} key saved on this device",provider)); true } catch(e: Exception) { notice(e.message ?: tr("Could not save key")); false }
     fun export(uri: Uri,plaintext: Boolean=false)=viewModelScope.launch {

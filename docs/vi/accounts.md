@@ -138,7 +138,7 @@ Capital chỉ kết nối với các giao diện hoạt động được từ đ
 - Các nhà môi giới có API chỉ cấp mã truy cập ngắn hạn qua OAuth, ví dụ Saxo Bank (mã truy cập có hiệu lực 20 phút; mã 24 giờ của cổng nhà phát triển chỉ dùng được cho môi trường mô phỏng).
 - Ngân hàng và nhà môi giới không có API công khai.
 
-Nhiều nhà môi giới trong số này được [SnapTrade](#snaptrade) bao phủ. Nếu không, hãy nhập số dư dưới dạng tài sản **Thủ công** và cập nhật con số khi bạn kiểm tra sao kê. Nếu nhà môi giới của bạn có điểm cuối HTTPS đơn giản dùng mã truy cập để đọc giá trị tài khoản, hãy [mở một issue]({{ site.repo }}/issues) kèm liên kết đến tài liệu của nó.
+Nhiều nhà môi giới trong số này được [SnapTrade](#snaptrade) bao phủ. Nếu không, hãy nhập số dư dưới dạng tài sản **Thủ công** và cập nhật con số khi bạn kiểm tra sao kê. Nếu nhà môi giới của bạn có điểm cuối HTTPS đơn giản dùng mã truy cập để đọc giá trị tài khoản, hãy [mở một issue]({{ site.repo }}/issues) kèm liên kết đến tài liệu của nó. Mỗi nhà môi giới trong Capital là một plugin nhỏ; nhà phát triển có thể thêm plugin mới theo [hướng dẫn viết plugin]({{ site.repo }}/blob/main/BROKER-PLUGINS.md).
 
 ## Thông báo và cách xử lý {#messages}
 
