@@ -24,7 +24,7 @@ A goal MAY be of type FIRE. It SHALL accept a birth date, a FIRE date, a recurri
 - **THEN** the screen shows "Enter a target, a monthly spend, or both a FIRE date and a contribution" and no results.
 
 ### Requirement: Scenarios and defaults
-The calculation SHALL run for average, optimistic and pessimistic growth and inflation rates, defaulting to 7/10/4 % growth and 3/2/5 % inflation, with a 4 % withdrawal rate and a life expectancy of 95, all overridable in the goal's Advanced section. The manual SHALL cite the sources of the defaults.
+The calculation SHALL run for average, optimistic and pessimistic growth and inflation rates, defaulting to 7/10/4 % growth and 3/2/5 % inflation, with a 4 % withdrawal rate, a working age of 65 (a derived FIRE date is not searched past it) and a life expectancy of 95, all overridable in the goal's Advanced section. The manual SHALL cite the sources of the defaults.
 
 #### Scenario: Override
 - **WHEN** the user sets growth to 5 % in Advanced

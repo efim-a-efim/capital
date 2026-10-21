@@ -5,6 +5,7 @@ Goals say what to save by when. They cannot answer the question a long-term save
 ## What Changes
 
 - A goal can be of type **FIRE**. Its editor adds: birth date, FIRE date, contribution ("I can invest X per week / 2 weeks / month / year / N days"), monthly spend after FIRE, and the amount to have after FIRE (the goal target). Each of FIRE date, contribution, target and spend may be left blank; the app derives what it can from the rest and says what is missing.
+- **Work until age** (v2.15.0): Advanced setting, default 65; caps the derived FIRE date.
 - **Lifetime-based FIRE date** (v2.14.0): a blank FIRE date is derived so the money lasts until life expectancy; captions show it.
 - **Foldable scenarios** (v2.13.0): shared inputs once, one fold per scenario with a status badge.
 - **Contribution growth % per year** (v2.12.0): a yearly raise of the contribution; blank keeps its purchasing power.
