@@ -705,6 +705,7 @@
   "Money is enough": "पैसा काफ़ी है",
   "growth {0}% · inflation {1}%": "वृद्धि {0}% · महँगाई {1}%",
  "Withdrawal rate % · now {0}": "निकासी दर % · अभी {0}",
+ "Work until age · now {0}": "कार्य-आयु सीमा · अभी {0}",
  "Life expectancy · years · now {0}": "जीवन प्रत्याशा · वर्ष · अभी {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "खाली छोड़ने पर सेटिंग में चुने प्रदाताओं से मिली दर इस्तेमाल होती है, वरना अंतर्निहित डिफ़ॉल्ट।"
 }

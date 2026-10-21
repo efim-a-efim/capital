@@ -705,6 +705,7 @@
  "Not enough money": "Uang tidak cukup",
  "Money is enough": "Uang cukup",
  "growth {0}% · inflation {1}%": "pertumbuhan {0}% · inflasi {1}%",
+ "Work until age · now {0}": "Bekerja hingga usia · saat ini {0}",
  "Life expectancy · years · now {0}": "Harapan hidup · tahun · saat ini {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Jika kosong, dipakai suku yang diambil oleh penyedia yang dipilih di Pengaturan, atau bawaan aplikasi."
 }

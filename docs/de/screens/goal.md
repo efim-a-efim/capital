@@ -26,13 +26,13 @@ Ein Ziel vom Typ **FIRE** (finanzielle Unabhängigkeit, früher Ruhestand) beant
 - **Beitragswachstum % pro Jahr · leer = Inflation**: um wie viel mehr Sie jedes Jahr investieren können, zum Beispiel eine jährliche Gehaltserhöhung. Leer behält die Kaufkraft des Beitrags.
 - **Ausgaben pro Monat nach FIRE · leer = wird berechnet**.
 - **Betrag nach FIRE · leer = wird berechnet**: der FIRE-Betrag, der Zielbetrag des Ziels.
-- **Erweiterte Annahmen**: **Inflation % · Durchschnitt / optimistisch / pessimistisch**, **Wachstum % · Durchschnitt / optimistisch / pessimistisch**, **Entnahmerate %** und **Lebenserwartung · Jahre**. Jede Bezeichnung endet mit „· jetzt {Wert}“, dem Wert, der gilt, wenn das Feld leer ist.
+- **Erweiterte Annahmen**: **Inflation % · Durchschnitt / optimistisch / pessimistisch**, **Wachstum % · Durchschnitt / optimistisch / pessimistisch**, **Entnahmerate %**, **Arbeiten bis Alter** (Standard 65) und **Lebenserwartung · Jahre**. Jede Bezeichnung endet mit „· jetzt {Wert}“, dem Wert, der gilt, wenn das Feld leer ist.
 
 Alle Beträge verstehen sich in heutiger Kaufkraft der Zielwährung. Der Bildschirm zeigt außerdem den Wert zum FIRE-Datum in künftigem Geld. Das Geld, das das Ziel heute hat, stammt wie bei jedem Ziel aus den verknüpften Töpfen; [Pläne]({{ page.base }}/screens/plans) fließen nicht in die FIRE-Berechnung ein.
 
 **Was berechnet wird.**
 
-- FIRE-Datum: der erste Monat, ab dem die Ausgaben bis zur Lebenserwartung reichen (50 Jahre ohne Geburtsdatum) und, wenn ein Zielbetrag angegeben ist, der Zielbetrag erreicht wird. Ohne Zielbetrag wird der FIRE-Betrag zu dem Betrag, den diese Lebensspanne braucht.
+- FIRE-Datum: der erste Monat, ab dem die Ausgaben bis zur Lebenserwartung reichen (50 Jahre ohne Geburtsdatum) und, wenn ein Zielbetrag angegeben ist, der Zielbetrag erreicht wird; nicht später als **Arbeiten bis Alter**, sonst *Nicht erreichbar vor* diesem Geburtstag. Ohne Zielbetrag wird der FIRE-Betrag zu dem Betrag, den diese Lebensspanne braucht.
 - Beitrag: aus Zielbetrag und FIRE-Datum.
 - Zielbetrag: aus den Ausgaben (Ausgaben × 12 ÷ Entnahmerate), wenn das FIRE-Datum angegeben ist, oder aus FIRE-Datum und Beitrag.
 - Ausgaben: aus dem Zielbetrag (Zielbetrag × Entnahmerate ÷ 12).

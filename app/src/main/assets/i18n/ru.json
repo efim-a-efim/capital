@@ -705,6 +705,7 @@
  "Not enough money": "Денег не хватает",
  "Money is enough": "Денег хватает",
  "growth {0}% · inflation {1}%": "рост {0}% · инфляция {1}%",
+ "Work until age · now {0}": "Работать до возраста · сейчас {0}",
  "Life expectancy · years · now {0}": "Ожидаемая продолжительность жизни · лет · сейчас {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Если пусто, берётся ставка от провайдеров, выбранных в настройках, иначе встроенное значение по умолчанию."
 }

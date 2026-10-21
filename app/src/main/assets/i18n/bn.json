@@ -705,6 +705,7 @@
  "Growth % · optimistic · now {0}": "প্রবৃদ্ধি % · আশাবাদী · এখন {0}",
  "Growth % · pessimistic · now {0}": "প্রবৃদ্ধি % · নিরাশাবাদী · এখন {0}",
  "Withdrawal rate % · now {0}": "উত্তোলনের হার % · এখন {0}",
+ "Work until age · now {0}": "কাজ করার বয়সসীমা · এখন {0}",
  "Life expectancy · years · now {0}": "প্রত্যাশিত আয়ু · বছর · এখন {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "খালি রাখলে সেটিংসে বাছাই করা প্রোভাইডারের আনা হার ব্যবহার হয়, না থাকলে অ্যাপের ডিফল্ট মান।"
 }

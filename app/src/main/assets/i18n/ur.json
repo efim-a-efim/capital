@@ -705,6 +705,7 @@
  "Money is enough": "رقم کافی ہے",
  "growth {0}% · inflation {1}%": "نمو ⁨{0}⁩% · مہنگائی ⁨{1}⁩%",
  "Withdrawal rate % · now {0}": "نکلوانے کی شرح % · ابھی ⁨{0}⁩",
+ "Work until age · now {0}": "کام کرنے کی آخری عمر · ابھی ⁨{0}⁩",
  "Life expectancy · years · now {0}": "متوقع عمر · سال · ابھی ⁨{0}⁩",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "خالی چھوڑنے پر سیٹنگز میں منتخب پرووائیڈرز سے حاصل کی گئی شرح استعمال ہوتی ہے، ورنہ پہلے سے طے شدہ شرح۔"
 }

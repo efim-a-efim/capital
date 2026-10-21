@@ -26,13 +26,13 @@ Un objectif de type **FIRE** (indépendance financière, retraite anticipée) r�
 - **Croissance du versement % par an · vide = inflation** : de combien vous pouvez investir de plus chaque année, par exemple une augmentation annuelle de salaire. Vide, le versement conserve son pouvoir d’achat.
 - **Dépense par mois après FIRE · vide pour la calculer**.
 - **Montant à avoir après FIRE · vide pour le calculer** : le montant FIRE, la cible de l’objectif.
-- **Hypothèses avancées** : **Inflation % · moyenne / optimiste / pessimiste**, **Croissance % · moyenne / optimiste / pessimiste**, **Taux de retrait %** et **Espérance de vie · années**. Chaque libellé se termine par « · actuellement {valeur} », la valeur appliquée lorsque le champ est vide.
+- **Hypothèses avancées** : **Inflation % · moyenne / optimiste / pessimiste**, **Croissance % · moyenne / optimiste / pessimiste**, **Taux de retrait %**, **Travailler jusqu’à l’âge de** (65 par défaut) et **Espérance de vie · années**. Chaque libellé se termine par « · actuellement {valeur} », la valeur appliquée lorsque le champ est vide.
 
 Tous les montants sont en valeur d’aujourd’hui, dans la devise de l’objectif. L’écran affiche aussi la valeur à la date FIRE, en monnaie future. L’argent dont l’objectif dispose aujourd’hui provient de ses poches connectées, comme pour tout objectif ; les [Prévisions]({{ page.base }}/screens/plans) n’entrent pas dans le calcul FIRE.
 
 **Ce qui est calculé.**
 
-- Date FIRE : le premier mois à partir duquel la dépense est couverte jusqu’à l’espérance de vie (50 ans sans date de naissance) et, si une cible est donnée, la cible est atteinte. Sans cible, le montant FIRE devient la somme dont cette durée de vie a besoin.
+- Date FIRE : le premier mois à partir duquel la dépense est couverte jusqu’à l’espérance de vie (50 ans sans date de naissance) et, si une cible est donnée, la cible est atteinte ; pas après **Travailler jusqu’à l’âge de**, sinon *Inatteignable avant le* cet anniversaire. Sans cible, le montant FIRE devient la somme dont cette durée de vie a besoin.
 - Versement : à partir de la cible et de la date FIRE.
 - Cible : à partir de la dépense (dépense × 12 ÷ taux de retrait) lorsque la date FIRE est donnée, ou à partir de la date FIRE et du versement.
 - Dépense : à partir de la cible (cible × taux de retrait ÷ 12).

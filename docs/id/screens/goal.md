@@ -26,13 +26,13 @@ Tujuan berjenis **FIRE** (kemandirian finansial, pensiun dini) menjawab dua pert
 - **Kontribusi bertambah % per tahun · kosongkan = inflasi**: seberapa banyak lagi yang bisa Anda investasikan setiap tahun, misalnya kenaikan gaji tahunan. Bila dikosongkan, daya beli kontribusi tetap terjaga.
 - **Pengeluaran per bulan setelah FIRE · kosongkan untuk dihitung**.
 - **Dana yang dimiliki setelah FIRE · kosongkan untuk dihitung**: dana FIRE, yaitu target tujuan.
-- **Asumsi lanjutan**: **Inflasi % · rata-rata / optimis / pesimis**, **Pertumbuhan % · rata-rata / optimis / pesimis**, **Tingkat penarikan %** dan **Harapan hidup · tahun**. Setiap label diakhiri "· saat ini {nilai}", yaitu nilai yang berlaku bila kolom dikosongkan.
+- **Asumsi lanjutan**: **Inflasi % · rata-rata / optimis / pesimis**, **Pertumbuhan % · rata-rata / optimis / pesimis**, **Tingkat penarikan %**, **Bekerja hingga usia** (bawaan 65) dan **Harapan hidup · tahun**. Setiap label diakhiri "· saat ini {nilai}", yaitu nilai yang berlaku bila kolom dikosongkan.
 
 Semua jumlah dalam nilai uang hari ini dalam mata uang tujuan. Layar juga menampilkan nilai pada tanggal FIRE dalam uang masa depan. Uang yang dimiliki tujuan hari ini berasal dari kantong yang terhubung, seperti tujuan lain; [Rencana]({{ page.base }}/screens/plans) tidak ikut dalam perhitungan FIRE.
 
 **Apa yang dihitung.**
 
-- Tanggal FIRE: bulan pertama sejak uang bertahan untuk pengeluaran hingga harapan hidup (50 tahun bila tanggal lahir tidak diisi) dan, bila target diberikan, target tercapai. Tanpa target, dana FIRE menjadi jumlah yang dibutuhkan untuk rentang hidup itu.
+- Tanggal FIRE: bulan pertama sejak uang bertahan untuk pengeluaran hingga harapan hidup (50 tahun bila tanggal lahir tidak diisi) dan, bila target diberikan, target tercapai; tidak lebih lambat dari **Bekerja hingga usia**, jika tidak *Tidak tercapai sebelum* ulang tahun itu. Tanpa target, dana FIRE menjadi jumlah yang dibutuhkan untuk rentang hidup itu.
 - Kontribusi: dari target dan tanggal FIRE.
 - Target: dari pengeluaran (pengeluaran × 12 ÷ tingkat penarikan) bila tanggal FIRE diberikan, atau dari tanggal FIRE dan kontribusi.
 - Pengeluaran: dari target (target × tingkat penarikan ÷ 12).

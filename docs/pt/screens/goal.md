@@ -26,13 +26,13 @@ Uma meta do tipo **FIRE** (independência financeira, aposentadoria antecipada) 
 - **Crescimento do aporte % por ano · vazio = inflação**: quanto a mais você pode investir a cada ano, por exemplo um aumento salarial anual. Vazio mantém o poder de compra do aporte.
 - **Gasto por mês após a FIRE · vazio para calcular**.
 - **Valor a ter após a FIRE · vazio para calcular**: o montante FIRE, o valor-alvo da meta.
-- **Premissas avançadas**: **Inflação % · média / otimista / pessimista**, **Crescimento % · média / otimista / pessimista**, **Taxa de retirada %** e **Expectativa de vida · anos**. Cada rótulo termina com "· agora {valor}", o valor em vigor quando o campo está vazio.
+- **Premissas avançadas**: **Inflação % · média / otimista / pessimista**, **Crescimento % · média / otimista / pessimista**, **Taxa de retirada %**, **Trabalhar até a idade** (padrão 65) e **Expectativa de vida · anos**. Cada rótulo termina com "· agora {valor}", o valor em vigor quando o campo está vazio.
 
 Todos os valores estão em valores de hoje, na moeda da meta. A tela também mostra o valor na data FIRE, em dinheiro futuro. O dinheiro que a meta tem hoje vem das caixinhas vinculadas, como em qualquer meta; os [Planos]({{ page.base }}/screens/plans) não entram no cálculo FIRE.
 
 **O que é calculado.**
 
-- Data FIRE: o primeiro mês a partir do qual o gasto dura até a expectativa de vida (50 anos sem data de nascimento) e, quando há um valor-alvo, o valor-alvo é atingido. Sem valor-alvo, o montante FIRE passa a ser o valor de que esse período precisa.
+- Data FIRE: o primeiro mês a partir do qual o gasto dura até a expectativa de vida (50 anos sem data de nascimento) e, quando há um valor-alvo, o valor-alvo é atingido; não depois de **Trabalhar até a idade**, senão *Inalcançável antes de* esse aniversário. Sem valor-alvo, o montante FIRE passa a ser o valor de que esse período precisa.
 - Aporte: a partir do valor-alvo e da data FIRE.
 - Valor-alvo: a partir do gasto (gasto × 12 ÷ taxa de retirada) quando a data FIRE é informada, ou a partir da data FIRE e do aporte.
 - Gasto: a partir do valor-alvo (valor-alvo × taxa de retirada ÷ 12).

@@ -26,13 +26,13 @@ Mục tiêu loại **FIRE** (độc lập tài chính, nghỉ hưu sớm) trả 
 - **Mức tăng khoản đầu tư % mỗi năm · để trống = lạm phát**: số tiền bạn có thể đầu tư tăng thêm mỗi năm, ví dụ khi được tăng lương hằng năm. Để trống thì khoản đóng góp giữ nguyên sức mua.
 - **Chi tiêu mỗi tháng sau FIRE · để trống để tự tính**.
 - **Số tiền cần có sau FIRE · để trống để tự tính**: số tiền FIRE, tức số tiền mục tiêu của mục tiêu.
-- **Giả định nâng cao**: **Lạm phát % · trung bình / lạc quan / bi quan**, **Tăng trưởng % · trung bình / lạc quan / bi quan**, **Tỷ lệ rút tiền %** và **Tuổi thọ · năm**. Mỗi nhãn kết thúc bằng "· hiện {giá trị}", là giá trị đang có hiệu lực khi trường để trống.
+- **Giả định nâng cao**: **Lạm phát % · trung bình / lạc quan / bi quan**, **Tăng trưởng % · trung bình / lạc quan / bi quan**, **Tỷ lệ rút tiền %**, **Làm việc đến tuổi** (mặc định 65) và **Tuổi thọ · năm**. Mỗi nhãn kết thúc bằng "· hiện {giá trị}", là giá trị đang có hiệu lực khi trường để trống.
 
 Mọi số tiền tính theo tiền hôm nay của tiền tệ mục tiêu. Màn hình cũng hiển thị giá trị tại ngày FIRE theo tiền của tương lai. Số tiền mục tiêu hiện có lấy từ các hũ đã liên kết, như với mọi mục tiêu; [Kế hoạch]({{ page.base }}/screens/plans) không tham gia vào phép tính FIRE.
 
 **Những gì được tự tính.**
 
-- Ngày FIRE: tháng đầu tiên mà từ đó chi tiêu đủ dùng đến hết tuổi thọ (50 năm nếu không có ngày sinh) và, khi có số tiền mục tiêu, số tiền mục tiêu đạt được. Nếu không có số tiền mục tiêu, số tiền FIRE trở thành khoản mà quãng đời đó cần.
+- Ngày FIRE: tháng đầu tiên mà từ đó chi tiêu đủ dùng đến hết tuổi thọ (50 năm nếu không có ngày sinh) và, khi có số tiền mục tiêu, số tiền mục tiêu đạt được; không muộn hơn **Làm việc đến tuổi**, nếu không thì *Không đạt được trước* sinh nhật đó. Nếu không có số tiền mục tiêu, số tiền FIRE trở thành khoản mà quãng đời đó cần.
 - Khoản đóng góp: từ số tiền mục tiêu và ngày FIRE.
 - Số tiền mục tiêu: từ chi tiêu (chi tiêu × 12 ÷ tỷ lệ rút tiền), khi đã có ngày FIRE, hoặc từ ngày FIRE và khoản đóng góp.
 - Chi tiêu: từ số tiền mục tiêu (số tiền mục tiêu × tỷ lệ rút tiền ÷ 12).

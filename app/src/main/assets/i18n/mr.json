@@ -705,6 +705,7 @@
  "Money is enough": "पैसे पुरेसे आहेत",
  "growth {0}% · inflation {1}%": "वाढ {0}% · महागाई {1}%",
  "Withdrawal rate % · now {0}": "काढण्याचा दर % · सध्या {0}",
+ "Work until age · now {0}": "कामाचे कमाल वय · सध्या {0}",
  "Life expectancy · years · now {0}": "आयुर्मान · वर्षे · सध्या {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "रिकामे ठेवल्यास सेटिंग्जमध्ये निवडलेल्या प्रदात्यांकडून मिळवलेला दर वापरला जातो, नाहीतर अॅपमधील डीफॉल्ट."
 }

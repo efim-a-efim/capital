@@ -705,6 +705,7 @@
  "Money is enough": "L’argent suffit",
  "growth {0}% · inflation {1}%": "croissance {0} % · inflation {1} %",
  "Withdrawal rate % · now {0}": "Taux de retrait % · actuellement {0}",
+ "Work until age · now {0}": "Travailler jusqu’à l’âge de · actuellement {0}",
  "Life expectancy · years · now {0}": "Espérance de vie · années · actuellement {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Vide : le taux récupéré auprès des fournisseurs choisis dans les Paramètres, sinon la valeur par défaut intégrée."
 }

@@ -26,13 +26,13 @@ Una meta de tipo **FIRE** (independencia financiera, jubilación anticipada) res
 - **Crecimiento de la aportación % al año · en blanco = inflación**: cuánto más puede invertir cada año, por ejemplo con un aumento de sueldo anual. En blanco se mantiene el poder adquisitivo de la aportación.
 - **Gasto al mes tras FIRE · en blanco para calcular**.
 - **Importe necesario tras FIRE · en blanco para calcular**: el importe FIRE, el objetivo de la meta.
-- **Supuestos avanzados**: **Inflación % · media / optimista / pesimista**, **Crecimiento % · medio / optimista / pesimista**, **Tasa de retiro %** y **Esperanza de vida · años**. Cada etiqueta termina en «· ahora {valor}», el valor vigente cuando el campo está en blanco.
+- **Supuestos avanzados**: **Inflación % · media / optimista / pesimista**, **Crecimiento % · medio / optimista / pesimista**, **Tasa de retiro %**, **Trabajar hasta los** (65 por defecto) y **Esperanza de vida · años**. Cada etiqueta termina en «· ahora {valor}», el valor vigente cuando el campo está en blanco.
 
 Todos los importes están en dinero de hoy de la moneda de la meta. La pantalla muestra también el valor en la fecha FIRE en dinero futuro. El dinero que la meta tiene hoy procede de sus bolsillos conectados, como en cualquier meta; los [Planes]({{ page.base }}/screens/plans) no entran en el cálculo FIRE.
 
 **Qué se calcula.**
 
-- Fecha FIRE: el primer mes a partir del cual el gasto dura hasta la esperanza de vida (50 años sin fecha de nacimiento) y, si se indica un objetivo, este se alcanza. Sin objetivo, el importe FIRE pasa a ser el importe que necesita ese periodo de vida.
+- Fecha FIRE: el primer mes a partir del cual el gasto dura hasta la esperanza de vida (50 años sin fecha de nacimiento) y, si se indica un objetivo, este se alcanza; no más tarde de **Trabajar hasta los**, de lo contrario *Inalcanzable antes del* cumpleaños correspondiente. Sin objetivo, el importe FIRE pasa a ser el importe que necesita ese periodo de vida.
 - Aportación: a partir del objetivo y la fecha FIRE.
 - Objetivo: a partir del gasto (gasto × 12 ÷ tasa de retiro) cuando se indica la fecha FIRE, o a partir de la fecha FIRE y la aportación.
 - Gasto: a partir del objetivo (objetivo × tasa de retiro ÷ 12).

@@ -705,6 +705,7 @@
  "Not enough money": "Dinero insuficiente",
  "Money is enough": "Dinero suficiente",
  "growth {0}% · inflation {1}%": "crecimiento {0}% · inflación {1}%",
+ "Work until age · now {0}": "Trabajar hasta los · ahora {0}",
  "Life expectancy · years · now {0}": "Esperanza de vida · años · ahora {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "En blanco se usa la tasa obtenida por los proveedores elegidos en Ajustes o, si no hay, el valor predeterminado integrado."
 }
