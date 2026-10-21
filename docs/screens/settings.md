@@ -18,7 +18,7 @@ title: Settings
 
 **Brokers.** Broker accounts and their credentials have their own screen: [Brokers]({{ page.base }}/screens/brokers).
 
-**Quotes and freshness.** Every cached quote, and every fetched inflation and growth series, with the source and the time it was observed and fetched. Stale quotes stay usable and are marked on the Overview.
+**Quotes and freshness.** Every cached quote, and every fetched inflation and growth series, with the source and the time it was observed and fetched. Stale quotes stay usable and are flagged by the notice at the top of this screen.
 
 **Security.** **Encryption** encrypts every file in the folder with a password; switching it off decrypts them. With encryption on you can **Set PIN**, enable **Use biometrics**, choose **Lock after time in background** and **Change password**. There is no password recovery. Ten wrong PINs remove the PIN; the password always works. See [Security]({{ page.base }}/manual#security).
 
