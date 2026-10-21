@@ -50,6 +50,24 @@ So wird das Geld zugeordnet:
 
 **Archivieren** Sie ein Ziel, um es zu behalten, ohne es zu berücksichtigen. Archivierte Ziele stehen am Ende der Liste.
 
+## FIRE {#fire}
+
+Ein Ziel vom Typ **FIRE** zeigt, wann Ihre Ersparnisse beginnen können, Ihre Lebenshaltungskosten zu tragen, und wie lange sie reichen. Es ist Rechnerei mit Ihren eigenen Zahlen; es empfiehlt nichts. Der Bildschirm ist unter [Ziel]({{ page.base }}/screens/goal#fire) beschrieben.
+
+**Einrichten.**
+
+1. Tab „Ziele“ → **+**, **Zieltyp** auf **FIRE** stellen, Name und Währung wählen.
+2. Geben Sie ein, was Sie wissen, in heutiger Kaufkraft: **Geburtsdatum**, **FIRE-Datum**, **Ich kann investieren** (pro Woche, 2 Wochen, Monat, Jahr oder N Tage), **Ausgaben pro Monat nach FIRE**, **Betrag nach FIRE**. Lassen Sie leer, was die App berechnen soll.
+3. Öffnen Sie das Ziel und wählen Sie **Topf verknüpfen** für die Ersparnisse, die Sie schon haben, wie bei jedem Ziel.
+
+**So lesen Sie es.** Die Tabelle hat drei Spalten, **Durchschnitt**, **Optimistisch** und **Pessimistisch**, für drei Sätze von Wachstums- und Inflationsraten. **Geld reicht** nennt, bis zu welchem Datum und Alter das Geld die Ausgaben deckt; *über die Lebenserwartung hinaus* und *Geld geht nie aus 🥳* sind die guten Fälle; *es fehlen …* heißt, dass das Datum nicht erreichbar ist. Das Diagramm zeigt das Geld in heutiger Kaufkraft: steigend bis zum gestrichelten FIRE-Datum und fallend danach. Verstehen Sie die drei Kurven als Spanne, nicht als Prognose.
+
+**Annahmen.** Beitrag und Ausgaben behalten ihre Kaufkraft (sie wachsen mit der Inflation). Steuern, Renten, Sozialleistungen und Einkommen nach FIRE werden nicht modelliert. Standardwerte: Wachstum 7 % (optimistisch 10 %, pessimistisch 4 %), Inflation 3 % (2 %, 5 %), Entnahmerate 4 %, Lebenserwartung 95. Ändern Sie jeden davon unter **Erweiterte Annahmen**; Ihr Wert hat immer Vorrang.
+
+**Quellen der Standardwerte.** UBS Global Investment Returns Yearbook 2026 (Welt, 1900–2024: Aktien 9,8 % pro Jahr nominal, Anleihen 4,6 %, Inflation 2,9 %; 7 % entspricht etwa einer 60/40-Mischung); die 2-%-Inflationsziele der Zentralbanken; Bengen (1994) und die Trinity-Studie (1998) für die 4-%-Entnahmeregel.
+
+**Aktuelle Sätze.** Einstellungen → Kostenlose Datenanbieter → **Inflation** (**World Bank**, **ECB**, **OECD**, **Aus**) und **Marktwachstum** (**World Bank**, **Yahoo Finance · inoffiziell**, **Aus**). **Aktualisieren** ruft sie für die Währung jedes FIRE-Ziels ab. Inflation: Verbraucherpreise der World Bank (jährlich, nach Land oder Weltdurchschnitt), HVPI des Euroraums der EZB (nur EUR), OECD (Mitgliedsländer, nicht RUB). Wachstum: Veränderung des S&P-Global-Aktienindex der World Bank je Land (EUR nutzt den US-Index) oder 30 Jahre Monatsschlusskurse vom inoffiziellen Endpunkt von Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; andere Währungen nutzen ^GSPC). Aus der Reihe: Die durchschnittliche Inflation ist der Mittelwert der letzten 20 Jahre, optimistisch und pessimistisch der niedrigste und der höchste 5-Jahres-Mittelwert; das durchschnittliche Wachstum ist die jährliche Zinseszinsrate über bis zu 30 Jahre, optimistisch und pessimistisch die beste und die schlechteste 10-Jahres-Rate. Beide Wachstumsquellen sind Kursindizes ohne Dividenden und unterschätzen daher die Gesamtrendite. **Aus** behält die eingebauten Standardwerte. Ein fehlgeschlagener Abruf behält die vorherige Reihe und zeigt den Fehler an.
+
 ## Pläne {#plans}
 
 Tab „Pläne“ → **+**. Ein geplanter Sparbetrag ist ein Betrag, den Sie zu einem bestimmten Datum hinzufügen möchten, zum Beispiel die monatliche Sparrate vom Gehalt am Monatsende. Pläne gehören nicht zu Ihren Ersparnissen; sie verlängern nur die Prognose: „Mit geplanten Sparbeträgen am 30.10.2026 finanziert · rechtzeitig“.

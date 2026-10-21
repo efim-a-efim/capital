@@ -40,6 +40,7 @@ Capital শুধু সেটিংসে আপনার বেছে নে�
 | আপনার যোগ করা পাবলিক ওয়ালেট ঠিকানা | সেই চেইনের জন্য নির্বাচিত ব্লকচেইন ডেটা অপারেটর | ঠিকানার ব্যালান্স ও টোকেন পড়া |
 | টোকেন কন্ট্রাক্ট ঠিকানা ও অ্যাসেট আইডি | আপনার নির্বাচিত ক্রিপ্টো মূল্যের অপারেটর | অ্যাসেটের মূল্য নির্ধারণ |
 | মুদ্রা কোড | আপনার নির্বাচিত ফিয়াট বিনিময় হারের অপারেটর | এক মুদ্রা থেকে আরেক মুদ্রায় রূপান্তর |
+| প্রতিটি FIRE লক্ষ্যের মুদ্রা অঞ্চল বা সূচকের প্রতীক | আপনার নির্বাচিত মুদ্রাস্ফীতি ও বাজার প্রবৃদ্ধির অপারেটর | FIRE হিসাবের জন্য মুদ্রাস্ফীতি ও সূচকের সিরিজ আনা |
 | কোনো অপারেটরের জন্য আপনার দেওয়া API কী | শুধু সেই অপারেটর | তাদের কাছে আপনার নিজের অ্যাকাউন্ট যাচাই |
 | ব্রোকার অ্যাকাউন্টের অ্যাক্সেস টোকেন বা API কী এবং অ্যাকাউন্ট বা কোয়েরি আইডি | শুধু সেই ব্রোকার ([ব্রোকার ও ফরেক্স অ্যাকাউন্ট]({{ page.base }}/accounts) দেখুন) | অ্যাকাউন্টের মোট মূল্য পড়া |
 
@@ -53,6 +54,7 @@ Capital শুধু সেটিংসে আপনার বেছে নে�
 | TRON ও TRC-20 টোকেন | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | ক্রিপ্টোর মূল্য | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | ফিয়াট বিনিময় হার | [Frankfurter](https://frankfurter.dev), [ইউরোপীয় কেন্দ্রীয় ব্যাংক](https://www.ecb.europa.eu) |
+| মুদ্রাস্ফীতি ও বাজার প্রবৃদ্ধি | [World Bank](https://data.worldbank.org), [ইউরোপীয় কেন্দ্রীয় ব্যাংক](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | ব্রোকার অ্যাকাউন্ট | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 এর বাইরে কোথাও কিছু পাঠানো হয় না। কোনো ডেটা বিক্রি করা হয় না, বিজ্ঞাপনের জন্য শেয়ার করা হয় না, বা প্রোফাইল তৈরিতে ব্যবহার করা হয় না। পাবলিক ব্লকচেইন কোয়েরি প্রকাশ করে দেয় যে আপনার IP ঠিকানার কেউ আপনার ট্র্যাক করা ঠিকানাটিতে আগ্রহী; এটি আপনার কাছে গুরুত্বপূর্ণ হলে VPN ব্যবহার করুন।

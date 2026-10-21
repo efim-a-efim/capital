@@ -40,6 +40,7 @@ Capital फक्त सेटिंग्जमध्ये तुम्ही 
 | तुम्ही जोडलेले सार्वजनिक वॉलेट पत्ते | त्या चेनसाठी निवडलेला ब्लॉकचेन डेटा प्रदाता | पत्त्यावरील शिल्लक आणि टोकन होल्डिंग वाचणे |
 | टोकन कॉन्ट्रॅक्ट पत्ते आणि मालमत्ता ID | तुम्ही निवडलेला क्रिप्टो भाव प्रदाता | मालमत्तांचे भाव मिळवणे |
 | चलन कोड | तुम्ही निवडलेला फिएट दर प्रदाता | चलनांमध्ये रूपांतर करणे |
+| प्रत्येक FIRE उद्दिष्टाचे चलन क्षेत्र किंवा निर्देशांक चिन्ह | तुम्ही निवडलेले महागाई आणि बाजार वाढ प्रदाते | FIRE गणनेसाठी महागाई आणि निर्देशांक मालिका मिळवणे |
 | एखाद्या प्रदात्यासाठी तुम्ही टाकलेली API की | फक्त तोच प्रदाता | त्यांच्याकडील तुमच्या स्वतःच्या खात्याचे प्रमाणीकरण |
 | ब्रोकर खात्याचा अॅक्सेस टोकन किंवा API की आणि खाते किंवा क्वेरी id | फक्त तो ब्रोकर (पहा [ब्रोकर आणि फॉरेक्स खाती]({{ page.base }}/accounts)) | खात्याचे एकूण मूल्य वाचणे |
 
@@ -53,6 +54,7 @@ Capital फक्त सेटिंग्जमध्ये तुम्ही 
 | TRON आणि TRC-20 टोकन | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | क्रिप्टो भाव | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | फिएट दर | [Frankfurter](https://frankfurter.dev), [युरोपियन सेंट्रल बँक](https://www.ecb.europa.eu) |
+| महागाई आणि बाजार वाढ | [World Bank](https://data.worldbank.org), [युरोपियन सेंट्रल बँक](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | ब्रोकर खाती | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 इतर कुठेही काहीही पाठवले जात नाही. कोणताही डेटा विकला जात नाही, जाहिरातींसाठी शेअर केला जात नाही किंवा प्रोफाइल तयार करण्यासाठी वापरला जात नाही. सार्वजनिक ब्लॉकचेन क्वेरींमुळे हे उघड होते की तुम्ही ट्रॅक करत असलेल्या पत्त्यात तुमच्या IP पत्त्यावरील कोणालातरी रस आहे; हे तुमच्यासाठी महत्त्वाचे असल्यास VPN वापरा.

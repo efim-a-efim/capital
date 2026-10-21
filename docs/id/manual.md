@@ -50,6 +50,24 @@ Cara uang dialokasikan:
 
 **Arsipkan** tujuan untuk menyimpannya tanpa ikut dihitung. Tujuan yang diarsipkan tercantum di bagian bawah.
 
+## FIRE {#fire}
+
+Tujuan berjenis **FIRE** menunjukkan kapan tabungan Anda dapat mulai membiayai hidup Anda dan berapa lama tabungan itu bertahan. Ini adalah hitungan atas angka Anda sendiri; tidak merekomendasikan apa pun. Layarnya dijelaskan di [Tujuan]({{ page.base }}/screens/goal#fire).
+
+**Menyiapkan.**
+
+1. Tab Tujuan → **+**, atur **Jenis tujuan** ke **FIRE**, lalu isi nama dan mata uang.
+2. Masukkan yang Anda ketahui, dalam nilai uang hari ini: **Tanggal lahir**, **Tanggal FIRE**, **Saya bisa berinvestasi** (per minggu, 2 minggu, bulan, tahun, atau N hari), **Pengeluaran per bulan setelah FIRE**, **Dana yang dimiliki setelah FIRE**. Kosongkan yang ingin dihitung aplikasi.
+3. Buka tujuan dan **Hubungkan kantong** untuk tabungan yang sudah Anda miliki, seperti pada tujuan lain.
+
+**Cara membacanya.** Tabel memiliki tiga kolom, **Rata-rata**, **Optimis**, dan **Pesimis**, untuk tiga set suku pertumbuhan dan inflasi. **Uang bertahan** menyatakan hingga tanggal dan usia berapa uang menutupi pengeluaran; *melampaui harapan hidup* dan *uang tidak akan habis 🥳* adalah kasus yang baik; *kurang …* berarti tanggalnya tidak tercapai. Grafik menunjukkan uang dalam nilai uang hari ini, naik hingga tanggal FIRE yang bergaris putus-putus dan turun setelahnya. Anggap ketiga kurva sebagai rentang, bukan ramalan.
+
+**Asumsi.** Kontribusi dan pengeluaran mempertahankan daya belinya (naik mengikuti inflasi). Pajak, pensiun, tunjangan, dan penghasilan setelah FIRE tidak dimodelkan. Bawaan: pertumbuhan 7 % (10 % optimis, 4 % pesimis), inflasi 3 % (2 %, 5 %), tingkat penarikan 4 %, harapan hidup 95. Ubah salah satunya di **Asumsi lanjutan**; nilai Anda selalu diutamakan.
+
+**Sumber nilai bawaan.** UBS Global Investment Returns Yearbook 2026 (dunia, 1900–2024: saham 9,8 % per tahun nominal, obligasi 4,6 %, inflasi 2,9 %; 7 % kira-kira setara campuran 60/40); target inflasi 2 % bank sentral; Bengen (1994) dan studi Trinity (1998) untuk aturan penarikan 4 %.
+
+**Suku langsung.** Pengaturan → Penyedia data gratis → **Inflasi** (**World Bank**, **ECB**, **OECD**, **Nonaktif**) dan **Pertumbuhan pasar** (**World Bank**, **Yahoo Finance · tidak resmi**, **Nonaktif**). **Perbarui** mengambilnya untuk mata uang setiap tujuan FIRE. Inflasi: harga konsumen World Bank (tahunan, per negara atau rata-rata dunia), HICP kawasan euro dari ECB (hanya EUR), OECD (negara anggota, bukan RUB). Pertumbuhan: perubahan indeks saham S&P Global dari World Bank per negara (EUR memakai indeks AS), atau penutupan bulanan 30 tahun dari endpoint tidak resmi Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; mata uang lain memakai ^GSPC). Dari seri tersebut: inflasi rata-rata adalah rerata 20 tahun terakhir, optimis dan pesimis adalah rerata 5 tahun terendah dan tertinggi; pertumbuhan rata-rata adalah laju tahunan majemuk hingga 30 tahun, optimis dan pesimis adalah laju 10 tahun terbaik dan terburuk. Kedua sumber pertumbuhan adalah indeks harga tanpa dividen, sehingga menaksir terlalu rendah total imbal hasil. **Nonaktif** mempertahankan bawaan aplikasi. Pengambilan yang gagal mempertahankan seri sebelumnya dan menampilkan galatnya.
+
 ## Rencana {#plans}
 
 Tab Rencana → **+**. Rencana tabungan adalah jumlah yang ingin Anda tambahkan pada suatu tanggal, misalnya tabungan dari gaji di setiap akhir bulan. Rencana bukan bagian dari tabungan Anda; rencana hanya memperpanjang proyeksi: "Rencana tabungan memenuhi tujuan ini pada 30 Okt 2026 · tepat waktu".

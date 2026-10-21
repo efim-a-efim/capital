@@ -8,7 +8,7 @@ class: doc
 ---
 # Déclaration relative aux fonctionnalités financières
 
-<p class="meta">Réponses au formulaire de la Google Play Console (Policy and programs → App content → Financial features ; Règles et programmes → Contenu de l’application → Fonctionnalités financières), avec leur justification. Vérifiées pour la version 2.2.1 le 30 septembre 2026.</p>
+<p class="meta">Réponses au formulaire de la Google Play Console (Policy and programs → App content → Financial features ; Règles et programmes → Contenu de l’application → Fonctionnalités financières), avec leur justification. Vérifiées pour la version 2.11.0 le 21 octobre 2026.</p>
 
 ## Réponse au formulaire
 
@@ -28,6 +28,7 @@ Capital est une application de suivi de l’épargne personnelle. Elle enregistr
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (récompenses et incitations, financement participatif et tontines, marchés de prédiction) | Aucune |
 | Credit monitoring and reporting (Surveillance et rapports de crédit) | Aucune |
 | Financial advice (Conseil financier) | Aucun. La projection se contente de calculer à partir des chiffres de l’utilisateur (« Objectif atteint le … grâce aux versements prévus ») ; elle ne recommande aucun produit, aucun actif ni aucune action. Le calculateur de rééquilibrage liste les achats nécessaires pour atteindre les pourcentages que l’utilisateur a lui-même définis |
+| FIRE calculator (Calculateur FIRE) | Calculs sur les chiffres et hypothèses de l’utilisateur (un objectif de type FIRE) : dates, versements et durée de l’argent. Il ne recommande aucun produit, aucun actif ni aucune action |
 | Insurance (Assurance) | Aucune |
 | Achats intégrés, dons | Aucun n’est traité par l’application. Un écran de dons affiche les adresses publiques de portefeuille crypto du développeur (les mêmes que sur ce site) ; le transfert s’effectue dans l’application de portefeuille de l’utilisateur, ne débloque rien et reste invisible pour l’application |
 

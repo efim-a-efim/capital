@@ -50,6 +50,24 @@ Cách phân bổ tiền:
 
 **Lưu trữ** một mục tiêu để giữ lại mà không tính đến nó. Mục tiêu đã lưu trữ được liệt kê ở cuối danh sách.
 
+## FIRE {#fire}
+
+Mục tiêu loại **FIRE** cho biết khi nào tiền tiết kiệm của bạn có thể bắt đầu chi trả sinh hoạt phí và nó đủ dùng trong bao lâu. Đây là phép tính trên số liệu của chính bạn; không đưa ra khuyến nghị nào. Màn hình được mô tả tại [Chi tiết mục tiêu]({{ page.base }}/screens/goal#fire).
+
+**Thiết lập.**
+
+1. Thẻ Mục tiêu → **+**, đặt **Loại mục tiêu** thành **FIRE**, nhập tên và tiền tệ.
+2. Nhập những gì bạn biết, theo tiền hôm nay: **Ngày sinh**, **Ngày FIRE**, **Tôi có thể đầu tư** (mỗi tuần, 2 tuần, tháng, năm hoặc N ngày), **Chi tiêu mỗi tháng sau FIRE**, **Số tiền cần có sau FIRE**. Để trống những gì bạn muốn ứng dụng tự tính.
+3. Mở mục tiêu và chọn **Liên kết hũ** cho số tiền tiết kiệm bạn đã có, như với mọi mục tiêu.
+
+**Cách đọc.** Bảng có ba cột, **Trung bình**, **Lạc quan** và **Bi quan**, ứng với ba bộ tỷ lệ tăng trưởng và lạm phát. **Tiền đủ dùng** cho biết tiền chi trả khoản chi đến ngày và tuổi nào; *vượt quá tuổi thọ* và *tiền sẽ không bao giờ hết 🥳* là các trường hợp tốt; *thiếu …* nghĩa là chưa đạt được ngày đó. Biểu đồ cho thấy tiền theo tiền hôm nay, tăng đến ngày FIRE (đường nét đứt) rồi giảm sau đó. Hãy xem ba đường cong như một khoảng giá trị, không phải dự đoán.
+
+**Giả định.** Khoản đóng góp và chi tiêu giữ nguyên sức mua (chúng tăng theo lạm phát). Thuế, lương hưu, trợ cấp và thu nhập sau FIRE không được mô hình hóa. Mặc định: tăng trưởng 7 % (lạc quan 10 %, bi quan 4 %), lạm phát 3 % (2 %, 5 %), tỷ lệ rút tiền 4 %, tuổi thọ 95. Thay đổi bất kỳ giá trị nào trong **Giả định nâng cao**; giá trị của bạn luôn được ưu tiên.
+
+**Nguồn của các mặc định.** UBS Global Investment Returns Yearbook 2026 (toàn thế giới, 1900–2024: cổ phiếu 9,8 % mỗi năm danh nghĩa, trái phiếu 4,6 %, lạm phát 2,9 %; 7 % xấp xỉ danh mục 60/40); mục tiêu lạm phát 2 % của các ngân hàng trung ương; Bengen (1994) và nghiên cứu Trinity (1998) cho quy tắc rút tiền 4 %.
+
+**Tỷ lệ trực tiếp.** Cài đặt → Nhà cung cấp dữ liệu miễn phí → **Lạm phát** (**World Bank**, **ECB**, **OECD**, **Tắt**) và **Tăng trưởng thị trường** (**World Bank**, **Yahoo Finance · không chính thức**, **Tắt**). **Làm mới** tải chúng cho tiền tệ của mọi mục tiêu FIRE. Lạm phát: chỉ số giá tiêu dùng của World Bank (hằng năm, theo quốc gia hoặc trung bình thế giới), HICP khu vực đồng euro của ECB (chỉ EUR), OECD (các nước thành viên, không có RUB). Tăng trưởng: thay đổi chỉ số cổ phiếu S&P Global của World Bank theo quốc gia (EUR dùng chỉ số của Mỹ), hoặc 30 năm giá đóng cửa hằng tháng từ endpoint không chính thức của Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; các tiền tệ khác dùng ^GSPC). Từ chuỗi dữ liệu: lạm phát trung bình là giá trị trung bình của 20 năm gần nhất, lạc quan và bi quan là trung bình 5 năm thấp nhất và cao nhất; tăng trưởng trung bình là tỷ lệ kép hằng năm trong tối đa 30 năm, lạc quan và bi quan là tỷ lệ 10 năm tốt nhất và tệ nhất. Cả hai nguồn tăng trưởng đều là chỉ số giá không tính cổ tức, nên đánh giá thấp tổng lợi suất. **Tắt** giữ nguyên các mặc định tích hợp. Nếu tải thất bại, chuỗi trước đó được giữ lại và lỗi được hiển thị.
+
 ## Kế hoạch {#plans}
 
 Thẻ Kế hoạch → **+**. Khoản tiết kiệm dự kiến là số tiền bạn định thêm vào một ngày cụ thể, ví dụ phần lương để dành vào cuối mỗi tháng. Kế hoạch không thuộc tiền tiết kiệm của bạn; chúng chỉ kéo dài phần dự báo: "Các khoản tiết kiệm dự kiến sẽ hoàn thành mục tiêu này vào 30 thg 10, 2026 · đúng hạn".

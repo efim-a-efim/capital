@@ -40,6 +40,7 @@ Capital se comunica solo con los operadores que usted elige en Ajustes, solo med
 | Direcciones públicas de billeteras que usted añadió | El operador de datos de blockchain elegido para esa red | Leer el saldo y los tokens de la dirección |
 | Direcciones de contratos de tokens e identificadores de activos | El operador de precios de criptomonedas que usted eligió | Obtener el precio de los activos |
 | Códigos de moneda | El operador de tipos de cambio fiat que usted eligió | Convertir entre monedas |
+| El área monetaria o el símbolo del índice de cada meta FIRE | Los operadores de inflación y de crecimiento del mercado que usted eligió | Obtener las series de inflación y de índices para el cálculo FIRE |
 | La clave API que usted introdujo para un operador | Solo ese operador | Autenticar su propia cuenta en ese operador |
 | El token de acceso o la clave de API y el ID de cuenta o de consulta de una cuenta de bróker | Solo ese bróker (véase [Cuentas de bróker y de divisas]({{ page.base }}/accounts)) | Leer el valor total de la cuenta |
 
@@ -53,6 +54,7 @@ Como en cualquier solicitud por internet, cada operador ve además su dirección
 | TRON y tokens TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Precios de criptomonedas | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tipos de cambio fiat | [Frankfurter](https://frankfurter.dev), [Banco Central Europeo](https://www.ecb.europa.eu) |
+| Inflación y crecimiento del mercado | [World Bank](https://data.worldbank.org), [Banco Central Europeo](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Cuentas de bróker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 No se envía nada a ningún otro sitio. Ningún dato se vende, se comparte con fines publicitarios ni se usa para crear perfiles. Las consultas a blockchains públicas revelan que alguien con su dirección IP tiene interés en la dirección que usted sigue; use una VPN si eso le importa.

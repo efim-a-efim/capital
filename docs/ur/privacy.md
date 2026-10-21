@@ -40,6 +40,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | آپ کے شامل کردہ عوامی والیٹ ایڈریس | اس چین کے لیے منتخب کردہ بلاک چین ڈیٹا آپریٹر | ایڈریس کا بیلنس اور ٹوکنز پڑھنا |
 | ٹوکن کنٹریکٹ ایڈریس اور اثاثوں کی ID | آپ کا منتخب کردہ کرپٹو قیمت آپریٹر | اثاثوں کی قیمت معلوم کرنا |
 | کرنسی کوڈ | آپ کا منتخب کردہ فیاٹ ریٹ آپریٹر | کرنسیوں کے درمیان تبدیلی |
+| ہر FIRE ہدف کا کرنسی علاقہ یا انڈیکس علامت | آپ کے منتخب کردہ مہنگائی اور مارکیٹ نمو کے آپریٹرز | FIRE کے حساب کے لیے مہنگائی اور انڈیکس کی سیریز حاصل کرنا |
 | کسی آپریٹر کے لیے آپ کی درج کردہ API کلید | صرف وہی آپریٹر | اس کے ہاں آپ کے اپنے اکاؤنٹ کی تصدیق |
 | بروکر اکاؤنٹ کا ایکسیس ٹوکن یا API کلید اور اکاؤنٹ یا کوئری id | صرف وہی بروکر (دیکھیں [بروکر اور فاریکس اکاؤنٹس]({{ page.base }}/accounts)) | اکاؤنٹ کی کل مالیت پڑھنا |
 
@@ -53,6 +54,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | TRON اور TRC-20 ٹوکنز | [TronGrid](https://www.trongrid.io)، [PublicNode](https://publicnode.com) |
 | کرپٹو قیمتیں | [DefiLlama](https://defillama.com)، [CoinGecko](https://www.coingecko.com)، [CoinPaprika](https://coinpaprika.com) |
 | فیاٹ ریٹس | [Frankfurter](https://frankfurter.dev)، [یورپی مرکزی بینک](https://www.ecb.europa.eu) |
+| مہنگائی اور مارکیٹ کی نمو | [World Bank](https://data.worldbank.org)، [یورپی مرکزی بینک](https://www.ecb.europa.eu)، [OECD](https://www.oecd.org)، [Yahoo Finance](https://finance.yahoo.com) |
 | بروکر اکاؤنٹس | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com)، [Alpaca](https://alpaca.markets)، [Tradier](https://tradier.com)، [tastytrade](https://tastytrade.com)، [Public.com](https://public.com)، [eToro](https://www.etoro.com)، [Indexa Capital](https://indexacapital.com)، [T-Invest](https://www.tbank.ru/invest/)، [ALOR](https://www.alorbroker.ru)، [Capital.com](https://capital.com)، [Akahu](https://www.akahu.nz) |
 
 اس کے علاوہ کہیں کچھ نہیں بھیجا جاتا۔ کوئی ڈیٹا فروخت نہیں کیا جاتا، اشتہارات کے لیے شیئر نہیں کیا جاتا، اور نہ ہی پروفائل بنانے میں استعمال ہوتا ہے۔ عوامی بلاک چین سوالات سے یہ ظاہر ہوتا ہے کہ آپ کے IP ایڈریس پر کوئی شخص آپ کے ٹریک کردہ ایڈریس میں دلچسپی رکھتا ہے؛ اگر یہ آپ کے لیے اہم ہے تو VPN استعمال کریں۔

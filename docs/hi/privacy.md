@@ -40,6 +40,7 @@ Capital सिर्फ़ उन्हीं ऑपरेटरों से �
 | आपके जोड़े गए सार्वजनिक वॉलेट पते | उस चेन के लिए चुना गया ब्लॉकचेन डेटा ऑपरेटर | पते का बैलेंस और टोकन होल्डिंग पढ़ना |
 | टोकन कॉन्ट्रैक्ट पते और एसेट ID | आपका चुना हुआ क्रिप्टो भाव ऑपरेटर | एसेट का भाव जानना |
 | करेंसी कोड | आपका चुना हुआ फ़िएट दर ऑपरेटर | करेंसी के बीच कन्वर्ट करना |
+| हर FIRE लक्ष्य का करेंसी क्षेत्र या इंडेक्स सिंबल | आपके चुने हुए महँगाई और बाज़ार वृद्धि ऑपरेटर | FIRE गणना के लिए महँगाई और इंडेक्स की श्रृंखला प्राप्त करना |
 | किसी ऑपरेटर के लिए आपकी डाली गई API कुंजी | सिर्फ़ वही ऑपरेटर | उस ऑपरेटर के पास आपके अपने अकाउंट का प्रमाणीकरण |
 | ब्रोकर खाते का एक्सेस टोकन या API कुंजी और खाता या क्वेरी id | सिर्फ़ वही ब्रोकर ([ब्रोकर और फ़ॉरेक्स खाते]({{ page.base }}/accounts) देखें) | खाते का कुल मूल्य पढ़ना |
 
@@ -53,6 +54,7 @@ Capital सिर्फ़ उन्हीं ऑपरेटरों से �
 | TRON और TRC-20 टोकन | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | क्रिप्टो भाव | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | फ़िएट दरें | [Frankfurter](https://frankfurter.dev), [यूरोपीय सेंट्रल बैंक](https://www.ecb.europa.eu) |
+| महँगाई और बाज़ार की वृद्धि | [World Bank](https://data.worldbank.org), [यूरोपीय सेंट्रल बैंक](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | ब्रोकर खाते | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 
 इसके अलावा कहीं और कुछ नहीं भेजा जाता। कोई डेटा बेचा नहीं जाता, विज्ञापन के लिए साझा नहीं किया जाता और प्रोफ़ाइल बनाने में इस्तेमाल नहीं होता। सार्वजनिक ब्लॉकचेन क्वेरी से यह ज़ाहिर होता है कि आप जिस पते को ट्रैक करते हैं, उसमें आपके IP पते पर मौजूद किसी व्यक्ति की दिलचस्पी है; अगर यह आपके लिए मायने रखता है, तो VPN इस्तेमाल करें।

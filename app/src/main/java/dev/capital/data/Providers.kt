@@ -137,7 +137,7 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
         quotes=if(current.settings.providers == requested.settings.providers) (current.quotes.associateBy { it.asset } + quotes.associateBy { it.asset }).values.filter { it.asset !in unlisted } else current.quotes,
     )
     val used=merged.holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } }.toSet()
-    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used }).linked()
+    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used }).linked().solvedFire()
 }
 data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList())
 // Contract lookups per refresh. DefiLlama answers in batches. CoinPaprika free tier: 60 requests per hour, a listed contract costs two.

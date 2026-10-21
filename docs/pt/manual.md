@@ -50,6 +50,24 @@ Como o dinheiro é alocado:
 
 Use **Arquivar** para manter uma meta sem contabilizá-la. As metas arquivadas ficam listadas no final.
 
+## FIRE {#fire}
+
+Uma meta do tipo **FIRE** mostra quando as suas economias podem começar a pagar o seu custo de vida e por quanto tempo duram. São cálculos aritméticos com os seus próprios números; não recomenda nada. A tela é descrita em [Meta]({{ page.base }}/screens/goal#fire).
+
+**Configuração.**
+
+1. Aba Metas → **+**, defina **Tipo de meta** como **FIRE**, o nome e a moeda.
+2. Informe o que você sabe, em valores de hoje: **Data de nascimento**, **Data FIRE**, **Posso investir** (por semana, 2 semanas, mês, ano ou N dias), **Gasto por mês após a FIRE**, **Valor a ter após a FIRE**. Deixe vazio o que o app deve calcular.
+3. Abra a meta e use **Vincular caixinha** para as economias que você já tem, como em qualquer meta.
+
+**Como ler.** A tabela tem três colunas, **Média**, **Otimista** e **Pessimista**, para três conjuntos de taxas de crescimento e inflação. **O dinheiro dura** diz até qual data e idade o dinheiro cobre o gasto; *além da expectativa de vida* e *o dinheiro nunca acaba 🥳* são os bons casos; *faltam …* significa que a data não é alcançável. O gráfico mostra o dinheiro em valores de hoje, subindo até a data FIRE tracejada e caindo depois dela. Trate as três curvas como uma faixa, não como uma previsão.
+
+**Premissas.** O aporte e o gasto mantêm o poder de compra (crescem com a inflação). Impostos, aposentadorias, benefícios e renda após a FIRE não são modelados. Padrões: crescimento de 7 % (10 % otimista, 4 % pessimista), inflação de 3 % (2 %, 5 %), taxa de retirada de 4 %, expectativa de vida de 95 anos. Altere qualquer um em **Premissas avançadas**; o seu valor sempre prevalece.
+
+**Fontes dos padrões.** UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: ações 9,8 % ao ano nominal, títulos 4,6 %, inflação 2,9 %; 7 % é cerca de uma carteira 60/40); as metas de inflação de 2 % dos bancos centrais; Bengen (1994) e o estudo Trinity (1998) para a regra de retirada de 4 %.
+
+**Taxas ao vivo.** Ajustes → Provedores de dados gratuitos → **Inflação** (**World Bank**, **ECB**, **OECD**, **Desativado**) e **Crescimento do mercado** (**World Bank**, **Yahoo Finance · não oficial**, **Desativado**). **Atualizar** as obtém para a moeda de cada meta FIRE. Inflação: preços ao consumidor do World Bank (anuais, por país ou média mundial), IPCH da área do euro do ECB (somente EUR), OECD (países membros, não RUB). Crescimento: variação do índice de ações S&P Global do World Bank por país (EUR usa o índice dos EUA), ou 30 anos de fechamentos mensais do endpoint não oficial do Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; as demais moedas usam ^GSPC). A partir da série: a inflação média é a média dos últimos 20 anos, a otimista e a pessimista são a menor e a maior média de 5 anos; o crescimento médio é a taxa anual composta de até 30 anos, o otimista e o pessimista são a melhor e a pior taxa de 10 anos. As duas fontes de crescimento são índices de preços sem dividendos, então subestimam o retorno total. **Desativado** mantém os padrões do app. Se a obtenção falhar, a série anterior é mantida e o erro é exibido.
+
 ## Planos {#plans}
 
 Aba Planos → **+**. Uma economia planejada é um valor que você pretende adicionar em determinada data, por exemplo o que você guarda do salário no fim de cada mês. Os planos não fazem parte das suas economias; eles apenas estendem a projeção: "as economias planejadas concluem esta meta em 30 de out. de 2026 · no prazo".

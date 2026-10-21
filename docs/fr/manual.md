@@ -50,6 +50,24 @@ Comment l’argent est affecté :
 
 **Archiver** un objectif permet de le conserver sans le compter. Les objectifs archivés sont listés en bas.
 
+## FIRE {#fire}
+
+Un objectif de type **FIRE** montre à partir de quand votre épargne peut commencer à payer vos dépenses courantes et combien de temps elle dure. C’est un calcul sur vos propres chiffres ; il ne recommande rien. L’écran est décrit sur la page [Objectif]({{ page.base }}/screens/goal#fire).
+
+**Mise en place.**
+
+1. Onglet Objectifs → **+**, réglez **Type d’objectif** sur **FIRE**, puis saisissez le nom et la devise.
+2. Saisissez ce que vous savez, en valeur d’aujourd’hui : **Date de naissance**, **Date FIRE**, **Je peux investir** (par semaine, 2 semaines, mois, an ou N jours), **Dépense par mois après FIRE**, **Montant à avoir après FIRE**. Laissez vide ce que l’application doit calculer.
+3. Ouvrez l’objectif et utilisez **Connecter une poche** pour l’épargne que vous avez déjà, comme pour tout objectif.
+
+**Comment le lire.** Le tableau a trois colonnes, **Moyen**, **Optimiste** et **Pessimiste**, pour trois jeux de taux de croissance et d’inflation. **L’argent dure** indique jusqu’à quelle date et à quel âge l’argent couvre la dépense ; *au-delà de l’espérance de vie* et *l’argent ne s’épuisera jamais 🥳* sont les bons cas ; *il manque …* signifie que la date n’est pas atteignable. Le graphique montre l’argent en valeur d’aujourd’hui, en hausse jusqu’à la date FIRE en pointillé et en baisse ensuite. Considérez les trois courbes comme une fourchette, pas comme une prévision.
+
+**Hypothèses.** Le versement et la dépense conservent leur pouvoir d’achat (ils augmentent avec l’inflation). Les impôts, les retraites, les prestations et les revenus après FIRE ne sont pas modélisés. Valeurs par défaut : croissance 7 % (10 % optimiste, 4 % pessimiste), inflation 3 % (2 %, 5 %), taux de retrait 4 %, espérance de vie 95 ans. Modifiez-les dans **Hypothèses avancées** ; votre valeur l’emporte toujours.
+
+**Sources des valeurs par défaut.** UBS Global Investment Returns Yearbook 2026 (monde, 1900–2024 : actions 9,8 % par an en nominal, obligations 4,6 %, inflation 2,9 % ; 7 % correspond à peu près à un mix 60/40) ; les cibles d’inflation de 2 % des banques centrales ; Bengen (1994) et l’étude Trinity (1998) pour la règle de retrait de 4 %.
+
+**Taux en direct.** Paramètres → Fournisseurs de données gratuits → **Inflation** (**World Bank**, **ECB**, **OECD**, **Désactivé**) et **Croissance des marchés** (**World Bank**, **Yahoo Finance · non officiel**, **Désactivé**). **Actualiser** les récupère pour la devise de chaque objectif FIRE. Inflation : prix à la consommation de la World Bank (annuels, par pays ou moyenne mondiale), IPCH de la zone euro de l’ECB (EUR uniquement), OECD (pays membres, pas RUB). Croissance : variation de l’indice actions S&P Global de la World Bank par pays (EUR utilise l’indice américain), ou 30 ans de clôtures mensuelles du point d’accès non officiel de Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS ; les autres devises utilisent ^GSPC). À partir des séries : l’inflation moyenne est la moyenne des 20 dernières années, l’optimiste et le pessimiste la plus basse et la plus haute moyenne sur 5 ans ; la croissance moyenne est le taux annuel composé sur 30 ans au plus, l’optimiste et le pessimiste le meilleur et le pire taux sur 10 ans. Les deux sources de croissance sont des indices de prix sans dividendes ; elles sous-estiment donc le rendement total. **Désactivé** conserve les valeurs par défaut intégrées. Un échec de récupération conserve la série précédente et affiche l’erreur.
+
 ## Prévisions {#plans}
 
 Onglet Prévisions → **+**. Un versement prévu est un montant que vous comptez ajouter à une date donnée, par exemple la part de votre salaire que vous épargnez à la fin de chaque mois. Les versements prévus ne font pas partie de votre épargne ; ils prolongent seulement la projection : « Objectif atteint le 30 oct. 2026 grâce aux versements prévus · dans les temps ».

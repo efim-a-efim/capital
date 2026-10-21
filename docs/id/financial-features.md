@@ -8,7 +8,7 @@ class: doc
 ---
 # Deklarasi fitur keuangan
 
-<p class="meta">Jawaban untuk formulir Google Play Console (Kebijakan dan program → Konten aplikasi → Fitur keuangan), beserta alasannya. Diperiksa terhadap versi 2.2.1 pada 30 September 2026.</p>
+<p class="meta">Jawaban untuk formulir Google Play Console (Kebijakan dan program → Konten aplikasi → Fitur keuangan), beserta alasannya. Diperiksa terhadap versi 2.11.0 pada 21 Oktober 2026.</p>
 
 ## Jawaban formulir
 
@@ -28,6 +28,7 @@ Capital adalah pencatat tabungan pribadi. Aplikasi ini mencatat apa yang sudah d
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (Hadiah dan insentif, urun dana dan arisan, pasar prediksi) | Tidak ada |
 | Credit monitoring and reporting (Pemantauan dan pelaporan kredit) | Tidak ada |
 | Financial advice (Saran keuangan) | Tidak ada. Proyeksi hanya menampilkan hasil hitungan atas angka milik pengguna sendiri ("Rencana tabungan memenuhi tujuan ini pada …"); proyeksi tidak merekomendasikan produk, aset, atau tindakan apa pun. Kalkulator penyeimbangan ulang mencantumkan pembelian yang diperlukan untuk mencapai persentase yang ditetapkan pengguna sendiri |
+| FIRE calculator (Kalkulator FIRE) | Hitungan atas angka dan asumsi milik pengguna sendiri (tujuan berjenis FIRE): tanggal, kontribusi, dan berapa lama uang bertahan. Tidak merekomendasikan produk, aset, atau tindakan apa pun |
 | Insurance (Asuransi) | Tidak ada |
 | In-app purchases, donations (Pembelian dalam aplikasi, donasi) | Tidak ada yang diproses oleh aplikasi. Layar tip menampilkan alamat dompet publik developer (sama dengan yang ada di situs ini); transfer dilakukan di aplikasi dompet milik pengguna sendiri, tidak membuka fitur apa pun, dan tidak terlihat oleh aplikasi |
 

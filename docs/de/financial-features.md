@@ -8,7 +8,7 @@ class: doc
 ---
 # Angaben zu Finanzfunktionen
 
-<p class="meta">Antworten für das Formular in der Google Play Console (Richtlinien und Programme → App-Inhalte → Finanzfunktionen) mit Begründung. Geprüft anhand von Version 2.2.1 am 30. September 2026.</p>
+<p class="meta">Antworten für das Formular in der Google Play Console (Richtlinien und Programme → App-Inhalte → Finanzfunktionen) mit Begründung. Geprüft anhand von Version 2.11.0 am 21. Oktober 2026.</p>
 
 ## Antwort im Formular
 
@@ -28,6 +28,7 @@ Capital ist ein persönlicher Spar-Tracker. Die App erfasst, was der Nutzer bere
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (Prämien und Anreize, Crowdfunding und Chit-Fonds, Prognosemärkte) | Keine |
 | Credit monitoring and reporting (Bonitätsüberwachung und -berichte) | Keine |
 | Financial advice (Finanzberatung) | Keine. Die Prognose gibt lediglich Rechenergebnisse auf Basis der eigenen Zahlen des Nutzers aus („Mit geplanten Sparbeträgen am … finanziert“); sie empfiehlt kein Produkt, keinen Vermögenswert und keine Handlung. Der Rebalancing-Rechner listet die Käufe auf, die nötig sind, um die vom Nutzer selbst festgelegten Prozentsätze zu erreichen |
+| FIRE-Rechner | Rechenergebnisse auf Basis der eigenen Zahlen und Annahmen des Nutzers (ein Ziel vom Typ FIRE): Daten, Beiträge und wie lange das Geld reicht. Er empfiehlt kein Produkt, keinen Vermögenswert und keine Handlung |
 | Insurance (Versicherungen) | Keine |
 | In-App-Käufe, Spenden | Die App wickelt keine ab. Ein Trinkgeld-Bildschirm zeigt die öffentlichen Wallet-Adressen des Entwicklers (dieselben wie auf dieser Website); eine Überweisung erfolgt in der eigenen Wallet-App des Nutzers, schaltet nichts frei und ist für die App unsichtbar |
 

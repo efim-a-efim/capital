@@ -8,7 +8,7 @@ class: doc
 ---
 # 金融機能の申告
 
-<p class="meta">Google Play Console のフォーム（Policy and programs（ポリシーとプログラム） → App content（アプリのコンテンツ） → Financial features（金融機能））への回答とその根拠です。2026年9月30日にバージョン2.2.1を対象に確認しました。</p>
+<p class="meta">Google Play Console のフォーム（Policy and programs（ポリシーとプログラム） → App content（アプリのコンテンツ） → Financial features（金融機能））への回答とその根拠です。2026年10月21日にバージョン2.11.0を対象に確認しました。</p>
 
 ## フォームへの回答
 
@@ -28,6 +28,7 @@ Capitalは個人向けの貯蓄管理アプリです。ユーザーがすでに�
 | Rewards and incentives, crowdfunding and chit funds, prediction markets（リワードとインセンティブ、クラウドファンディングと頼母子講、予測市場） | なし |
 | Credit monitoring and reporting（信用情報の監視と報告） | なし |
 | Financial advice（金融アドバイス） | なし。予測はユーザー自身の数値に対する計算結果を示すだけで（「貯蓄予定により … に目標達成の見込み」）、商品、資産、行動を推奨しない。リバランス計算機は、ユーザー自身が設定した割合に合わせるために必要な購入を一覧にするだけ |
+| FIRE calculator（FIRE計算機） | ユーザー自身の数値と前提に対する計算（種類がFIREの目標）：日付、積立額、お金がどれだけ持つか。商品、資産、行動を推奨しない |
 | Insurance（保険） | なし |
 | In-app purchases, donations（アプリ内課金、寄付） | アプリでは一切処理しない。チップ画面には開発者の公開ウォレットアドレス（このサイトと同じもの）が表示される。送金はユーザー自身のウォレットアプリで行われ、何も解放せず、アプリからは見えない |
 

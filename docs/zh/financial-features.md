@@ -8,7 +8,7 @@ class: doc
 ---
 # 金融功能声明
 
-<p class="meta">Google Play 管理中心表单（Policy and programs（政策和计划）→ App content（应用内容）→ Financial features（金融功能））的填写答案及理由。已于 2026年9月30日 按 2.2.1 版本核对。</p>
+<p class="meta">Google Play 管理中心表单（Policy and programs（政策和计划）→ App content（应用内容）→ Financial features（金融功能））的填写答案及理由。已于 2026年10月21日 按 2.11.0 版本核对。</p>
 
 ## 表单答案
 
@@ -28,6 +28,7 @@ Capital 是一款个人储蓄追踪应用。它记录用户已经拥有的资产
 | Rewards and incentives, crowdfunding and chit funds, prediction markets（奖励和激励、众筹和互助会、预测市场） | 无 |
 | Credit monitoring and reporting（信用监控和报告） | 无 |
 | Financial advice（理财建议） | 无。预测只是基于用户自己的数字进行算术运算（“计划储蓄将于 … 达成此目标”）；不推荐任何产品、资产或操作。再平衡计算器列出的，是为达到用户自己设定的占比所需的买入项 |
+| FIRE 计算器 | 对用户自己的数字和假设做的算术（FIRE 类型的目标）：日期、定期投入以及资金能维持多久。不推荐任何产品、资产或操作 |
 | Insurance（保险） | 无 |
 | In-app purchases, donations（应用内购买、捐赠） | 应用不处理任何此类交易。打赏页面显示开发者的公开钱包地址（与本网站上的地址相同）；转账在用户自己的钱包应用中完成，不会解锁任何内容，应用也看不到这笔转账 |
 

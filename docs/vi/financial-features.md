@@ -8,7 +8,7 @@ class: doc
 ---
 # Khai báo tính năng tài chính
 
-<p class="meta">Câu trả lời cho biểu mẫu trong Google Play Console (Policy and programs → App content → Financial features (Chính sách và chương trình → Nội dung ứng dụng → Tính năng tài chính)), kèm lập luận. Đã rà soát theo phiên bản 2.2.1 vào ngày 30 tháng 9 năm 2026.</p>
+<p class="meta">Câu trả lời cho biểu mẫu trong Google Play Console (Policy and programs → App content → Financial features (Chính sách và chương trình → Nội dung ứng dụng → Tính năng tài chính)), kèm lập luận. Đã rà soát theo phiên bản 2.11.0 vào ngày 21 tháng 10 năm 2026.</p>
 
 ## Câu trả lời cho biểu mẫu
 
@@ -28,6 +28,7 @@ Capital là ứng dụng theo dõi tiết kiệm cá nhân. Ứng dụng ghi l�
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (Phần thưởng và ưu đãi, gọi vốn cộng đồng và hụi/họ, thị trường dự đoán) | Không có |
 | Credit monitoring and reporting (Theo dõi và báo cáo tín dụng) | Không có |
 | Financial advice (Tư vấn tài chính) | Không có. Phần dự báo chỉ là phép tính số học trên các con số của chính người dùng ("Các khoản tiết kiệm dự kiến sẽ hoàn thành mục tiêu này vào …"); nó không khuyến nghị sản phẩm, tài sản hay hành động nào. Công cụ tính tái cân bằng liệt kê các lệnh mua cần thiết để khớp với tỷ lệ phần trăm do chính người dùng đặt |
+| FIRE calculator (Công cụ tính FIRE) | Phép tính số học trên các con số và giả định của chính người dùng (mục tiêu loại FIRE): ngày, khoản đóng góp và thời gian tiền đủ dùng. Nó không khuyến nghị sản phẩm, tài sản hay hành động nào |
 | Insurance (Bảo hiểm) | Không có |
 | In-app purchases, donations (Mua hàng trong ứng dụng, quyên góp) | Ứng dụng không xử lý bất kỳ khoản nào. Một màn hình ủng hộ hiển thị các địa chỉ ví công khai của nhà phát triển (giống với các địa chỉ trên trang web này); việc chuyển tiền diễn ra trong ứng dụng ví của chính người dùng, không mở khóa gì và ứng dụng không nhìn thấy được |
 

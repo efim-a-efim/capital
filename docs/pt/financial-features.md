@@ -8,7 +8,7 @@ class: doc
 ---
 # Declaração de recursos financeiros
 
-<p class="meta">Respostas para o formulário do Google Play Console (Política e programas → Conteúdo do app → Recursos financeiros), com a justificativa. Revisadas com base na versão 2.2.1 em 30 de setembro de 2026.</p>
+<p class="meta">Respostas para o formulário do Google Play Console (Política e programas → Conteúdo do app → Recursos financeiros), com a justificativa. Revisadas com base na versão 2.11.0 em 21 de outubro de 2026.</p>
 
 ## Resposta do formulário
 
@@ -28,6 +28,7 @@ O Capital é um app pessoal para acompanhar economias. Ele registra o que o usu�
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (recompensas e incentivos, financiamento coletivo e consórcios, mercados de previsão) | Nenhum |
 | Credit monitoring and reporting (monitoramento e relatórios de crédito) | Nenhum |
 | Financial advice (consultoria financeira) | Nenhuma. A projeção apresenta cálculos aritméticos sobre os números do próprio usuário ("as economias planejadas concluem esta meta em …"); não recomenda nenhum produto, ativo ou ação. A calculadora de rebalanceamento lista as compras necessárias para atingir percentuais definidos pelo próprio usuário |
+| FIRE calculator (calculadora FIRE) | Cálculos aritméticos com os números e as premissas do próprio usuário (uma meta do tipo FIRE): datas, aportes e por quanto tempo o dinheiro dura. Não recomenda nenhum produto, ativo ou ação |
 | Insurance (seguros) | Nenhum |
 | In-app purchases, donations (compras no app, doações) | Nenhuma processada pelo app. Uma tela de gorjetas mostra os endereços públicos de carteira do desenvolvedor (os mesmos deste site); a transferência acontece no app de carteira do próprio usuário, não desbloqueia nada e é invisível para o app |
 

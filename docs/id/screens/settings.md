@@ -12,11 +12,11 @@ title: Pengaturan
 
 **Preferensi.** Mata uang default dan tema (sistem, terang, gelap). Mata uang default dipakai untuk nilai di Ringkasan dan diusulkan untuk kantong dan tujuan baru; data yang sudah ada tetap memakai mata uangnya. **Bahasa** langsung mengganti bahasa antarmuka; *Default sistem* mengikuti perangkat.
 
-**Penyedia data gratis.** Satu baris per jenis data, masing-masing dengan operator yang sedang dipakai: saldo BTC, ETH, TON, TRX; daftar token ETH, TON, TRX; harga kripto; kurs fiat. Ketuk baris untuk memilih operator lain, mengatur pencarian token ke **Nonaktif** untuk suatu jaringan, atau memasukkan kunci API opsional. Kunci disimpan terenkripsi di perangkat dan hanya dikirim ke operator yang menerbitkannya. **Uji sumber / perbarui portofolio** mengueri setiap operator dengan aset yang benar-benar Anda miliki dan melaporkan apa yang gagal. Tidak ada operator yang pernah diganti secara diam-diam.
+**Penyedia data gratis.** Satu baris per jenis data, masing-masing dengan operator yang sedang dipakai: saldo BTC, ETH, TON, TRX; daftar token ETH, TON, TRX; harga kripto; kurs fiat; **Inflasi** (**World Bank**, **ECB**, **OECD**, **Nonaktif**) dan **Pertumbuhan pasar** (**World Bank**, **Yahoo Finance · tidak resmi**, **Nonaktif**), yang mengisi [tujuan FIRE]({{ page.base }}/screens/goal#fire) dan mempertahankan bawaan aplikasi bila **Nonaktif**. Ketuk baris untuk memilih operator lain, mengatur pencarian token ke **Nonaktif** untuk suatu jaringan, atau memasukkan kunci API opsional. Kunci disimpan terenkripsi di perangkat dan hanya dikirim ke operator yang menerbitkannya. **Uji sumber / perbarui portofolio** mengueri setiap operator dengan aset yang benar-benar Anda miliki dan melaporkan apa yang gagal. Tidak ada operator yang pernah diganti secara diam-diam.
 
 **Broker.** Akun broker dan kredensialnya punya layar sendiri: [Broker]({{ page.base }}/screens/brokers).
 
-**Harga dan waktu pembaruan.** Setiap harga tersimpan beserta waktu diamati dan diambilnya. Harga yang usang tetap dapat dipakai dan ditandai di Ringkasan.
+**Harga dan waktu pembaruan.** Setiap harga tersimpan, dan setiap seri inflasi dan pertumbuhan yang diambil, beserta sumber serta waktu diamati dan diambilnya. Harga yang usang tetap dapat dipakai dan ditandai di Ringkasan.
 
 **Keamanan.** **Enkripsi** mengenkripsi semua file di folder dengan kata sandi; menonaktifkannya akan mendekripsi file-file tersebut. Dengan enkripsi aktif, Anda dapat **Atur PIN**, mengaktifkan **Gunakan biometrik**, memilih **Kunci otomatis setelah di latar belakang**, dan **Ubah kata sandi**. Kata sandi tidak dapat dipulihkan. Sepuluh kali PIN salah akan menghapus PIN; kata sandi selalu berfungsi. Lihat [Keamanan]({{ page.base }}/manual#security).
 

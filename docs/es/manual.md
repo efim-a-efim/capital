@@ -50,6 +50,24 @@ Cómo se asigna el dinero:
 
 **Archivar** una meta la conserva sin contabilizarla. Las metas archivadas aparecen al final de la lista.
 
+## FIRE {#fire}
+
+Una meta de tipo **FIRE** muestra cuándo sus ahorros pueden empezar a pagar sus gastos de vida y cuánto duran. Es aritmética sobre sus propias cifras; no recomienda nada. La pantalla se describe en [Meta]({{ page.base }}/screens/goal#fire).
+
+**Configuración.**
+
+1. Pestaña Metas → **+**, ponga **Tipo de meta** en **FIRE**, y elija nombre y moneda.
+2. Introduzca lo que sepa, en dinero de hoy: **Fecha de nacimiento**, **Fecha FIRE**, **Puedo invertir** (por semana, 2 semanas, mes, año o N días), **Gasto al mes tras FIRE**, **Importe necesario tras FIRE**. Deje en blanco lo que quiera que la aplicación calcule.
+3. Abra la meta y use **Conectar bolsillo** para los ahorros que ya tiene, como en cualquier meta.
+
+**Cómo leerla.** La tabla tiene tres columnas, **Medio**, **Optimista** y **Pesimista**, para tres conjuntos de tasas de crecimiento e inflación. **El dinero dura** indica hasta qué fecha y edad el dinero cubre el gasto; *más allá de la esperanza de vida* y *el dinero nunca se acabará 🥳* son los casos buenos; *faltan …* significa que la fecha no es alcanzable. El gráfico muestra el dinero en dinero de hoy, creciendo hasta la fecha FIRE (línea discontinua) y bajando después. Trate las tres curvas como un rango, no como un pronóstico.
+
+**Supuestos.** La aportación y el gasto mantienen su poder adquisitivo (crecen con la inflación). No se modelan impuestos, pensiones, prestaciones ni ingresos posteriores a FIRE. Valores predeterminados: crecimiento 7 % (10 % optimista, 4 % pesimista), inflación 3 % (2 %, 5 %), tasa de retiro 4 %, esperanza de vida 95 años. Cámbielos en **Supuestos avanzados**; su valor siempre prevalece.
+
+**Fuentes de los valores predeterminados.** UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: renta variable 9,8 % anual nominal, bonos 4,6 %, inflación 2,9 %; el 7 % equivale aproximadamente a una mezcla 60/40); los objetivos de inflación del 2 % de los bancos centrales; Bengen (1994) y el estudio Trinity (1998) para la regla de retiro del 4 %.
+
+**Tasas en vivo.** Ajustes → Proveedores de datos gratuitos → **Inflación** (**World Bank**, **ECB**, **OECD**, **Desactivado**) y **Crecimiento del mercado** (**World Bank**, **Yahoo Finance · no oficial**, **Desactivado**). **Actualizar** las obtiene para la moneda de cada meta FIRE. Inflación: precios al consumo del World Bank (anuales, por país o promedio mundial), IPCA de la zona del euro del ECB (solo EUR), OECD (países miembros, no RUB). Crecimiento: variación del índice bursátil S&P Global del World Bank por país (EUR usa el índice de EE. UU.), o 30 años de cierres mensuales del endpoint no oficial de Yahoo Finance (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; las demás monedas usan ^GSPC). A partir de las series: la inflación media es el promedio de los últimos 20 años, la optimista y la pesimista el promedio quinquenal más bajo y más alto; el crecimiento medio es la tasa anual compuesta de hasta 30 años, el optimista y el pesimista la mejor y la peor tasa a 10 años. Las dos fuentes de crecimiento son índices de precios sin dividendos, por lo que subestiman el rendimiento total. **Desactivado** mantiene los valores predeterminados integrados. Si una consulta falla, se conserva la serie anterior y se muestra el error.
+
 ## Planes {#plans}
 
 Pestaña Planes → **+**. Un ahorro planificado es un importe que usted prevé añadir en una fecha, por ejemplo lo que ahorra de su sueldo a final de cada mes. Los planes no forman parte de sus ahorros; solo amplían la proyección: «los ahorros planificados completan esta meta el 30 de octubre de 2026 · a tiempo».

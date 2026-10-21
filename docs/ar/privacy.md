@@ -40,6 +40,7 @@ class: doc
 | عناوين المحافظ العامة التي أضفتها | مزود بيانات البلوك تشين المختار لتلك الشبكة | قراءة رصيد العنوان والتوكنات الموجودة عليه |
 | عناوين عقود التوكنات ومعرّفات الأصول | مزود أسعار العملات الرقمية الذي اخترته | تسعير الأصول |
 | رموز العملات | مزود أسعار صرف العملات الورقية الذي اخترته | التحويل بين العملات |
+| منطقة العملة أو رمز المؤشر لكل هدف FIRE | مزودو التضخم ونمو السوق الذين اخترتهم | جلب سلاسل التضخم والمؤشرات لحساب FIRE |
 | مفتاح API الذي أدخلته لمزود ما | ذلك المزود فقط | مصادقة حسابك الخاص لديه |
 | رمز الوصول أو مفتاح API ومعرّف الحساب أو الاستعلام لحساب وساطة | ذلك الوسيط فقط (راجع [حسابات الوساطة والفوركس]({{ page.base }}/accounts)) | قراءة القيمة الإجمالية للحساب |
 
@@ -53,6 +54,7 @@ class: doc
 | TRON وتوكنات TRC-20 | [TronGrid](https://www.trongrid.io)، [PublicNode](https://publicnode.com) |
 | أسعار العملات الرقمية | [DefiLlama](https://defillama.com)، [CoinGecko](https://www.coingecko.com)، [CoinPaprika](https://coinpaprika.com) |
 | أسعار صرف العملات الورقية | [Frankfurter](https://frankfurter.dev)، [البنك المركزي الأوروبي](https://www.ecb.europa.eu) |
+| التضخم ونمو السوق | [World Bank](https://data.worldbank.org)، [البنك المركزي الأوروبي](https://www.ecb.europa.eu)، [OECD](https://www.oecd.org)، [Yahoo Finance](https://finance.yahoo.com) |
 | حسابات الوساطة | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com)، [Alpaca](https://alpaca.markets)، [Tradier](https://tradier.com)، [tastytrade](https://tastytrade.com)، [Public.com](https://public.com)، [eToro](https://www.etoro.com)، [Indexa Capital](https://indexacapital.com)، [T-Invest](https://www.tbank.ru/invest/)، [ALOR](https://www.alorbroker.ru)، [Capital.com](https://capital.com)، [Akahu](https://www.akahu.nz) |
 
 لا يُرسل شيء إلى أي مكان آخر. لا تُباع أي بيانات، ولا تُشارك لأغراض إعلانية، ولا تُستخدم لبناء ملفات تعريف. تكشف استعلامات البلوك تشين العامة أن العنوان الذي تتتبعه يهمّ شخصًا ما عند عنوان IP الخاص بك؛ استخدم VPN إن كان ذلك يهمّك.

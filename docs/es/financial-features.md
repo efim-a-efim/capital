@@ -8,7 +8,7 @@ class: doc
 ---
 # Declaración de funciones financieras
 
-<p class="meta">Respuestas para el formulario de Google Play Console (Política y programas → Contenido de la aplicación → Funciones financieras), con su justificación. Revisado con la versión 2.2.1 el 30 de septiembre de 2026.</p>
+<p class="meta">Respuestas para el formulario de Google Play Console (Política y programas → Contenido de la aplicación → Funciones financieras), con su justificación. Revisado con la versión 2.11.0 el 21 de octubre de 2026.</p>
 
 ## Respuesta del formulario
 
@@ -28,6 +28,7 @@ Capital es un registro personal de ahorros. Anota lo que el usuario ya posee y m
 | Rewards and incentives, crowdfunding and chit funds, prediction markets (recompensas e incentivos, micromecenazgo y fondos rotativos, mercados de predicción) | Ninguna |
 | Credit monitoring and reporting (supervisión e informes de crédito) | Ninguna |
 | Financial advice (asesoramiento financiero) | Ninguno. La proyección presenta operaciones aritméticas sobre los números del propio usuario («los ahorros planificados completan esta meta el …»); no recomienda ningún producto, activo ni acción. La calculadora de reequilibrio enumera las compras necesarias para ajustarse a los porcentajes que el propio usuario fijó |
+| FIRE calculator (calculadora FIRE) | Aritmética sobre las cifras y los supuestos del propio usuario (una meta de tipo FIRE): fechas, aportaciones y cuánto dura el dinero. No recomienda ningún producto, activo ni acción |
 | Insurance (seguros) | Ninguno |
 | In-app purchases, donations (compras en la aplicación, donaciones) | La aplicación no procesa ninguna. Una pantalla de propinas muestra las direcciones públicas de billetera del desarrollador (las mismas que en este sitio); la transferencia se hace en la aplicación de billetera del propio usuario, no desbloquea nada y la aplicación no la ve |
 

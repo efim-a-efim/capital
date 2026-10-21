@@ -12,11 +12,11 @@ title: Cài đặt
 
 **Tùy chọn.** Tiền tệ mặc định và giao diện (Hệ thống, Sáng, Tối). Tiền tệ mặc định dùng để định giá màn hình Tổng quan và được đề xuất cho hũ và mục tiêu mới; các bản ghi hiện có giữ nguyên tiền tệ của chúng. **Ngôn ngữ** đổi ngôn ngữ giao diện ngay lập tức; *Mặc định hệ thống* theo ngôn ngữ của thiết bị.
 
-**Nhà cung cấp dữ liệu miễn phí.** Mỗi loại dữ liệu một dòng, kèm nhà cung cấp đang dùng: số dư BTC, ETH, TON, TRX; danh sách token ETH, TON, TRX; giá tiền mã hóa; tỷ giá tiền pháp định. Chạm vào một dòng để chọn nhà cung cấp khác, chuyển tra cứu token của một chuỗi sang **Tắt**, hoặc nhập khóa API không bắt buộc. Khóa được lưu mã hóa trên thiết bị và chỉ được gửi đến nhà cung cấp đã cấp khóa đó. **Kiểm tra nguồn / làm mới danh mục** truy vấn từng nhà cung cấp với những tài sản bạn thực sự nắm giữ và báo cáo những gì thất bại. Không nhà cung cấp nào bị âm thầm thay thế.
+**Nhà cung cấp dữ liệu miễn phí.** Mỗi loại dữ liệu một dòng, kèm nhà cung cấp đang dùng: số dư BTC, ETH, TON, TRX; danh sách token ETH, TON, TRX; giá tiền mã hóa; tỷ giá tiền pháp định; **Lạm phát** (**World Bank**, **ECB**, **OECD**, **Tắt**) và **Tăng trưởng thị trường** (**World Bank**, **Yahoo Finance · không chính thức**, **Tắt**), dùng cho [mục tiêu FIRE]({{ page.base }}/screens/goal#fire) và giữ nguyên mặc định tích hợp khi **Tắt**. Chạm vào một dòng để chọn nhà cung cấp khác, chuyển tra cứu token của một chuỗi sang **Tắt**, hoặc nhập khóa API không bắt buộc. Khóa được lưu mã hóa trên thiết bị và chỉ được gửi đến nhà cung cấp đã cấp khóa đó. **Kiểm tra nguồn / làm mới danh mục** truy vấn từng nhà cung cấp với những tài sản bạn thực sự nắm giữ và báo cáo những gì thất bại. Không nhà cung cấp nào bị âm thầm thay thế.
 
 **Môi giới.** Các tài khoản môi giới và thông tin xác thực của chúng có màn hình riêng: [Môi giới]({{ page.base }}/screens/brokers).
 
-**Giá và độ cập nhật.** Mọi giá đã lưu đệm kèm thời điểm ghi nhận và thời điểm lấy về. Giá cũ vẫn được dùng và được đánh dấu trên màn hình Tổng quan.
+**Giá và độ cập nhật.** Mọi giá đã lưu đệm, cùng mọi chuỗi lạm phát và tăng trưởng đã tải, kèm nguồn, thời điểm ghi nhận và thời điểm lấy về. Giá cũ vẫn được dùng và được đánh dấu trên màn hình Tổng quan.
 
 **Bảo mật.** **Mã hóa** mã hóa mọi tệp trong thư mục bằng mật khẩu; tắt mã hóa sẽ giải mã chúng. Khi bật mã hóa, bạn có thể **Đặt PIN**, bật **Dùng sinh trắc học**, chọn **Khóa sau thời gian ở chế độ nền** và **Đổi mật khẩu**. Không thể khôi phục mật khẩu. Nhập sai PIN mười lần sẽ xóa PIN; mật khẩu luôn dùng được. Xem [Bảo mật]({{ page.base }}/manual#security).
 
