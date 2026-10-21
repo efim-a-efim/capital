@@ -511,6 +511,27 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
     /** URL of the broker's authorization page for the user's browser. */
     suspend fun connect(broker: String): String = plugin(broker).connect(host)
     /** Total account value in the account's base currency, read-only; the plugin reads, the host checks the result. */
+    /** Flows of a linked account as [Flow]s of `holding`, checked: currency, decimal, date not in the future, unique refs. */
+    suspend fun flows(a: Account,holding: Holding,since: LocalDate): List<Flow> {
+        val plugin=plugin(a.broker); if(!plugin.listsFlows) return emptyList()
+        val today=LocalDate.now().plusDays(1)
+        return plugin.flows(host,accountId(a.broker,a.address),since).map { f ->
+            require(f.currency.matches(Regex("[A-Z]{3}")) && validAsset(f.currency)) { tr("Unsupported account currency {0}",f.currency.clean()) }
+            val amount=f.amount.trim().toBigDecimalOrNull() ?: throw ProviderFailure(tr("Invalid account value"))
+            require(!f.date.isAfter(today) && f.ref.isNotBlank() && f.ref.length<=200) { tr("Invalid provider response") }
+            Flow(holding.id,f.date.toString(),amount.setScale(18,java.math.RoundingMode.DOWN).text(),f.currency,a.broker,f.ref.filterNot { it.isISOControl() }.trim().take(200))
+        }.also { list -> require(list.map { it.ref }.distinct().size==list.size) { tr("Invalid provider response") } }
+    }
+    /** Daily totals of a linked account as `qty:` points (value in the account currency), checked like [account]. */
+    suspend fun accountHistory(a: Account,since: LocalDate): Map<String,String> {
+        val plugin=plugin(a.broker); if(!plugin.listsHistory) return emptyMap()
+        val today=LocalDate.now().plusDays(1)
+        return plugin.history(host,accountId(a.broker,a.address),since).associate { (day,r) ->
+            require(r.currency.matches(Regex("[A-Z]{3}")) && validAsset(r.currency) && !day.isAfter(today)) { tr("Invalid provider response") }
+            val value=r.total.trim().toBigDecimalOrNull()?.takeIf { it.signum()>=0 } ?: throw ProviderFailure(tr("Invalid account value"))
+            day.toString() to value.setScale(18,java.math.RoundingMode.DOWN).text()
+        }
+    }
     suspend fun account(a: Account): Account {
         val now=System.currentTimeMillis()
         val r=plugin(a.broker).read(host,accountId(a.broker,a.address))

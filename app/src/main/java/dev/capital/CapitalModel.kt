@@ -169,6 +169,8 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun resolve(revision: Revision)=viewModelScope.launch { transaction.withLock {
         try { persist(revision.data.linked().solvedFire().ranked(),true) } catch(e: Exception) { notice(e.message ?: tr("Conflict resolution failed")) }
     } }
+    /** Fills the quantity history, rates and broker flows of a bucket whose Investment PnL was just switched on (see add-bucket-pnl). */
+    fun backfill(bucketId: String) { /* implemented with the PnL backfill */ }
     fun refresh(bucketId: String?=null) {
         if(refreshJob?.isActive==true || !isOpen || !mutable.value.ready || mutable.value.blocked || mutable.value.unsaved || !foreground) return
         val requested=mutable.value.data

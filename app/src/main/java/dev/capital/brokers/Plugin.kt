@@ -33,7 +33,17 @@ interface BrokerPlugin {
     suspend fun connect(host: BrokerHost): String = throw UnsupportedOperationException(name)
     /** Total value of the account, read-only. Throw [dev.capital.data.ProviderFailure] with a translated message on any problem. */
     suspend fun read(host: BrokerHost, id: String): Reading
+    /** True when [flows] is implemented. */
+    val listsFlows: Boolean get() = false
+    /** External deposits (positive) and withdrawals (negative) of the account since `since` (inclusive), newest last. Trades, dividends, fees and interest are not flows. */
+    suspend fun flows(host: BrokerHost, id: String, since: java.time.LocalDate): List<BrokerFlow> = throw UnsupportedOperationException(name)
+    /** True when [history] is implemented. */
+    val listsHistory: Boolean get() = false
+    /** Daily total values of the account since `since`, oldest first; one entry per day the broker reports. */
+    suspend fun history(host: BrokerHost, id: String, since: java.time.LocalDate): List<Pair<java.time.LocalDate, Reading>> = throw UnsupportedOperationException(name)
 }
+/** One external cash movement: the day, the signed amount as text, its ISO currency, and the broker's own id (unique per account). */
+data class BrokerFlow(val date: java.time.LocalDate, val amount: String, val currency: String, val ref: String)
 /** One stored credential: `key` names it in Secrets, `label` is shown in the Credentials section (call [tr] inside). */
 data class Credential(val key: String, val label: () -> String)
 /** What a plugin returns: ISO currency code, decimal total as text, and when the broker observed it (epoch ms). */

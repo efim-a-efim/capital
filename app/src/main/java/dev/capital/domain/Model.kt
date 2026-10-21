@@ -31,6 +31,8 @@ fun assetLabel(asset: String) = if (asset == "TON") "TON / GRAM" else asset
 @Serializable data class Bucket(
     val id: String = id(), val name: String, val currency: String = "EUR",
     val portfolio: Boolean = false, val targets: Map<String, String> = emptyMap(), val allowSells: Boolean = false,
+    /** Investment PnL on: quantity history and cash flows are recorded for the bucket's holdings (see Pnl.kt). */
+    val pnl: Boolean = false,
 )
 @Serializable data class Holding(
     val id: String = id(), val bucketId: String, val label: String, val asset: String,
@@ -85,6 +87,8 @@ fun accountId(broker: String?, raw: String): String {
     /** Age until which the user can still work: a derived FIRE date is searched up to it. */
     val work: Int? = null,
 )
+/** An external cash movement of a holding in `currency`: deposits positive, withdrawals negative. `source` is the broker name, "Manual" or "Wallet"; `ref` is the broker's own id or the date, unique per holding and source. */
+@Serializable data class Flow(val holdingId: String, val date: String, val amount: String, val currency: String, val source: String, val ref: String)
 /** A daily series: `key` is `rate:<ASSET>` (USD price per unit at the day's close) or `qty:<holdingId>` (asset units, sparse); `points` maps `YYYY-MM-DD` to a decimal. */
 @Serializable data class Series(val key: String, val points: Map<String, String> = emptyMap())
 /** A fetched annual series for a currency area: `kind` is "inflation" (consumer prices, % per year) or "growth" (stock index change, % per year); `values` maps year to percent. */
@@ -125,10 +129,10 @@ val providerChoices = linkedMapOf(
     val goals: List<Goal> = emptyList(), val connections: List<Connection> = emptyList(),
     val quotes: List<Quote> = emptyList(), val settings: Settings = Settings(),
     val planned: List<Planned> = emptyList(), val accounts: List<Account> = emptyList(),
-    val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList(),
+    val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList(), val flows: List<Flow> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000 && rates.size <= 1000 && history.size <= 2000) { tr("File exceeds personal portfolio limits") }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000 && rates.size <= 1000 && history.size <= 2000 && flows.size <= 20000) { tr("File exceeds personal portfolio limits") }
         fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { tr("Duplicate or invalid identifiers") } }
         unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id }); unique(accounts.map { it.id })
         require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { tr("Duplicate or invalid identifiers") }
@@ -178,6 +182,8 @@ val providerChoices = linkedMapOf(
                 require((f.period != Period.DAYS || f.days != null) && (f.days == null || f.days in 1..3660) && (f.life == null || f.life in 1..150) && (f.work == null || f.work in 1..150)) { tr("Invalid FIRE settings") }
             }
         }
+        require(flows.map { "${it.holdingId}/${it.source}/${it.ref}" }.distinct().size == flows.size) { tr("Duplicate flow") }
+        flows.forEach { f -> require(holdings.any { it.id == f.holdingId } && f.date.matches(Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")) && f.amount.matches(Regex("-?[0-9]+(\\.[0-9]{1,18})?")) && validAsset(f.currency) && f.source.isNotBlank() && f.source.length <= 60 && f.ref.isNotBlank() && f.ref.length <= 200) { tr("Invalid flow") } }
         require(history.map { it.key }.distinct().size == history.size) { tr("Duplicate series") }
         history.forEach { s -> require((s.key.startsWith("rate:") && validAsset(s.key.substring(5)) && s.key != "rate:USD" || s.key.startsWith("qty:") && holdings.any { h -> h.id == s.key.substring(4) }) && s.points.size <= 4000 && s.points.all { (d, v) -> d.matches(Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")) && v.matches(Regex("[0-9]+(\\.[0-9]{1,18})?")) }) { tr("Invalid series") } }
         require(rates.map { "${it.kind}/${it.currency}" }.distinct().size == rates.size) { tr("Duplicate rate") }
