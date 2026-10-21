@@ -85,6 +85,8 @@ fun accountId(broker: String?, raw: String): String {
     /** Age until which the user can still work: a derived FIRE date is searched up to it. */
     val work: Int? = null,
 )
+/** A daily series: `key` is `rate:<ASSET>` (USD price per unit at the day's close) or `qty:<holdingId>` (asset units, sparse); `points` maps `YYYY-MM-DD` to a decimal. */
+@Serializable data class Series(val key: String, val points: Map<String, String> = emptyMap())
 /** A fetched annual series for a currency area: `kind` is "inflation" (consumer prices, % per year) or "growth" (stock index change, % per year); `values` maps year to percent. */
 @Serializable data class Rate(
     val kind: String, val currency: String, val values: Map<String, String> = emptyMap(),
@@ -110,6 +112,7 @@ val providerChoices = linkedMapOf(
     "TRX tokens" to listOf("TronGrid", "Off"),
     "Crypto" to listOf("DefiLlama", "CoinGecko", "CoinPaprika"),
     "Fiat" to listOf("Frankfurter", "ECB"),
+    "Rate history" to listOf("Frankfurter + DefiLlama", "Off"),
     "Inflation" to listOf("World Bank", "ECB", "OECD", "Off"),
     "Market growth" to listOf("World Bank", "Yahoo Finance", "Off"),
 )
@@ -122,10 +125,10 @@ val providerChoices = linkedMapOf(
     val goals: List<Goal> = emptyList(), val connections: List<Connection> = emptyList(),
     val quotes: List<Quote> = emptyList(), val settings: Settings = Settings(),
     val planned: List<Planned> = emptyList(), val accounts: List<Account> = emptyList(),
-    val rates: List<Rate> = emptyList(),
+    val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000 && rates.size <= 1000) { tr("File exceeds personal portfolio limits") }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000 && rates.size <= 1000 && history.size <= 2000) { tr("File exceeds personal portfolio limits") }
         fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { tr("Duplicate or invalid identifiers") } }
         unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id }); unique(accounts.map { it.id })
         require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { tr("Duplicate or invalid identifiers") }
@@ -175,6 +178,8 @@ val providerChoices = linkedMapOf(
                 require((f.period != Period.DAYS || f.days != null) && (f.days == null || f.days in 1..3660) && (f.life == null || f.life in 1..150) && (f.work == null || f.work in 1..150)) { tr("Invalid FIRE settings") }
             }
         }
+        require(history.map { it.key }.distinct().size == history.size) { tr("Duplicate series") }
+        history.forEach { s -> require((s.key.startsWith("rate:") && validAsset(s.key.substring(5)) && s.key != "rate:USD" || s.key.startsWith("qty:") && holdings.any { h -> h.id == s.key.substring(4) }) && s.points.size <= 4000 && s.points.all { (d, v) -> d.matches(Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")) && v.matches(Regex("[0-9]+(\\.[0-9]{1,18})?")) }) { tr("Invalid series") } }
         require(rates.map { "${it.kind}/${it.currency}" }.distinct().size == rates.size) { tr("Duplicate rate") }
         rates.forEach { r -> require(r.kind in listOf("inflation", "growth") && validAsset(r.currency) && r.values.size <= 200 && r.values.all { (y, v) -> y.matches(Regex("[0-9]{4}")) && v.matches(Regex("-?[0-9]+(\\.[0-9]{1,6})?")) } && r.observedAt > 0 && r.fetchedAt > 0) { tr("Invalid rate") } }
         planned.forEach {
@@ -220,6 +225,13 @@ val providerChoices = linkedMapOf(
         val used = holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset, it.contract) } }.toSet()
         return accounts.any { it.error != null || it.fetchedAt == null || now - it.fetchedAt > 86_400_000 } || holdings.any { it.error != null || it.tokensError != null || (it.address != null && (it.fetchedAt == null || now - it.fetchedAt > 86_400_000)) } ||
             quotes.any { (':' !in it.asset || it.asset in used) && (it.error != null || now - it.observedAt > (if (it.asset in Chain.entries.map { c -> c.name } || ':' in it.asset) 86_400_000L else 604_800_000L)) }
+    }
+    /** Today's cached quotes appended to the rate history (one point per asset and day; USD is the unit). */
+    fun recorded(today: LocalDate = LocalDate.now()): Portfolio {
+        val day = today.toString()
+        val fresh = quotes.filter { it.error == null && it.asset != "USD" }.associate { "rate:${it.asset}" to it.usd }
+        val kept = history.map { s -> fresh[s.key]?.let { s.copy(points = s.points + (day to it)) } ?: s }
+        return copy(history = kept + (fresh.keys - history.map { it.key }.toSet()).map { Series(it, mapOf(day to fresh.getValue(it))) })
     }
     fun deleteBucket(id: String) = copy(buckets = buckets.filterNot { it.id == id }, holdings = holdings.filterNot { it.bucketId == id }, connections = connections.filterNot { it.bucketId == id })
     fun deleteAccount(id: String) = copy(accounts = accounts.filterNot { it.id == id }, holdings = holdings.filterNot { it.accountId == id })

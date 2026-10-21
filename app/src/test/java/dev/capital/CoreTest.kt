@@ -327,7 +327,7 @@ class CoreTest {
         val payload=old.toString()
         val r=decodeRevision(json.encodeToString(Envelope(payload,checksum(payload))))
         assertEquals(4,r.schema); assertNull(r.data.holdings.single().broker)
-        assertEquals(7,SCHEMA)
+        assertEquals(8,SCHEMA)
     }
     @Test fun schemaThreeOpensWithPortfolioDefaults() {
         val p=portfolio().let { it.copy(buckets=listOf(Bucket("b","Savings","USD",true,mapOf("USD" to "100"),true))) }
