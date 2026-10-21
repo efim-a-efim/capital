@@ -88,7 +88,7 @@ private fun shown(v: String)=when(v) {
     "Convert existing values" -> tr("Convert existing values"); "Replace with entered numbers" -> tr("Replace with entered numbers")
     "ETH tokens" -> tr("ETH tokens"); "TON tokens" -> tr("TON tokens"); "TRX tokens" -> tr("TRX tokens"); "Crypto" -> tr("Crypto"); "Fiat" -> tr("Fiat")
     "Powered by CoinGecko" -> tr("Powered by CoinGecko"); "Powered by CoinPaprika" -> tr("Powered by CoinPaprika")
-    "Inflation" -> tr("Inflation"); "Market growth" -> tr("Market growth"); "World Bank" -> tr("World Bank"); "OECD" -> tr("OECD"); "Yahoo Finance" -> tr("Yahoo Finance · unofficial")
+    "Inflation" -> tr("Inflation"); "Rate history" -> tr("Rate history"); "Market growth" -> tr("Market growth"); "World Bank" -> tr("World Bank"); "OECD" -> tr("OECD"); "Yahoo Finance" -> tr("Yahoo Finance · unofficial")
     else -> v
 }
 // Secrets names shown as buttons and dialog titles.
