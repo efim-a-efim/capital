@@ -707,5 +707,6 @@
  "Work until age · now {0}": "Travailler jusqu’à l’âge de · actuellement {0}",
  "Life expectancy · years · now {0}": "Espérance de vie · années · actuellement {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Vide : le taux récupéré auprès des fournisseurs choisis dans les Paramètres, sinon la valeur par défaut intégrée.",
- "Value in {0}, today's money · the dashed line marks the FIRE date": "Valeur en {0}, en valeur d’aujourd’hui · la ligne pointillée marque la date FIRE"
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "Valeur en {0}, en valeur d’aujourd’hui · la ligne pointillée marque la date FIRE",
+ "{0} · {1}": "{0} · {1}"
 }

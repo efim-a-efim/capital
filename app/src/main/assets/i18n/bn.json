@@ -707,5 +707,6 @@
  "Work until age · now {0}": "কাজ করার বয়সসীমা · এখন {0}",
  "Life expectancy · years · now {0}": "প্রত্যাশিত আয়ু · বছর · এখন {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "খালি রাখলে সেটিংসে বাছাই করা প্রোভাইডারের আনা হার ব্যবহার হয়, না থাকলে অ্যাপের ডিফল্ট মান।",
-"Value in {0}, today's money · the dashed line marks the FIRE date": "{0}-এ মান, আজকের মূল্যে · ড্যাশ দেওয়া রেখা FIRE-এর তারিখ নির্দেশ করে"
+"Value in {0}, today's money · the dashed line marks the FIRE date": "{0}-এ মান, আজকের মূল্যে · ড্যাশ দেওয়া রেখা FIRE-এর তারিখ নির্দেশ করে",
+ "{0} · {1}": "{0} · {1}"
 }

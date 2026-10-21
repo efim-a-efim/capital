@@ -707,5 +707,6 @@
  "Work until age · now {0}": "कामाचे कमाल वय · सध्या {0}",
  "Life expectancy · years · now {0}": "आयुर्मान · वर्षे · सध्या {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "रिकामे ठेवल्यास सेटिंग्जमध्ये निवडलेल्या प्रदात्यांकडून मिळवलेला दर वापरला जातो, नाहीतर अॅपमधील डीफॉल्ट.",
- "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} मध्ये, आजच्या मूल्यात · तुटक रेषा FIRE तारीख दर्शवते"
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} मध्ये, आजच्या मूल्यात · तुटक रेषा FIRE तारीख दर्शवते",
+ "{0} · {1}": "{0} · {1}"
 }

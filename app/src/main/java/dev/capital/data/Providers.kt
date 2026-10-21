@@ -449,25 +449,25 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         for(a in data.accounts.filter { a -> bucketId==null || data.holdings.any { it.bucketId==bucketId && it.accountId==a.id } }) {
             read += try { account(a) }
             catch(e: CancellationException) { throw e }
-            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",a.name,message); a.copy(error=message) }
+            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} · {1}",a.broker,tr("{0}: {1}",a.name,message)); a.copy(error=message) }
         }
         for(h in data.holdings.filter { it.address != null && (bucketId==null || it.bucketId==bucketId) }) {
             var r=try { balance(h,data.settings.providers.getValue(h.asset)) }
             catch(e: CancellationException) { throw e }
-            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0}: {1}",h.label,message); h.copy(error=message) }
+            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} · {1}",data.settings.providers.getValue(h.asset),tr("{0}: {1}",h.label,message)); h.copy(error=message) }
             val source=data.settings.providers["${h.asset} tokens"]
             if(h.asset != Chain.BTC.name && source != null) r=if(source=="Off") r.copy(tokens=emptyList(),tokensError=null) else try {
                 val fresh=tokens(h,source).map { t -> h.tokens.find { it.contract==t.contract }?.let { o -> t.copy(decimals=t.decimals ?: o.decimals,symbol=t.symbol.ifBlank { o.symbol },checkedAt=o.checkedAt) } ?: t }
                 r.copy(tokens=fresh,tokensError=null)
             } catch(e: CancellationException) { throw e }
-            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} tokens: {1}",h.label,message); r.copy(tokens=h.tokens,tokensError=message) }
+            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} · {1}",source,tr("{0} tokens: {1}",h.label,message)); r.copy(tokens=h.tokens,tokensError=message) }
             updated += r
         }
         // Account holdings may come back in another currency than stored; its rate is fetched in the same refresh.
         val assets=(data.holdings.filter { bucketId==null || it.bucketId==bucketId }.map { it.asset }+read.mapNotNull { it.asset }+data.buckets.map { it.currency }+data.goals.map { it.currency }+data.settings.currency).toSet()-"USD"
         val native=Chain.entries.map { it.name }.toSet()
         fun failedQuote(asset: String,e: Exception) {
-            val message=e.safeMessage(); errors += tr("{0}: {1}",asset,message)
+            val message=e.safeMessage(); errors += tr("{0} · {1}",data.settings.providers.getValue(if(asset in native) "Crypto" else "Fiat"),tr("{0}: {1}",asset,message))
             data.quotes.find { it.asset==asset }?.let { quotes += it.copy(error=message) }
         }
         for((group,requested) in listOf("Crypto" to assets.intersect(native),"Fiat" to (assets-native))) {
@@ -490,7 +490,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         val unlisted=mutableSetOf<String>(); val looked=mutableSetOf<String>(); val now=System.currentTimeMillis()
         fun keepOld(asset: String,message: String): Boolean = data.quotes.find { it.asset==asset }?.let { quotes += it.copy(error=message); true } ?: false
         val missingKey=try { if(lookups.isNotEmpty() && provider=="CoinGecko") requiredKey(provider); null } catch(e: Exception) { e.safeMessage() }
-        if(missingKey != null) { errors += tr("Tokens: {0}",missingKey); lookups.forEach { keepOld(it,missingKey) } }
+        if(missingKey != null) { errors += tr("{0} · {1}",provider,tr("Tokens: {0}",missingKey)); lookups.forEach { keepOld(it,missingKey) } }
         else if(provider=="DefiLlama") {
             val platform=mapOf("ETH" to "ethereum","TRX" to "tron","TON" to "ton")
             val keys=lookups.associateWith { a -> val (c,contract)=a.split(":",limit=2); "${platform.getValue(c)}:${providerAddress(Chain.valueOf(c),contract)}" }
@@ -498,7 +498,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
                 val found=if(keys.isEmpty()) emptyMap() else llama(keys.values.toList())
                 lookups.forEach { a -> looked += a; found[keys.getValue(a)]?.let { (price,stamp) -> quotes += Quote(a,price,provider,stamp,now) } ?: run { unlisted += a } }
             } catch(e: CancellationException) { throw e }
-            catch(e: Exception) { val message=e.safeMessage(); errors += tr("Tokens: {0}",message); lookups.forEach { keepOld(it,message) } }
+            catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} · {1}",provider,tr("Tokens: {0}",message)); lookups.forEach { keepOld(it,message) } }
         }
         else for((index,asset) in lookups.withIndex()) {
             val (c,contract)=asset.split(":",limit=2)
@@ -506,16 +506,16 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             catch(e: CancellationException) { throw e }
             catch(e: ProviderFailure) {
                 // Provider down or out of quota: stop asking, keep cached prices.
-                val message=e.safeMessage(); errors += tr("Tokens: {0}",message); lookups.drop(index).forEach { keepOld(it,message) }; break
+                val message=e.safeMessage(); errors += tr("{0} · {1}",provider,tr("Tokens: {0}",message)); lookups.drop(index).forEach { keepOld(it,message) }; break
             }
-            catch(e: Exception) { val message=e.safeMessage(); if(keepOld(asset,message)) errors += tr("Token {0}…: {1}",contract.take(10),message) }
+            catch(e: Exception) { val message=e.safeMessage(); if(keepOld(asset,message)) errors += tr("{0} · {1}",provider,tr("Token {0}…: {1}",contract.take(10),message)) }
         }
         val listed=(quotes.map { it.asset }+seen)-unlisted
         val info=mutableMapOf<String,Pair<Int,String>>()
         for(asset in updated.flatMap { h -> if(h.asset=="TRX") h.tokens.filter { it.decimals==null && it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } else emptyList() }.distinct().filter { it in listed }) {
             try { info[asset]=trxTokenInfo(asset.substringAfter(":"),data.settings.providers.getValue("TRX tokens")) }
             catch(e: CancellationException) { throw e }
-            catch(e: Exception) { errors += tr("TRX token {0}…: {1}",asset.substringAfter(":").take(10),e.safeMessage()) }
+            catch(e: Exception) { errors += tr("{0} · {1}",data.settings.providers.getValue("TRX tokens"),tr("TRX token {0}…: {1}",asset.substringAfter(":").take(10),e.safeMessage())) }
         }
         val final=updated.map { h -> h.copy(tokens=h.tokens.map { t ->
             val asset=tokenAsset(h.asset,t.contract); val i=info[asset]
@@ -526,7 +526,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             val source=data.settings.providers.getValue(group); val currencies=rateCurrencies(data)
             if(source=="Off" || currencies.isEmpty()) continue
             fun failedRate(c: String,e: Exception) {
-                val message=e.safeMessage(); errors += tr("{0}: {1}","$c $group",message)
+                val message=e.safeMessage(); errors += tr("{0} · {1}",source,tr("{0}: {1}","$c $group",message))
                 data.rates.find { it.kind==kind && it.currency==c }?.let { fetchedRates += it.copy(error=message,fetchedAt=rateNow) }
             }
             try { fetchedRates += rates(kind,currencies,source,::failedRate) }

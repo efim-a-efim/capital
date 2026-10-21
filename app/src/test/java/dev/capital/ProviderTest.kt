@@ -192,7 +192,7 @@ class ProviderTest {
             }
         }.refresh(p,null)
         assertEquals(1,attempts.get())
-        assertEquals(1,result.errors.count { it.startsWith("Tokens:") })
+        assertEquals(1,result.errors.count { it.contains(" · Tokens:") })
         assertNotNull(result.quotes.first { it.asset==tokenAsset("ETH",c(0)) }.error)
         assertTrue(result.unlisted.isEmpty())
     }

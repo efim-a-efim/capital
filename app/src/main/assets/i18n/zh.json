@@ -707,5 +707,6 @@
  "Money is enough": "资金充足",
  "growth {0}% · inflation {1}%": "增长 {0}% · 通胀 {1}%",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "留空则使用“设置”中所选数据源获取的比率，否则使用内置默认值。",
- "Value in {0}, today's money · the dashed line marks the FIRE date": "按今日币值计（{0}） · 虚线标示 FIRE 日期"
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "按今日币值计（{0}） · 虚线标示 FIRE 日期",
+ "{0} · {1}": "{0} · {1}"
 }

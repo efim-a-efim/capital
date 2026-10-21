@@ -707,5 +707,6 @@
  "Withdrawal rate % · now {0}": "Tỷ lệ rút tiền % · hiện {0}",
  "Work until age · now {0}": "Làm việc đến tuổi · hiện {0}",
  "Life expectancy · years · now {0}": "Tuổi thọ · năm · hiện {0}",
- "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Để trống sẽ dùng tỷ lệ do các nhà cung cấp chọn trong Cài đặt tải về, nếu không có thì dùng mặc định tích hợp."
+ "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Để trống sẽ dùng tỷ lệ do các nhà cung cấp chọn trong Cài đặt tải về, nếu không có thì dùng mặc định tích hợp.",
+ "{0} · {1}": "{0} · {1}"
 }
