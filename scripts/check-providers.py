@@ -36,16 +36,24 @@ checks = [
     ("ALOR", "https://oauth.alor.ru/refresh", {"token":"x"}),
     ("Capital.com", "https://api-capital.backend-capital.com/api/v1/session", {"identifier":"a@b.c","password":"x","encryptedPassword":False}),
     ("Akahu", "https://api.akahu.io/v1/accounts", None),
+    # FIRE rate series; the shape is checked on the first bytes of the body.
+    ("World Bank inflation", "https://api.worldbank.org/v2/country/WLD;USA;EMU/indicator/FP.CPI.TOTL.ZG?format=json&per_page=2000&date=1990:2025", None),
+    ("World Bank growth", "https://api.worldbank.org/v2/country/USA;GBR/indicator/CM.MKT.INDX.ZG?format=json&per_page=2000&date=1990:2025", None),
+    ("ECB inflation", "https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.000000.4.ANR?format=csvdata&startPeriod=1997-01", None),
+    ("OECD inflation", "https://sdmx.oecd.org/public/rest/data/OECD.SDD.TPS,DSD_PRICES@DF_PRICES_ALL,1.0/USA.A.N.CPI.PA._T.N.GY?startPeriod=1990&dimensionAtObservation=AllDimensions&format=jsondata", None),
+    ("Yahoo Finance growth", "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=30y&interval=1mo", None),
 ]
+shapes={"World Bank inflation": '[{"page"', "World Bank growth": '[{"page"', "ECB inflation": "KEY,FREQ,", "OECD inflation": '{"meta"', "Yahoo Finance growth": '{"chart"'}
 # T-Invest (invest-public-api.tbank.ru) is not listed: it is served under the Russian Trusted Root CA, which only the app trusts for that host.
 expected_errors={"OANDA v20": 401, "Trading 212": 401, "Alpaca": 401, "Tradier": 401, "tastytrade": 400, "Public.com": 401, "eToro": 401, "Indexa Capital": 401, "ALOR": 403, "Capital.com": 400, "Akahu": 401}
 results=[]
 for name,url,body in checks:
-    req=urllib.request.Request(url,data=json.dumps(body).encode() if body else None,headers={"Content-Type":"application/json","User-Agent":"Java" if "interactivebrokers" in url else "Capital/0.1"})
+    req=urllib.request.Request(url,data=json.dumps(body).encode() if body else None,headers={"Content-Type":"application/json","User-Agent":"Java" if "interactivebrokers" in url else "Capital/0.1",**({"Accept":"application/vnd.sdmx.data+json"} if "oecd" in url else {})})
     try:
         with urllib.request.urlopen(req,timeout=20) as response:
             text=response.read(8*1024*1024).decode()
-            payload=text if name in ("ECB","Interactive Brokers Flex") else json.loads(text)
+            if name in shapes and not text.startswith(shapes[name]): raise ValueError("unexpected body start: "+text[:60])
+            payload=text if name in ("ECB","Interactive Brokers Flex","ECB inflation") else json.loads(text)
             results.append({"provider":name,"status":response.status,"sample":payload})
             print(name, response.status)
     except urllib.error.HTTPError as exc:

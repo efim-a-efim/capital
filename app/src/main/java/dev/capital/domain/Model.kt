@@ -68,6 +68,23 @@ fun accountId(broker: String?, raw: String): String {
 @Serializable data class Goal(
     val id: String = id(), val name: String, val target: String, val currency: String,
     val due: String, val priority: Int = 0, val archived: Boolean = false,
+    /** Set on a FIRE goal; `target` and `due` are then derived when the block leaves them blank (see Fire.kt). */
+    val fire: Fire? = null,
+)
+@Serializable enum class Period { WEEK, TWO_WEEKS, MONTH, YEAR, DAYS }
+/** FIRE inputs in today's money of the goal currency. A blank `fireDate` or `target` means the goal's `due` or `target` is derived; blank rates use the fetched or built-in defaults (see Fire.kt). Rates are annual percents. */
+@Serializable data class Fire(
+    val birth: String? = null, val fireDate: String? = null,
+    val contribution: String? = null, val period: Period = Period.MONTH, val days: Int? = null,
+    val spend: String? = null, val target: String? = null,
+    val inflation: String? = null, val inflationOptimistic: String? = null, val inflationPessimistic: String? = null,
+    val growth: String? = null, val growthOptimistic: String? = null, val growthPessimistic: String? = null,
+    val withdrawal: String? = null, val life: Int? = null,
+)
+/** A fetched annual series for a currency area: `kind` is "inflation" (consumer prices, % per year) or "growth" (stock index change, % per year); `values` maps year to percent. */
+@Serializable data class Rate(
+    val kind: String, val currency: String, val values: Map<String, String> = emptyMap(),
+    val source: String, val observedAt: Long, val fetchedAt: Long, val error: String? = null,
 )
 @Serializable data class Planned(val id: String = id(), val name: String, val amount: String, val currency: String, val date: String)
 fun Planned.archived(today: LocalDate = LocalDate.now()) = LocalDate.parse(date) < today
@@ -89,6 +106,8 @@ val providerChoices = linkedMapOf(
     "TRX tokens" to listOf("TronGrid", "Off"),
     "Crypto" to listOf("DefiLlama", "CoinGecko", "CoinPaprika"),
     "Fiat" to listOf("Frankfurter", "ECB"),
+    "Inflation" to listOf("World Bank", "ECB", "OECD", "Off"),
+    "Market growth" to listOf("World Bank", "Yahoo Finance", "Off"),
 )
 @Serializable data class Settings(
     val currency: String = "EUR", val theme: String = "System",
@@ -99,9 +118,10 @@ val providerChoices = linkedMapOf(
     val goals: List<Goal> = emptyList(), val connections: List<Connection> = emptyList(),
     val quotes: List<Quote> = emptyList(), val settings: Settings = Settings(),
     val planned: List<Planned> = emptyList(), val accounts: List<Account> = emptyList(),
+    val rates: List<Rate> = emptyList(),
 ) {
     fun validate(): Portfolio {
-        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000) { tr("File exceeds personal portfolio limits") }
+        require(buckets.size <= 1000 && holdings.size <= 10000 && goals.size <= 1000 && connections.size <= 10000 && quotes.size <= 5000 && planned.size <= 1000 && accounts.size <= 1000 && rates.size <= 1000) { tr("File exceeds personal portfolio limits") }
         fun unique(ids: List<String>) { require(ids.distinct().size == ids.size && ids.all { it.isNotBlank() && it.length <= 100 && '/' !in it }) { tr("Duplicate or invalid identifiers") } }
         unique(buckets.map { it.id }); unique(holdings.map { it.id }); unique(goals.map { it.id }); unique(planned.map { it.id }); unique(accounts.map { it.id })
         require(buckets.none { it.id == PLANNED_BUCKET } && planned.none { it.id == PLANNED_BUCKET }) { tr("Duplicate or invalid identifiers") }
@@ -144,7 +164,15 @@ val providerChoices = linkedMapOf(
         goals.forEach {
             require(it.name.isNotBlank() && it.name.length <= 120 && it.target.decimal() > ZERO && validAsset(it.currency)) { tr("Invalid goal") }
             LocalDate.parse(it.due)
+            it.fire?.let { f ->
+                listOfNotNull(f.birth, f.fireDate).forEach { d -> LocalDate.parse(d) }
+                listOfNotNull(f.contribution, f.spend, f.target).forEach { v -> v.decimal() }
+                listOfNotNull(f.inflation, f.inflationOptimistic, f.inflationPessimistic, f.growth, f.growthOptimistic, f.growthPessimistic, f.withdrawal).forEach { v -> require(v.decimal() <= HUNDRED) { tr("Invalid FIRE settings") } }
+                require((f.period != Period.DAYS || f.days != null) && (f.days == null || f.days in 1..3660) && (f.life == null || f.life in 1..150)) { tr("Invalid FIRE settings") }
+            }
         }
+        require(rates.map { "${it.kind}/${it.currency}" }.distinct().size == rates.size) { tr("Duplicate rate") }
+        rates.forEach { r -> require(r.kind in listOf("inflation", "growth") && validAsset(r.currency) && r.values.size <= 200 && r.values.all { (y, v) -> y.matches(Regex("[0-9]{4}")) && v.matches(Regex("-?[0-9]+(\\.[0-9]{1,6})?")) } && r.observedAt > 0 && r.fetchedAt > 0) { tr("Invalid rate") } }
         planned.forEach {
             require(it.name.isNotBlank() && it.name.length <= 120 && it.amount.decimal() > ZERO && validAsset(it.currency) && ':' !in it.currency) { tr("Invalid planned saving") }
             LocalDate.parse(it.date)

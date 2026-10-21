@@ -355,4 +355,84 @@ class ProviderTest {
         val unsynced=routeWith(secrets("SnapTrade" to "CLIENT","SnapTrade consumer key" to "CONSUMER")) { ok("""{"id":"$id","balance":{"total":null}}""") }
         try { unsynced.account(h); fail("Expected failure") } catch(e: ProviderFailure) { assertTrue(e.message!!.contains("sync")) }
     }
+
+    // --- FIRE rates ---
+    private val wbBody="""[{"page":1,"pages":1,"per_page":2000,"total":4,"sourceid":"2","lastupdated":"2026-10-08"},[{"indicator":{"id":"FP.CPI.TOTL.ZG","value":"Inflation, consumer prices (annual %)"},"country":{"id":"US","value":"United States"},"countryiso3code":"USA","date":"2025","value":null,"unit":"","obs_status":"","decimal":1},{"indicator":{"id":"FP.CPI.TOTL.ZG","value":"Inflation, consumer prices (annual %)"},"country":{"id":"US","value":"United States"},"countryiso3code":"USA","date":"2024","value":2.94952520485207,"unit":"","obs_status":"","decimal":1},{"indicator":{"id":"FP.CPI.TOTL.ZG","value":"x"},"country":{"id":"1W","value":"World"},"countryiso3code":"WLD","date":"2025","value":3.04,"unit":"","obs_status":"","decimal":1},{"indicator":{"id":"FP.CPI.TOTL.ZG","value":"x"},"country":{"id":"1W","value":"World"},"countryiso3code":"WLD","date":"2024","value":-0.5,"unit":"","obs_status":"","decimal":1}]]"""
+    private val ecbCsv="KEY,FREQ,REF_AREA,ADJUSTMENT,ICP_ITEM,STS_INSTITUTION,ICP_SUFFIX,TIME_PERIOD,OBS_VALUE,OBS_STATUS,OBS_CONF,OBS_PRE_BREAK,OBS_COM,TIME_FORMAT,BREAKS,COLLECTION,COMPILING_ORG,DATA_COMP,DISS_ORG,DOM_SER_IDS,PUBL_ECB,PUBL_MU,PUBL_PUBLIC,UNIT_INDEX_BASE,COMPILATION,COVERAGE,DECIMALS,SOURCE_AGENCY,TITLE,TITLE_COMPL,UNIT,UNIT_MULT\n"+
+        (1..12).joinToString("") { m -> "ICP.M.U2.N.000000.4.ANR,M,U2,N,000000,4,ANR,2023-%02d,5,A,F,,,P1M,,A,,,,ICPT.M.VAL.HICP.RCH_A.EA.00.M,,,,,,,1,,HICP - Overall index,\"Euro area, HICP, Annual rate of change\",PCCH,0\n".format(m) } +
+        (1..12).joinToString("") { m -> "ICP.M.U2.N.000000.4.ANR,M,U2,N,000000,4,ANR,2024-%02d,%s,A,F,,,P1M,,A,,,,ICPT.M.VAL.HICP.RCH_A.EA.00.M,,,,,,,1,,HICP - Overall index,\"Euro area, HICP, Annual rate of change\",PCCH,0\n".format(m,if(m==12) "2.4" else "2") } +
+        "ICP.M.U2.N.000000.4.ANR,M,U2,N,000000,4,ANR,2025-01,2.5,A,F,,,P1M,,A,,,,X,,,,,,,1,,HICP,\"a, b\",PCCH,0\n"
+    private val oecdBody="""{"data":{"dataSets":[{"observations":{"0:0:0:0:0:0:0:0:0":[2.949525,0,null,null,0],"0:0:0:0:0:0:0:0:1":[8.0028,0,null,null,0],"0:0:0:0:0:0:0:0:2":[4.116338,0,null,null,0]}}],"structure":{"dimensions":{"observation":[{"id":"REF_AREA","values":[{"id":"USA"}]},{"id":"FREQ","values":[{"id":"A"}]},{"id":"METHODOLOGY","values":[{"id":"N"}]},{"id":"MEASURE","values":[{"id":"CPI"}]},{"id":"UNIT_MEASURE","values":[{"id":"PA"}]},{"id":"EXPENDITURE","values":[{"id":"_T"}]},{"id":"ADJUSTMENT","values":[{"id":"N"}]},{"id":"TRANSFORMATION","values":[{"id":"GY"}]},{"id":"TIME_PERIOD","values":[{"id":"2024"},{"id":"2022"},{"id":"2023"}]}]}}}}"""
+    // Monthly bars: December 2022, 2023, 2024, then January 2025 and a bar without a close.
+    private val yahooBody="""{"chart":{"result":[{"meta":{"currency":"USD","symbol":"^GSPC","gmtoffset":-18000,"timezone":"EST"},"timestamp":[1669905000,1701441000,1733063400,1735828200,1738420200],"indicators":{"quote":[{"close":[4000.0,4500.0,5400.0,5500.0,null]}]}}],"error":null}}"""
+    private fun rates(kind: String,currencies: Set<String>,provider: String,body: String,seen: MutableList<Request> = mutableListOf(),errors: MutableMap<String,String> = mutableMapOf()) = runBlocking {
+        Providers({ "" },client { r -> seen += r; 200 to body },0).rates(kind,currencies,provider) { c,e -> errors[c]=e.message.orEmpty() }
+    }
+    @Test fun worldBankInflationOneRequestForAllAreas() {
+        val seen=mutableListOf<Request>()
+        val rates=rates("inflation",setOf("USD","XYZ"),"World Bank",wbBody,seen)
+        assertEquals(1,seen.size)
+        assertTrue(seen.single().url.toString().startsWith("https://api.worldbank.org/v2/country/USA;WLD/indicator/FP.CPI.TOTL.ZG?format=json&per_page=2000&date=1990:"))
+        assertEquals(mapOf("2024" to "2.95"),rates.first { it.currency=="USD" }.values)
+        assertEquals(mapOf("2024" to "-0.5","2025" to "3.04"),rates.first { it.currency=="XYZ" }.values)
+        assertEquals("World Bank",rates[0].source)
+    }
+    @Test fun worldBankGrowthUsesUsAreaForEuroAndWorld() {
+        val seen=mutableListOf<Request>()
+        rates("growth",setOf("EUR","GBP","XYZ"),"World Bank",wbBody,seen)
+        assertTrue(seen.single().url.toString().contains("/country/GBR;USA/indicator/CM.MKT.INDX.ZG"))
+    }
+    @Test fun ecbInflationMeansCompleteYearsAndHandlesQuotedCommas() {
+        assertEquals(mapOf("2023" to "5","2024" to "2.03"),rates("inflation",setOf("EUR"),"ECB",ecbCsv).single().values)
+    }
+    @Test fun ecbDoesNotCoverOtherCurrencies() {
+        val errors=mutableMapOf<String,String>()
+        assertTrue(rates("inflation",setOf("USD"),"ECB",ecbCsv,errors=errors).isEmpty())
+        assertEquals("ECB does not cover USD",errors["USD"])
+    }
+    @Test fun oecdInflationReadsObservationsByTimeIndex() {
+        val seen=mutableListOf<Request>()
+        val rates=rates("inflation",setOf("USD"),"OECD",oecdBody,seen)
+        assertEquals(mapOf("2022" to "8","2023" to "4.12","2024" to "2.95"),rates.single().values)
+        assertEquals("application/vnd.sdmx.data+json",seen.single().header("Accept"))
+        assertTrue(seen.single().url.toString().contains("DF_PRICES_ALL,1.0/USA.A.N.CPI.PA._T.N.GY?startPeriod=1990"))
+    }
+    @Test fun oecdDoesNotCoverRubles() {
+        val errors=mutableMapOf<String,String>()
+        assertTrue(rates("inflation",setOf("RUB"),"OECD",oecdBody,errors=errors).isEmpty())
+        assertEquals("OECD does not cover RUB",errors["RUB"])
+    }
+    @Test fun yahooGrowthIsDecemberToDecemberChange() {
+        val seen=mutableListOf<Request>()
+        val rates=rates("growth",setOf("USD"),"Yahoo Finance",yahooBody,seen)
+        assertEquals(mapOf("2023" to "12.5","2024" to "20"),rates.single().values)
+        assertEquals("Yahoo Finance",rates.single().source)
+        assertTrue(seen.single().url.toString().startsWith("https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=30y&interval=1mo"))
+    }
+    @Test fun malformedRateBodyIsAProviderFailure() {
+        for((kind,provider) in listOf("inflation" to "World Bank","inflation" to "ECB","inflation" to "OECD","growth" to "Yahoo Finance")) {
+            val errors=mutableMapOf<String,String>()
+            assertTrue(rates(kind,setOf("EUR"),provider,"""{"unexpected":true}""",errors=errors).isEmpty())
+            assertTrue("$provider: ${errors["EUR"]}",!errors["EUR"].isNullOrBlank() && !errors["EUR"]!!.contains("unexpected"))
+        }
+    }
+    @Test fun mergeReplacesRateAndKeepsFailedFetchValues() {
+        val old=Rate("inflation","USD",mapOf("2023" to "4.1"),"World Bank",1,1)
+        val other=Rate("growth","USD",mapOf("2023" to "20"),"Yahoo Finance",1,1)
+        val p=Portfolio(rates=listOf(old,other))
+        val fresh=Rate("inflation","USD",mapOf("2024" to "2.9"),"World Bank",5,5)
+        assertEquals(listOf(other,fresh),mergeObservations(p,p,emptyList(),emptyList(),rates=listOf(fresh)).rates)
+        val failed=old.copy(error="Provider busy",fetchedAt=9)
+        val kept=mergeObservations(p,p,emptyList(),emptyList(),rates=listOf(failed)).rates.first { it.kind=="inflation" }
+        assertEquals(mapOf("2023" to "4.1"),kept.values); assertEquals("Provider busy",kept.error); assertEquals(9L,kept.fetchedAt)
+    }
+    @Test fun refreshFetchesRatesForFireGoalsOnly()=runBlocking {
+        val fire=Goal(id="g",name="FIRE",target="0",currency="USD",due="2040-01-01",fire=Fire())
+        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),goals=listOf(fire),settings=Settings("USD").let { it.copy(providers=it.providers+("Market growth" to "Off")) })
+        val result=Providers({ "" },client { 200 to wbBody },0).refresh(p,null)
+        assertEquals(listOf("inflation/USD"),result.rates.map { "${it.kind}/${it.currency}" })
+        assertTrue(Providers({ "" },client { 200 to wbBody },0).refresh(p,"b").rates.isEmpty())
+        val failing=Providers({ "" },client { 500 to "{}" },0).refresh(p.copy(rates=result.rates),null)
+        assertEquals(result.rates.single().values,failing.rates.single().values); assertNotNull(failing.rates.single().error)
+    }
 }

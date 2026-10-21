@@ -37,7 +37,91 @@ fun parseRpc(body: JsonObject): String {
     if(body["error"] != null) throw ProviderFailure(tr("RPC rejected the request"))
     return body.string("result").also { require(it.matches(Regex("0x[0-9a-fA-F]+")) && it.length <= 82) { tr("Invalid RPC response") } }
 }
-fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList()): Portfolio {
+// --- annual inflation and market growth series for FIRE goals ---
+/** Currency to World Bank area. The one place for the map. */
+private val rateAreas = mapOf("USD" to "USA","EUR" to "EMU","GBP" to "GBR","JPY" to "JPN","INR" to "IND","BRL" to "BRA","RUB" to "RUS","CNY" to "CHN")
+fun rateArea(currency: String) = rateAreas[currency] ?: "WLD"
+/** The World Bank has no equity index for the euro area or the world; the US index stands in. */
+private fun growthArea(currency: String) = rateArea(currency).let { if(it=="EMU" || it=="WLD") "USA" else it }
+private val oecdAreas = mapOf("USD" to "USA","EUR" to "EA20","GBP" to "GBR","JPY" to "JPN","INR" to "IND","BRL" to "BRA","CNY" to "CHN")
+// RUB has no index with a long history on Yahoo; the US index stands in, like for any currency without its own.
+private val yahooSymbols = mapOf("USD" to "^GSPC","EUR" to "^GDAXI","GBP" to "^FTSE","JPY" to "^N225","INR" to "^BSESN","BRL" to "^BVSP","CNY" to "000001.SS")
+/** Currencies that get a rate series: ISO fiat codes of goals with a FIRE plan. */
+fun rateCurrencies(data: Portfolio): Set<String> = data.goals.filter { it.fire != null }.map { it.currency }.filter { c -> c.matches(Regex("[A-Z]{3}")) && c !in Chain.entries.map { it.name } && runCatching { java.util.Currency.getInstance(c) }.isSuccess }.toSet()
+private fun pct(d: java.math.BigDecimal) = d.setScale(2,java.math.RoundingMode.HALF_UP).text()
+private fun JsonElement?.num() = (this as? JsonPrimitive)?.content?.toBigDecimalOrNull()
+private fun badResponse() = ProviderFailure(tr("Invalid provider response"))
+/** Area to year to percent. Null values are skipped. */
+fun parseWorldBank(body: String): Map<String,Map<String,String>> {
+    val rows=(json.parseToJsonElement(body) as? JsonArray)?.getOrNull(1) as? JsonArray ?: throw badResponse()
+    val out=mutableMapOf<String,MutableMap<String,String>>()
+    for(r in rows) {
+        val o=r.jsonObject; val v=o["value"].num() ?: continue; val year=o.string("date")
+        require(year.matches(Regex("[0-9]{4}"))) { tr("Invalid provider response") }
+        out.getOrPut(o.string("countryiso3code")) { mutableMapOf() }[year]=pct(v)
+    }
+    return out
+}
+private fun csvRow(line: String): List<String> {
+    val cells=mutableListOf<String>(); val cell=StringBuilder(); var quoted=false; var i=0
+    while(i<line.length) {
+        val c=line[i]
+        if(quoted) { if(c=='"') { if(line.getOrNull(i+1)=='"') { cell.append('"'); i++ } else quoted=false } else cell.append(c) }
+        else if(c=='"') quoted=true else if(c==',') { cells += cell.toString(); cell.clear() } else cell.append(c)
+        i++
+    }
+    return cells+cell.toString()
+}
+/** Monthly annual rates to one mean per year; years without all twelve months are left out. */
+fun parseEcbInflation(csv: String): Map<String,String> {
+    val lines=csv.lines().filter { it.isNotBlank() }
+    val head=csvRow(lines.firstOrNull() ?: throw badResponse())
+    val period=head.indexOf("TIME_PERIOD").takeIf { it>=0 } ?: throw ProviderFailure(tr("Missing {0} in provider response","TIME_PERIOD"))
+    val value=head.indexOf("OBS_VALUE").takeIf { it>=0 } ?: throw ProviderFailure(tr("Missing {0} in provider response","OBS_VALUE"))
+    val months=mutableMapOf<String,MutableMap<String,java.math.BigDecimal>>()
+    for(line in lines.drop(1)) {
+        val cells=csvRow(line); val t=cells.getOrNull(period) ?: throw badResponse()
+        require(t.matches(Regex("[0-9]{4}-[0-9]{2}"))) { tr("Invalid provider response") }
+        months.getOrPut(t.take(4)) { mutableMapOf() }[t]=cells.getOrNull(value)?.toBigDecimalOrNull() ?: continue
+    }
+    return months.filterValues { it.size==12 }.mapValues { (_,m) -> pct(m.values.reduce { a,b -> a+b }.divide(java.math.BigDecimal(12),10,java.math.RoundingMode.HALF_UP)) }
+}
+/** OECD SDMX-JSON, one area, observations keyed by dimension index (dimensionAtObservation=AllDimensions). */
+fun parseOecd(body: String): Map<String,String> {
+    val data=json.parseToJsonElement(body).jsonObject["data"]?.jsonObject ?: throw badResponse()
+    val dims=data["structure"]?.jsonObject?.get("dimensions")?.jsonObject?.get("observation")?.jsonArray ?: throw badResponse()
+    val position=dims.indexOfFirst { it.jsonObject["id"]?.jsonPrimitive?.content=="TIME_PERIOD" }.takeIf { it>=0 } ?: throw badResponse()
+    val years=dims[position].jsonObject["values"]?.jsonArray?.map { it.jsonObject.string("id") } ?: throw badResponse()
+    val observations=data["dataSets"]?.jsonArray?.firstOrNull()?.jsonObject?.get("observations")?.jsonObject ?: throw badResponse()
+    val out=mutableMapOf<String,String>()
+    for((key,row) in observations) {
+        val year=years.getOrNull(key.split(":").getOrNull(position)?.toIntOrNull() ?: throw badResponse()) ?: throw badResponse()
+        require(year.matches(Regex("[0-9]{4}"))) { tr("Invalid provider response") }
+        out[year]=pct((row as? JsonArray)?.firstOrNull().num() ?: continue)
+    }
+    return out
+}
+/** Yahoo monthly closes to the yearly change from the December close to the next; the current year is left out. */
+fun parseYahoo(body: String,thisYear: Int): Map<String,String> {
+    val result=(json.parseToJsonElement(body).jsonObject["chart"]?.jsonObject?.get("result") as? JsonArray)?.firstOrNull()?.jsonObject ?: throw badResponse()
+    val offset=result["meta"]?.jsonObject?.get("gmtoffset").num()?.toLong() ?: 0L
+    val times=result["timestamp"]?.jsonArray ?: throw badResponse()
+    val closes=result["indicators"]?.jsonObject?.get("quote")?.jsonArray?.firstOrNull()?.jsonObject?.get("close")?.jsonArray ?: throw badResponse()
+    require(times.size==closes.size) { tr("Invalid provider response") }
+    val december=sortedMapOf<Int,java.math.BigDecimal>()
+    for(i in times.indices) {
+        val close=closes[i].num() ?: continue
+        val date=Instant.ofEpochSecond(times[i].jsonPrimitive.long+offset).atZone(ZoneOffset.UTC).toLocalDate()
+        if(date.monthValue==12) december[date.year]=close
+    }
+    val out=mutableMapOf<String,String>()
+    for((year,close) in december) {
+        val before=december[year-1] ?: continue
+        if(year<thisYear && before.signum()>0) out[year.toString()]=pct(close.divide(before,java.math.MathContext.DECIMAL64).subtract(java.math.BigDecimal.ONE).multiply(java.math.BigDecimal(100)))
+    }
+    return out
+}
+fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList(), rates: List<Rate> = emptyList()): Portfolio {
     val results=holdings.associateBy { it.id }; val read=accounts.associateBy { it.id }
     val merged=current.copy(
         accounts=current.accounts.map { a -> read[a.id]?.takeIf { r -> requested.accounts.find { it.id == a.id }?.let { it.broker == a.broker && it.address == a.address } == true }?.let { r -> a.copy(asset=r.asset,quantity=r.quantity,observedAt=r.observedAt,fetchedAt=r.fetchedAt,error=r.error) } ?: a },
@@ -49,12 +133,13 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
                 if(current.settings.providers[src] == requested.settings.providers[src]) native.copy(tokens=result.tokens,tokensError=result.tokensError) else native
             } else h
         },
+        rates=current.rates.filterNot { old -> rates.any { it.kind==old.kind && it.currency==old.currency } }+rates,
         quotes=if(current.settings.providers == requested.settings.providers) (current.quotes.associateBy { it.asset } + quotes.associateBy { it.asset }).values.filter { it.asset !in unlisted } else current.quotes,
     )
     val used=merged.holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } }.toSet()
     return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used }).linked()
 }
-data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList())
+data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList())
 // Contract lookups per refresh. DefiLlama answers in batches. CoinPaprika free tier: 60 requests per hour, a listed contract costs two.
 fun tokenLookups(provider: String) = when(provider) { "DefiLlama" -> 1000; "CoinPaprika" -> 10; else -> 30 }
 const val MIN_CONFIDENCE = "0.9"
@@ -296,6 +381,43 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         val stamp=LocalDate.parse(requireNotNull(date)).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
         return quoteEach(assets,onError) { asset -> Quote(asset,usd.divideMoney(rates[asset] ?: throw ProviderFailure(tr("ECB does not cover {0}",asset))).text(),provider,stamp,now) }
     }
+    /** Annual percent series of one kind ("inflation" or "growth") per currency. Failed currencies go to onError; the caller keeps their old series. */
+    suspend fun rates(kind: String,currencies: Set<String>,provider: String,onError: (String,Exception)->Unit): List<Rate> {
+        val now=System.currentTimeMillis(); val year=LocalDate.now(ZoneOffset.UTC).year
+        fun rate(c: String,values: Map<String,String>?): Rate {
+            val kept=values.orEmpty().toSortedMap().entries.toList().takeLast(200).associate { it.key to it.value }
+            if(kept.isEmpty()) throw ProviderFailure(tr("No rate data for {0}",c))
+            return Rate(kind,c,kept,provider,now,now)
+        }
+        suspend fun each(block: suspend (String)->Rate) = currencies.sorted().mapNotNull { c ->
+            try { block(c) } catch(e: CancellationException) { throw e } catch(e: Exception) { onError(c,e); null }
+        }
+        if(provider=="World Bank") {
+            val area: (String)->String = if(kind=="inflation") ::rateArea else ::growthArea
+            val indicator=if(kind=="inflation") "FP.CPI.TOTL.ZG" else "CM.MKT.INDX.ZG"
+            val areas=currencies.map(area).distinct().sorted().joinToString(";")
+            val byArea=try { parseWorldBank(request("https://api.worldbank.org/v2/country/$areas/indicator/$indicator?format=json&per_page=2000&date=1990:$year")) }
+            catch(e: CancellationException) { throw e } catch(e: Exception) { currencies.sorted().forEach { onError(it,e) }; return emptyList() }
+            return each { c -> rate(c,byArea[area(c)]) }
+        }
+        return each { c ->
+            rate(c,when {
+                kind=="inflation" && provider=="ECB" -> {
+                    if(c!="EUR") throw ProviderFailure(tr("ECB does not cover {0}",c))
+                    parseEcbInflation(request("https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.000000.4.ANR?format=csvdata&startPeriod=1997-01"))
+                }
+                kind=="inflation" && provider=="OECD" -> {
+                    val area=oecdAreas[c] ?: throw ProviderFailure(tr("OECD does not cover {0}",c))
+                    parseOecd(request("https://sdmx.oecd.org/public/rest/data/OECD.SDD.TPS,DSD_PRICES@DF_PRICES_ALL,1.0/$area.A.N.CPI.PA._T.N.GY?startPeriod=1990&dimensionAtObservation=AllDimensions&format=jsondata",null,mapOf("Accept" to "application/vnd.sdmx.data+json")))
+                }
+                kind=="growth" && provider=="Yahoo Finance" -> {
+                    val symbol=(yahooSymbols[c] ?: "^GSPC").replace("^","%5E")
+                    parseYahoo(request("https://query1.finance.yahoo.com/v8/finance/chart/$symbol?range=30y&interval=1mo"),year)
+                }
+                else -> throw ProviderFailure(tr("Unsupported provider"))
+            })
+        }
+    }
     /** What broker plugins see: the paced HTTPS client and the stored credentials. */
     private val host=object: BrokerHost {
         override fun secret(key: String)=key(key)
@@ -399,7 +521,19 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             val asset=tokenAsset(h.asset,t.contract); val i=info[asset]
             t.copy(decimals=t.decimals ?: i?.first,symbol=t.symbol.ifBlank { i?.second ?: "" },checkedAt=if(asset in looked) now else t.checkedAt)
         }) }
-        return Observations(final,quotes,errors,unlisted,read)
+        val fetchedRates=mutableListOf<Rate>(); val rateNow=System.currentTimeMillis()
+        if(bucketId==null) for((kind,group) in listOf("inflation" to "Inflation","growth" to "Market growth")) {
+            val source=data.settings.providers.getValue(group); val currencies=rateCurrencies(data)
+            if(source=="Off" || currencies.isEmpty()) continue
+            fun failedRate(c: String,e: Exception) {
+                val message=e.safeMessage(); errors += tr("{0}: {1}","$c $group",message)
+                data.rates.find { it.kind==kind && it.currency==c }?.let { fetchedRates += it.copy(error=message,fetchedAt=rateNow) }
+            }
+            try { fetchedRates += rates(kind,currencies,source,::failedRate) }
+            catch(e: CancellationException) { throw e }
+            catch(e: Exception) { currencies.forEach { failedRate(it,e) } }
+        }
+        return Observations(final,quotes,errors,unlisted,read,fetchedRates)
     }
 }
 fun Exception.safeMessage(): String = when(this) {
