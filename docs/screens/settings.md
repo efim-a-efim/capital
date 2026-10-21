@@ -12,11 +12,11 @@ title: Settings
 
 **Preferences.** Default currency and theme (system, light, dark). The default currency values the Overview and is proposed for new buckets and goals; existing records keep their currency. **Language** switches the interface immediately; *System default* follows the device.
 
-**Free data providers.** One row per data type, each with the operator in use: BTC, ETH, TON, TRX balances; ETH, TON, TRX token lists; crypto prices; fiat rates. Tap a row to pick another operator, switch token lookups **Off** for a chain, or enter an optional API key. Keys are stored encrypted on the device and sent only to the operator that issued them. **Test sources / refresh portfolio** queries every operator with the assets you actually hold and reports what failed. No operator is ever substituted silently.
+**Free data providers.** One row per data type, each with the operator in use: BTC, ETH, TON, TRX balances; ETH, TON, TRX token lists; crypto prices; fiat rates; **Inflation** (**World Bank**, **ECB**, **OECD**, **Off**) and **Market growth** (**World Bank**, **Yahoo Finance · unofficial**, **Off**), which feed [FIRE goals]({{ page.base }}/screens/goal#fire) and keep the built-in defaults when **Off**. Tap a row to pick another operator, switch token lookups **Off** for a chain, or enter an optional API key. Keys are stored encrypted on the device and sent only to the operator that issued them. **Test sources / refresh portfolio** queries every operator with the assets you actually hold and reports what failed. No operator is ever substituted silently.
 
 **Brokers.** Broker accounts and their credentials have their own screen: [Brokers]({{ page.base }}/screens/brokers).
 
-**Quotes and freshness.** Every cached quote with the time it was observed and fetched. Stale quotes stay usable and are marked on the Overview.
+**Quotes and freshness.** Every cached quote, and every fetched inflation and growth series, with the source and the time it was observed and fetched. Stale quotes stay usable and are marked on the Overview.
 
 **Security.** **Encryption** encrypts every file in the folder with a password; switching it off decrypts them. With encryption on you can **Set PIN**, enable **Use biometrics**, choose **Lock after time in background** and **Change password**. There is no password recovery. Ten wrong PINs remove the PIN; the password always works. See [Security]({{ page.base }}/manual#security).
 

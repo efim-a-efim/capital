@@ -37,6 +37,9 @@ Put each place you keep money into a bucket: a savings account, cash, a brokerag
 GOALS
 Give each goal a target and a due date, then connect the buckets that may fund it, with limits if you like. Goals with earlier dates are funded first; drag goals that share a date to set their order. The app shows what each goal has, what it still needs, and marks it Funded, Funded in time or Not funded.
 
+FIRE
+A goal of type FIRE turns a FIRE date, a contribution and a monthly spend – any of them may be left blank – into the missing number, and shows for three scenarios when the money can start to pay your spend and how long it lasts. It is a projection on your own numbers; it recommends nothing.
+
 PLANS
 Add the savings you intend to make – salary at the end of the month, a bonus in December. Capital projects them onto your goals and tells you the date each goal closes, or how much it falls short. Plans whose date has passed move to an archive and stop counting.
 

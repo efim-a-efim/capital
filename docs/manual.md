@@ -50,6 +50,24 @@ How money is allocated:
 
 **Archive** a goal to keep it without counting it. Archived goals are listed at the bottom.
 
+## FIRE {#fire}
+
+A goal of type **FIRE** shows when your savings can start to pay your living costs and how long they last. It is arithmetic on your own numbers; it recommends nothing. The screen is described on [Goal]({{ page.base }}/screens/goal#fire).
+
+**Set up.**
+
+1. Goals tab → **+**, set **Goal type** to **FIRE**, name and currency.
+2. Enter what you know, in today's money: **Birth date**, **FIRE date**, **I can invest** (per week, 2 weeks, month, year or N days), **Spend per month after FIRE**, **Amount to have after FIRE**. Leave blank what you want the app to derive.
+3. Open the goal and **Connect bucket** for the savings you already have, as for any goal.
+
+**How to read it.** The table has three columns, **Average**, **Optimistic** and **Pessimistic**, for three sets of growth and inflation rates. **Money lasts** says until which date and age the money covers the spend; *beyond life expectancy* and *money will never end 🥳* are the good cases; *short by …* means the date is not reachable. The chart shows the money in today's money, rising until the dashed FIRE date and falling after it. Treat the three curves as a range, not as a forecast.
+
+**Assumptions.** Contribution and spend keep their purchasing power (they grow with inflation). Taxes, pensions, benefits and income after FIRE are not modelled. Defaults: growth 7 % (10 % optimistic, 4 % pessimistic), inflation 3 % (2 %, 5 %), withdrawal rate 4 %, life expectancy 95. Change any of them under **Advanced assumptions**; your value always wins.
+
+**Sources of the defaults.** UBS Global Investment Returns Yearbook 2026 (world, 1900–2024: equities 9.8 % a year nominal, bonds 4.6 %, inflation 2.9 %; 7 % is about a 60/40 mix); the 2 % inflation targets of central banks; Bengen (1994) and the Trinity study (1998) for the 4 % withdrawal rule.
+
+**Live rates.** Settings → Free data providers → **Inflation** (**World Bank**, **ECB**, **OECD**, **Off**) and **Market growth** (**World Bank**, **Yahoo Finance · unofficial**, **Off**). **Refresh** fetches them for the currency of every FIRE goal. Inflation: World Bank consumer prices (annual, by country or world average), ECB euro-area HICP (EUR only), OECD (member countries, not RUB). Growth: World Bank S&P Global equity index change per country (EUR uses the US index), or 30 years of monthly closes from Yahoo Finance's unofficial endpoint (^GSPC, ^GDAXI, ^FTSE, ^N225, ^BSESN, ^BVSP, 000001.SS; other currencies use ^GSPC). From the series: average inflation is the mean of the last 20 years, optimistic and pessimistic the lowest and highest 5-year mean; average growth is the compound annual rate over up to 30 years, optimistic and pessimistic the best and worst 10-year rate. Both growth sources are price indexes without dividends, so they understate the total return. **Off** keeps the built-in defaults. A failed fetch keeps the previous series and shows the error.
+
 ## Plans
 
 Plans tab → **+**. A planned saving is an amount you intend to add on a date, for example your salary savings at the end of each month. Plans are not part of your savings; they only extend the projection: "planned savings close this goal on 30 Oct 2026 · on time".

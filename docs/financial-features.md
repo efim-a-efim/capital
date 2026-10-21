@@ -8,7 +8,7 @@ class: doc
 ---
 # Financial features declaration
 
-<p class="meta">Answers for the Google Play Console form (Policy and programs → App content → Financial features), with the reasoning. Reviewed against version 2.2.1 on 30 September 2026.</p>
+<p class="meta">Answers for the Google Play Console form (Policy and programs → App content → Financial features), with the reasoning. Reviewed against version 2.11.0 on 21 October 2026.</p>
 
 ## Form answer
 
@@ -28,6 +28,7 @@ Capital is a personal savings tracker. It records what the user already owns and
 | Rewards and incentives, crowdfunding and chit funds, prediction markets | None |
 | Credit monitoring and reporting | None |
 | Financial advice | None. The projection reports arithmetic on the user's own numbers ("planned savings close this goal on …"); it recommends no product, asset or action. The rebalance calculator lists purchases needed to match percentages the user set themselves |
+| FIRE calculator | Arithmetic on the user's own numbers and assumptions (a goal of type FIRE): dates, contributions and how long the money lasts. It recommends no product, asset or action |
 | Insurance | None |
 | In-app purchases, donations | None processed by the app. A tip screen shows the developer's public wallet addresses (the same ones as on this site); a transfer happens in the user's own wallet app, unlocks nothing and is invisible to the app |
 

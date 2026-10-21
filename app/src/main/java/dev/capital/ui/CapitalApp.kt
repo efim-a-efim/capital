@@ -23,6 +23,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -81,6 +85,7 @@ private fun shown(v: String)=when(v) {
     "Convert existing values" -> tr("Convert existing values"); "Replace with entered numbers" -> tr("Replace with entered numbers")
     "ETH tokens" -> tr("ETH tokens"); "TON tokens" -> tr("TON tokens"); "TRX tokens" -> tr("TRX tokens"); "Crypto" -> tr("Crypto"); "Fiat" -> tr("Fiat")
     "Powered by CoinGecko" -> tr("Powered by CoinGecko"); "Powered by CoinPaprika" -> tr("Powered by CoinPaprika")
+    "Inflation" -> tr("Inflation"); "Market growth" -> tr("Market growth"); "World Bank" -> tr("World Bank"); "OECD" -> tr("OECD"); "Yahoo Finance" -> tr("Yahoo Finance · unofficial")
     else -> v
 }
 // Secrets names shown as buttons and dialog titles.
@@ -151,8 +156,57 @@ private val badgeGreen=Color(0xff66bb6a); private val badgeYellow=Color(0xffffd5
     else TextButton(onClick=onClick,modifier=Modifier.fillMaxWidth(),shape=MaterialTheme.shapes.small,contentPadding=PaddingValues(vertical=14.dp,horizontal=4.dp)) { body() }
     HorizontalDivider()
 }
+private fun scenarioName(s: Scenario)=when(s) { Scenario.AVERAGE -> tr("Average"); Scenario.OPTIMISTIC -> tr("Optimistic"); Scenario.PESSIMISTIC -> tr("Pessimistic") }
+private fun periodLabel(p: Period)=when(p) { Period.WEEK -> tr("week"); Period.TWO_WEEKS -> tr("2 weeks"); Period.MONTH -> tr("month"); Period.YEAR -> tr("year"); Period.DAYS -> tr("N days") }
+private fun ageText(age: Int?)=age?.let { " · "+tr("age {0}",it) }.orEmpty()
+private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
+    is FireOutcome.Missing -> o.message
+    is FireOutcome.Ready -> o.results.getValue(Scenario.AVERAGE).let { r -> tr("FIRE on {0}",date(r.fireDate.toString()))+ageText(r.ageAtFire)+(if(r.reachable) "" else " · "+tr("not reachable")) }
+}
+// Scenario table, rate sources and the burndown of a FIRE goal; values are in today's money of the goal currency.
+@Composable private fun FireSection(goal: Goal,data: Portfolio) {
+    Heading(tr("FIRE"))
+    val outcome=remember(goal,data) { data.fire(goal) }
+    if(outcome is FireOutcome.Missing) { Notice(outcome.message); return }
+    val r=(outcome as FireOutcome.Ready).results
+    fun m(v: BigDecimal?)=money(v ?: ZERO,goal.currency)
+    val rows=listOf<Pair<String,(FireResult)->String>>(
+        tr("FIRE date") to { x -> if(x.reachable) date(x.fireDate.toString())+ageText(x.ageAtFire) else tr("Not reachable before {0}",date(x.fireDate.toString())) },
+        tr("Contribution per month") to { x -> m(x.contribution) },
+        tr("FIRE number · today's money") to { x -> m(x.target) },
+        tr("FIRE number · at the FIRE date") to { x -> m(x.targetNominal) },
+        tr("Spend per month · today's money") to { x -> m(x.spend) },
+        tr("Spend per month · at the FIRE date") to { x -> m(x.spendNominal) },
+        tr("Money lasts") to { x -> when { !x.reachable -> tr("short by {0}",m(x.shortfall)); x.neverEnds -> tr("money will never end 🥳"); x.beyondLife -> tr("{0} years · beyond life expectancy",x.lastsYears ?: 0); else -> tr("until {0}",date(x.lastsUntil.toString()))+ageText(x.ageAtEnd) } },
+    )
+    @Composable fun line(cells: List<String>,weight: FontWeight?=null) { Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) { cells.forEach { Text(it,Modifier.weight(1f).padding(end=4.dp),style=MaterialTheme.typography.bodySmall,fontWeight=weight) } } }
+    line(listOf("")+Scenario.entries.map(::scenarioName),FontWeight.SemiBold)
+    rows.forEach { (label,cell) -> line(listOf(label)+Scenario.entries.map { cell(r.getValue(it)) }) }
+    r.getValue(Scenario.AVERAGE).let { a -> if((a.shortfall?.signum() ?: 0)>0 && a.earliest!=null && a.earliest>a.fireDate) Note(tr("Short by {0} at the FIRE date · reachable on {1}",m(a.shortfall),date(a.earliest.toString()))) }
+    Scenario.entries.forEach { s -> val rt=data.fireRates(goal,s); Note(tr("{0}: growth {1}% · inflation {2}% · withdrawal {3}%",scenarioName(s),rt.growth.text(),rt.inflation.text(),rt.withdrawal.text())) }
+    Note(tr("Rates: {0}",listOf("inflation" to "Inflation","growth" to "Market growth").joinToString(" · ") { (kind,category) -> shown(category)+" "+(data.rates.find { it.kind==kind && it.currency==goal.currency && it.values.isNotEmpty() && it.error==null }?.source?.let(::shown) ?: tr("built-in defaults")) }))
+    val colors=mapOf(Scenario.AVERAGE to MaterialTheme.colorScheme.primary,Scenario.OPTIMISTIC to MaterialTheme.colorScheme.tertiary,Scenario.PESSIMISTIC to MaterialTheme.colorScheme.error)
+    val today=LocalDate.now()
+    // ponytail: at most 400 samples per curve; x in days from today, y in today's money.
+    val curves=remember(outcome) { r.mapValues { (_,x) -> val step=(x.curve.size+399)/400; x.curve.filterIndexed { i,_ -> i%step==0 || i==x.curve.lastIndex }.map { (d,v) -> ChronoUnit.DAYS.between(today,d).toFloat() to v.toFloat() } } }
+    val maxX=curves.values.maxOf { it.lastOrNull()?.first ?: 0f }.coerceAtLeast(1f); val maxY=curves.values.maxOf { it.maxOfOrNull { p -> p.second } ?: 0f }.coerceAtLeast(1f)
+    val fireX=ChronoUnit.DAYS.between(today,r.getValue(Scenario.AVERAGE).fireDate).toFloat()
+    val axis=MaterialTheme.colorScheme.onSurfaceVariant
+    Canvas(Modifier.fillMaxWidth().height(220.dp).padding(top=8.dp)) {
+        val w=size.width; val h=size.height
+        fun x(d: Float)=d/maxX*w
+        fun y(v: Float)=h-v.coerceAtLeast(0f)/maxY*h
+        drawLine(axis,Offset(0f,h),Offset(w,h),1.dp.toPx())
+        drawLine(axis,Offset(x(fireX),0f),Offset(x(fireX),h),1.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(),6.dp.toPx())))
+        curves.forEach { (s,pts) -> if(pts.isNotEmpty()) drawPath(Path().apply { moveTo(x(pts[0].first),y(pts[0].second)); pts.drop(1).forEach { (d,v) -> lineTo(x(d),y(v)) } },colors.getValue(s),style=Stroke(3.dp.toPx())) }
+    }
+    Note(tr("Value in today's money · the dashed line marks the FIRE date"))
+    Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) { Scenario.entries.forEach { s -> Text("● "+scenarioName(s),style=MaterialTheme.typography.bodySmall,color=colors.getValue(s)) } }
+    Note(tr("A projection on your own numbers; it recommends nothing."))
+}
 private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     if(g.archived) return ""
+    if(g.fire!=null) return fireLine(g,data)
     fun m(usd: BigDecimal)=money(data.convert(usd,"USD",g.currency),g.currency)
     val target=p.targets[g.id] ?: return tr("Projection unavailable: missing rate")
     val closes=p.closes[g.id]; val reached=p.reached[g.id]; val final=p.final[g.id]
@@ -435,6 +489,7 @@ private val rtlType=Typography().run {
                                             TextButton(onClick={ model.edit({ p -> p.copy(goals=p.goals.map { if(it.id==goal.id) it.copy(archived=!it.archived) else it }) }) },enabled=editable) { Text(if(goal.archived) tr("Activate") else tr("Archive")) }
                                             TextButton(onClick={ confirmation=tr("Delete {0} and its connections?",goal.name) to { model.edit({ it.deleteGoal(goal.id) }) { goalId=null } } },enabled=editable) { Text(tr("Delete")) }
                                         }
+                                        if(goal.fire!=null) FireSection(goal,data)
                                         Heading(tr("Funding sources"))
                                         Button(onClick={ editor=Editor("Connection",owner=goal.id) },enabled=editable && data.buckets.isNotEmpty()) { Text(tr("Connect bucket")) }
                                         if(data.buckets.isEmpty()) Note(tr("Create a bucket first."))
@@ -491,6 +546,7 @@ private val rtlType=Typography().run {
                                     if(data.quotes.isEmpty()) Note(tr("No cached quotes. Add holdings and refresh."))
                                     data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note(tr("{0} token prices by contract address are shown with their wallets.",it)) }
                                     data.quotes.filter { ':' !in it.asset }.forEach { q -> Text("${q.asset}: ${money(q.usd.decimal(),"USD")}"); Note(tr("{0} · observed {1} · fetched {2}{3}",shown(q.source),time(q.observedAt),time(q.fetchedAt),q.error?.let { "\n$it" } ?: "")) }
+                                    data.rates.forEach { r -> Note(tr("{0} {1} · {2} · fetched {3}",shown(if(r.kind=="inflation") "Inflation" else "Market growth"),r.currency,shown(r.source),time(r.fetchedAt))); r.error?.let { Notice(it) } }
                                     SecuritySection(model,state,lockRev,{ lockRev++ }) { secDialog=it }
                                     Heading(tr("Storage"))
                                     Text(state.folder ?: tr("No folder"))
@@ -591,12 +647,14 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         "name" to (b?.name ?: h?.label ?: g?.name ?: pl?.name ?: a?.name ?: ""),
         "currency" to (b?.currency ?: h?.asset ?: g?.currency ?: pl?.currency ?: data.settings.currency),
         "amount" to (pl?.amount ?: ""), "date" to (pl?.date ?: LocalDate.now().plusMonths(1).toString()),
-        "quantity" to (h?.quantity ?: "0"), "target" to (g?.target ?: ""),
+        "quantity" to (h?.quantity ?: "0"), "target" to (g?.fire?.let { it.target ?: "" } ?: g?.target ?: ""),
         "due" to (g?.due ?: LocalDate.now().plusYears(1).toString()),
         "bucket" to (h?.bucketId ?: c?.bucketId ?: editor.owner.takeIf { editor.kind=="Holding" } ?: data.buckets.firstOrNull()?.id.orEmpty()),
-        "address" to (h?.address ?: a?.address ?: ""), "type" to (if(h?.accountId!=null) "Account" else if(h?.address!=null) "Wallet" else "Manual"), "broker" to (a?.broker ?: brokerChoices.first()), "account" to (h?.accountId ?: ""), "ignore" to (a?.ignoreBelow!=null).toString(), "minimum" to (a?.ignoreBelow ?: "1"),
+        "address" to (h?.address ?: a?.address ?: ""), "type" to (if(editor.kind=="Goal") (if(g?.fire!=null) "FIRE" else "Savings") else if(h?.accountId!=null) "Account" else if(h?.address!=null) "Wallet" else "Manual"), "broker" to (a?.broker ?: brokerChoices.first()), "account" to (h?.accountId ?: ""), "ignore" to (a?.ignoreBelow!=null).toString(), "minimum" to (a?.ignoreBelow ?: "1"),
         "mode" to (c?.mode?.name ?: Limit.AUTO.name), "value" to (c?.value ?: "0"), "cap" to (c?.goalCap ?: ""),
         "theme" to data.settings.theme, "currencyAction" to "Choose treatment",
+        "birth" to (g?.fire?.birth ?: ""), "fireDate" to (g?.fire?.fireDate ?: ""), "contribution" to (g?.fire?.contribution ?: ""), "period" to (g?.fire?.period ?: Period.MONTH).name, "days" to (g?.fire?.days?.toString() ?: ""), "spend" to (g?.fire?.spend ?: ""),
+        "inflation" to (g?.fire?.inflation ?: ""), "inflationOptimistic" to (g?.fire?.inflationOptimistic ?: ""), "inflationPessimistic" to (g?.fire?.inflationPessimistic ?: ""), "growth" to (g?.fire?.growth ?: ""), "growthOptimistic" to (g?.fire?.growthOptimistic ?: ""), "growthPessimistic" to (g?.fire?.growthPessimistic ?: ""), "withdrawal" to (g?.fire?.withdrawal ?: ""), "life" to (g?.fire?.life?.toString() ?: ""),
     ) }
     val fields=remember { mutableStateMapOf<String,String>().apply { putAll(initial) } }
     var error by remember { mutableStateOf<String?>(null) }
@@ -667,8 +725,16 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                 p.copy(accounts=if(a==null) p.accounts+item else p.accounts.map { if(it.id==a.id) item else it })
             }
             "Goal" -> {
-                val item=Goal(g?.id ?: newId,name,if(convert) converted(requireNotNull(g?.target)) else number("target"),currency,fields.getValue("due"),g?.takeIf { it.due==fields.getValue("due") }?.priority ?: 0,g?.archived ?: false)
-                p.copy(goals=if(g==null) p.goals+item else p.goals.map { if(it.id==g.id) item else it },connections=p.connections.map { if(convert && it.goalId==g?.id && it.mode==Limit.FIXED) it.copy(value=converted(it.value)) else it })
+                fun opt(key: String)=fields.getValue(key).trim().replace(',','.').takeIf { it.isNotBlank() }
+                fun int(key: String)=opt(key)?.let { it.toIntOrNull() ?: error(tr("Invalid FIRE settings")) }
+                // ponytail: FIRE amounts are not converted on a currency change; a blank target or date gets a placeholder that solvedFire() overwrites.
+                val fire=if(fields.getValue("type")=="FIRE") Fire(opt("birth"),opt("fireDate"),opt("contribution"),Period.valueOf(fields.getValue("period")),int("days"),opt("spend"),opt("target"),opt("inflation"),opt("inflationOptimistic"),opt("inflationPessimistic"),opt("growth"),opt("growthOptimistic"),opt("growthPessimistic"),opt("withdrawal"),int("life")) else null
+                val target=if(fire!=null) fire.target ?: g?.target ?: "1" else if(convert) converted(requireNotNull(g?.target)) else number("target")
+                val due=fire?.fireDate ?: fields.getValue("due")
+                val item=Goal(g?.id ?: newId,name,target,currency,due,g?.takeIf { it.due==due }?.priority ?: 0,g?.archived ?: false,fire)
+                val next=p.copy(goals=if(g==null) p.goals+item else p.goals.map { if(it.id==g.id) item else it },connections=p.connections.map { if(convert && it.goalId==g?.id && it.mode==Limit.FIXED) it.copy(value=converted(it.value)) else it })
+                if(fire!=null) (next.fire(item) as? FireOutcome.Missing)?.let { error(it.message) }
+                next
             }
             "Planned" -> {
                 val item=Planned(pl?.id ?: newId,name,number("amount"),currency,fields.getValue("date"))
@@ -813,8 +879,36 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                             TextButton(onClick={ runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(I18n.siteUrl("accounts")))) }.onFailure { error=tr("No browser available") } },modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Setup guide for broker accounts")) }
                         }
                         "Goal" -> {
-                            field("target",tr("Target amount · no grouping separators"),true)
-                            dateField("due",tr("Due date · YYYY-MM-DD"))
+                            Choice(tr("Goal type"),fields.getValue("type"),listOf("Savings","FIRE"),!saving,{ if(it=="FIRE") tr("FIRE") else tr("Savings goal") }) { fields["type"]=it; error=null }
+                            if(fields.getValue("type")=="FIRE") {
+                                dateField("birth",tr("Birth date · YYYY-MM-DD · optional"))
+                                dateField("fireDate",tr("FIRE date · YYYY-MM-DD · blank to derive"))
+                                field("contribution",tr("I can invest · blank to derive"),true)
+                                Choice(tr("per"),fields.getValue("period"),Period.entries.map { it.name },!saving,{ periodLabel(Period.valueOf(it)) }) { fields["period"]=it; error=null }
+                                if(fields.getValue("period")==Period.DAYS.name) field("days",tr("Days"),true)
+                                field("spend",tr("Spend per month after FIRE · blank to derive"),true)
+                                field("target",tr("Amount to have after FIRE · blank to derive"),true)
+                                Note(tr("All amounts are in today's money of the goal currency. Blank fields are derived from the others when possible."))
+                                var advanced by remember { mutableStateOf(g?.fire?.let { listOfNotNull(it.inflation,it.inflationOptimistic,it.inflationPessimistic,it.growth,it.growthOptimistic,it.growthPessimistic,it.withdrawal,it.life).isNotEmpty() } ?: false) }
+                                TextButton(onClick={ advanced=!advanced },modifier=Modifier.heightIn(min=48.dp)) { Text(tr("Advanced assumptions")) }
+                                if(advanced) {
+                                    // The label shows the fetched or default value: the rates of a goal without overrides in the entered currency.
+                                    val preview=Goal(name="",target="1",currency=fields.getValue("currency").trim().uppercase(),due="",fire=Fire())
+                                    val rates=Scenario.entries.associateWith { data.fireRates(preview,it) }
+                                    field("inflation",tr("Inflation % · average · now {0}",rates.getValue(Scenario.AVERAGE).inflation.text()),true)
+                                    field("inflationOptimistic",tr("Inflation % · optimistic · now {0}",rates.getValue(Scenario.OPTIMISTIC).inflation.text()),true)
+                                    field("inflationPessimistic",tr("Inflation % · pessimistic · now {0}",rates.getValue(Scenario.PESSIMISTIC).inflation.text()),true)
+                                    field("growth",tr("Growth % · average · now {0}",rates.getValue(Scenario.AVERAGE).growth.text()),true)
+                                    field("growthOptimistic",tr("Growth % · optimistic · now {0}",rates.getValue(Scenario.OPTIMISTIC).growth.text()),true)
+                                    field("growthPessimistic",tr("Growth % · pessimistic · now {0}",rates.getValue(Scenario.PESSIMISTIC).growth.text()),true)
+                                    field("withdrawal",tr("Withdrawal rate % · now {0}",rates.getValue(Scenario.AVERAGE).withdrawal.text()),true)
+                                    field("life",tr("Life expectancy · years · now {0}",FIRE_LIFE),true)
+                                    Note(tr("Blank uses the rate fetched by the providers chosen in Settings, else the built-in default."))
+                                }
+                            } else {
+                                field("target",tr("Target amount · no grouping separators"),true)
+                                dateField("due",tr("Due date · YYYY-MM-DD"))
+                            }
                         }
                         "Planned" -> { field("amount",tr("Amount · no grouping separators"),true); dateField("date",tr("Planned date · YYYY-MM-DD")) }
                         "Connection" -> {

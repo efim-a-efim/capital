@@ -54,7 +54,8 @@ Local builds of earlier versions are kept in `releases/`, which is not tracked.
 3. Add a bucket, then manual holdings, public wallet addresses or broker accounts added on the Brokers tab (Interactive Brokers, OANDA, Trading 212, SnapTrade, Alpaca, Tradier, tastytrade, Public.com, eToro, Indexa Capital, T-Invest, ALOR, Capital.com, Akahu; credentials under Credentials on that tab, steps on the site page `accounts`). Each broker is a plugin; see `BROKER-PLUGINS.md` to add one.
 4. Add goals and connect their funding buckets. Goals with earlier dates fund first; drag goals that share a date to set their order.
 5. Add planned savings on the Plans tab to see when each goal closes.
-6. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
+6. For long-term saving, add a goal of type FIRE: from a FIRE date, a contribution and a monthly spend (any may be left blank) it derives the missing value and shows, for three scenarios, when the money can start to pay your spend and how long it lasts. Inflation and market growth can be fetched from World Bank, ECB, OECD or Yahoo Finance in Settings.
+7. Refresh all or a bucket. Cold startup refreshes once; returning from background only reloads local files.
 
 Amounts accept a decimal point or comma, without grouping separators. Each bucket displays native quantities plus converted values. Missing quotes mark totals incomplete; stale cached values remain usable with a warning. Goal allocations never transfer money or increase your total savings.
 
