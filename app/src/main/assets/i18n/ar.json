@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "تاريخ الميلاد · YYYY-MM-DD · اختياري",
  "FIRE date · YYYY-MM-DD · blank to derive": "تاريخ FIRE · YYYY-MM-DD · اتركه فارغًا للاستنتاج",
  "I can invest · blank to derive": "يمكنني استثمار · اتركه فارغًا للاستنتاج",
+ "Contribution growth % per year · blank = inflation": "نمو المساهمة % سنويًا · اتركه فارغًا = التضخم",
  "per": "كل",
  "Days": "الأيام",
  "Spend per month after FIRE · blank to derive": "الإنفاق الشهري بعد FIRE · اتركه فارغًا للاستنتاج",

@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "Fecha de nacimiento · YYYY-MM-DD · opcional",
  "FIRE date · YYYY-MM-DD · blank to derive": "Fecha FIRE · YYYY-MM-DD · en blanco para calcular",
  "I can invest · blank to derive": "Puedo invertir · en blanco para calcular",
+ "Contribution growth % per year · blank = inflation": "Crecimiento de la aportación % al año · en blanco = inflación",
  "per": "por",
  "Days": "Días",
  "Spend per month after FIRE · blank to derive": "Gasto al mes tras FIRE · en blanco para calcular",

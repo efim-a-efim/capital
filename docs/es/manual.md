@@ -57,12 +57,12 @@ Una meta de tipo **FIRE** muestra cuándo sus ahorros pueden empezar a pagar sus
 **Configuración.**
 
 1. Pestaña Metas → **+**, ponga **Tipo de meta** en **FIRE**, y elija nombre y moneda.
-2. Introduzca lo que sepa, en dinero de hoy: **Fecha de nacimiento**, **Fecha FIRE**, **Puedo invertir** (por semana, 2 semanas, mes, año o N días), **Gasto al mes tras FIRE**, **Importe necesario tras FIRE**. Deje en blanco lo que quiera que la aplicación calcule.
+2. Introduzca lo que sepa, en dinero de hoy: **Fecha de nacimiento**, **Fecha FIRE**, **Puedo invertir** (por semana, 2 semanas, mes, año o N días), **Crecimiento de la aportación % al año · en blanco = inflación** (un aumento anual de lo que invierte; en blanco = inflación), **Gasto al mes tras FIRE**, **Importe necesario tras FIRE**. Deje en blanco lo que quiera que la aplicación calcule.
 3. Abra la meta y use **Conectar bolsillo** para los ahorros que ya tiene, como en cualquier meta.
 
 **Cómo leerla.** La tabla tiene tres columnas, **Medio**, **Optimista** y **Pesimista**, para tres conjuntos de tasas de crecimiento e inflación. **El dinero dura** indica hasta qué fecha y edad el dinero cubre el gasto; *más allá de la esperanza de vida* y *el dinero nunca se acabará 🥳* son los casos buenos; *faltan …* significa que la fecha no es alcanzable. El gráfico muestra el dinero en dinero de hoy, creciendo hasta la fecha FIRE (línea discontinua) y bajando después. Trate las tres curvas como un rango, no como un pronóstico.
 
-**Supuestos.** La aportación y el gasto mantienen su poder adquisitivo (crecen con la inflación). No se modelan impuestos, pensiones, prestaciones ni ingresos posteriores a FIRE. Valores predeterminados: crecimiento 7 % (10 % optimista, 4 % pesimista), inflación 3 % (2 %, 5 %), tasa de retiro 4 %, esperanza de vida 95 años. Cámbielos en **Supuestos avanzados**; su valor siempre prevalece.
+**Supuestos.** El gasto mantiene su poder adquisitivo (crece con la inflación); la aportación crece según su propio porcentaje anual, o según la inflación si está en blanco. No se modelan impuestos, pensiones, prestaciones ni ingresos posteriores a FIRE. Valores predeterminados: crecimiento 7 % (10 % optimista, 4 % pesimista), inflación 3 % (2 %, 5 %), tasa de retiro 4 %, esperanza de vida 95 años. Cámbielos en **Supuestos avanzados**; su valor siempre prevalece.
 
 **Fuentes de los valores predeterminados.** UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: renta variable 9,8 % anual nominal, bonos 4,6 %, inflación 2,9 %; el 7 % equivale aproximadamente a una mezcla 60/40); los objetivos de inflación del 2 % de los bancos centrales; Bengen (1994) y el estudio Trinity (1998) para la regla de retiro del 4 %.
 

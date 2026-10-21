@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "जन्मतारीख · YYYY-MM-DD · ऐच्छिक",
  "FIRE date · YYYY-MM-DD · blank to derive": "FIRE तारीख · YYYY-MM-DD · काढण्यासाठी रिकामी ठेवा",
  "I can invest · blank to derive": "मी गुंतवू शकतो · काढण्यासाठी रिकामी ठेवा",
+  "Contribution growth % per year · blank = inflation": "योगदान वाढ % प्रति वर्ष · रिकामे = महागाई",
  "per": "प्रति",
  "Days": "दिवस",
  "Spend per month after FIRE · blank to derive": "FIRE नंतर मासिक खर्च · काढण्यासाठी रिकामी ठेवा",

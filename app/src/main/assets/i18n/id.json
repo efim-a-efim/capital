@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "Tanggal lahir · YYYY-MM-DD · opsional",
  "FIRE date · YYYY-MM-DD · blank to derive": "Tanggal FIRE · YYYY-MM-DD · kosongkan untuk dihitung",
  "I can invest · blank to derive": "Saya bisa berinvestasi · kosongkan untuk dihitung",
+ "Contribution growth % per year · blank = inflation": "Kontribusi bertambah % per tahun · kosongkan = inflasi",
  "per": "per",
  "Days": "Hari",
  "Spend per month after FIRE · blank to derive": "Pengeluaran per bulan setelah FIRE · kosongkan untuk dihitung",

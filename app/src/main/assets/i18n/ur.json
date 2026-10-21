@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "تاریخِ پیدائش · YYYY-MM-DD · اختیاری",
  "FIRE date · YYYY-MM-DD · blank to derive": "FIRE کی تاریخ · YYYY-MM-DD · خالی چھوڑیں تو حساب سے نکلے گی",
  "I can invest · blank to derive": "میں سرمایہ کاری کر سکتا ہوں · خالی چھوڑیں تو حساب سے نکلے گی",
+ "Contribution growth % per year · blank = inflation": "سالانہ حصہ میں اضافہ % · خالی = مہنگائی",
  "per": "فی",
  "Days": "دن",
  "Spend per month after FIRE · blank to derive": "FIRE کے بعد ماہانہ اخراجات · خالی چھوڑیں تو حساب سے نکلیں گے",

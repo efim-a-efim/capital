@@ -57,12 +57,12 @@ Ein Ziel vom Typ **FIRE** zeigt, wann Ihre Ersparnisse beginnen können, Ihre Le
 **Einrichten.**
 
 1. Tab „Ziele“ → **+**, **Zieltyp** auf **FIRE** stellen, Name und Währung wählen.
-2. Geben Sie ein, was Sie wissen, in heutiger Kaufkraft: **Geburtsdatum**, **FIRE-Datum**, **Ich kann investieren** (pro Woche, 2 Wochen, Monat, Jahr oder N Tage), **Ausgaben pro Monat nach FIRE**, **Betrag nach FIRE**. Lassen Sie leer, was die App berechnen soll.
+2. Geben Sie ein, was Sie wissen, in heutiger Kaufkraft: **Geburtsdatum**, **FIRE-Datum**, **Ich kann investieren** (pro Woche, 2 Wochen, Monat, Jahr oder N Tage), **Beitragswachstum % pro Jahr** (eine jährliche Erhöhung dessen, was Sie investieren; leer = Inflation), **Ausgaben pro Monat nach FIRE**, **Betrag nach FIRE**. Lassen Sie leer, was die App berechnen soll.
 3. Öffnen Sie das Ziel und wählen Sie **Topf verknüpfen** für die Ersparnisse, die Sie schon haben, wie bei jedem Ziel.
 
 **So lesen Sie es.** Die Tabelle hat drei Spalten, **Durchschnitt**, **Optimistisch** und **Pessimistisch**, für drei Sätze von Wachstums- und Inflationsraten. **Geld reicht** nennt, bis zu welchem Datum und Alter das Geld die Ausgaben deckt; *über die Lebenserwartung hinaus* und *Geld geht nie aus 🥳* sind die guten Fälle; *es fehlen …* heißt, dass das Datum nicht erreichbar ist. Das Diagramm zeigt das Geld in heutiger Kaufkraft: steigend bis zum gestrichelten FIRE-Datum und fallend danach. Verstehen Sie die drei Kurven als Spanne, nicht als Prognose.
 
-**Annahmen.** Beitrag und Ausgaben behalten ihre Kaufkraft (sie wachsen mit der Inflation). Steuern, Renten, Sozialleistungen und Einkommen nach FIRE werden nicht modelliert. Standardwerte: Wachstum 7 % (optimistisch 10 %, pessimistisch 4 %), Inflation 3 % (2 %, 5 %), Entnahmerate 4 %, Lebenserwartung 95. Ändern Sie jeden davon unter **Erweiterte Annahmen**; Ihr Wert hat immer Vorrang.
+**Annahmen.** Die Ausgaben behalten ihre Kaufkraft (sie wachsen mit der Inflation); der Beitrag wächst um seinen eigenen jährlichen Prozentsatz, bei leerem Feld mit der Inflation. Steuern, Renten, Sozialleistungen und Einkommen nach FIRE werden nicht modelliert. Standardwerte: Wachstum 7 % (optimistisch 10 %, pessimistisch 4 %), Inflation 3 % (2 %, 5 %), Entnahmerate 4 %, Lebenserwartung 95. Ändern Sie jeden davon unter **Erweiterte Annahmen**; Ihr Wert hat immer Vorrang.
 
 **Quellen der Standardwerte.** UBS Global Investment Returns Yearbook 2026 (Welt, 1900–2024: Aktien 9,8 % pro Jahr nominal, Anleihen 4,6 %, Inflation 2,9 %; 7 % entspricht etwa einer 60/40-Mischung); die 2-%-Inflationsziele der Zentralbanken; Bengen (1994) und die Trinity-Studie (1998) für die 4-%-Entnahmeregel.
 

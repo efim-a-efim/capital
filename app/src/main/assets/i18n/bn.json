@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "জন্মতারিখ · YYYY-MM-DD · ঐচ্ছিক",
  "FIRE date · YYYY-MM-DD · blank to derive": "FIRE-এর তারিখ · YYYY-MM-DD · হিসাবের জন্য খালি রাখুন",
  "I can invest · blank to derive": "আমি বিনিয়োগ করতে পারি · হিসাবের জন্য খালি রাখুন",
+ "Contribution growth % per year · blank = inflation": "প্রতি বছর অবদান বৃদ্ধি % · খালি = মুদ্রাস্ফীতি",
  "per": "প্রতি",
  "Days": "দিন",
  "Spend per month after FIRE · blank to derive": "FIRE-এর পর মাসিক খরচ · হিসাবের জন্য খালি রাখুন",

@@ -57,12 +57,12 @@ Tujuan berjenis **FIRE** menunjukkan kapan tabungan Anda dapat mulai membiayai h
 **Menyiapkan.**
 
 1. Tab Tujuan → **+**, atur **Jenis tujuan** ke **FIRE**, lalu isi nama dan mata uang.
-2. Masukkan yang Anda ketahui, dalam nilai uang hari ini: **Tanggal lahir**, **Tanggal FIRE**, **Saya bisa berinvestasi** (per minggu, 2 minggu, bulan, tahun, atau N hari), **Pengeluaran per bulan setelah FIRE**, **Dana yang dimiliki setelah FIRE**. Kosongkan yang ingin dihitung aplikasi.
+2. Masukkan yang Anda ketahui, dalam nilai uang hari ini: **Tanggal lahir**, **Tanggal FIRE**, **Saya bisa berinvestasi** (per minggu, 2 minggu, bulan, tahun, atau N hari), **Kontribusi bertambah % per tahun** (kenaikan tahunan jumlah yang Anda investasikan; kosongkan = inflasi), **Pengeluaran per bulan setelah FIRE**, **Dana yang dimiliki setelah FIRE**. Kosongkan yang ingin dihitung aplikasi.
 3. Buka tujuan dan **Hubungkan kantong** untuk tabungan yang sudah Anda miliki, seperti pada tujuan lain.
 
 **Cara membacanya.** Tabel memiliki tiga kolom, **Rata-rata**, **Optimis**, dan **Pesimis**, untuk tiga set suku pertumbuhan dan inflasi. **Uang bertahan** menyatakan hingga tanggal dan usia berapa uang menutupi pengeluaran; *melampaui harapan hidup* dan *uang tidak akan habis 🥳* adalah kasus yang baik; *kurang …* berarti tanggalnya tidak tercapai. Grafik menunjukkan uang dalam nilai uang hari ini, naik hingga tanggal FIRE yang bergaris putus-putus dan turun setelahnya. Anggap ketiga kurva sebagai rentang, bukan ramalan.
 
-**Asumsi.** Kontribusi dan pengeluaran mempertahankan daya belinya (naik mengikuti inflasi). Pajak, pensiun, tunjangan, dan penghasilan setelah FIRE tidak dimodelkan. Bawaan: pertumbuhan 7 % (10 % optimis, 4 % pesimis), inflasi 3 % (2 %, 5 %), tingkat penarikan 4 %, harapan hidup 95. Ubah salah satunya di **Asumsi lanjutan**; nilai Anda selalu diutamakan.
+**Asumsi.** Pengeluaran mempertahankan daya belinya (naik mengikuti inflasi); kontribusi naik sebesar persentase tahunannya sendiri, mengikuti inflasi bila dikosongkan. Pajak, pensiun, tunjangan, dan penghasilan setelah FIRE tidak dimodelkan. Bawaan: pertumbuhan 7 % (10 % optimis, 4 % pesimis), inflasi 3 % (2 %, 5 %), tingkat penarikan 4 %, harapan hidup 95. Ubah salah satunya di **Asumsi lanjutan**; nilai Anda selalu diutamakan.
 
 **Sumber nilai bawaan.** UBS Global Investment Returns Yearbook 2026 (dunia, 1900–2024: saham 9,8 % per tahun nominal, obligasi 4,6 %, inflasi 2,9 %; 7 % kira-kira setara campuran 60/40); target inflasi 2 % bank sentral; Bengen (1994) dan studi Trinity (1998) untuk aturan penarikan 4 %.
 

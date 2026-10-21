@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "Ngày sinh · YYYY-MM-DD · tùy chọn",
  "FIRE date · YYYY-MM-DD · blank to derive": "Ngày FIRE · YYYY-MM-DD · để trống để tự tính",
  "I can invest · blank to derive": "Tôi có thể đầu tư · để trống để tự tính",
+ "Contribution growth % per year · blank = inflation": "Mức tăng khoản đầu tư % mỗi năm · để trống = lạm phát",
  "per": "mỗi",
  "Days": "Số ngày",
  "Spend per month after FIRE · blank to derive": "Chi tiêu mỗi tháng sau FIRE · để trống để tự tính",

@@ -57,12 +57,12 @@ Uma meta do tipo **FIRE** mostra quando as suas economias podem começar a pagar
 **Configuração.**
 
 1. Aba Metas → **+**, defina **Tipo de meta** como **FIRE**, o nome e a moeda.
-2. Informe o que você sabe, em valores de hoje: **Data de nascimento**, **Data FIRE**, **Posso investir** (por semana, 2 semanas, mês, ano ou N dias), **Gasto por mês após a FIRE**, **Valor a ter após a FIRE**. Deixe vazio o que o app deve calcular.
+2. Informe o que você sabe, em valores de hoje: **Data de nascimento**, **Data FIRE**, **Posso investir** (por semana, 2 semanas, mês, ano ou N dias), **Crescimento do aporte % por ano** (um aumento anual do que você investe; vazio = inflação), **Gasto por mês após a FIRE**, **Valor a ter após a FIRE**. Deixe vazio o que o app deve calcular.
 3. Abra a meta e use **Vincular caixinha** para as economias que você já tem, como em qualquer meta.
 
 **Como ler.** A tabela tem três colunas, **Média**, **Otimista** e **Pessimista**, para três conjuntos de taxas de crescimento e inflação. **O dinheiro dura** diz até qual data e idade o dinheiro cobre o gasto; *além da expectativa de vida* e *o dinheiro nunca acaba 🥳* são os bons casos; *faltam …* significa que a data não é alcançável. O gráfico mostra o dinheiro em valores de hoje, subindo até a data FIRE tracejada e caindo depois dela. Trate as três curvas como uma faixa, não como uma previsão.
 
-**Premissas.** O aporte e o gasto mantêm o poder de compra (crescem com a inflação). Impostos, aposentadorias, benefícios e renda após a FIRE não são modelados. Padrões: crescimento de 7 % (10 % otimista, 4 % pessimista), inflação de 3 % (2 %, 5 %), taxa de retirada de 4 %, expectativa de vida de 95 anos. Altere qualquer um em **Premissas avançadas**; o seu valor sempre prevalece.
+**Premissas.** O gasto mantém o poder de compra (cresce com a inflação); o aporte cresce pelo seu próprio percentual anual, ou pela inflação quando vazio. Impostos, aposentadorias, benefícios e renda após a FIRE não são modelados. Padrões: crescimento de 7 % (10 % otimista, 4 % pessimista), inflação de 3 % (2 %, 5 %), taxa de retirada de 4 %, expectativa de vida de 95 anos. Altere qualquer um em **Premissas avançadas**; o seu valor sempre prevalece.
 
 **Fontes dos padrões.** UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: ações 9,8 % ao ano nominal, títulos 4,6 %, inflação 2,9 %; 7 % é cerca de uma carteira 60/40); as metas de inflação de 2 % dos bancos centrais; Bengen (1994) e o estudo Trinity (1998) para a regra de retirada de 4 %.
 

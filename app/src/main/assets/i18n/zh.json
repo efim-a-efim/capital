@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "出生日期 · YYYY-MM-DD · 可选",
  "FIRE date · YYYY-MM-DD · blank to derive": "FIRE 日期 · YYYY-MM-DD · 留空则推算",
  "I can invest · blank to derive": "我可投入 · 留空则推算",
+ "Contribution growth % per year · blank = inflation": "定期投入每年增长 % · 留空则按通胀",
  "per": "每",
  "Days": "天数",
  "Spend per month after FIRE · blank to derive": "FIRE 后每月支出 · 留空则推算",

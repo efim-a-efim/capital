@@ -57,12 +57,12 @@ Mục tiêu loại **FIRE** cho biết khi nào tiền tiết kiệm của bạn
 **Thiết lập.**
 
 1. Thẻ Mục tiêu → **+**, đặt **Loại mục tiêu** thành **FIRE**, nhập tên và tiền tệ.
-2. Nhập những gì bạn biết, theo tiền hôm nay: **Ngày sinh**, **Ngày FIRE**, **Tôi có thể đầu tư** (mỗi tuần, 2 tuần, tháng, năm hoặc N ngày), **Chi tiêu mỗi tháng sau FIRE**, **Số tiền cần có sau FIRE**. Để trống những gì bạn muốn ứng dụng tự tính.
+2. Nhập những gì bạn biết, theo tiền hôm nay: **Ngày sinh**, **Ngày FIRE**, **Tôi có thể đầu tư** (mỗi tuần, 2 tuần, tháng, năm hoặc N ngày), **Mức tăng khoản đầu tư % mỗi năm** (mức tăng hằng năm của số tiền bạn đầu tư; để trống = lạm phát), **Chi tiêu mỗi tháng sau FIRE**, **Số tiền cần có sau FIRE**. Để trống những gì bạn muốn ứng dụng tự tính.
 3. Mở mục tiêu và chọn **Liên kết hũ** cho số tiền tiết kiệm bạn đã có, như với mọi mục tiêu.
 
 **Cách đọc.** Bảng có ba cột, **Trung bình**, **Lạc quan** và **Bi quan**, ứng với ba bộ tỷ lệ tăng trưởng và lạm phát. **Tiền đủ dùng** cho biết tiền chi trả khoản chi đến ngày và tuổi nào; *vượt quá tuổi thọ* và *tiền sẽ không bao giờ hết 🥳* là các trường hợp tốt; *thiếu …* nghĩa là chưa đạt được ngày đó. Biểu đồ cho thấy tiền theo tiền hôm nay, tăng đến ngày FIRE (đường nét đứt) rồi giảm sau đó. Hãy xem ba đường cong như một khoảng giá trị, không phải dự đoán.
 
-**Giả định.** Khoản đóng góp và chi tiêu giữ nguyên sức mua (chúng tăng theo lạm phát). Thuế, lương hưu, trợ cấp và thu nhập sau FIRE không được mô hình hóa. Mặc định: tăng trưởng 7 % (lạc quan 10 %, bi quan 4 %), lạm phát 3 % (2 %, 5 %), tỷ lệ rút tiền 4 %, tuổi thọ 95. Thay đổi bất kỳ giá trị nào trong **Giả định nâng cao**; giá trị của bạn luôn được ưu tiên.
+**Giả định.** Chi tiêu giữ nguyên sức mua (tăng theo lạm phát); khoản đóng góp tăng theo tỷ lệ hằng năm riêng của nó, theo lạm phát khi để trống. Thuế, lương hưu, trợ cấp và thu nhập sau FIRE không được mô hình hóa. Mặc định: tăng trưởng 7 % (lạc quan 10 %, bi quan 4 %), lạm phát 3 % (2 %, 5 %), tỷ lệ rút tiền 4 %, tuổi thọ 95. Thay đổi bất kỳ giá trị nào trong **Giả định nâng cao**; giá trị của bạn luôn được ưu tiên.
 
 **Nguồn của các mặc định.** UBS Global Investment Returns Yearbook 2026 (toàn thế giới, 1900–2024: cổ phiếu 9,8 % mỗi năm danh nghĩa, trái phiếu 4,6 %, lạm phát 2,9 %; 7 % xấp xỉ danh mục 60/40); mục tiêu lạm phát 2 % của các ngân hàng trung ương; Bengen (1994) và nghiên cứu Trinity (1998) cho quy tắc rút tiền 4 %.
 

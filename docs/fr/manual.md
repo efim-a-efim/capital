@@ -57,12 +57,12 @@ Un objectif de type **FIRE** montre à partir de quand votre épargne peut comme
 **Mise en place.**
 
 1. Onglet Objectifs → **+**, réglez **Type d’objectif** sur **FIRE**, puis saisissez le nom et la devise.
-2. Saisissez ce que vous savez, en valeur d’aujourd’hui : **Date de naissance**, **Date FIRE**, **Je peux investir** (par semaine, 2 semaines, mois, an ou N jours), **Dépense par mois après FIRE**, **Montant à avoir après FIRE**. Laissez vide ce que l’application doit calculer.
+2. Saisissez ce que vous savez, en valeur d’aujourd’hui : **Date de naissance**, **Date FIRE**, **Je peux investir** (par semaine, 2 semaines, mois, an ou N jours), **Croissance du versement % par an** (une augmentation annuelle de ce que vous investissez ; vide = inflation), **Dépense par mois après FIRE**, **Montant à avoir après FIRE**. Laissez vide ce que l’application doit calculer.
 3. Ouvrez l’objectif et utilisez **Connecter une poche** pour l’épargne que vous avez déjà, comme pour tout objectif.
 
 **Comment le lire.** Le tableau a trois colonnes, **Moyen**, **Optimiste** et **Pessimiste**, pour trois jeux de taux de croissance et d’inflation. **L’argent dure** indique jusqu’à quelle date et à quel âge l’argent couvre la dépense ; *au-delà de l’espérance de vie* et *l’argent ne s’épuisera jamais 🥳* sont les bons cas ; *il manque …* signifie que la date n’est pas atteignable. Le graphique montre l’argent en valeur d’aujourd’hui, en hausse jusqu’à la date FIRE en pointillé et en baisse ensuite. Considérez les trois courbes comme une fourchette, pas comme une prévision.
 
-**Hypothèses.** Le versement et la dépense conservent leur pouvoir d’achat (ils augmentent avec l’inflation). Les impôts, les retraites, les prestations et les revenus après FIRE ne sont pas modélisés. Valeurs par défaut : croissance 7 % (10 % optimiste, 4 % pessimiste), inflation 3 % (2 %, 5 %), taux de retrait 4 %, espérance de vie 95 ans. Modifiez-les dans **Hypothèses avancées** ; votre valeur l’emporte toujours.
+**Hypothèses.** La dépense conserve son pouvoir d’achat (elle augmente avec l’inflation) ; le versement augmente de son propre pourcentage annuel, de l’inflation si ce champ est vide. Les impôts, les retraites, les prestations et les revenus après FIRE ne sont pas modélisés. Valeurs par défaut : croissance 7 % (10 % optimiste, 4 % pessimiste), inflation 3 % (2 %, 5 %), taux de retrait 4 %, espérance de vie 95 ans. Modifiez-les dans **Hypothèses avancées** ; votre valeur l’emporte toujours.
 
 **Sources des valeurs par défaut.** UBS Global Investment Returns Yearbook 2026 (monde, 1900–2024 : actions 9,8 % par an en nominal, obligations 4,6 %, inflation 2,9 % ; 7 % correspond à peu près à un mix 60/40) ; les cibles d’inflation de 2 % des banques centrales ; Bengen (1994) et l’étude Trinity (1998) pour la règle de retrait de 4 %.
 

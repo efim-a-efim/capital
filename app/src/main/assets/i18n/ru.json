@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "Дата рождения · YYYY-MM-DD · необязательно",
  "FIRE date · YYYY-MM-DD · blank to derive": "Дата FIRE · YYYY-MM-DD · пусто — рассчитать",
  "I can invest · blank to derive": "Могу вкладывать · пусто — рассчитать",
+ "Contribution growth % per year · blank = inflation": "Рост взноса, % в год · пусто = инфляция",
  "per": "за",
  "Days": "Дней",
  "Spend per month after FIRE · blank to derive": "Траты в месяц после FIRE · пусто — рассчитать",

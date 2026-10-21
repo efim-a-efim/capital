@@ -688,6 +688,7 @@
  "Birth date · YYYY-MM-DD · optional": "生年月日 · YYYY-MM-DD · 任意",
  "FIRE date · YYYY-MM-DD · blank to derive": "FIRE日 · YYYY-MM-DD · 空欄で自動算出",
  "I can invest · blank to derive": "投資できる額 · 空欄で自動算出",
+ "Contribution growth % per year · blank = inflation": "積立額の年間増加率 % · 空欄 = インフレ率",
  "per": "周期",
  "Days": "日数",
  "Spend per month after FIRE · blank to derive": "FIRE後の月々の支出 · 空欄で自動算出",
