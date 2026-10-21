@@ -51,6 +51,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -184,7 +185,6 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
     )
     // Values equal in all three scenarios are the user's own inputs: shown once, above the folds.
     val same=rows.filter { (_,cell) -> Scenario.entries.map { cell(r.getValue(it)) }.distinct().size==1 }
-    @Composable fun line(label: String,value: String) { Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) { Text(label,Modifier.weight(1f).padding(end=8.dp),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant); Text(value,style=MaterialTheme.typography.bodySmall) } }
     same.forEach { (label,cell) -> line(label,cell(r.getValue(Scenario.AVERAGE))) }
     line(tr("Withdrawal rate"),data.fireRates(goal,Scenario.AVERAGE).withdrawal.text()+"%")
     var open by rememberSaveable { mutableStateOf<String?>(null) }
@@ -200,30 +200,75 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
     Note(tr("Rates: {0}",listOf("inflation" to "Inflation","growth" to "Market growth").joinToString(" · ") { (kind,category) -> shown(category)+" "+(data.rates.find { it.kind==kind && it.currency==goal.currency && it.values.isNotEmpty() && it.error==null }?.source?.let(::shown) ?: tr("built-in defaults")) }))
     val colors=mapOf(Scenario.AVERAGE to MaterialTheme.colorScheme.primary,Scenario.OPTIMISTIC to MaterialTheme.colorScheme.tertiary,Scenario.PESSIMISTIC to Color(0xffe53935))
     val today=LocalDate.now()
-    // ponytail: at most 400 samples per curve; x in days from today, y in today's money.
-    val curves=remember(outcome) { r.mapValues { (_,x) -> val step=(x.curve.size+399)/400; x.curve.filterIndexed { i,_ -> i%step==0 || i==x.curve.lastIndex }.map { (d,v) -> ChronoUnit.DAYS.between(today,d).toFloat() to v.toFloat() } } }
-    val maxX=curves.values.maxOf { it.lastOrNull()?.first ?: 0f }.coerceAtLeast(1f); val maxY=curves.values.maxOf { it.maxOfOrNull { p -> p.second } ?: 0f }.coerceAtLeast(1f)
-    val fireX=ChronoUnit.DAYS.between(today,r.getValue(Scenario.AVERAGE).fireDate).toFloat()
-    val axis=MaterialTheme.colorScheme.onSurfaceVariant
-    val measurer=rememberTextMeasurer(); val labelStyle=MaterialTheme.typography.labelSmall.copy(color=axis)
-    // Axis labels: compact amounts on the left (0, half, max), years below (today, FIRE, end).
-    val compact=remember { android.icu.text.CompactDecimalFormat.getInstance(I18n.locale,android.icu.text.CompactDecimalFormat.CompactStyle.SHORT) }
-    val yLabels=listOf(0f,maxY/2,maxY).map { compact.format(it.toDouble()) }
-    val endYear=today.plusDays(maxX.toLong()).year; val fireYear=r.getValue(Scenario.AVERAGE).fireDate.year
-    Canvas(Modifier.fillMaxWidth().height(240.dp).padding(top=8.dp)) {
-        val left=yLabels.maxOf { measurer.measure(it,labelStyle).size.width }+8.dp.toPx(); val bottom=measurer.measure("0",labelStyle).size.height+4.dp.toPx()
-        val w=size.width-left; val h=size.height-bottom
-        fun x(d: Float)=left+d/maxX*w
-        fun y(v: Float)=h-v.coerceAtLeast(0f)/maxY*h
-        yLabels.forEachIndexed { i,t -> val yy=y(maxY/2*i); val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset(left-8.dp.toPx()-m.size.width,(yy-m.size.height/2).coerceIn(0f,h-m.size.height))); if(i>0) drawLine(axis.copy(alpha=0.3f),Offset(left,yy),Offset(left+w,yy),1.dp.toPx()) }
-        drawLine(axis,Offset(left,h),Offset(left+w,h),1.dp.toPx())
-        drawLine(axis,Offset(x(fireX),0f),Offset(x(fireX),h),1.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(),6.dp.toPx())))
-        listOf(today.year.toString() to left,fireYear.toString() to x(fireX),endYear.toString() to left+w).forEach { (t,xx) -> val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset((xx-m.size.width/2).coerceIn(left,left+w-m.size.width),h+4.dp.toPx())) }
-        curves.forEach { (s,pts) -> if(pts.isNotEmpty()) drawPath(Path().apply { moveTo(x(pts[0].first),y(pts[0].second)); pts.drop(1).forEach { (d,v) -> lineTo(x(d),y(v)) } },colors.getValue(s),style=Stroke(3.dp.toPx())) }
-    }
+    // y in today's money.
+    val curves=remember(outcome) { r.mapValues { (_,x) -> sampled(x.curve).map { (d,v) -> d to v.toFloat() } } }
+    val end=curves.values.mapNotNull { it.lastOrNull()?.first }.maxOrNull() ?: today
+    LineChart(Scenario.entries.map { colors.getValue(it) to curves.getValue(it) },today,end,marker=r.getValue(Scenario.AVERAGE).fireDate)
     Note(tr("Value in {0}, today's money · the dashed line marks the FIRE date",goal.currency))
     Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) { Scenario.entries.forEach { s -> Text("● "+scenarioName(s),style=MaterialTheme.typography.bodySmall,color=colors.getValue(s)) } }
     Note(tr("A projection on your own numbers; it recommends nothing."))
+}
+@Composable private fun line(label: String,value: String,color: Color=Color.Unspecified) { Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) { Text(label,Modifier.weight(1f).padding(end=8.dp),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant); Text(value,style=MaterialTheme.typography.bodySmall,color=color) } }
+// ponytail: at most 400 samples per curve.
+private fun <T> sampled(list: List<T>): List<T> { val step=(list.size+399)/400; return list.filterIndexed { i,_ -> i%step==0 || i==list.lastIndex } }
+// Axis labels: compact amounts on the left (min, mid, max), years or months below (from, marker, to); the marker is a dashed vertical line.
+@Composable private fun LineChart(series: List<Pair<Color,List<Pair<LocalDate,Float>>>>,from: LocalDate,to: LocalDate,marker: LocalDate?=null,years: Boolean=true,allowNegative: Boolean=false,height: Dp=240.dp) {
+    val maxX=ChronoUnit.DAYS.between(from,to).toFloat().coerceAtLeast(1f)
+    val values=series.flatMap { (_,pts) -> pts.map { it.second } }
+    val minY=if(allowNegative) (values.minOrNull() ?: 0f).coerceAtMost(0f) else 0f
+    val maxY=(values.maxOrNull() ?: 0f).coerceAtLeast(minY+1f)
+    val axis=MaterialTheme.colorScheme.onSurfaceVariant
+    val measurer=rememberTextMeasurer(); val labelStyle=MaterialTheme.typography.labelSmall.copy(color=axis)
+    val compact=remember { android.icu.text.CompactDecimalFormat.getInstance(I18n.locale,android.icu.text.CompactDecimalFormat.CompactStyle.SHORT) }
+    val month=remember { DateTimeFormatter.ofPattern("MMM yyyy",I18n.locale) }
+    val yValues=listOf(minY,(minY+maxY)/2,maxY); val yLabels=yValues.map { compact.format(it.toDouble()) }
+    val xLabels=listOfNotNull(from,marker,to).map { (if(years) it.year.toString() else it.format(month)) to it }
+    Canvas(Modifier.fillMaxWidth().height(height).padding(top=8.dp)) {
+        val left=yLabels.maxOf { measurer.measure(it,labelStyle).size.width }+8.dp.toPx(); val bottom=measurer.measure("0",labelStyle).size.height+4.dp.toPx()
+        val w=size.width-left; val h=size.height-bottom
+        fun x(d: LocalDate)=left+ChronoUnit.DAYS.between(from,d).toFloat()/maxX*w
+        fun y(v: Float)=h-(v.coerceIn(minY,maxY)-minY)/(maxY-minY)*h
+        yLabels.forEachIndexed { i,t -> val yy=y(yValues[i]); val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset(left-8.dp.toPx()-m.size.width,(yy-m.size.height/2).coerceIn(0f,h-m.size.height))); if(i>0) drawLine(axis.copy(alpha=0.3f),Offset(left,yy),Offset(left+w,yy),1.dp.toPx()) }
+        drawLine(axis,Offset(left,h),Offset(left+w,h),1.dp.toPx())
+        if(minY<0f) drawLine(axis,Offset(left,y(0f)),Offset(left+w,y(0f)),1.dp.toPx())
+        marker?.let { drawLine(axis,Offset(x(it),0f),Offset(x(it),h),1.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(),6.dp.toPx()))) }
+        xLabels.forEach { (t,d) -> val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset((x(d)-m.size.width/2).coerceIn(left,left+w-m.size.width),h+4.dp.toPx())) }
+        series.forEach { (color,pts) -> if(pts.size==1) drawCircle(color,3.dp.toPx(),Offset(x(pts[0].first),y(pts[0].second))) else if(pts.isNotEmpty()) drawPath(Path().apply { moveTo(x(pts[0].first),y(pts[0].second)); pts.drop(1).forEach { (d,v) -> lineTo(x(d),y(v)) } },color,style=Stroke(3.dp.toPx())) }
+    }
+}
+private val pnlGreen=Color(0xff2e7d32); private val pnlRed=Color(0xffc62828)
+private fun spanLabel(s: Span)=when(s) { Span.ALL -> tr("All time"); Span.YEAR -> tr("Last year"); Span.MONTH -> tr("Last month"); Span.WEEK -> tr("Last week"); Span.DAY -> tr("Last day") }
+// Investment PnL of a bucket: periods, then the value and the rebased PnL curves of the chosen time frame.
+@Composable private fun PnlSection(bucket: Bucket,data: Portfolio) {
+    Heading(tr("Investment"))
+    val report=remember(data,bucket.id) { data.pnl(bucket.id) }
+    if(report.points.isEmpty()) { Note(tr("No history yet. Refresh once, or wait for the backfill to finish.")); return }
+    val today=LocalDate.now(); val start=report.start ?: report.points.first().date
+    fun signed(v: BigDecimal,text: String)=if(v.signum()>0) "+$text" else text
+    val percent=remember { NumberFormat.getNumberInstance(I18n.locale).apply { maximumFractionDigits=2 } }
+    report.periods.forEach { p ->
+        if(p.pnl==null) line(spanLabel(p.span),tr("since {0}",date(start.toString())))
+        else line(spanLabel(p.span),signed(p.pnl,money(p.pnl,report.currency))+(p.twr?.let { " · "+signed(it,percent.format(it))+" %" }.orEmpty()),if(p.pnl.signum()>=0) pnlGreen else pnlRed)
+    }
+    Note(tr("Since {0} · in {1}",date(start.toString()),report.currency))
+    if(report.incomplete) Note(tr("Some days lack a rate; those values carry the last known one."))
+    var span by rememberSaveable { mutableStateOf(Span.ALL) }
+    Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+        Span.entries.forEach { s -> FilterChip(selected=span==s,onClick={ span=s },label={ Text(when(s) { Span.ALL -> tr("All"); Span.YEAR -> "1Y"; Span.MONTH -> "1M"; Span.WEEK -> "1W"; Span.DAY -> "1D" }) }) }
+    }
+    val from=if(span==Span.ALL) start else report.periods.find { it.span==span }?.from ?: start
+    val visible=remember(report,from) { sampled(report.points.filter { it.date>=from }) }
+    val years=ChronoUnit.DAYS.between(from,today)>731
+    val caption=tr("In {0} · {1}",report.currency,date(from.toString())+" – "+date(today.toString()))
+    Note(tr("Value"))
+    LineChart(listOf(MaterialTheme.colorScheme.primary to visible.map { it.date to it.value.toFloat() }),from,today,years=years,height=200.dp)
+    Note(caption)
+    Note(tr("Profit and loss"))
+    val base=visible.firstOrNull()?.pnl ?: ZERO
+    val pnl=visible.map { it.date to (it.pnl-base).toFloat() }
+    LineChart(listOf((if((pnl.lastOrNull()?.second ?: 0f)>=0f) pnlGreen else pnlRed) to pnl),from,today,years=years,allowNegative=true,height=200.dp)
+    Note(caption)
+    Note(tr("Value change minus deposits and withdrawals; the percentage is time-weighted."))
 }
 private fun projectionLine(g: Goal,p: Projection,data: Portfolio): String {
     if(g.archived) return ""
@@ -460,6 +505,7 @@ private val rtlType=Typography().run {
                                             }
                                             OutlinedButton(onClick={ calculator=bucket.id },modifier=Modifier.heightIn(min=48.dp).testTag("rebalance")) { Text(tr("Rebalance")) }
                                         }
+                                        if(bucket.pnl) PnlSection(bucket,data)
                                         Heading(tr("Holdings"))
                                         Button(onClick={ editor=Editor("Holding",owner=bucket.id) },enabled=editable) { Text(tr("Add holding")) }
                                         data.holdings.filter { it.bucketId==bucket.id }.forEach { h ->
@@ -600,7 +646,7 @@ private val rtlType=Typography().run {
                 }
             }
         }
-        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform -> model.edit(transform) { editor=null } },onFetchTokens=model::fetchTokens,onFetchAccounts=model::fetchAccounts,
+        editor?.let { e -> EditSheet(e,data,state.saving,if(state.unsaved && !state.saving) state.message ?: tr("Save failed") else null,onDismiss={ editor=null },onSave={ transform,after -> model.edit(transform) { editor=null; after() } },onBackfill=model::backfill,onFetchTokens=model::fetchTokens,onFetchAccounts=model::fetchAccounts,
             onConnect={ broker -> model.connect(broker) { url -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url))) }.onFailure { model.notice(tr("No browser available")) } } }) }
         calculator?.let { id -> data.buckets.find { it.id==id }?.let { RebalanceDialog(it,data) { calculator=null } } }
         confirmation?.let { (text,action) -> AlertDialog(onDismissRequest={ confirmation=null },title={ Text(tr("Confirm change")) },text={ Text(text) },confirmButton={ TextButton(onClick={ confirmation=null; action() }) { Text(tr("Confirm")) } },dismissButton={ TextButton(onClick={ confirmation=null }) { Text(tr("Cancel")) } }) }
@@ -661,7 +707,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit,onFetchAccounts: (String,(List<Pair<String,String>>?,String?)->Unit)->Unit,onConnect: (String)->Unit) {
+@Composable private fun EditSheet(editor: Editor,data: Portfolio,saving: Boolean,saveError: String?,onDismiss: ()->Unit,onSave: ((Portfolio)->Portfolio,()->Unit)->Unit,onBackfill: (String)->Unit,onFetchTokens: (String,String,(List<Token>?,String?)->Unit)->Unit,onFetchAccounts: (String,(List<Pair<String,String>>?,String?)->Unit)->Unit,onConnect: (String)->Unit) {
     val b=data.buckets.find { it.id==editor.id }
     val h=data.holdings.find { it.id==editor.id }
     val g=data.goals.find { it.id==editor.id }
@@ -689,6 +735,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     val disabled=remember { mutableStateListOf<String>().apply { addAll(h?.excluded ?: emptyList()) } }
     var portfolio by remember { mutableStateOf(b?.portfolio ?: false) }
     var sells by remember { mutableStateOf(b?.allowSells ?: false) }
+    var pnl by remember { mutableStateOf(b?.pnl ?: false) }
     val targets=remember { mutableStateListOf<Pair<String,String>>().apply { addAll(b?.targets?.toList().orEmpty()) } }
     var otherAsset by remember { mutableStateOf("") }
     var fetching by remember { mutableStateOf(false) }
@@ -702,7 +749,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
     var tokenFor by remember { mutableStateOf(tokenKey) }
     LaunchedEffect(tokenKey) { if(tokenKey!=tokenFor) { tokenFor=tokenKey; tokens=emptyList(); disabled.clear(); fetched=false; tokenMessage=null } }
     val context=LocalContext.current
-    fun close() { if(fields.toMap()!=initial || portfolio!=(b?.portfolio ?: false) || sells!=(b?.allowSells ?: false) || targets.toList()!=b?.targets?.toList().orEmpty()) discard=true else onDismiss() }
+    fun close() { if(fields.toMap()!=initial || portfolio!=(b?.portfolio ?: false) || sells!=(b?.allowSells ?: false) || pnl!=(b?.pnl ?: false) || targets.toList()!=b?.targets?.toList().orEmpty()) discard=true else onDismiss() }
     fun number(key: String)=fields.getValue(key).trim().replace(',','.').also { it.decimal() }
     fun transform(p: Portfolio): Portfolio {
         val currency=fields.getValue("currency").trim().uppercase()
@@ -715,7 +762,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         fun converted(amount: String)=p.convert(amount.decimal(),requireNotNull(oldCurrency),currency)?.text() ?: error(tr("Refresh exchange rates before converting"))
         return when(editor.kind) {
             "Bucket" -> {
-                val item=Bucket(b?.id ?: newId,name,currency,portfolio,targets.associate { (k,v) -> k to v.trim().replace(',','.') },sells)
+                val item=Bucket(b?.id ?: newId,name,currency,portfolio,targets.associate { (k,v) -> k to v.trim().replace(',','.') },sells,pnl)
                 p.copy(buckets=if(b==null) p.buckets+item else p.buckets.map { if(it.id==b.id) item else it })
             }
             "Holding" -> {
@@ -816,7 +863,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         Surface(Modifier.fillMaxSize().semantics { testTagsAsResourceId=true },color=MaterialTheme.colorScheme.background) {
             Scaffold(topBar={ TopAppBar(title={ Text(editorTitle(editor.kind,editor.id.isBlank())) },navigationIcon={ TextButton(onClick={ close() },enabled=!saving) { Text(tr("Cancel")) } },actions={ TextButton(onClick={
                 val checked=runCatching { transform(data) }
-                if(checked.isFailure) error=checked.exceptionOrNull()?.message else onSave(::transform)
+                if(checked.isFailure) error=checked.exceptionOrNull()?.message else onSave(::transform) { if(editor.kind=="Bucket" && pnl && b?.pnl!=true) onBackfill(b?.id ?: newId) }
             },enabled=!saving) { Text(if(saving) tr("Saving…") else tr("Save")) } }) }) { padding ->
                 Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
                     error?.let { Text(it,color=MaterialTheme.colorScheme.error) }
@@ -845,6 +892,11 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                                 Text(tr("Portfolio mode"),Modifier.weight(1f))
                                 Switch(checked=portfolio,onCheckedChange={ portfolio=it; error=null },enabled=!saving,modifier=Modifier.testTag("portfolio-mode").semantics { contentDescription=tr("Portfolio mode") })
                             }
+                            Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
+                                Text(tr("Investment PnL"),Modifier.weight(1f))
+                                Switch(checked=pnl,onCheckedChange={ pnl=it },enabled=!saving,modifier=Modifier.testTag("investment-pnl").semantics { contentDescription=tr("Investment PnL") })
+                            }
+                            Note(tr("Records daily values and deposits of this bucket's holdings and shows the profit or loss over time. Turning it on builds the history from your past snapshots and the brokers."))
                             if(portfolio) {
                                 Row(Modifier.fillMaxWidth().heightIn(min=48.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                                     Text(tr("Allow sells during rebalance"),Modifier.weight(1f))

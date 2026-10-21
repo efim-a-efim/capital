@@ -509,4 +509,47 @@ class ProviderTest {
         paths.clear()
         assertTrue(provider.refresh(p.copy(settings=p.settings.noHistory()),null).history.isEmpty()); assertTrue(paths.none { it.startsWith("/v1/") })
     }
+    // --- bucket PnL: flows ---
+    private val alpaca=Account("al","Alpaca main","Alpaca","PA123","USD","10")
+    private fun alpacaPortfolio(pnl: Boolean,flows: List<Flow> = emptyList())=Portfolio(buckets=listOf(Bucket("b","B","USD",pnl=pnl)),accounts=listOf(alpaca),holdings=listOf(Holding("h","b","Broker","USD","10",accountId="al")),flows=flows,settings=Settings("USD").noHistory()).linked()
+    private fun alpacaRoute(activities: (Request)->Triple<Int,String,String?>)=routeWith(secrets("Alpaca" to "KID","Alpaca secret" to "SEC")) { r -> when(r.url.encodedPath) {
+        "/v2/account" -> ok("""{"account_number":"PA123","currency":"USD","equity":"11"}""")
+        "/v2/account/activities" -> activities(r)
+        else -> null
+    } }
+    @Test fun refreshCollectsFlowsOfPnlBucketsOnly()=runBlocking {
+        val after=mutableListOf<String>()
+        val provider=alpacaRoute { r -> after += r.url.queryParameter("after").orEmpty(); ok("""[{"id":"a1","date":"2026-06-05","net_amount":"100","activity_type":"CSD"}]""") }
+        val stored=Flow("h","2026-06-01","100","USD","Alpaca","a0")
+        val result=provider.refresh(alpacaPortfolio(true,listOf(stored)),null)
+        assertEquals(listOf(Flow("h","2026-06-05","100","USD","Alpaca","a1")),result.flows); assertTrue(result.errors.isEmpty())
+        // since = last stored flow of that holding and broker − 90 days; Alpaca asks from the day before
+        assertEquals(listOf("2026-03-02"),after)
+        after.clear()
+        provider.refresh(alpacaPortfolio(true),null)
+        assertEquals(listOf(java.time.LocalDate.now().minusDays(366).toString()),after)
+        after.clear()
+        assertTrue(provider.refresh(alpacaPortfolio(false,listOf(stored)),null).flows.isEmpty()); assertTrue(after.isEmpty())
+    }
+    @Test fun flowErrorNamesBrokerAndAccount()=runBlocking {
+        val result=alpacaRoute { Triple(500,"{}",null) }.refresh(alpacaPortfolio(true),null)
+        assertTrue(result.flows.isEmpty()); assertEquals("11",result.accounts.single().quantity)
+        assertEquals(1,result.errors.size); assertTrue(result.errors.single(),result.errors.single().startsWith("Alpaca · Alpaca main: "))
+    }
+    @Test fun mergeReplacesFlowsByRef() {
+        val p=alpacaPortfolio(true,listOf(Flow("h","2026-06-01","100","USD","Alpaca","a0"),Flow("h","2026-06-01","100","USD","Alpaca","a1")))
+        val m=mergeObservations(p,p,emptyList(),emptyList(),flows=listOf(Flow("h","2026-06-02","50","USD","Alpaca","a1"),Flow("h","2026-06-03","7","USD","Alpaca","a2")))
+        assertEquals(listOf("a0" to "100","a1" to "50","a2" to "7"),m.flows.map { it.ref to it.amount })
+        m.validate()
+        // the merge records today's quantity of the PnL bucket's holding
+        assertEquals("10",m.history.first { it.key=="qty:h" }.points[java.time.LocalDate.now().toString()])
+    }
+    @Test fun pnlBucketExtendsTheRateHistoryStart() {
+        val today=java.time.LocalDate.parse("2026-10-22")
+        val p=alpacaPortfolio(true).copy(buckets=listOf(Bucket("b","B","EUR",pnl=true)),history=listOf(Series("qty:h",mapOf("2024-02-01" to "10"))),flows=listOf(Flow("h","2023-05-01","100","GBP","Alpaca","a0")))
+        assertEquals(java.time.LocalDate.parse("2023-05-01"),historyStart(p,"EUR",today))
+        assertEquals(java.time.LocalDate.parse("2023-05-01"),historyStart(p,"GBP",today))
+        assertEquals(today.minusDays(365),historyStart(p,"CHF",today))
+        assertEquals(today.minusDays(365),historyStart(p.copy(buckets=listOf(Bucket("b","B","EUR"))),"EUR",today))
+    }
 }

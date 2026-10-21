@@ -122,7 +122,7 @@ fun parseYahoo(body: String,thisYear: Int): Map<String,String> {
     }
     return out
 }
-fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList(), rates: List<Rate> = emptyList(), history: List<Series> = emptyList()): Portfolio {
+fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList(), rates: List<Rate> = emptyList(), history: List<Series> = emptyList(), flows: List<Flow> = emptyList()): Portfolio {
     val results=holdings.associateBy { it.id }; val read=accounts.associateBy { it.id }
     val merged=current.copy(
         accounts=current.accounts.map { a -> read[a.id]?.takeIf { r -> requested.accounts.find { it.id == a.id }?.let { it.broker == a.broker && it.address == a.address } == true }?.let { r -> a.copy(asset=r.asset,quantity=r.quantity,observedAt=r.observedAt,fetchedAt=r.fetchedAt,error=r.error) } ?: a },
@@ -140,14 +140,23 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
     val used=merged.holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } }.toSet()
     // Fetched days replace stored ones; other days are kept. A series keeps its newest 4000 days.
     val union=history.fold(merged.history.associateBy { it.key }) { acc,s -> acc + (s.key to Series(s.key,(acc[s.key]?.points.orEmpty()+s.points).toSortedMap().entries.toList().takeLast(4000).associate { it.key to it.value })) }
-    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used },history=union.values.toList()).recorded().linked().solvedFire()
+    // Fetched flows replace stored ones with the same holding, source and ref; the newest 20000 are kept.
+    fun flowKey(f: Flow) = "${f.holdingId}/${f.source}/${f.ref}"
+    val allFlows=(merged.flows.associateBy(::flowKey)+flows.associateBy(::flowKey)).values.sortedBy { it.date }.takeLast(20000)
+    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used },history=union.values.toList(),flows=allFlows).recorded().linked().recordedPnl().solvedFire()
 }
 /** Oldest first day of history the portfolio needs for an asset: the earliest day of its stored series, else the oldest observation time of any holding, account or quote, else one year back. Never more than 4000 days back. */
 fun historyStart(data: Portfolio,asset: String,today: LocalDate): LocalDate {
     val stored=data.history.find { it.key=="rate:$asset" }?.points?.keys?.minOrNull()?.let { LocalDate.parse(it) }
     val observed=(data.holdings.mapNotNull { it.observedAt }+data.accounts.mapNotNull { it.observedAt }+data.quotes.map { it.observedAt }).filter { it>0 }.minOrNull()?.let { Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate() }
-    // The earliest of: the stored series, the oldest observation, and one year back (a series that only holds today's point must still backfill).
-    return listOfNotNull(stored,observed,today.minusDays(365)).min().let { if(it.isBefore(today.minusDays(3999))) today.minusDays(3999) else it }
+    // A PnL bucket values its holdings from its first quantity point or flow on: its assets and currency need rates from that day.
+    val pnl=data.buckets.filter { it.pnl }.mapNotNull { b ->
+        val held=data.holdings.filter { it.bucketId==b.id }
+        val days=held.flatMap { h -> data.history.find { it.key=="qty:${h.id}" }?.points?.keys.orEmpty()+data.flows.filter { it.holdingId==h.id }.map { it.date } }
+        if(asset==b.currency || held.any { it.asset==asset } || data.flows.any { f -> f.currency==asset && held.any { it.id==f.holdingId } }) days.minOrNull()?.let { LocalDate.parse(it) } else null
+    }.minOrNull()
+    // The earliest of: the stored series, the oldest observation, the PnL start and one year back (a series that only holds today's point must still backfill).
+    return listOfNotNull(stored,observed,pnl,today.minusDays(365)).min().let { if(it.isBefore(today.minusDays(3999))) today.minusDays(3999) else it }
 }
 /** The day to fetch history from, or null when the asset's series is complete: it has its first needed day and a point in the last 7 days. */
 fun historyGap(data: Portfolio,asset: String,today: LocalDate): LocalDate? {
@@ -166,7 +175,7 @@ private fun llamaKey(asset: String): String {
 private fun llamaCase(key: String) = key.startsWith("ethereum:") || key.startsWith("coingecko:")
 /** Dates since..until cut into inclusive ranges of at most `size` days. */
 private fun dayRanges(since: LocalDate,until: LocalDate,size: Long) = generateSequence(since) { it.plusDays(size) }.takeWhile { !it.isAfter(until) }.map { it to minOf(it.plusDays(size-1),until) }.toList()
-data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList())
+data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList(), val flows: List<Flow> = emptyList())
 // Contract lookups per refresh. DefiLlama answers in batches. CoinPaprika free tier: 60 requests per hour, a listed contract costs two.
 fun tokenLookups(provider: String) = when(provider) { "DefiLlama" -> 1000; "CoinPaprika" -> 10; else -> 30 }
 const val MIN_CONFIDENCE = "0.9"
@@ -549,6 +558,15 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             catch(e: CancellationException) { throw e }
             catch(e: Exception) { val message=e.safeMessage(); errors += tr("{0} · {1}",a.broker,tr("{0}: {1}",a.name,message)); a.copy(error=message) }
         }
+        // Cash flows of the accounts linked into PnL buckets, from 90 days before the last stored flow (brokers post late) or one year back.
+        val fetchedFlows=mutableListOf<Flow>(); val pnlBuckets=data.buckets.filter { it.pnl }.map { it.id }.toSet()
+        for(a in read.filter { it.error==null }) {
+            val h=data.holdings.find { it.accountId==a.id && it.bucketId in pnlBuckets } ?: continue
+            val since=data.flows.filter { it.holdingId==h.id && it.source==a.broker }.maxOfOrNull { it.date }?.let { LocalDate.parse(it).minusDays(90) } ?: LocalDate.now().minusDays(365)
+            try { fetchedFlows += flows(a,h,since) }
+            catch(e: CancellationException) { throw e }
+            catch(e: Exception) { errors += tr("{0} · {1}",a.broker,tr("{0}: {1}",a.name,e.safeMessage())) }
+        }
         for(h in data.holdings.filter { it.address != null && (bucketId==null || it.bucketId==bucketId) }) {
             var r=try { balance(h,data.settings.providers.getValue(h.asset)) }
             catch(e: CancellationException) { throw e }
@@ -644,7 +662,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         }
         // Stored days win over fetched ones; the rest is the union.
         val mergedHistory=fetchedHistory.groupBy { it.key }.map { (k,list) -> Series(k,list.flatMap { it.points.entries }.associate { it.key to it.value }+data.history.find { it.key==k }?.points.orEmpty()) }
-        return Observations(final,quotes,errors,unlisted,read,fetchedRates,mergedHistory)
+        return Observations(final,quotes,errors,unlisted,read,fetchedRates,mergedHistory,fetchedFlows)
     }
 }
 fun Exception.safeMessage(): String = when(this) {

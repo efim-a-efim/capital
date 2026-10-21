@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 data class ScreenState(
     val data: Portfolio = Portfolio(), val ready: Boolean = false, val loading: Boolean = true,
@@ -135,8 +137,12 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         transaction.withLock {
             if(!isOpen) return@withLock
             if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Resolve storage issues before editing")); return@withLock }
-            try { persist(transform(mutable.value.data).linked().solvedFire().ranked().validate()); onSaved() }
-            catch(e: Exception) { notice(e.message ?: tr("Could not save")) }
+            val before=mutable.value.data
+            try {
+                val next=transform(before).linked().solvedFire().ranked().validate()
+                persist(next); onSaved()
+                next.buckets.filter { b -> b.pnl && before.buckets.find { it.id==b.id }?.pnl==false }.forEach { backfill(it.id) }
+            } catch(e: Exception) { notice(e.message ?: tr("Could not save")) }
         }
     }
     private suspend fun persist(data: Portfolio,resolve: Boolean=false) {
@@ -169,8 +175,53 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     fun resolve(revision: Revision)=viewModelScope.launch { transaction.withLock {
         try { persist(revision.data.linked().solvedFire().ranked(),true) } catch(e: Exception) { notice(e.message ?: tr("Conflict resolution failed")) }
     } }
-    /** Fills the quantity history, rates and broker flows of a bucket whose Investment PnL was just switched on (see add-bucket-pnl). */
-    fun backfill(bucketId: String) { /* implemented with the PnL backfill */ }
+    /** Fills the quantity history, rates and broker flows of a bucket whose Investment PnL was just switched on (see add-bucket-pnl). Waits for a running refresh; a refresh waits for it. */
+    fun backfill(bucketId: String) {
+        if(!isOpen || !mutable.value.ready) return
+        val running=refreshJob
+        refreshJob=viewModelScope.launch {
+            running?.join()
+            update { it.copy(refreshing=true,message=tr("Building the PnL history…")) }
+            try {
+                val s=store ?: error(tr("Choose a storage folder first"))
+                fun plain(text: String): String { if(!isEncrypted(text)) return text; val k=s.key ?: throw Locked(); return try { decryptSnapshot(text,k) } catch(e: Exception) { decryptSnapshot(text,s.previous ?: throw e) } }
+                val today=LocalDate.now()
+                val rebuilt=transaction.withLock { withContext(Dispatchers.IO) { backfill(SafFiles(resolver,s.tree ?: error(tr("Choose a storage folder first"))),{ runCatching { decodeRevision(plain(it)) }.getOrNull() },bucketId,mutable.value.data,today) } }
+                val held=rebuilt.holdings.filter { it.bucketId==bucketId }
+                val earliest=held.flatMap { h -> rebuilt.history.find { it.key=="qty:${h.id}" }?.points?.keys.orEmpty()+rebuilt.flows.filter { it.holdingId==h.id }.map { it.date } }.minOrNull()?.let { LocalDate.parse(it) } ?: today.minusDays(365)
+                val errors=mutableListOf<String>(); val series=mutableListOf<Series>(); val flows=mutableListOf<Flow>()
+                for(h in held) {
+                    val a=rebuilt.accounts.find { it.id==h.accountId } ?: continue
+                    try {
+                        // Stored days win over the broker's.
+                        providers.accountHistory(a,earliest).takeIf { it.isNotEmpty() }?.let { series += Series("qty:${h.id}",it+rebuilt.history.find { s -> s.key=="qty:${h.id}" }?.points.orEmpty()) }
+                        flows += providers.flows(a,h,earliest)
+                    } catch(e: CancellationException) { throw e }
+                    catch(e: Exception) { errors += tr("{0} · {1}",a.broker,tr("{0}: {1}",a.name,e.safeMessage())) }
+                }
+                val merged=mergeObservations(rebuilt,rebuilt,emptyList(),emptyList(),history=series,flows=flows)
+                val source=merged.settings.providers.getValue("Rate history"); val rates=mutableListOf<Series>()
+                if(source!="Off") {
+                    val utc=LocalDate.now(ZoneOffset.UTC)
+                    val assets=(held.map { it.asset }+merged.buckets.filter { it.id==bucketId }.map { it.currency }+flows.map { it.currency }).toSet()-"USD"
+                    for((since,group) in assets.sorted().mapNotNull { a -> historyGap(merged,a,utc)?.let { a to it } }.groupBy({ it.second },{ it.first })) {
+                        try { rates += providers.history(group.toSet(),since,utc,source) { a,e -> errors += tr("{0} · {1}",source,tr("{0}: {1}",a,e.safeMessage())) } }
+                        catch(e: CancellationException) { throw e }
+                        catch(e: Exception) { group.forEach { a -> errors += tr("{0} · {1}",source,tr("{0}: {1}",a,e.safeMessage())) } }
+                    }
+                }
+                transaction.withLock {
+                    if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Refresh finished; resolve storage issues before retrying.")); return@withLock }
+                    val final=mergeObservations(mutable.value.data.copy(history=merged.history,flows=merged.flows),merged,emptyList(),emptyList(),history=rates.map { r -> r.copy(points=r.points+merged.history.find { it.key==r.key }?.points.orEmpty()) })
+                    withContext(NonCancellable) { persist(final) }
+                    val days=held.flatMap { h -> final.history.find { it.key=="qty:${h.id}" }?.points?.keys.orEmpty() }.toSet().size
+                    notice((listOf(tr("PnL history ready: {0} days",days))+errors).joinToString("\n"))
+                }
+            } catch(e: CancellationException) { notice(tr("Refresh stopped. Cached values retained.")); throw e }
+            catch(e: Exception) { notice(e.message ?: tr("Refresh failed. Cached values retained.")) }
+            finally { update { it.copy(refreshing=false) } }
+        }
+    }
     fun refresh(bucketId: String?=null) {
         if(refreshJob?.isActive==true || !isOpen || !mutable.value.ready || mutable.value.blocked || mutable.value.unsaved || !foreground) return
         val requested=mutable.value.data

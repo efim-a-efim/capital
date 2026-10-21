@@ -61,6 +61,43 @@ Throw `dev.capital.data.ProviderFailure(tr("…"))` for anything the broker said
 5. Reachability check in `scripts/check-providers.py` with a bogus credential, so a renamed endpoint is noticed.
 6. Record it as an OpenSpec change (`openspec/changes/<name>/`), with the spec delta under `specs/broker-accounts/`.
 
+## Cash flows and value history
+
+Two optional members feed the bucket PnL. Leave them out for brokers whose API has no such data: the site then lists the broker as PnL-unsupported.
+
+- `listsFlows = true` + `flows(host, id, since)`: external cash movements of the account since `since` (inclusive), newest last, as `BrokerFlow(date, amount, currency, ref)`. Deposits are positive, withdrawals negative, `amount` is decimal text, `currency` the ISO code of the row, `ref` the broker's own id of the row. Only money that crossed the account boundary counts: no trades, dividends, interest, fees or taxes; transfers between the user's own accounts at the broker are internal and stay out unless the broker cannot tell them apart.
+- `listsHistory = true` + `history(host, id, since)`: the account's daily total value since `since`, oldest first, one `(LocalDate, Reading)` per day the broker reports (trading days are enough). Return what the broker has: when its window is shorter than `since` asks for, return the shorter series and do not page or stitch.
+
+The host (`Providers.flows` / `Providers.accountHistory`) checks every row and rejects the whole result when one fails: the currency is a known ISO code, the amount or total is decimal (totals not negative), the date is not in the future, `ref` is non-blank, at most 200 characters and unique within the result. Flows are re-read on every refresh from the last known flow minus 90 days and merged by `ref`, so a `ref` must be stable across reads; when the broker gives no id, build one from the row's fields and number same-day duplicates. History is read once when the bucket's PnL switch is turned on.
+
+```kotlin
+override val listsFlows=true
+override suspend fun flows(host: BrokerHost,id: String,since: LocalDate): List<BrokerFlow> {
+    val out=mutableListOf<BrokerFlow>(); var token=""
+    repeat(100) {                                                 // paged by the id of the last activity
+        val url="$base/activities?activity_types=CSD,CSW&after=${since.minusDays(1)}&direction=asc&page_size=100"+(if(token.isBlank()) "" else "&page_token=$token")
+        val page=(json.parseToJsonElement(host.text(url,headers=auth(host))) as? JsonArray)?.mapNotNull { it as? JsonObject } ?: throw ProviderFailure(tr("Invalid provider response"))
+        page.forEach { a ->
+            val date=a.text("date")?.take(10)?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: return@forEach
+            if(!date.isBefore(since)) out += BrokerFlow(date,a.string("net_amount"),"USD",a.string("id"))   // CSD +, CSW -
+        }
+        token=page.lastOrNull()?.text("id").orEmpty()
+        if(page.size<100 || token.isBlank()) return out
+    }
+    return out
+}
+override val listsHistory=true
+override suspend fun history(host: BrokerHost,id: String,since: LocalDate): List<Pair<LocalDate,Reading>> {
+    val h=host.json("$base/portfolio/history?start=$since&timeframe=1D",headers=auth(host))
+    val times=(h["timestamp"] as? JsonArray).orEmpty().map { (it as? JsonPrimitive)?.content?.toLongOrNull() }
+    val equity=(h["equity"] as? JsonArray).orEmpty().map { (it as? JsonPrimitive)?.takeIf { p -> p !is JsonNull }?.content }
+    return times.zip(equity).mapNotNull { (t,e) -> if(t==null || e==null) null else Instant.ofEpochSecond(t).atZone(ZoneOffset.UTC).toLocalDate().let { d -> d to Reading("USD",e,t*1000) } }
+        .filter { !it.first.isBefore(since) }.groupBy { it.first }.map { (_,l) -> l.last() }.sortedBy { it.first }
+}
+```
+
+Test both in `PluginTest` with a recorded (or schema-built, say so in a comment) response: dates, signs, currency, refs and paging, through `Providers.flows` / `Providers.accountHistory` so the host checks run too.
+
 ## What stays out of a plugin
 
 Credential storage (Android Keystore-backed `Secrets`), the account entity and linking, refresh scheduling, currency conversion, snapshots, the Brokers screen. If a broker needs something the host does not offer (a signing primitive, a second request type), extend `BrokerHost` in one place rather than working around it in the plugin.
