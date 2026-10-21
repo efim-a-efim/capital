@@ -21,4 +21,4 @@ title: Ringkasan
 
 **Bilah atas.** Ikon perbarui memuat ulang semua saldo dompet dan harga, dan berputar selama bekerja. Ikon roda gigi membuka Pengaturan. **?** membuka halaman ini.
 
-**Pemberitahuan.** Bilah kuning muncul ketika harga sudah usang atau tidak tersedia, ketika folder memiliki perubahan yang belum disimpan, atau ketika dua revisi folder saling berkonflik. Setiap pemberitahuan punya tombolnya sendiri; lihat [Sinkronisasi, cadangan, pemulihan]({{ page.base }}/manual#sync-backup-recovery).
+**Pemberitahuan.** Bilah kuning muncul ketika folder memiliki perubahan yang belum disimpan atau ketika dua revisi folder saling berkonflik; harga yang usang atau tidak tersedia dilaporkan di layar [Pengaturan]({{ page.base }}/screens/settings). Setiap pemberitahuan punya tombolnya sendiri; lihat [Sinkronisasi, cadangan, pemulihan]({{ page.base }}/manual#sync-backup-recovery).

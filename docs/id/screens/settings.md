@@ -10,6 +10,8 @@ title: Pengaturan
 
 **Apa ini.** Semua yang bukan data catatan: preferensi, sumber data, keamanan, dan folder. Dibuka dengan ikon roda gigi di bilah atas; di layar lebar, Pengaturan menjadi tab di panel navigasi samping.
 
+**Pemberitahuan.** Bilah kuning di bagian atas memberi tahu ketika nilai tersimpan sudah usang (perbarui saat online) atau ketika penilaian tidak lengkap karena ada saldo atau kurs yang tidak tersedia. Bilah ini hanya muncul di sini.
+
 **Preferensi.** Mata uang default dan tema (sistem, terang, gelap). Mata uang default dipakai untuk nilai di Ringkasan dan diusulkan untuk kantong dan tujuan baru; data yang sudah ada tetap memakai mata uangnya. **Bahasa** langsung mengganti bahasa antarmuka; *Default sistem* mengikuti perangkat.
 
 **Penyedia data gratis.** Satu baris per jenis data, masing-masing dengan operator yang sedang dipakai: saldo BTC, ETH, TON, TRX; daftar token ETH, TON, TRX; harga kripto; kurs fiat; **Inflasi** (**World Bank**, **ECB**, **OECD**, **Nonaktif**) dan **Pertumbuhan pasar** (**World Bank**, **Yahoo Finance · tidak resmi**, **Nonaktif**), yang mengisi [tujuan FIRE]({{ page.base }}/screens/goal#fire) dan mempertahankan bawaan aplikasi bila **Nonaktif**. Ketuk baris untuk memilih operator lain, mengatur pencarian token ke **Nonaktif** untuk suatu jaringan, atau memasukkan kunci API opsional. Kunci disimpan terenkripsi di perangkat dan hanya dikirim ke operator yang menerbitkannya. **Uji sumber / perbarui portofolio** mengueri setiap operator dengan aset yang benar-benar Anda miliki dan melaporkan apa yang gagal. Tidak ada operator yang pernah diganti secara diam-diam.

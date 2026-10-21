@@ -10,6 +10,8 @@ title: Ajustes
 
 **Qué es.** Todo lo que no es un registro: preferencias, fuentes de datos, seguridad y la carpeta. Se abre con el engranaje de la barra superior; en pantallas anchas es una pestaña del panel lateral.
 
+**Aviso.** Una barra amarilla en la parte superior indica cuándo los valores en caché están desactualizados (actualice cuando tenga conexión) o cuándo una valoración está incompleta porque falta un saldo o un tipo de cambio. Aparece solo aquí.
+
 **Preferencias.** Moneda predeterminada y tema (sistema, claro, oscuro). La moneda predeterminada se usa para valorar el Resumen y se propone para los bolsillos y metas nuevos; los registros existentes conservan su moneda. **Idioma** cambia la interfaz de inmediato; *Predeterminado del sistema* sigue al dispositivo.
 
 **Proveedores de datos gratuitos.** Una fila por tipo de datos, cada una con el operador en uso: saldos BTC, ETH, TON y TRX; listas de tokens ETH, TON y TRX; precios de criptomonedas; tipos de cambio fiat; **Inflación** (**World Bank**, **ECB**, **OECD**, **Desactivado**) y **Crecimiento del mercado** (**World Bank**, **Yahoo Finance · no oficial**, **Desactivado**), que alimentan las [metas FIRE]({{ page.base }}/screens/goal#fire) y mantienen los valores predeterminados integrados cuando están en **Desactivado**. Toque una fila para elegir otro operador, poner en **Desactivado** las consultas de tokens de una red o introducir una clave API opcional. Las claves se guardan cifradas en el dispositivo y solo se envían al operador que las emitió. **Probar fuentes / actualizar cartera** consulta a cada operador con los activos que realmente posee e informa de lo que ha fallado. Nunca se sustituye un operador por otro sin avisar.

@@ -10,6 +10,8 @@ title: Ajustes
 
 **O que é.** Tudo o que não é um registro: preferências, fontes de dados, segurança e a pasta. Abre pela engrenagem na barra superior; em telas largas, é uma aba na barra lateral.
 
+**Aviso.** Uma barra amarela no topo indica quando os valores em cache estão desatualizados (atualize quando estiver online) ou quando a avaliação está incompleta porque falta um saldo ou uma cotação. Ela aparece somente aqui.
+
 **Preferências.** Moeda padrão e tema (sistema, claro, escuro). A moeda padrão é usada para avaliar a Visão geral e é sugerida para novas caixinhas e metas; os registros existentes mantêm sua moeda. **Idioma** muda a interface imediatamente; *Padrão do sistema* segue o dispositivo.
 
 **Provedores de dados gratuitos.** Uma linha por tipo de dado, cada uma com o operador em uso: saldos BTC, ETH, TON, TRX; listas de tokens ETH, TON, TRX; preços de cripto; câmbio de moedas fiduciárias; **Inflação** (**World Bank**, **ECB**, **OECD**, **Desativado**) e **Crescimento do mercado** (**World Bank**, **Yahoo Finance · não oficial**, **Desativado**), que alimentam as [metas FIRE]({{ page.base }}/screens/goal#fire) e mantêm os padrões do app quando estão em **Desativado**. Toque em uma linha para escolher outro operador, deixar a consulta de tokens de uma rede como **Desativado** ou informar uma chave de API opcional. As chaves são armazenadas criptografadas no dispositivo e enviadas apenas ao operador que as emitiu. **Testar fontes / atualizar portfólio** consulta todos os operadores com os ativos que você realmente possui e informa o que falhou. Nenhum operador é substituído em silêncio.

@@ -21,4 +21,4 @@ title: Übersicht
 
 **Obere Leiste.** Das Aktualisieren-Symbol lädt alle Wallet-Guthaben und Kurse neu und dreht sich, solange es arbeitet. Das Zahnrad öffnet die Einstellungen. **?** öffnet diese Seite.
 
-**Hinweise.** Eine gelbe Leiste erscheint, wenn Kurse veraltet sind oder fehlen, wenn der Ordner nicht gespeicherte Änderungen enthält oder wenn zwei Revisionen des Ordners in Konflikt stehen. Jeder Hinweis hat eigene Schaltflächen; siehe [Synchronisierung, Backup, Wiederherstellung]({{ page.base }}/manual#sync-backup-recovery).
+**Hinweise.** Eine gelbe Leiste erscheint, wenn der Ordner nicht gespeicherte Änderungen enthält oder wenn zwei Revisionen des Ordners in Konflikt stehen; veraltete oder fehlende Kurse werden auf dem Bildschirm [Einstellungen]({{ page.base }}/screens/settings) gemeldet. Jeder Hinweis hat eigene Schaltflächen; siehe [Synchronisierung, Backup, Wiederherstellung]({{ page.base }}/manual#sync-backup-recovery).

@@ -10,6 +10,8 @@ title: Einstellungen
 
 **Was es ist.** Alles, was kein Datensatz ist: Voreinstellungen, Datenquellen, Sicherheit und der Ordner. Wird über das Zahnrad in der oberen Leiste geöffnet; auf breiten Bildschirmen ist es ein Tab in der seitlichen Navigationsleiste.
 
+**Hinweis.** Eine gelbe Leiste oben zeigt an, wenn zwischengespeicherte Werte veraltet sind (aktualisieren Sie, sobald Sie online sind) oder wenn eine Bewertung unvollständig ist, weil ein Guthaben oder ein Kurs fehlt. Sie erscheint nur hier.
+
 **Allgemein.** Standardwährung und Design (System, Hell, Dunkel). Die Standardwährung gilt für die Übersicht und wird für neue Töpfe und Ziele vorgeschlagen; vorhandene Einträge behalten ihre Währung. **Sprache** wechselt die Oberflächensprache sofort; *Systemstandard* folgt dem Gerät.
 
 **Kostenlose Datenanbieter.** Eine Zeile je Datentyp, jeweils mit dem verwendeten Betreiber: BTC-, ETH-, TON-, TRX-Guthaben; ETH-, TON-, TRX-Tokenlisten; Kryptopreise; Wechselkurse; **Inflation** (**World Bank**, **ECB**, **OECD**, **Aus**) und **Marktwachstum** (**World Bank**, **Yahoo Finance · inoffiziell**, **Aus**), die [FIRE-Ziele]({{ page.base }}/screens/goal#fire) speisen und bei **Aus** die eingebauten Standardwerte beibehalten. Tippen Sie auf eine Zeile, um einen anderen Betreiber zu wählen, Token-Abfragen für eine Chain auf **Aus** zu stellen oder einen optionalen API-Schlüssel einzugeben. Schlüssel werden verschlüsselt auf dem Gerät gespeichert und nur an den Betreiber gesendet, der sie ausgegeben hat. **Quellen testen / Portfolio aktualisieren** fragt jeden Betreiber mit den Vermögenswerten ab, die Sie tatsächlich halten, und meldet, was fehlgeschlagen ist. Kein Betreiber wird jemals stillschweigend ersetzt.

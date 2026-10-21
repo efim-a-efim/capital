@@ -21,4 +21,4 @@ title: Tổng quan
 
 **Thanh trên cùng.** Biểu tượng làm mới tải lại mọi số dư ví và giá, và quay trong khi đang chạy. Biểu tượng bánh răng mở Cài đặt. **?** mở trang này.
 
-**Thông báo.** Một thanh màu vàng xuất hiện khi giá đã cũ hoặc bị thiếu, khi thư mục có thay đổi chưa lưu, hoặc khi hai phiên bản của thư mục xung đột. Mỗi thông báo có các nút riêng; xem [Đồng bộ, sao lưu, khôi phục]({{ page.base }}/manual#sync-backup-recovery).
+**Thông báo.** Một thanh màu vàng xuất hiện khi thư mục có thay đổi chưa lưu hoặc khi hai phiên bản của thư mục xung đột; giá cũ hoặc bị thiếu được báo trên màn hình [Cài đặt]({{ page.base }}/screens/settings). Mỗi thông báo có các nút riêng; xem [Đồng bộ, sao lưu, khôi phục]({{ page.base }}/manual#sync-backup-recovery).

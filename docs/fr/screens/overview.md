@@ -21,4 +21,4 @@ title: Synthèse
 
 **Barre supérieure.** L’icône d’actualisation recharge tous les soldes de portefeuilles crypto et tous les cours, et tourne pendant l’opération. L’engrenage ouvre les Paramètres. **?** ouvre cette page.
 
-**Avertissements.** Une barre jaune apparaît lorsque des cours sont obsolètes ou manquants, lorsque le dossier contient des modifications non enregistrées, ou lorsque deux révisions du dossier sont en conflit. Chaque avertissement a ses propres boutons ; voir [Synchronisation, sauvegarde, récupération]({{ page.base }}/manual#sync-backup-recovery).
+**Avertissements.** Une barre jaune apparaît lorsque le dossier contient des modifications non enregistrées ou lorsque deux révisions du dossier sont en conflit ; les cours obsolètes ou manquants sont signalés dans l’écran [Paramètres]({{ page.base }}/screens/settings). Chaque avertissement a ses propres boutons ; voir [Synchronisation, sauvegarde, récupération]({{ page.base }}/manual#sync-backup-recovery).

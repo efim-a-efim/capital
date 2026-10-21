@@ -21,4 +21,4 @@ title: Resumen
 
 **Barra superior.** El icono de actualizar vuelve a cargar todos los saldos de billeteras y precios, y gira mientras trabaja. El engranaje abre Ajustes. **?** abre esta página.
 
-**Avisos.** Aparece una barra amarilla cuando las cotizaciones están desactualizadas o faltan, cuando la carpeta tiene cambios sin guardar o cuando dos revisiones de la carpeta entran en conflicto. Cada aviso tiene sus propios botones; consulte [Sincronización, copia de seguridad, recuperación]({{ page.base }}/manual#sync-backup-recovery).
+**Avisos.** Aparece una barra amarilla cuando la carpeta tiene cambios sin guardar o cuando dos revisiones de la carpeta entran en conflicto; las cotizaciones desactualizadas o ausentes se indican en la pantalla [Ajustes]({{ page.base }}/screens/settings). Cada aviso tiene sus propios botones; consulte [Sincronización, copia de seguridad, recuperación]({{ page.base }}/manual#sync-backup-recovery).

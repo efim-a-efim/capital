@@ -10,6 +10,8 @@ title: Cài đặt
 
 **Đây là gì.** Mọi thứ không phải là bản ghi: tùy chọn, nguồn dữ liệu, bảo mật và thư mục. Mở bằng biểu tượng bánh răng trên thanh trên cùng; trên màn hình rộng, đây là một thẻ trong thanh điều hướng bên.
 
+**Thông báo.** Một thanh màu vàng ở đầu màn hình cho biết khi các giá trị đã lưu đệm bị cũ (hãy làm mới khi có mạng) hoặc khi định giá chưa đầy đủ do thiếu số dư hoặc tỷ giá. Thanh này chỉ xuất hiện ở đây.
+
 **Tùy chọn.** Tiền tệ mặc định và giao diện (Hệ thống, Sáng, Tối). Tiền tệ mặc định dùng để định giá màn hình Tổng quan và được đề xuất cho hũ và mục tiêu mới; các bản ghi hiện có giữ nguyên tiền tệ của chúng. **Ngôn ngữ** đổi ngôn ngữ giao diện ngay lập tức; *Mặc định hệ thống* theo ngôn ngữ của thiết bị.
 
 **Nhà cung cấp dữ liệu miễn phí.** Mỗi loại dữ liệu một dòng, kèm nhà cung cấp đang dùng: số dư BTC, ETH, TON, TRX; danh sách token ETH, TON, TRX; giá tiền mã hóa; tỷ giá tiền pháp định; **Lạm phát** (**World Bank**, **ECB**, **OECD**, **Tắt**) và **Tăng trưởng thị trường** (**World Bank**, **Yahoo Finance · không chính thức**, **Tắt**), dùng cho [mục tiêu FIRE]({{ page.base }}/screens/goal#fire) và giữ nguyên mặc định tích hợp khi **Tắt**. Chạm vào một dòng để chọn nhà cung cấp khác, chuyển tra cứu token của một chuỗi sang **Tắt**, hoặc nhập khóa API không bắt buộc. Khóa được lưu mã hóa trên thiết bị và chỉ được gửi đến nhà cung cấp đã cấp khóa đó. **Kiểm tra nguồn / làm mới danh mục** truy vấn từng nhà cung cấp với những tài sản bạn thực sự nắm giữ và báo cáo những gì thất bại. Không nhà cung cấp nào bị âm thầm thay thế.

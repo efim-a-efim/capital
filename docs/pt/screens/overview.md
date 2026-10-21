@@ -21,4 +21,4 @@ title: Visão geral
 
 **Barra superior.** O ícone de atualizar recarrega todos os saldos de carteiras e preços, e gira enquanto trabalha. A engrenagem abre Ajustes. **?** abre esta página.
 
-**Avisos.** Uma barra amarela aparece quando há cotações desatualizadas ou ausentes, quando a pasta tem alterações não salvas ou quando duas revisões da pasta entram em conflito. Cada aviso tem seus próprios botões; veja [Sincronização, backup, recuperação]({{ page.base }}/manual#sync-backup-recovery).
+**Avisos.** Uma barra amarela aparece quando a pasta tem alterações não salvas ou quando duas revisões da pasta entram em conflito; cotações desatualizadas ou ausentes são informadas na tela [Ajustes]({{ page.base }}/screens/settings). Cada aviso tem seus próprios botões; veja [Sincronização, backup, recuperação]({{ page.base }}/manual#sync-backup-recovery).
