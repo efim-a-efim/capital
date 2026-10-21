@@ -32,14 +32,14 @@ Mọi số tiền tính theo tiền hôm nay của tiền tệ mục tiêu. Màn
 
 **Những gì được tự tính.**
 
-- Ngày FIRE: từ số tiền mục tiêu và khoản đóng góp.
+- Ngày FIRE: tháng đầu tiên mà từ đó chi tiêu đủ dùng đến hết tuổi thọ (50 năm nếu không có ngày sinh) và, khi có số tiền mục tiêu, số tiền mục tiêu đạt được. Nếu không có số tiền mục tiêu, số tiền FIRE trở thành khoản mà quãng đời đó cần.
 - Khoản đóng góp: từ số tiền mục tiêu và ngày FIRE.
-- Số tiền mục tiêu: từ chi tiêu (chi tiêu × 12 ÷ tỷ lệ rút tiền), hoặc từ ngày FIRE và khoản đóng góp.
+- Số tiền mục tiêu: từ chi tiêu (chi tiêu × 12 ÷ tỷ lệ rút tiền), khi đã có ngày FIRE, hoặc từ ngày FIRE và khoản đóng góp.
 - Chi tiêu: từ số tiền mục tiêu (số tiền mục tiêu × tỷ lệ rút tiền ÷ 12).
 
 Nếu cả ngày FIRE, khoản đóng góp và số tiền mục tiêu đều được nhập, ngày được giữ nguyên và màn hình hiển thị phần còn thiếu cùng ngày sớm nhất có thể đạt được. Số tiền mục tiêu và ngày được tính ra sẽ được ghi vào số tiền mục tiêu và hạn hoàn thành của mục tiêu, nên việc sắp xếp, phân bổ, màn hình Tổng quan và Kế hoạch hoạt động như với mọi mục tiêu. Chúng được cập nhật sau mỗi lần chỉnh sửa và mỗi lần làm mới.
 
-**Phần FIRE.** Trước tiên là các giá trị giống nhau ở mọi kịch bản (những gì bạn đã nhập và **Tỷ lệ rút tiền**), mỗi giá trị một dòng. Sau đó là một hàng có thể gập cho mỗi kịch bản, **Trung bình**, **Lạc quan** và **Bi quan**, kèm tỷ lệ tăng trưởng, lạm phát và một huy hiệu: **Đủ tiền** (xanh lá) khi tiền đủ dùng vượt quá tuổi thọ, **tiền sẽ không bao giờ hết 🥳** (xanh lá) khi tiền không bao giờ cạn, **Không đủ tiền** (vàng) khi chưa đạt được ngày FIRE hoặc tiền hết sớm hơn. Chạm vào hàng để mở ra các giá trị khác nhau theo kịch bản:
+**Phần FIRE.** Trước tiên là các giá trị giống nhau ở mọi kịch bản (những gì bạn đã nhập và **Tỷ lệ rút tiền**), mỗi giá trị một dòng. Sau đó là một hàng có thể gập cho mỗi kịch bản, **Trung bình**, **Lạc quan** và **Bi quan**, kèm tỷ lệ tăng trưởng, lạm phát, ngày FIRE được tính ra khi bạn để trống ngày đó, và một huy hiệu: **Đủ tiền** (xanh lá) khi tiền đủ dùng vượt quá tuổi thọ, **tiền sẽ không bao giờ hết 🥳** (xanh lá) khi tiền không bao giờ cạn, **Không đủ tiền** (vàng) khi chưa đạt được ngày FIRE hoặc tiền hết sớm hơn. Chạm vào hàng để mở ra các giá trị khác nhau theo kịch bản:
 
 | Hàng | Ý nghĩa |
 |---|---|

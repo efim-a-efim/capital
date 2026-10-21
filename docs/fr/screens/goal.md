@@ -32,14 +32,14 @@ Tous les montants sont en valeur d’aujourd’hui, dans la devise de l’object
 
 **Ce qui est calculé.**
 
-- Date FIRE : à partir de la cible et du versement.
+- Date FIRE : le premier mois à partir duquel la dépense est couverte jusqu’à l’espérance de vie (50 ans sans date de naissance) et, si une cible est donnée, la cible est atteinte. Sans cible, le montant FIRE devient la somme dont cette durée de vie a besoin.
 - Versement : à partir de la cible et de la date FIRE.
-- Cible : à partir de la dépense (dépense × 12 ÷ taux de retrait), ou à partir de la date FIRE et du versement.
+- Cible : à partir de la dépense (dépense × 12 ÷ taux de retrait) lorsque la date FIRE est donnée, ou à partir de la date FIRE et du versement.
 - Dépense : à partir de la cible (cible × taux de retrait ÷ 12).
 
 Si la date FIRE, le versement et la cible sont tous renseignés, la date est conservée et l’écran affiche le manque et la date la plus proche qui soit atteignable. La cible et la date calculées sont écrites dans la cible et l’échéance de l’objectif ; le classement, l’affectation, la Synthèse et les Prévisions fonctionnent donc comme pour tout objectif. Elles sont recalculées à chaque modification et à chaque actualisation.
 
-**La section FIRE.** D’abord les valeurs identiques dans tous les scénarios (ce que vous avez saisi, et le **Taux de retrait**), une par ligne. Ensuite une ligne dépliable par scénario, **Moyen**, **Optimiste** et **Pessimiste**, avec ses taux de croissance et d’inflation et un badge : **L’argent suffit** (vert) lorsque l’argent dure au-delà de l’espérance de vie, **l’argent ne s’épuisera jamais 🥳** (vert) lorsqu’il n’est jamais épuisé, **Argent insuffisant** (jaune) lorsque la date FIRE n’est pas atteignable ou que l’argent s’épuise plus tôt. Touchez la ligne pour déplier les valeurs qui diffèrent selon le scénario :
+**La section FIRE.** D’abord les valeurs identiques dans tous les scénarios (ce que vous avez saisi, et le **Taux de retrait**), une par ligne. Ensuite une ligne dépliable par scénario, **Moyen**, **Optimiste** et **Pessimiste**, avec ses taux de croissance et d’inflation, la date FIRE calculée lorsque vous l’avez laissée vide, et un badge : **L’argent suffit** (vert) lorsque l’argent dure au-delà de l’espérance de vie, **l’argent ne s’épuisera jamais 🥳** (vert) lorsqu’il n’est jamais épuisé, **Argent insuffisant** (jaune) lorsque la date FIRE n’est pas atteignable ou que l’argent s’épuise plus tôt. Touchez la ligne pour déplier les valeurs qui diffèrent selon le scénario :
 
 | Ligne | Signification |
 |---|---|

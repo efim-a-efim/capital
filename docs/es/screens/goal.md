@@ -32,14 +32,14 @@ Todos los importes están en dinero de hoy de la moneda de la meta. La pantalla 
 
 **Qué se calcula.**
 
-- Fecha FIRE: a partir del objetivo y la aportación.
+- Fecha FIRE: el primer mes a partir del cual el gasto dura hasta la esperanza de vida (50 años sin fecha de nacimiento) y, si se indica un objetivo, este se alcanza. Sin objetivo, el importe FIRE pasa a ser el importe que necesita ese periodo de vida.
 - Aportación: a partir del objetivo y la fecha FIRE.
-- Objetivo: a partir del gasto (gasto × 12 ÷ tasa de retiro), o a partir de la fecha FIRE y la aportación.
+- Objetivo: a partir del gasto (gasto × 12 ÷ tasa de retiro) cuando se indica la fecha FIRE, o a partir de la fecha FIRE y la aportación.
 - Gasto: a partir del objetivo (objetivo × tasa de retiro ÷ 12).
 
 Si se indican la fecha FIRE, la aportación y el objetivo, se mantiene la fecha y la pantalla muestra lo que falta y la fecha más próxima alcanzable. El objetivo y la fecha calculados se escriben en el objetivo y la fecha de vencimiento de la meta, de modo que el orden, la asignación, el Resumen y los Planes funcionan como con cualquier meta. Se actualizan en cada edición y en cada actualización.
 
-**La sección FIRE.** Primero los valores que son iguales en todos los escenarios (lo que usted indicó y la **Tasa de retiro**), uno por línea. Después una fila plegable por escenario, **Medio**, **Optimista** y **Pesimista**, con sus tasas de crecimiento e inflación y una insignia: **Dinero suficiente** (verde) cuando el dinero dura más allá de la esperanza de vida, **el dinero nunca se acabará 🥳** (verde) cuando nunca se agota, **Dinero insuficiente** (amarillo) cuando la fecha FIRE es inalcanzable o el dinero se acaba antes. Toque la fila para desplegar los valores que difieren según el escenario:
+**La sección FIRE.** Primero los valores que son iguales en todos los escenarios (lo que usted indicó y la **Tasa de retiro**), uno por línea. Después una fila plegable por escenario, **Medio**, **Optimista** y **Pesimista**, con sus tasas de crecimiento e inflación, la fecha FIRE calculada si la dejó en blanco, y una insignia: **Dinero suficiente** (verde) cuando el dinero dura más allá de la esperanza de vida, **el dinero nunca se acabará 🥳** (verde) cuando nunca se agota, **Dinero insuficiente** (amarillo) cuando la fecha FIRE es inalcanzable o el dinero se acaba antes. Toque la fila para desplegar los valores que difieren según el escenario:
 
 | Fila | Significado |
 |---|---|

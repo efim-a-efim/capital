@@ -32,14 +32,14 @@ Semua jumlah dalam nilai uang hari ini dalam mata uang tujuan. Layar juga menamp
 
 **Apa yang dihitung.**
 
-- Tanggal FIRE: dari target dan kontribusi.
+- Tanggal FIRE: bulan pertama sejak uang bertahan untuk pengeluaran hingga harapan hidup (50 tahun bila tanggal lahir tidak diisi) dan, bila target diberikan, target tercapai. Tanpa target, dana FIRE menjadi jumlah yang dibutuhkan untuk rentang hidup itu.
 - Kontribusi: dari target dan tanggal FIRE.
-- Target: dari pengeluaran (pengeluaran × 12 ÷ tingkat penarikan), atau dari tanggal FIRE dan kontribusi.
+- Target: dari pengeluaran (pengeluaran × 12 ÷ tingkat penarikan) bila tanggal FIRE diberikan, atau dari tanggal FIRE dan kontribusi.
 - Pengeluaran: dari target (target × tingkat penarikan ÷ 12).
 
 Jika tanggal FIRE, kontribusi, dan target semuanya diisi, tanggal dipertahankan dan layar menampilkan kekurangan serta tanggal paling awal yang dapat dicapai. Target dan tanggal hasil hitungan ditulis ke target dan tenggat tujuan, sehingga urutan, alokasi, Ringkasan, dan Rencana bekerja seperti pada tujuan lain. Keduanya diperbarui pada setiap pengeditan dan setiap pembaruan.
 
-**Bagian FIRE.** Pertama nilai yang sama di setiap skenario (yang Anda masukkan, dan **Tingkat penarikan**), satu per baris. Lalu satu baris yang dapat dilipat per skenario, **Rata-rata**, **Optimis**, dan **Pesimis**, dengan suku pertumbuhan dan inflasinya serta sebuah lencana: **Uang cukup** (hijau) bila uang bertahan melampaui harapan hidup, **uang tidak akan habis 🥳** (hijau) bila uang tidak pernah habis, **Uang tidak cukup** (kuning) bila tanggal FIRE tidak tercapai atau uang habis lebih awal. Ketuk baris untuk membuka nilai yang berbeda di tiap skenario:
+**Bagian FIRE.** Pertama nilai yang sama di setiap skenario (yang Anda masukkan, dan **Tingkat penarikan**), satu per baris. Lalu satu baris yang dapat dilipat per skenario, **Rata-rata**, **Optimis**, dan **Pesimis**, dengan suku pertumbuhan dan inflasinya, tanggal FIRE hasil hitungan bila Anda mengosongkannya, serta sebuah lencana: **Uang cukup** (hijau) bila uang bertahan melampaui harapan hidup, **uang tidak akan habis 🥳** (hijau) bila uang tidak pernah habis, **Uang tidak cukup** (kuning) bila tanggal FIRE tidak tercapai atau uang habis lebih awal. Ketuk baris untuk membuka nilai yang berbeda di tiap skenario:
 
 | Baris | Arti |
 |---|---|

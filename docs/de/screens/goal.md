@@ -32,14 +32,14 @@ Alle Beträge verstehen sich in heutiger Kaufkraft der Zielwährung. Der Bildsch
 
 **Was berechnet wird.**
 
-- FIRE-Datum: aus Zielbetrag und Beitrag.
+- FIRE-Datum: der erste Monat, ab dem die Ausgaben bis zur Lebenserwartung reichen (50 Jahre ohne Geburtsdatum) und, wenn ein Zielbetrag angegeben ist, der Zielbetrag erreicht wird. Ohne Zielbetrag wird der FIRE-Betrag zu dem Betrag, den diese Lebensspanne braucht.
 - Beitrag: aus Zielbetrag und FIRE-Datum.
-- Zielbetrag: aus den Ausgaben (Ausgaben × 12 ÷ Entnahmerate) oder aus FIRE-Datum und Beitrag.
+- Zielbetrag: aus den Ausgaben (Ausgaben × 12 ÷ Entnahmerate), wenn das FIRE-Datum angegeben ist, oder aus FIRE-Datum und Beitrag.
 - Ausgaben: aus dem Zielbetrag (Zielbetrag × Entnahmerate ÷ 12).
 
 Sind FIRE-Datum, Beitrag und Zielbetrag alle angegeben, bleibt das Datum erhalten, und der Bildschirm zeigt die Lücke und das früheste erreichbare Datum. Der berechnete Zielbetrag und das berechnete Datum werden als Zielbetrag und Fälligkeitsdatum des Ziels gespeichert; Reihenfolge, Zuordnung, Übersicht und Pläne funktionieren daher wie bei jedem Ziel. Sie werden bei jeder Bearbeitung und jeder Aktualisierung neu berechnet.
 
-**Der Abschnitt FIRE.** Zuerst die Werte, die in jedem Szenario gleich sind (Ihre Eingaben und die **Entnahmerate**), je einer pro Zeile. Dann pro Szenario eine aufklappbare Zeile, **Durchschnitt**, **Optimistisch** und **Pessimistisch**, mit Wachstums- und Inflationssatz und einem Abzeichen: **Geld reicht** (grün), wenn das Geld über die Lebenserwartung hinaus reicht, **Geld geht nie aus 🥳** (grün), wenn es nie aufgebraucht wird, **Nicht genug Geld** (gelb), wenn das FIRE-Datum nicht erreichbar ist oder das Geld früher ausgeht. Tippen Sie auf die Zeile, um die Werte aufzuklappen, die sich je Szenario unterscheiden:
+**Der Abschnitt FIRE.** Zuerst die Werte, die in jedem Szenario gleich sind (Ihre Eingaben und die **Entnahmerate**), je einer pro Zeile. Dann pro Szenario eine aufklappbare Zeile, **Durchschnitt**, **Optimistisch** und **Pessimistisch**, mit Wachstums- und Inflationssatz, dem berechneten FIRE-Datum, wenn Sie es leer gelassen haben, und einem Abzeichen: **Geld reicht** (grün), wenn das Geld über die Lebenserwartung hinaus reicht, **Geld geht nie aus 🥳** (grün), wenn es nie aufgebraucht wird, **Nicht genug Geld** (gelb), wenn das FIRE-Datum nicht erreichbar ist oder das Geld früher ausgeht. Tippen Sie auf die Zeile, um die Werte aufzuklappen, die sich je Szenario unterscheiden:
 
 | Zeile | Bedeutung |
 |---|---|

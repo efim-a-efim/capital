@@ -32,14 +32,14 @@ Todos os valores estão em valores de hoje, na moeda da meta. A tela também mos
 
 **O que é calculado.**
 
-- Data FIRE: a partir do valor-alvo e do aporte.
+- Data FIRE: o primeiro mês a partir do qual o gasto dura até a expectativa de vida (50 anos sem data de nascimento) e, quando há um valor-alvo, o valor-alvo é atingido. Sem valor-alvo, o montante FIRE passa a ser o valor de que esse período precisa.
 - Aporte: a partir do valor-alvo e da data FIRE.
-- Valor-alvo: a partir do gasto (gasto × 12 ÷ taxa de retirada), ou a partir da data FIRE e do aporte.
+- Valor-alvo: a partir do gasto (gasto × 12 ÷ taxa de retirada) quando a data FIRE é informada, ou a partir da data FIRE e do aporte.
 - Gasto: a partir do valor-alvo (valor-alvo × taxa de retirada ÷ 12).
 
 Se a data FIRE, o aporte e o valor-alvo forem todos informados, a data é mantida e a tela mostra o que falta e a data mais próxima que é alcançável. O valor-alvo e a data calculados são gravados no valor-alvo e na data de vencimento da meta; assim, a ordem, a alocação, a Visão geral e os Planos funcionam como em qualquer meta. Eles são atualizados a cada edição e a cada atualização.
 
-**A seção FIRE.** Primeiro vêm os valores iguais em todos os cenários (o que você informou e a **Taxa de retirada**), um por linha. Depois, uma linha expansível por cenário, **Média**, **Otimista** e **Pessimista**, com suas taxas de crescimento e de inflação e um selo: **Dinheiro suficiente** (verde) quando o dinheiro dura além da expectativa de vida, **o dinheiro nunca acaba 🥳** (verde) quando ele nunca se esgota, **Dinheiro insuficiente** (amarelo) quando a data FIRE é inalcançável ou o dinheiro acaba antes. Toque na linha para expandir os valores que mudam conforme o cenário:
+**A seção FIRE.** Primeiro vêm os valores iguais em todos os cenários (o que você informou e a **Taxa de retirada**), um por linha. Depois, uma linha expansível por cenário, **Média**, **Otimista** e **Pessimista**, com suas taxas de crescimento e de inflação, a data FIRE calculada quando você a deixou vazia e um selo: **Dinheiro suficiente** (verde) quando o dinheiro dura além da expectativa de vida, **o dinheiro nunca acaba 🥳** (verde) quando ele nunca se esgota, **Dinheiro insuficiente** (amarelo) quando a data FIRE é inalcançável ou o dinheiro acaba antes. Toque na linha para expandir os valores que mudam conforme o cenário:
 
 | Linha | Significado |
 |---|---|
