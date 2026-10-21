@@ -5,7 +5,7 @@ FIRE goal type: solver, scenarios, burndown and live inflation and market-growth
 ## Requirements
 
 ### Requirement: FIRE goal type
-A goal MAY be of type FIRE. It SHALL accept a birth date, a FIRE date, a recurring contribution (amount per week, two weeks, month, year or N days), a monthly spend after FIRE and an amount to have after FIRE, all in today's money of the goal currency. FIRE date, contribution, target and spend MAY each be blank.
+A goal MAY be of type FIRE. It SHALL accept a birth date, a FIRE date, a recurring contribution (amount per week, two weeks, month, year or N days), a monthly spend after FIRE and an amount to have after FIRE, all in today's money of the goal currency. FIRE date, contribution, target and spend MAY each be blank. A contribution growth percent per year MAY be given; when blank the contribution SHALL keep its purchasing power.
 
 #### Scenario: Derive the FIRE date
 - **WHEN** target and contribution are given and the FIRE date is blank
