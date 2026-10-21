@@ -8,8 +8,8 @@ FIRE goal type: solver, scenarios, burndown and live inflation and market-growth
 A goal MAY be of type FIRE. It SHALL accept a birth date, a FIRE date, a recurring contribution (amount per week, two weeks, month, year or N days), a monthly spend after FIRE and an amount to have after FIRE, all in today's money of the goal currency. FIRE date, contribution, target and spend MAY each be blank. A contribution growth percent per year MAY be given; when blank the contribution SHALL keep its purchasing power.
 
 #### Scenario: Derive the FIRE date
-- **WHEN** target and contribution are given and the FIRE date is blank
-- **THEN** the goal's due date becomes the first month in which the accumulated value reaches the inflated target under the average scenario, and the screen shows the date for all three scenarios.
+- **WHEN** the FIRE date is blank and the spend is known (given, or from the target)
+- **THEN** each scenario derives it as the first month from which the spend lasts until life expectancy (50 years without a birth date) and, when a target was given, the target is reached; the goal's due date takes the average scenario's date and each scenario's caption shows its own.
 
 #### Scenario: Derive the contribution
 - **WHEN** target and FIRE date are given and the contribution is blank
