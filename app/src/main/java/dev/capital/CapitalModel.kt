@@ -181,7 +181,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
                 val observations=providers.refresh(mutable.value.data,bucketId)
                 transaction.withLock {
                     if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Refresh finished; resolve storage issues before retrying.")); return@withLock }
-                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted,observations.accounts,observations.rates)) }
+                    withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted,observations.accounts,observations.rates,observations.history)) }
                     notice(if(observations.errors.isEmpty()) tr("Refreshed. Shared rates may revalue other buckets.") else observations.errors.joinToString("\n"))
                 }
             } catch(e: CancellationException) { notice(tr("Refresh stopped. Cached values retained.")); throw e }
