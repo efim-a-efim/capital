@@ -26,13 +26,13 @@ A goal of type **FIRE** (financial independence, retire early) answers two quest
 - **Contribution growth % per year · blank = inflation**: how much more you can invest each year, for example a yearly raise. Blank keeps the contribution's purchasing power.
 - **Spend per month after FIRE · blank to derive**.
 - **Amount to have after FIRE · blank to derive**: the FIRE number, the goal's target.
-- **Advanced assumptions**: **Inflation % · average / optimistic / pessimistic**, **Growth % · average / optimistic / pessimistic**, **Withdrawal rate %** and **Life expectancy · years**. Each label ends with "· now {value}", the value in effect when the field is blank.
+- **Advanced assumptions**: **Inflation % · average / optimistic / pessimistic**, **Growth % · average / optimistic / pessimistic**, **Withdrawal rate %**, **Work until age** (default 65) and **Life expectancy · years**. Each label ends with "· now {value}", the value in effect when the field is blank.
 
 All amounts are in today's money of the goal currency. The screen also shows the value at the FIRE date in future money. The money the goal has today comes from its connected buckets, like any goal; [Plans]({{ page.base }}/screens/plans) do not enter the FIRE calculation.
 
 **What is derived.**
 
-- FIRE date: the first month from which the spend lasts until life expectancy (50 years without a birth date) and, when a target is given, the target is reached. Without a target the FIRE number becomes the amount that lifetime needs.
+- FIRE date: the first month from which the spend lasts until life expectancy (50 years without a birth date) and, when a target is given, the target is reached; not later than **Work until age**, else *Not reachable before* that birthday. Without a target the FIRE number becomes the amount that lifetime needs.
 - Contribution: from target and FIRE date.
 - Target: from spend (spend × 12 ÷ withdrawal rate) when the FIRE date is given, or from FIRE date and contribution.
 - Spend: from target (target × withdrawal rate ÷ 12).

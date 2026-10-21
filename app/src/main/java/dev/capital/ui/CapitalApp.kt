@@ -664,7 +664,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         "mode" to (c?.mode?.name ?: Limit.AUTO.name), "value" to (c?.value ?: "0"), "cap" to (c?.goalCap ?: ""),
         "theme" to data.settings.theme, "currencyAction" to "Choose treatment",
         "birth" to (g?.fire?.birth ?: ""), "fireDate" to (g?.fire?.fireDate ?: ""), "contribution" to (g?.fire?.contribution ?: ""), "period" to (g?.fire?.period ?: Period.MONTH).name, "days" to (g?.fire?.days?.toString() ?: ""), "spend" to (g?.fire?.spend ?: ""), "contributionGrowth" to (g?.fire?.contributionGrowth ?: ""),
-        "inflation" to (g?.fire?.inflation ?: ""), "inflationOptimistic" to (g?.fire?.inflationOptimistic ?: ""), "inflationPessimistic" to (g?.fire?.inflationPessimistic ?: ""), "growth" to (g?.fire?.growth ?: ""), "growthOptimistic" to (g?.fire?.growthOptimistic ?: ""), "growthPessimistic" to (g?.fire?.growthPessimistic ?: ""), "withdrawal" to (g?.fire?.withdrawal ?: ""), "life" to (g?.fire?.life?.toString() ?: ""),
+        "inflation" to (g?.fire?.inflation ?: ""), "inflationOptimistic" to (g?.fire?.inflationOptimistic ?: ""), "inflationPessimistic" to (g?.fire?.inflationPessimistic ?: ""), "growth" to (g?.fire?.growth ?: ""), "growthOptimistic" to (g?.fire?.growthOptimistic ?: ""), "growthPessimistic" to (g?.fire?.growthPessimistic ?: ""), "withdrawal" to (g?.fire?.withdrawal ?: ""), "life" to (g?.fire?.life?.toString() ?: ""), "work" to (g?.fire?.work?.toString() ?: ""),
     ) }
     val fields=remember { mutableStateMapOf<String,String>().apply { putAll(initial) } }
     var error by remember { mutableStateOf<String?>(null) }
@@ -738,7 +738,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                 fun opt(key: String)=fields.getValue(key).trim().replace(',','.').takeIf { it.isNotBlank() }
                 fun int(key: String)=opt(key)?.let { it.toIntOrNull() ?: error(tr("Invalid FIRE settings")) }
                 // ponytail: FIRE amounts are not converted on a currency change; a blank target or date gets a placeholder that solvedFire() overwrites.
-                val fire=if(fields.getValue("type")=="FIRE") Fire(opt("birth"),opt("fireDate"),opt("contribution"),Period.valueOf(fields.getValue("period")),int("days"),opt("spend"),opt("target"),opt("inflation"),opt("inflationOptimistic"),opt("inflationPessimistic"),opt("growth"),opt("growthOptimistic"),opt("growthPessimistic"),opt("withdrawal"),int("life"),opt("contributionGrowth")) else null
+                val fire=if(fields.getValue("type")=="FIRE") Fire(opt("birth"),opt("fireDate"),opt("contribution"),Period.valueOf(fields.getValue("period")),int("days"),opt("spend"),opt("target"),opt("inflation"),opt("inflationOptimistic"),opt("inflationPessimistic"),opt("growth"),opt("growthOptimistic"),opt("growthPessimistic"),opt("withdrawal"),int("life"),opt("contributionGrowth"),int("work")) else null
                 val target=if(fire!=null) fire.target ?: g?.target ?: "1" else if(convert) converted(requireNotNull(g?.target)) else number("target")
                 val due=fire?.fireDate ?: fields.getValue("due")
                 val item=Goal(g?.id ?: newId,name,target,currency,due,g?.takeIf { it.due==due }?.priority ?: 0,g?.archived ?: false,fire)
@@ -913,6 +913,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                                     field("growthOptimistic",tr("Growth % · optimistic · now {0}",rates.getValue(Scenario.OPTIMISTIC).growth.text()),true)
                                     field("growthPessimistic",tr("Growth % · pessimistic · now {0}",rates.getValue(Scenario.PESSIMISTIC).growth.text()),true)
                                     field("withdrawal",tr("Withdrawal rate % · now {0}",rates.getValue(Scenario.AVERAGE).withdrawal.text()),true)
+                                    field("work",tr("Work until age · now {0}",FIRE_WORK),true)
                                     field("life",tr("Life expectancy · years · now {0}",FIRE_LIFE),true)
                                     Note(tr("Blank uses the rate fetched by the providers chosen in Settings, else the built-in default."))
                                 }

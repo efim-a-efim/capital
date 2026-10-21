@@ -28,6 +28,7 @@ val FIRE_GROWTH = mapOf(Scenario.AVERAGE to 7, Scenario.OPTIMISTIC to 10, Scenar
 val FIRE_INFLATION = mapOf(Scenario.AVERAGE to 3, Scenario.OPTIMISTIC to 2, Scenario.PESSIMISTIC to 5)
 const val FIRE_WITHDRAWAL = 4
 const val FIRE_LIFE = 95
+const val FIRE_WORK = 65
 private const val MONTH_DAYS = 30.4375
 private const val MAX_DRAWDOWN = 2400
 private fun Double.money(): BigDecimal = BigDecimal(this).setScale(2, RoundingMode.HALF_UP)
@@ -67,12 +68,12 @@ fun Portfolio.fire(goal: Goal, today: LocalDate = LocalDate.now()): FireOutcome 
     if (f.target == null && f.spend != null && (f.withdrawal?.decimal()?.signum() ?: 1) == 0) return FireOutcome.Missing(tr("The withdrawal rate must be above zero"))
     val c0 = (convert(allocate().goal(goal.id), "USD", goal.currency) ?: ZERO).toDouble()
     val monthly = f.contribution?.decimal()?.toDouble()?.times(when (f.period) { Period.WEEK -> MONTH_DAYS / 7; Period.TWO_WEEKS -> MONTH_DAYS / 14; Period.MONTH -> 1.0; Period.YEAR -> 1 / 12.0; Period.DAYS -> MONTH_DAYS / (f.days ?: 30) })
-    val life = (f.life ?: FIRE_LIFE).toLong()
-    return FireOutcome.Ready(Scenario.entries.associateWith { s -> solve(f, fireRates(goal, s), c0, monthly, birth, fireDate, life, today) })
+    val life = (f.life ?: FIRE_LIFE).toLong(); val work = (f.work ?: FIRE_WORK).toLong()
+    return FireOutcome.Ready(Scenario.entries.associateWith { s -> solve(f, fireRates(goal, s), c0, monthly, birth, fireDate, life, work, today) })
 }
 
 // ponytail: whole months from today; a FIRE date inside the current month counts as today.
-private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: LocalDate?, fireDate: LocalDate?, life: Long, today: LocalDate): FireResult {
+private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: LocalDate?, fireDate: LocalDate?, life: Long, work: Long, today: LocalDate): FireResult {
     val g = (1 + rates.growth.toDouble() / 100).pow(1 / 12.0); val inf = 1 + rates.inflation.toDouble() / 100; val w = rates.withdrawal.toDouble() / 100
     val raise = f.contributionGrowth?.decimal()?.toDouble()?.let { 1 + it / 100 } ?: inf
     var target = f.target?.decimal()?.toDouble() ?: f.spend?.decimal()?.toDouble()?.let { it * 12 / w }
@@ -91,7 +92,9 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
             // The earliest month from which the spend lasts to the horizon (life expectancy, or 50 years without a birth date) and, when the target was given, the target is reached.
             val given = f.target != null
             fun survives(k: Int): Boolean { val end = birth?.let { months(it.plusYears(life)) } ?: (k + 600); var v = acc[k]; for (t in k until end) { v = v * g - spend!! * inf.pow(t / 12.0); if (v < 0) return false }; return true }
-            n = (0..span).firstOrNull { (!given || acc[it] >= nominal(it)) && survives(it) } ?: run { draw = false; reachable = false; shortfall = if (given) deflate(nominal(span) - acc[span], span) else null; span }
+            // Not later than the age until which the user can work (birth + work), else the whole horizon.
+            val last = birth?.let { minOf(months(it.plusYears(work)), span) } ?: span
+            n = (0..last).firstOrNull { (!given || acc[it] >= nominal(it)) && survives(it) } ?: run { draw = false; reachable = false; shortfall = if (given) deflate(nominal(last) - acc[last], last) else null; last }
             if (!given && reachable) target = deflate(acc[n!!], n!!)
         }
         contribution == null -> {

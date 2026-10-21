@@ -82,6 +82,8 @@ fun accountId(broker: String?, raw: String): String {
     val withdrawal: String? = null, val life: Int? = null,
     /** Yearly raise of the contribution in percent; blank keeps its purchasing power (the scenario's inflation). */
     val contributionGrowth: String? = null,
+    /** Age until which the user can still work: a derived FIRE date is searched up to it. */
+    val work: Int? = null,
 )
 /** A fetched annual series for a currency area: `kind` is "inflation" (consumer prices, % per year) or "growth" (stock index change, % per year); `values` maps year to percent. */
 @Serializable data class Rate(
@@ -170,7 +172,7 @@ val providerChoices = linkedMapOf(
                 listOfNotNull(f.birth, f.fireDate).forEach { d -> LocalDate.parse(d) }
                 listOfNotNull(f.contribution, f.spend, f.target).forEach { v -> v.decimal() }
                 listOfNotNull(f.inflation, f.inflationOptimistic, f.inflationPessimistic, f.growth, f.growthOptimistic, f.growthPessimistic, f.withdrawal, f.contributionGrowth).forEach { v -> require(v.decimal() <= HUNDRED) { tr("Invalid FIRE settings") } }
-                require((f.period != Period.DAYS || f.days != null) && (f.days == null || f.days in 1..3660) && (f.life == null || f.life in 1..150)) { tr("Invalid FIRE settings") }
+                require((f.period != Period.DAYS || f.days != null) && (f.days == null || f.days in 1..3660) && (f.life == null || f.life in 1..150) && (f.work == null || f.work in 1..150)) { tr("Invalid FIRE settings") }
             }
         }
         require(rates.map { "${it.kind}/${it.currency}" }.distinct().size == rates.size) { tr("Duplicate rate") }

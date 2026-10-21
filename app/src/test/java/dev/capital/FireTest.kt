@@ -58,10 +58,19 @@ class FireTest {
         // Without a target the FIRE number is what the lifetime needs.
         val bySpend = solve(zero.copy(contribution = "1000", spend = "400"))
         assertEquals(today.plusYears(20), bySpend.fireDate); eq("240000", bySpend.target)
-        val late = solve(zero.copy(contribution = "1000", spend = "400", birth = today.minusYears(60).toString()))
+        val late = solve(zero.copy(contribution = "1000", spend = "400", birth = today.minusYears(60).toString(), work = 80))
         assertEquals(today.plusYears(10), late.fireDate); eq("120000", late.target); assertEquals(today.plusYears(35), late.lastsUntil); assertTrue(late.beyondLife)
         val miss = solve(zero.copy(contribution = "100", target = "120000"))
         assertFalse(miss.reachable); assertEquals(today.plusYears(50), miss.fireDate); eq("60000", miss.shortfall!!); assertNull(miss.earliest); assertEquals(miss.fireDate, miss.lastsUntil); assertEquals(601, miss.curve.size)
+    }
+    @Test fun workAgeCapsTheDerivedDate() {
+        // Born 40 years ago, 1500 a month until 95: 1000k >= 1500(660-k) from month 396 (age 73), past the default working age of 65.
+        val f = zero.copy(contribution = "1000", spend = "1500", birth = today.minusYears(40).toString())
+        val r = solve(f)
+        assertFalse(r.reachable); assertEquals(today.plusYears(25), r.fireDate); assertEquals(65, r.ageAtFire)
+        val later = solve(f.copy(work = 80))
+        assertTrue(later.reachable); assertEquals(today.plusMonths(396), later.fireDate); assertEquals(73, later.ageAtFire)
+        rejects { Portfolio(goals = listOf(Goal("g", "g", "1", "USD", "2030-01-01", fire = Fire(work = 0)))).validate() }
     }
     @Test fun derivesContribution() {
         val r = solve(zero.copy(fireDate = today.plusYears(10).toString(), target = "120000"))
