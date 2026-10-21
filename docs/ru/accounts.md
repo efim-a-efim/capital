@@ -139,6 +139,29 @@ Capital вызывает **сводку по счёту** (account summary) в T
 
 Документация SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Пополнения и история стоимости для PnL {#pnl}
+
+Для [инвестиционного PnL]({{ page.base }}/screens/bucket) нужны пополнения и выводы привязанного счёта и, если брокер это предоставляет, ежедневная стоимость счёта. Оба набора данных читаются тем же ключом доступа, что и баланс.
+
+| Брокер | Пополнения и выводы | Ежедневная стоимость счёта |
+|---|---|---|
+| Interactive Brokers | Раздел Flex Query *Cash Transactions* | Раздел Flex Query *Equity Summary in Base by Report Date* (365 дней на запрос) |
+| Alpaca | Операции по счёту (CSD, CSW) | История портфеля |
+| Tradier | История счёта (ACH, wire, check) | История остатков |
+| tastytrade | Транзакции, движение денег | История чистой ликвидационной стоимости |
+| SnapTrade | Операции (взнос, вывод) | Нет (история баланса — бета-функция, по умолчанию выключена) |
+| OANDA | Транзакции типа TRANSFER_FUNDS | Нет |
+| Trading 212 | История транзакций (пополнение, вывод) | Нет |
+| Public.com | История, движение денег | Нет |
+| T-Invest | Операции типов ввода и вывода | Нет |
+| Capital.com | История транзакций (пополнение, вывод) | Нет |
+| eToro | Нет: в API нет истории пополнений торговых счетов, поэтому пополнения считаются прибылью | История баланса (последние 12 месяцев) |
+| Indexa Capital | Нет: коды пополнений не документированы | Нет |
+| ALOR | Нет | Нет |
+| Akahu | Нет: у инвестиционных счетов нет транзакций | Нет |
+
+Без истории пополнений PnL такого счёта равен изменению его стоимости. Для Interactive Brokers добавьте разделы в редакторе Flex Query; иначе приложение покажет *В Flex Query нет раздела …*.
+
 ## Подключение счёта в Capital {#connect}
 
 Ниже описано, как создать учётные данные у каждого брокера. В Capital шаги одинаковы для всех:

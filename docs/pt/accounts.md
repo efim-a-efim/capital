@@ -139,6 +139,29 @@ Uma conta que o SnapTrade ainda não terminou de sincronizar informa *O SnapTrad
 
 Documentação do SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Aportes e histórico de valor para o PnL {#pnl}
+
+O [PnL do investimento]({{ page.base }}/screens/bucket) precisa dos aportes e saques de uma conta vinculada e, quando a corretora oferece, do valor diário da conta. Ambos são lidos com a mesma credencial do saldo.
+
+| Corretora | Aportes e saques | Valor diário da conta |
+|---|---|---|
+| Interactive Brokers | Seção da Flex Query *Cash Transactions* | Seção da Flex Query *Equity Summary in Base by Report Date* (365 dias por consulta) |
+| Alpaca | Atividades da conta (CSD, CSW) | Histórico do portfólio |
+| Tradier | Histórico da conta (ACH, wire, check) | Saldos históricos |
+| tastytrade | Transações, movimentações de dinheiro | Histórico do valor líquido de liquidação |
+| SnapTrade | Atividades (contribution, withdrawal) | Não (o histórico de saldo é um recurso beta, desativado por padrão) |
+| OANDA | Transações do tipo TRANSFER_FUNDS | Não |
+| Trading 212 | Histórico de transações (deposit, withdraw) | Não |
+| Public.com | Histórico, movimentações de dinheiro | Não |
+| T-Invest | Operações dos tipos de entrada e saída | Não |
+| Capital.com | Histórico de transações (deposit, withdrawal) | Não |
+| eToro | Não: a API não tem histórico de depósitos para contas de negociação, então os aportes contam como ganhos | Histórico de saldo (últimos 12 meses) |
+| Indexa Capital | Não: os códigos de depósito não são documentados | Não |
+| ALOR | Não | Não |
+| Akahu | Não: contas de investimento não têm transações | Não |
+
+Sem histórico de aportes, o PnL dessa conta é a variação do seu valor. Adicione as seções da Flex Query da Interactive Brokers no editor de Flex Query; caso contrário, o app informa *A Flex Query não tem a seção …*.
+
 ## Conectar uma conta no Capital {#connect}
 
 As seções abaixo explicam como criar a credencial em cada corretora. No Capital, os passos são os mesmos para todas:

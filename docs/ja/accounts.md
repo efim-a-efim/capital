@@ -141,6 +141,29 @@ SnapTradeがまだ同期を終えていない口座では *SnapTradeにはこの
 
 SnapTradeのドキュメント：[Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## PnL用の入出金と評価額の履歴 {#pnl}
+
+[投資PnL]({{ page.base }}/screens/bucket)には、紐づけた口座の入出金と、ブローカーが提供している場合は日次の口座評価額が必要です。どちらも残高と同じ認証情報で読み取ります。
+
+| ブローカー | 入出金 | 日次の口座評価額 |
+|---|---|---|
+| Interactive Brokers | Flex Queryのセクション *Cash Transactions* | Flex Queryのセクション *Equity Summary in Base by Report Date*（1クエリにつき365日分） |
+| Alpaca | アカウントアクティビティ（CSD、CSW） | ポートフォリオ履歴 |
+| Tradier | 口座履歴（ACH、電信送金、小切手） | 過去の残高 |
+| tastytrade | 取引、資金移動 | 純清算価値の履歴 |
+| SnapTrade | アクティビティ（入金、出金） | なし（残高履歴はベータ機能で、既定ではオフ） |
+| OANDA | タイプが TRANSFER_FUNDS の取引 | なし |
+| Trading 212 | 取引履歴（入金、出金） | なし |
+| Public.com | 履歴、資金移動 | なし |
+| T-Invest | 入金・出金タイプの操作 | なし |
+| Capital.com | 取引履歴（入金、出金） | なし |
+| eToro | なし：APIに取引口座の入金履歴がないため、入金は利益として扱われます | 残高履歴（直近12か月） |
+| Indexa Capital | なし：入金コードが文書化されていません | なし |
+| ALOR | なし | なし |
+| Akahu | なし：投資口座には取引がありません | なし |
+
+入金履歴がない口座のPnLは、評価額の変動そのものになります。Interactive Brokersでは、Flex Queryエディタで上記のFlex Queryセクションを追加してください。追加しないと、アプリに *Flex Queryに … セクションがありません* と表示されます。
+
 ## Capitalで口座を接続する {#connect}
 
 以下の各セクションでは、各ブローカーで認証情報を作成する方法を説明します。Capitalでの手順は、どのブローカーでも同じです。

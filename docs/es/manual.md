@@ -36,6 +36,14 @@ Los importes admiten punto o coma decimal, sin separadores de miles. Cada bolsil
 
 **Modo cartera** (ajustes del bolsillo) trata un bolsillo como una cartera de inversión: fije un porcentaje objetivo por activo, compare la proporción real con el objetivo y use **Reequilibrar** para obtener una lista de lo que debe comprar con un importe dado. Solo se proponen ventas si *Permitir ventas al reequilibrar* está activado. Es una calculadora; no cambia nada.
 
+## PnL de inversión {#pnl}
+
+Active **PnL de inversión** en el editor de un bolsillo para ver cuánto ha ganado, separado de lo que ha aportado. La pantalla del bolsillo muestra entonces la ganancia o pérdida y la rentabilidad ponderada por el tiempo de todo el tiempo, el último año, mes, semana y día, un gráfico de valor y un gráfico de ganancias y pérdidas con chips de marco temporal (Todo, 1Y, 1M, 1W, 1D).
+
+- **Datos.** Cada actualización registra la cantidad de cada posición del bolsillo y pide a los brókeres vinculados los depósitos y retiros; los cambios manuales y de billetera cuentan como depósitos o retiros a la tasa de ese día. Los valores pasados se calculan con el [historial de tasas]({{ page.base }}/screens/settings) diario.
+- **Reconstrucción.** Al activarlo, la aplicación reconstruye el historial a partir de las instantáneas de su carpeta (una por día), obtiene las tasas que faltan y pide a cada bróker su historial de depósitos y, si lo ofrece, el valor diario de la cuenta. Qué brókeres ofrecen qué se indica en la [página de brókeres]({{ page.base }}/accounts#pnl).
+- **Lectura.** La ganancia o pérdida es la variación del valor menos los depósitos netos. El porcentaje está ponderado por el tiempo, así que el momento de los depósitos no lo altera. Un periodo que empezó antes de su historial muestra *desde <fecha>* en lugar de una cifra.
+
 ## Metas {#goals}
 
 Pestaña Metas → **+**. Una meta tiene un nombre, una moneda, un importe objetivo y una fecha de vencimiento. Abra la meta y pulse **Conectar bolsillo** para indicar qué bolsillos pueden financiarla, opcionalmente con un límite: un importe fijo, un porcentaje del bolsillo o un porcentaje de la meta.

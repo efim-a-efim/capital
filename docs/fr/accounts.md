@@ -139,6 +139,29 @@ Un compte que SnapTrade n’a pas encore fini de synchroniser signale *SnapTrade
 
 Documentation de SnapTrade : [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Versements et historique de valeur pour le PnL {#pnl}
+
+Le [PnL d’investissement]({{ page.base }}/screens/bucket) a besoin des versements et retraits d’un compte lié et, lorsque le courtier le propose, de la valeur quotidienne du compte. Les deux sont lus avec le même identifiant que le solde.
+
+| Courtier | Versements et retraits | Valeur quotidienne du compte |
+|---|---|---|
+| Interactive Brokers | Section Flex Query *Cash Transactions* | Section Flex Query *Equity Summary in Base by Report Date* (365 jours par requête) |
+| Alpaca | Activités du compte (CSD, CSW) | Historique du portefeuille |
+| Tradier | Historique du compte (ACH, virement, chèque) | Soldes historiques |
+| tastytrade | Transactions, mouvements de fonds | Historique de la valeur de liquidation nette |
+| SnapTrade | Activités (contribution, retrait) | Non (l’historique des soldes est une fonction bêta, désactivée par défaut) |
+| OANDA | Transactions de type TRANSFER_FUNDS | Non |
+| Trading 212 | Historique des transactions (dépôt, retrait) | Non |
+| Public.com | Historique, mouvements de fonds | Non |
+| T-Invest | Opérations de types entrée et sortie | Non |
+| Capital.com | Historique des transactions (dépôt, retrait) | Non |
+| eToro | Non : l’API n’a pas d’historique de dépôts pour les comptes de trading, les dépôts comptent donc comme des gains | Historique des soldes (12 derniers mois) |
+| Indexa Capital | Non : les codes de dépôt ne sont pas documentés | Non |
+| ALOR | Non | Non |
+| Akahu | Non : les comptes d’investissement n’ont pas de transactions | Non |
+
+Sans historique de versements, le PnL de ce compte est sa variation de valeur. Ajoutez les sections Flex Query pour Interactive Brokers dans l’éditeur de Flex Query ; sinon, l’application affiche *La Flex Query ne contient pas la section …*.
+
 ## Connecter un compte dans Capital {#connect}
 
 Les sections ci-dessous indiquent comment créer l’identifiant chez chaque courtier. Dans Capital, les étapes sont les mêmes pour tous :

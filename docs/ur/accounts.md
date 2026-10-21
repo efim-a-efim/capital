@@ -139,6 +139,29 @@ Trading 212 کی دستاویزات: [Public API](https://docs.trading212.com/ap
 
 SnapTrade کی دستاویزات: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [معاون بروکریجز](https://snaptrade.com/brokerage-integrations) · [قیمتیں](https://snaptrade.com/pricing)
 
+## PnL کے لیے جمع شدہ رقوم اور مالیت کی ہسٹری {#pnl}
+
+[سرمایہ کاری PnL]({{ page.base }}/screens/bucket) کو منسلک اکاؤنٹ کی جمع کرائی گئی اور نکلوائی گئی رقوم درکار ہیں، اور جب بروکر فراہم کرے تو اکاؤنٹ کی روزانہ مالیت بھی۔ دونوں اسی اسناد سے پڑھی جاتی ہیں جن سے بیلنس پڑھا جاتا ہے۔
+
+| بروکر | جمع کرائی گئی اور نکلوائی گئی رقوم | اکاؤنٹ کی روزانہ مالیت |
+|---|---|---|
+| Interactive Brokers | Flex Query کا سیکشن *Cash Transactions* | Flex Query کا سیکشن *Equity Summary in Base by Report Date* (فی کوئری 365 دن) |
+| Alpaca | Account activities (CSD, CSW) | Portfolio history |
+| Tradier | Account history (ACH, wire, check) | Historical balances |
+| tastytrade | Transactions, money movements | Net liquidating value history |
+| SnapTrade | Activities (contribution, withdrawal) | نہیں (بیلنس کی ہسٹری بیٹا فیچر ہے، بطور ڈیفالٹ بند) |
+| OANDA | TRANSFER_FUNDS قسم کے ٹرانزیکشنز | نہیں |
+| Trading 212 | Transaction history (deposit, withdraw) | نہیں |
+| Public.com | History, money movements | نہیں |
+| T-Invest | ان پٹ اور آؤٹ پٹ اقسام کے آپریشنز | نہیں |
+| Capital.com | Transaction history (deposit, withdrawal) | نہیں |
+| eToro | نہیں: API میں ٹریڈنگ اکاؤنٹس کی جمع شدہ رقوم کی ہسٹری نہیں ہے، اس لیے جمع کرائی گئی رقوم منافع شمار ہوتی ہیں | Balance history (آخری 12 مہینے) |
+| Indexa Capital | نہیں: جمع شدہ رقوم کے کوڈ غیر دستاویزی ہیں | نہیں |
+| ALOR | نہیں | نہیں |
+| Akahu | نہیں: سرمایہ کاری اکاؤنٹس میں ٹرانزیکشنز نہیں ہوتے | نہیں |
+
+جمع شدہ رقوم کی ہسٹری کے بغیر اس اکاؤنٹ کا PnL صرف اس کی مالیت میں تبدیلی ہے۔ Interactive Brokers کے لیے Flex Query ایڈیٹر میں مطلوبہ Flex Query سیکشن شامل کریں؛ ورنہ ایپ *Flex Query میں … سیکشن موجود نہیں* بتاتی ہے۔
+
 ## Capital میں اکاؤنٹ جوڑنا {#connect}
 
 نیچے کے سیکشن بتاتے ہیں کہ ہر بروکر کے پاس اسناد کیسے بنائی جاتی ہیں۔ Capital میں مراحل سب کے لیے ایک جیسے ہیں:

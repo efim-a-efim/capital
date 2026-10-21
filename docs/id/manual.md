@@ -36,6 +36,14 @@ Jumlah dapat ditulis dengan titik atau koma desimal, tanpa pemisah ribuan. Setia
 
 **Mode portofolio** (pengaturan kantong) memperlakukan kantong sebagai portofolio investasi: atur persentase target per aset, lihat porsi aktual dibandingkan target, dan gunakan **Seimbangkan ulang** untuk mendapatkan daftar apa yang perlu dibeli untuk jumlah tertentu. Penjualan hanya disarankan jika *Izinkan penjualan saat penyeimbangan ulang* aktif. Ini hanya kalkulator; tidak ada yang diubah.
 
+## PnL investasi {#pnl}
+
+Aktifkan **PnL investasi** di editor kantong untuk melihat hasil yang diperoleh kantong, terpisah dari uang yang Anda setorkan. Layar kantong lalu menampilkan laba atau rugi dan imbal hasil tertimbang waktu untuk sepanjang waktu, setahun, sebulan, seminggu dan sehari terakhir, grafik nilai, dan grafik laba rugi dengan chip rentang waktu (Semua, 1Y, 1M, 1W, 1D).
+
+- **Data.** Setiap pembaruan mencatat jumlah setiap aset kantong dan meminta setoran serta penarikan dari broker yang tertaut; perubahan jumlah manual dan dompet dihitung sebagai setoran atau penarikan pada kurs hari itu. Nilai masa lalu dihitung dengan [riwayat kurs]({{ page.base }}/screens/settings) harian.
+- **Pengisian riwayat.** Saat Anda mengaktifkannya, aplikasi membangun ulang riwayat dari snapshot di folder Anda (satu per hari), mengambil kurs yang belum ada, dan meminta setiap broker untuk riwayat setorannya serta, jika broker menyediakannya, nilai akun hariannya. Broker mana menyediakan apa tercantum di [halaman broker]({{ page.base }}/accounts#pnl).
+- **Membacanya.** Laba atau rugi adalah perubahan nilai dikurangi setoran bersih. Persentasenya tertimbang waktu, sehingga waktu setoran tidak memengaruhinya. Periode yang dimulai sebelum riwayat Anda menampilkan *sejak <tanggal>* alih-alih angka.
+
 ## Tujuan {#goals}
 
 Tab Tujuan → **+**. Tujuan memiliki nama, mata uang, jumlah target, dan tenggat. Buka tujuan lalu tekan **Hubungkan kantong** untuk menentukan kantong mana yang boleh mendanainya, dengan batas opsional: jumlah tetap, persentase dari kantong, atau persentase dari tujuan.

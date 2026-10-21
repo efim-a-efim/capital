@@ -36,6 +36,14 @@ Les montants acceptent le point ou la virgule comme séparateur décimal, sans s
 
 Le **Mode portefeuille** (paramètres de la poche) traite une poche comme un portefeuille d’investissement : définissez un pourcentage cible par actif, comparez la part réelle à la cible et utilisez **Rééquilibrer** pour obtenir la liste de ce qu’il faut acheter pour un montant donné. Des ventes ne sont proposées que si *Autoriser les ventes lors du rééquilibrage* est activé. C’est un calculateur ; il ne modifie rien.
 
+## PnL d’investissement {#pnl}
+
+Activez **PnL d’investissement** dans l’éditeur d’une poche pour voir ce qu’elle a rapporté, indépendamment de ce que vous y avez versé. L’écran de la poche affiche alors le gain ou la perte et le rendement pondéré dans le temps depuis le début, sur la dernière année, le dernier mois, la dernière semaine et le dernier jour, un graphique de la valeur et un graphique des gains et pertes avec des puces de période (Tout, 1Y, 1M, 1W, 1D).
+
+- **Données.** Chaque actualisation enregistre la quantité de chaque position de la poche et demande aux courtiers liés les versements et retraits ; les variations de quantité manuelles et des portefeuilles crypto comptent comme des versements ou des retraits au taux de ce jour. Les valeurs passées sont évaluées avec l’[historique des taux]({{ page.base }}/screens/settings) quotidien.
+- **Reconstitution.** À l’activation, l’application reconstruit l’historique à partir des instantanés de votre dossier (un par jour), récupère les taux manquants et demande à chaque courtier son historique de versements et, lorsqu’il le propose, la valeur quotidienne du compte. Les données fournies par chaque courtier sont listées sur la [page des courtiers]({{ page.base }}/accounts#pnl).
+- **Lecture.** Le gain ou la perte est la variation de valeur moins les versements nets. Le pourcentage est pondéré dans le temps : le moment des versements ne le modifie donc pas. Une période qui a commencé avant votre historique affiche *depuis le <date>* au lieu d’un chiffre.
+
 ## Objectifs {#goals}
 
 Onglet Objectifs → **+**. Un objectif a un nom, une devise, un montant cible et une échéance. Ouvrez l’objectif et utilisez **Connecter une poche** pour indiquer quelles poches peuvent le financer, avec une limite facultative : un montant fixe, un pourcentage de la poche ou un pourcentage de l’objectif.

@@ -139,6 +139,29 @@ Ein Konto, das SnapTrade noch nicht fertig synchronisiert hat, meldet *SnapTrade
 
 SnapTrade-Dokumentation: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Einzahlungen und Wertverlauf für PnL {#pnl}
+
+Für den [Anlage-PnL]({{ page.base }}/screens/bucket) braucht die App die Ein- und Auszahlungen eines verknüpften Kontos und, wenn der Broker es anbietet, einen täglichen Kontowert. Beides wird mit demselben Zugangsdatum gelesen wie das Guthaben.
+
+| Broker | Ein- und Auszahlungen | Täglicher Kontowert |
+|---|---|---|
+| Interactive Brokers | Flex-Query-Abschnitt *Cash Transactions* | Flex-Query-Abschnitt *Equity Summary in Base by Report Date* (365 Tage pro Abfrage) |
+| Alpaca | Kontoaktivitäten (CSD, CSW) | Portfolioverlauf |
+| Tradier | Kontoverlauf (ACH, Überweisung, Scheck) | Historische Salden |
+| tastytrade | Transaktionen, Geldbewegungen | Verlauf des Nettoliquidationswerts |
+| SnapTrade | Aktivitäten (Einzahlung, Auszahlung) | Nein (Saldenverlauf ist eine Beta-Funktion, standardmäßig aus) |
+| OANDA | Transaktionen vom Typ TRANSFER_FUNDS | Nein |
+| Trading 212 | Transaktionsverlauf (Einzahlung, Auszahlung) | Nein |
+| Public.com | Verlauf, Geldbewegungen | Nein |
+| T-Invest | Operationen der Ein- und Auszahlungstypen | Nein |
+| Capital.com | Transaktionsverlauf (Einzahlung, Auszahlung) | Nein |
+| eToro | Nein: Die API hat keinen Einzahlungsverlauf für Handelskonten, daher zählen Einzahlungen als Gewinn | Saldenverlauf (letzte 12 Monate) |
+| Indexa Capital | Nein: Die Einzahlungscodes sind nicht dokumentiert | Nein |
+| ALOR | Nein | Nein |
+| Akahu | Nein: Anlagekonten haben keine Transaktionen | Nein |
+
+Ohne Einzahlungsverlauf ist der PnL dieses Kontos seine Wertänderung. Fügen Sie die Flex-Query-Abschnitte für Interactive Brokers im Flex-Query-Editor hinzu; sonst meldet die App *Der Flex Query fehlt der Abschnitt …*.
+
 ## Ein Konto in Capital verbinden {#connect}
 
 Die folgenden Abschnitte beschreiben, wie Sie die Zugangsdaten beim jeweiligen Broker erstellen. In Capital sind die Schritte für alle gleich:

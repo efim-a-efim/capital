@@ -141,6 +141,29 @@ SnapTrade 尚未完成同步的账户会提示 *SnapTrade 尚无此账户的总�
 
 SnapTrade 文档：[Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [支持的券商](https://snaptrade.com/brokerage-integrations) · [定价](https://snaptrade.com/pricing)
 
+## PnL 所需的存取款与价值历史 {#pnl}
+
+[投资 PnL]({{ page.base }}/screens/bucket)需要已关联账户的存入和取出记录，以及（若券商提供）每日账户价值。两者都使用与读取余额相同的凭据获取。
+
+| 券商 | 存入和取出 | 每日账户价值 |
+|---|---|---|
+| Interactive Brokers | Flex Query 部分 *Cash Transactions* | Flex Query 部分 *Equity Summary in Base by Report Date*（每次查询 365 天） |
+| Alpaca | 账户活动（CSD、CSW） | 投资组合历史 |
+| Tradier | 账户历史（ACH、电汇、支票） | 历史余额 |
+| tastytrade | 交易、资金划转 | 净清算价值历史 |
+| SnapTrade | 活动（入金、出金） | 无（余额历史为测试版功能，默认关闭） |
+| OANDA | 类型为 TRANSFER_FUNDS 的交易 | 无 |
+| Trading 212 | 交易历史（存入、取出） | 无 |
+| Public.com | 历史、资金划转 | 无 |
+| T-Invest | 输入和输出类型的操作 | 无 |
+| Capital.com | 交易历史（存入、取出） | 无 |
+| eToro | 无：API 没有交易账户的存款历史，因此存入会被计为收益 | 余额历史（最近 12 个月） |
+| Indexa Capital | 无：存款代码没有文档说明 | 无 |
+| ALOR | 无 | 无 |
+| Akahu | 无：投资账户没有交易记录 | 无 |
+
+没有存款历史时，该账户的 PnL 就是其价值变化。请在 Flex Query 编辑器中为 Interactive Brokers 添加所需的 Flex Query 部分；否则应用会提示 *Flex Query 缺少 … 部分*。
+
 ## 在 Capital 中连接账户 {#connect}
 
 下面各节说明如何在各券商处创建凭据。在 Capital 中，所有券商的步骤都相同：

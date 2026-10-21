@@ -36,6 +36,14 @@ Số tiền có thể dùng dấu chấm hoặc dấu phẩy thập phân, khôn
 
 **Chế độ danh mục đầu tư** (trong cài đặt hũ) coi hũ là một danh mục đầu tư: đặt tỷ trọng mục tiêu cho từng tài sản, xem tỷ trọng thực tế so với mục tiêu, và dùng **Tái cân bằng** để nhận danh sách những gì cần mua với một số tiền nhất định. Lệnh bán chỉ được gợi ý khi bật *Cho phép bán khi tái cân bằng*. Đây chỉ là công cụ tính; nó không thay đổi gì cả.
 
+## PnL đầu tư {#pnl}
+
+Bật **PnL đầu tư** trong trình chỉnh sửa của hũ để xem hũ đã sinh lời bao nhiêu, tách riêng khỏi số tiền bạn đã nạp vào. Màn hình hũ khi đó hiển thị lãi hoặc lỗ và tỷ suất sinh lời có trọng số theo thời gian cho toàn thời gian, năm qua, tháng qua, tuần qua và ngày qua, cùng biểu đồ giá trị và biểu đồ lãi và lỗ với các nút khung thời gian (Tất cả, 1Y, 1M, 1W, 1D).
+
+- **Dữ liệu.** Mỗi lần làm mới ghi lại số lượng của từng tài sản trong hũ và hỏi các nhà môi giới đã liên kết về các khoản nạp và rút; thay đổi số lượng thủ công và của ví được tính là nạp hoặc rút theo tỷ giá của ngày đó. Giá trị trong quá khứ được định giá bằng [lịch sử tỷ giá]({{ page.base }}/screens/settings) hằng ngày.
+- **Bổ sung dữ liệu cũ.** Khi bạn bật, ứng dụng dựng lại lịch sử từ các bản lưu trong thư mục của bạn (mỗi ngày một bản), tải các tỷ giá còn thiếu và hỏi từng nhà môi giới về lịch sử nạp tiền và, nếu nhà môi giới có, giá trị tài khoản hằng ngày. Nhà môi giới nào cung cấp gì được liệt kê ở [trang nhà môi giới]({{ page.base }}/accounts#pnl).
+- **Cách đọc.** Lãi hoặc lỗ là chênh lệch giá trị trừ đi tiền nạp ròng. Tỷ lệ phần trăm có trọng số theo thời gian, nên thời điểm nạp tiền không làm nó thay đổi. Kỳ bắt đầu trước lịch sử của bạn hiển thị *từ <ngày>* thay cho một con số.
+
 ## Mục tiêu {#goals}
 
 Thẻ Mục tiêu → **+**. Mục tiêu gồm tên, tiền tệ, số tiền mục tiêu và hạn hoàn thành. Mở mục tiêu và chọn **Liên kết hũ** để chỉ định những hũ nào được cấp tiền cho nó, có thể kèm giới hạn: số tiền cố định, phần trăm của hũ hoặc phần trăm của mục tiêu.

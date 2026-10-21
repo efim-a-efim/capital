@@ -139,6 +139,29 @@ Trading 212 के दस्तावेज़: [Public API](https://docs.tradin
 
 SnapTrade के दस्तावेज़: [शुरुआत](https://docs.snaptrade.com/docs/getting-started) · [Personal बनाम Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [समर्थित ब्रोकरेज](https://snaptrade.com/brokerage-integrations) · [कीमतें](https://snaptrade.com/pricing)
 
+## PnL के लिए जमा और मूल्य इतिहास {#pnl}
+
+[निवेश PnL]({{ page.base }}/screens/bucket) को जुड़े खाते की जमा और निकासी चाहिए, और ब्रोकर दे तो खाते का रोज़ का मूल्य भी। दोनों उसी क्रेडेंशियल से पढ़े जाते हैं जिससे बैलेंस।
+
+| ब्रोकर | जमा और निकासी | खाते का रोज़ का मूल्य |
+|---|---|---|
+| Interactive Brokers | Flex Query सेक्शन *Cash Transactions* | Flex Query सेक्शन *Equity Summary in Base by Report Date* (प्रति क्वेरी 365 दिन) |
+| Alpaca | Account activities (CSD, CSW) | Portfolio history |
+| Tradier | Account history (ACH, wire, check) | Historical balances |
+| tastytrade | Transactions, money movements | Net liquidating value history |
+| SnapTrade | Activities (contribution, withdrawal) | नहीं (बैलेंस इतिहास बीटा सुविधा है, डिफ़ॉल्ट रूप से बंद) |
+| OANDA | TRANSFER_FUNDS प्रकार के Transactions | नहीं |
+| Trading 212 | Transaction history (deposit, withdraw) | नहीं |
+| Public.com | History, money movements | नहीं |
+| T-Invest | इनपुट और आउटपुट प्रकार के Operations | नहीं |
+| Capital.com | Transaction history (deposit, withdrawal) | नहीं |
+| eToro | नहीं: API में ट्रेडिंग खातों का जमा इतिहास नहीं है, इसलिए जमा लाभ गिने जाते हैं | Balance history (पिछले 12 महीने) |
+| Indexa Capital | नहीं: जमा कोड दस्तावेज़ में नहीं हैं | नहीं |
+| ALOR | नहीं | नहीं |
+| Akahu | नहीं: निवेश खातों में कोई लेन-देन नहीं होता | नहीं |
+
+जमा इतिहास के बिना उस खाते का PnL उसके मूल्य का बदलाव है। Interactive Brokers के लिए Flex Query एडिटर में Flex Query के सेक्शन जोड़ें; वरना ऐप *Flex Query में ... सेक्शन नहीं है* बताता है।
+
 ## Capital में खाता जोड़ना {#connect}
 
 नीचे के खंड बताते हैं कि हर ब्रोकर पर क्रेडेंशियल कैसे बनाएँ। Capital में सभी के लिए चरण एक जैसे हैं:

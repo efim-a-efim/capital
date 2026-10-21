@@ -36,6 +36,14 @@ Beträge akzeptieren Punkt oder Komma als Dezimaltrennzeichen, jedoch keine Taus
 
 Der **Portfoliomodus** (Einstellungen des Topfs) behandelt einen Topf als Anlageportfolio: Legen Sie je Vermögenswert einen Zielanteil fest, vergleichen Sie den Ist-Anteil mit dem Ziel und lassen Sie sich mit **Rebalancing** auflisten, was Sie für einen bestimmten Betrag kaufen sollten. Verkäufe werden nur vorgeschlagen, wenn *Verkäufe beim Rebalancing erlauben* aktiviert ist. Es ist ein Rechner; er ändert nichts.
 
+## Anlage-PnL {#pnl}
+
+Schalten Sie **Anlage-PnL** im Editor eines Topfs ein, um zu sehen, was der Topf verdient hat, getrennt von dem, was Sie eingezahlt haben. Der Topf-Bildschirm zeigt dann Gewinn oder Verlust und die zeitgewichtete Rendite für den gesamten Zeitraum, das letzte Jahr, den letzten Monat, die letzte Woche und den letzten Tag, dazu ein Wertdiagramm und ein Gewinn-und-Verlust-Diagramm mit Zeitraum-Chips (Alle, 1Y, 1M, 1W, 1D).
+
+- **Daten.** Jede Aktualisierung erfasst die Menge jeder Position des Topfs und fragt die verknüpften Broker nach Ein- und Auszahlungen; Mengenänderungen bei manuellen Positionen und Wallets zählen als Ein- oder Auszahlung zum Kurs dieses Tages. Vergangene Werte werden mit dem täglichen [Kursverlauf]({{ page.base }}/screens/settings) bewertet.
+- **Nachberechnung.** Beim Einschalten baut die App den Verlauf aus den Snapshots in Ihrem Ordner auf (einer pro Tag), ruft die fehlenden Kurse ab und fragt jeden Broker nach seinem Einzahlungsverlauf und, sofern der Broker ihn anbietet, nach dem täglichen Kontowert. Welche Broker was liefern, steht auf der [Broker-Seite]({{ page.base }}/accounts#pnl).
+- **Lesen.** Gewinn oder Verlust ist die Wertänderung minus Nettoeinzahlungen. Der Prozentwert ist zeitgewichtet, sodass der Zeitpunkt von Einzahlungen ihn nicht verschiebt. Beginnt ein Zeitraum vor Ihrem Verlauf, steht statt einer Zahl *seit <Datum>*.
+
 ## Ziele {#goals}
 
 Tab „Ziele“ → **+**. Ein Ziel hat einen Namen, eine Währung, einen Zielbetrag und ein Fälligkeitsdatum. Öffnen Sie das Ziel und wählen Sie **Topf verknüpfen**, um festzulegen, welche Töpfe es finanzieren dürfen – optional mit einem Limit: einem festen Betrag, einem Prozentsatz des Topfs oder einem Prozentsatz des Ziels.

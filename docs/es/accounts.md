@@ -139,6 +139,29 @@ Una cuenta que SnapTrade aún no ha terminado de sincronizar informa *SnapTrade 
 
 Documentación de SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Depósitos e historial de valor para el PnL {#pnl}
+
+El [PnL de inversión]({{ page.base }}/screens/bucket) necesita los depósitos y retiros de una cuenta vinculada y, cuando el bróker lo ofrece, un valor diario de la cuenta. Ambos se leen con la misma credencial que el saldo.
+
+| Bróker | Depósitos y retiros | Valor diario de la cuenta |
+|---|---|---|
+| Interactive Brokers | Sección de la Flex Query *Cash Transactions* | Sección de la Flex Query *Equity Summary in Base by Report Date* (365 días por consulta) |
+| Alpaca | Actividades de la cuenta (CSD, CSW) | Historial de la cartera |
+| Tradier | Historial de la cuenta (ACH, transferencia, cheque) | Saldos históricos |
+| tastytrade | Transacciones, movimientos de dinero | Historial del valor liquidativo neto |
+| SnapTrade | Actividades (aportación, retiro) | No (el historial de saldos es una función beta, desactivada por defecto) |
+| OANDA | Transacciones de tipo TRANSFER_FUNDS | No |
+| Trading 212 | Historial de transacciones (depósito, retiro) | No |
+| Public.com | Historial, movimientos de dinero | No |
+| T-Invest | Operaciones de los tipos de entrada y salida | No |
+| Capital.com | Historial de transacciones (depósito, retiro) | No |
+| eToro | No: la API no tiene historial de depósitos de las cuentas de trading, por lo que los depósitos cuentan como ganancias | Historial de saldos (últimos 12 meses) |
+| Indexa Capital | No: los códigos de depósito no están documentados | No |
+| ALOR | No | No |
+| Akahu | No: las cuentas de inversión no tienen transacciones | No |
+
+Sin historial de depósitos, el PnL de esa cuenta es su variación de valor. Añada las secciones de la Flex Query de Interactive Brokers en el editor de Flex Query; de lo contrario la aplicación indica *A la Flex Query le falta la sección …*.
+
 ## Conectar una cuenta en Capital {#connect}
 
 Las secciones siguientes explican cómo crear la credencial en cada bróker. En Capital los pasos son los mismos para todos:

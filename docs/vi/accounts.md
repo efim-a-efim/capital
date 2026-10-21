@@ -139,6 +139,29 @@ Tài khoản mà SnapTrade chưa đồng bộ xong sẽ báo *SnapTrade chưa c�
 
 Tài liệu của SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Tiền nạp và lịch sử giá trị cho PnL {#pnl}
+
+[PnL đầu tư]({{ page.base }}/screens/bucket) cần các khoản nạp và rút của tài khoản đã liên kết và, khi nhà môi giới có, giá trị tài khoản hằng ngày. Cả hai đều được đọc bằng cùng thông tin xác thực với số dư.
+
+| Nhà môi giới | Nạp và rút | Giá trị tài khoản hằng ngày |
+|---|---|---|
+| Interactive Brokers | Phần Flex Query *Cash Transactions* | Phần Flex Query *Equity Summary in Base by Report Date* (365 ngày mỗi truy vấn) |
+| Alpaca | Hoạt động tài khoản (CSD, CSW) | Lịch sử danh mục |
+| Tradier | Lịch sử tài khoản (ACH, wire, check) | Số dư lịch sử |
+| tastytrade | Giao dịch, chuyển tiền | Lịch sử giá trị thanh lý ròng |
+| SnapTrade | Hoạt động (contribution, withdrawal) | Không (lịch sử số dư là tính năng beta, mặc định tắt) |
+| OANDA | Giao dịch loại TRANSFER_FUNDS | Không |
+| Trading 212 | Lịch sử giao dịch (deposit, withdraw) | Không |
+| Public.com | Lịch sử, chuyển tiền | Không |
+| T-Invest | Các thao tác loại nạp vào và rút ra | Không |
+| Capital.com | Lịch sử giao dịch (deposit, withdrawal) | Không |
+| eToro | Không: API không có lịch sử nạp tiền cho tài khoản giao dịch, nên tiền nạp được tính là lãi | Lịch sử số dư (12 tháng gần nhất) |
+| Indexa Capital | Không: các mã nạp tiền không được tài liệu hóa | Không |
+| ALOR | Không | Không |
+| Akahu | Không: tài khoản đầu tư không có giao dịch | Không |
+
+Khi không có lịch sử nạp tiền, PnL của tài khoản đó chính là chênh lệch giá trị. Hãy thêm các phần Flex Query cho Interactive Brokers trong trình chỉnh sửa Flex Query; nếu không, ứng dụng báo *Flex Query thiếu phần …*.
+
 ## Kết nối tài khoản trong Capital {#connect}
 
 Các phần dưới đây nêu cách tạo thông tin xác thực ở từng nhà môi giới. Trong Capital, các bước giống nhau cho tất cả:

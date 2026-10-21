@@ -139,6 +139,29 @@ Trading 212 दस्तऐवज: [Public API](https://docs.trading212.com/api)
 
 SnapTrade दस्तऐवज: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## PnL साठी जमा रकमा आणि मूल्य इतिहास {#pnl}
+
+[गुंतवणूक PnL (नफा-तोटा)]({{ page.base }}/screens/bucket) साठी जोडलेल्या खात्याच्या जमा व काढलेल्या रकमा लागतात, आणि ब्रोकर देत असल्यास दैनंदिन खाते मूल्यही. दोन्ही शिल्लक वाचण्यासाठी वापरलेल्या त्याच क्रेडेन्शियलने वाचले जातात.
+
+| ब्रोकर | जमा आणि काढलेल्या रकमा | दैनंदिन खाते मूल्य |
+|---|---|---|
+| Interactive Brokers | Flex Query विभाग *Cash Transactions* | Flex Query विभाग *Equity Summary in Base by Report Date* (प्रति क्वेरी 365 दिवस) |
+| Alpaca | खाते क्रियाकलाप (CSD, CSW) | पोर्टफोलिओ इतिहास |
+| Tradier | खाते इतिहास (ACH, वायर, चेक) | ऐतिहासिक शिल्लक |
+| tastytrade | व्यवहार, पैशांच्या हालचाली | नेट लिक्विडेटिंग व्हॅल्यू इतिहास |
+| SnapTrade | क्रियाकलाप (योगदान, काढणी) | नाही (शिल्लक इतिहास हे बीटा वैशिष्ट्य आहे, डीफॉल्टनुसार बंद) |
+| OANDA | TRANSFER_FUNDS प्रकारचे व्यवहार | नाही |
+| Trading 212 | व्यवहार इतिहास (जमा, काढणी) | नाही |
+| Public.com | इतिहास, पैशांच्या हालचाली | नाही |
+| T-Invest | इनपुट आणि आउटपुट प्रकारच्या ऑपरेशन्स | नाही |
+| Capital.com | व्यवहार इतिहास (जमा, काढणी) | नाही |
+| eToro | नाही: API मध्ये ट्रेडिंग खात्यांचा जमा-इतिहास नाही, म्हणून जमा रकमा नफा मानल्या जातात | शिल्लक इतिहास (गेले 12 महिने) |
+| Indexa Capital | नाही: जमा कोड दस्तऐवजीकृत नाहीत | नाही |
+| ALOR | नाही | नाही |
+| Akahu | नाही: गुंतवणूक खात्यांमध्ये व्यवहार नसतात | नाही |
+
+जमा-इतिहासाशिवाय त्या खात्याचा PnL म्हणजे त्याच्या मूल्यातील बदल. Interactive Brokers साठी Flex Query संपादकात Flex Query विभाग जोडा; अन्यथा अॅप *Flex Query मध्ये {0} विभाग नाही* असे सांगते.
+
 ## Capital मध्ये खाते जोडणे {#connect}
 
 खालील विभागांत प्रत्येक ब्रोकरकडे क्रेडेन्शियल कसे तयार करायचे ते सांगितले आहे. Capital मध्ये सर्वांसाठी पायऱ्या सारख्याच आहेत:

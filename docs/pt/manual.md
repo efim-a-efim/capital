@@ -36,6 +36,14 @@ Os valores aceitam ponto ou vírgula como separador decimal, sem separadores de 
 
 O **Modo portfólio** (ajustes da caixinha) trata a caixinha como uma carteira de investimentos: defina um percentual-alvo por ativo, compare a participação real com o alvo e use **Rebalancear** para obter uma lista do que comprar com determinado valor. Vendas só são sugeridas quando *Permitir vendas no rebalanceamento* está ativado. É uma calculadora; não altera nada.
 
+## PnL do investimento {#pnl}
+
+Ative **PnL do investimento** no editor de uma caixinha para ver quanto ela rendeu, separado do que você aportou. A tela da caixinha passa a mostrar o lucro ou prejuízo e o retorno ponderado pelo tempo de todo o período, do último ano, mês, semana e dia, um gráfico de valor e um gráfico de lucros e perdas com botões de período (Tudo, 1Y, 1M, 1W, 1D).
+
+- **Dados.** Cada atualização registra a quantidade de cada posição da caixinha e pede às corretoras vinculadas os aportes e saques; mudanças manuais e de carteira na quantidade contam como aportes ou saques pela taxa do dia. Os valores passados usam o [histórico de taxas]({{ page.base }}/screens/settings) diário.
+- **Preenchimento.** Ao ativar, o app reconstrói o histórico a partir dos snapshots da sua pasta (um por dia), busca as taxas que faltam e pede a cada corretora o histórico de aportes e, quando ela oferece, o valor diário da conta. O que cada corretora fornece está na [página das corretoras]({{ page.base }}/accounts#pnl).
+- **Leitura.** Lucro ou prejuízo é a variação do valor menos os aportes líquidos. O percentual é ponderado pelo tempo, então o momento dos aportes não o altera. Um período que começou antes do seu histórico mostra *desde <data>* em vez de um número.
+
 ## Metas {#goals}
 
 Aba Metas → **+**. Uma meta tem nome, moeda, valor-alvo e data de vencimento. Abra a meta e use **Vincular caixinha** para indicar quais caixinhas podem cobri-la, opcionalmente com um limite: um valor fixo, um percentual da caixinha ou um percentual da meta.

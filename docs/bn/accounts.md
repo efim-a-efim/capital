@@ -139,6 +139,29 @@ Trading 212 ডকুমেন্টেশন: [Public API](https://docs.trading
 
 SnapTrade ডকুমেন্টেশন: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## PnL-এর জন্য জমা ও মূল্যের ইতিহাস {#pnl}
+
+[বিনিয়োগের PnL]({{ page.base }}/screens/bucket)-এর জন্য সংযুক্ত অ্যাকাউন্টের জমা ও উত্তোলন লাগে, এবং ব্রোকার দিলে দৈনিক অ্যাকাউন্ট মূল্যও লাগে। দুটোই ব্যালান্সের একই ক্রেডেনশিয়াল দিয়ে পড়া হয়।
+
+| ব্রোকার | জমা ও উত্তোলন | দৈনিক অ্যাকাউন্ট মূল্য |
+|---|---|---|
+| Interactive Brokers | Flex Query সেকশন *Cash Transactions* | Flex Query সেকশন *Equity Summary in Base by Report Date* (প্রতি কোয়েরিতে ৩৬৫ দিন) |
+| Alpaca | Account activities (CSD, CSW) | Portfolio history |
+| Tradier | Account history (ACH, wire, check) | Historical balances |
+| tastytrade | Transactions, money movements | Net liquidating value history |
+| SnapTrade | Activities (contribution, withdrawal) | না (ব্যালান্স ইতিহাস একটি বেটা ফিচার, ডিফল্টভাবে বন্ধ) |
+| OANDA | TRANSFER_FUNDS ধরনের লেনদেন | না |
+| Trading 212 | Transaction history (deposit, withdraw) | না |
+| Public.com | History, money movements | না |
+| T-Invest | ইনপুট ও আউটপুট ধরনের অপারেশন | না |
+| Capital.com | Transaction history (deposit, withdrawal) | না |
+| eToro | না: API-তে ট্রেডিং অ্যাকাউন্টের জমার ইতিহাস নেই, তাই জমা লাভ হিসেবে গণ্য হয় | Balance history (গত ১২ মাস) |
+| Indexa Capital | না: জমার কোড নথিভুক্ত নয় | না |
+| ALOR | না | না |
+| Akahu | না: বিনিয়োগ অ্যাকাউন্টে কোনো লেনদেন নেই | না |
+
+জমার ইতিহাস না থাকলে ওই অ্যাকাউন্টের PnL হলো তার মূল্যের পরিবর্তন। Interactive Brokers-এর জন্য Flex Query এডিটরে Flex Query-র সেকশনগুলো যোগ করুন; না করলে অ্যাপ জানায় *Flex Query-তে … সেকশন নেই*।
+
 ## Capital-এ অ্যাকাউন্ট সংযুক্ত করা {#connect}
 
 নিচের অংশগুলোতে প্রতিটি ব্রোকারে ক্রেডেনশিয়াল কীভাবে তৈরি করবেন তা বলা আছে। Capital-এ ধাপগুলো সবার জন্য একই:

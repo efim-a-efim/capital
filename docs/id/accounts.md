@@ -139,6 +139,29 @@ Akun yang belum selesai disinkronkan oleh SnapTrade melaporkan *SnapTrade belum 
 
 Dokumentasi SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Setoran dan riwayat nilai untuk PnL {#pnl}
+
+[PnL investasi]({{ page.base }}/screens/bucket) memerlukan setoran dan penarikan akun yang tertaut dan, jika broker menyediakannya, nilai akun harian. Keduanya dibaca dengan kredensial yang sama seperti saldo.
+
+| Broker | Setoran dan penarikan | Nilai akun harian |
+|---|---|---|
+| Interactive Brokers | Bagian Flex Query *Cash Transactions* | Bagian Flex Query *Equity Summary in Base by Report Date* (365 hari per query) |
+| Alpaca | Account activities (CSD, CSW) | Portfolio history |
+| Tradier | Account history (ACH, wire, check) | Historical balances |
+| tastytrade | Transactions, money movements | Net liquidating value history |
+| SnapTrade | Activities (contribution, withdrawal) | Tidak ada (riwayat saldo adalah fitur beta, nonaktif secara default) |
+| OANDA | Transaksi bertipe TRANSFER_FUNDS | Tidak ada |
+| Trading 212 | Transaction history (deposit, withdraw) | Tidak ada |
+| Public.com | History, money movements | Tidak ada |
+| T-Invest | Operasi bertipe masuk dan keluar | Tidak ada |
+| Capital.com | Transaction history (deposit, withdrawal) | Tidak ada |
+| eToro | Tidak ada: API tidak memiliki riwayat setoran untuk akun trading, sehingga setoran dihitung sebagai keuntungan | Balance history (12 bulan terakhir) |
+| Indexa Capital | Tidak ada: kode setoran tidak terdokumentasi | Tidak ada |
+| ALOR | Tidak ada | Tidak ada |
+| Akahu | Tidak ada: akun investasi tidak memiliki transaksi | Tidak ada |
+
+Tanpa riwayat setoran, PnL akun itu adalah perubahan nilainya. Tambahkan bagian Flex Query untuk Interactive Brokers di editor Flex Query; jika tidak, aplikasi menampilkan *Flex Query tidak memiliki bagian …*.
+
 ## Menghubungkan akun di Capital {#connect}
 
 Bagian di bawah ini menjelaskan cara membuat kredensial di tiap broker. Di Capital langkahnya sama untuk semuanya:

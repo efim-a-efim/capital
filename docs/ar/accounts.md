@@ -139,6 +139,29 @@ class: doc
 
 وثائق SnapTrade: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## الإيداعات وسجل القيمة لحساب PnL {#pnl}
+
+تحتاج [أرباح وخسائر الاستثمار (PnL)]({{ page.base }}/screens/bucket) إلى إيداعات الحساب المرتبط وسحوباته، وإلى قيمة يومية للحساب عندما يوفرها الوسيط. تُقرأ كلتاهما بالاعتماد نفسه المستخدم لقراءة الرصيد.
+
+| الوسيط | الإيداعات والسحوبات | قيمة الحساب اليومية |
+|---|---|---|
+| Interactive Brokers | قسم Flex Query باسم *Cash Transactions* | قسم Flex Query باسم *Equity Summary in Base by Report Date* (365 يومًا لكل استعلام) |
+| Alpaca | أنشطة الحساب (CSD، CSW) | سجل المحفظة (Portfolio history) |
+| Tradier | سجل الحساب (ACH، تحويل مصرفي، شيك) | الأرصدة التاريخية (Historical balances) |
+| tastytrade | المعاملات وحركات الأموال | سجل صافي قيمة التصفية (Net liquidating value) |
+| SnapTrade | الأنشطة (إيداع، سحب) | لا (سجل الرصيد ميزة تجريبية، معطلة افتراضيًا) |
+| OANDA | معاملات من النوع TRANSFER_FUNDS | لا |
+| Trading 212 | سجل المعاملات (إيداع، سحب) | لا |
+| Public.com | السجل، حركات الأموال | لا |
+| T-Invest | عمليات من نوعي الإدخال والإخراج | لا |
+| Capital.com | سجل المعاملات (إيداع، سحب) | لا |
+| eToro | لا: لا توفر الواجهة سجل إيداعات لحسابات التداول، فتُحتسب الإيداعات أرباحًا | سجل الرصيد (آخر 12 شهرًا) |
+| Indexa Capital | لا: رموز الإيداع غير موثقة | لا |
+| ALOR | لا | لا |
+| Akahu | لا: ليست لحسابات الاستثمار معاملات | لا |
+
+بدون سجل إيداعات يكون PnL لذلك الحساب هو تغيّر قيمته. أضف أقسام Flex Query لـ Interactive Brokers في محرر Flex Query؛ وإلا يعرض التطبيق *يفتقر Flex Query إلى القسم …*.
+
 ## ربط حساب في Capital {#connect}
 
 تشرح الأقسام التالية كيف تنشئ بيانات الاعتماد لدى كل وسيط. أما في Capital فالخطوات واحدة للجميع:
