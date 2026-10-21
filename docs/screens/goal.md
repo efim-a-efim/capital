@@ -23,6 +23,7 @@ A goal of type **FIRE** (financial independence, retire early) answers two quest
 - **Birth date · YYYY-MM-DD · optional**: shows ages and sets the horizon to the life expectancy.
 - **FIRE date · YYYY-MM-DD · blank to derive**: the day you stop saving and start spending.
 - **I can invest · blank to derive**: an amount per **week**, **2 weeks**, **month**, **year** or **N days** (then enter **Days**).
+- **Contribution growth % per year · blank = inflation**: how much more you can invest each year, for example a yearly raise. Blank keeps the contribution's purchasing power.
 - **Spend per month after FIRE · blank to derive**.
 - **Amount to have after FIRE · blank to derive**: the FIRE number, the goal's target.
 - **Advanced assumptions**: **Inflation % · average / optimistic / pessimistic**, **Growth % · average / optimistic / pessimistic**, **Withdrawal rate %** and **Life expectancy · years**. Each label ends with "· now {value}", the value in effect when the field is blank.
@@ -52,7 +53,7 @@ If FIRE date, contribution and target are all given, the date is kept and the sc
 
 Under the table, the rates of each scenario ("Average: growth 7% · inflation 3% · withdrawal 4%") and a "Rates: …" line naming the provider they come from, or *built-in defaults*. The chart below is a burndown: the value of the money in today's money from today to the end of the money or the horizon, with three coloured curves, one per scenario. The dashed line marks the FIRE date. The note under it reads *A projection on your own numbers; it recommends nothing.* On the [Goals]({{ page.base }}/screens/goals) tab the goal shows *FIRE on <date> · age N*, or *not reachable*.
 
-**How it is calculated.** In monthly steps. Until the FIRE date the contribution keeps its purchasing power, so it grows with inflation, and the money grows at the scenario's rate. After the FIRE date the spend grows with inflation and what remains keeps growing at the scenario's rate. The horizon is the birth date plus life expectancy (95 by default), or 50 years after the FIRE date without a birth date. *Money will never end* means the money is not used up in 200 years and is worth at least as much in today's money at the end as at the FIRE date.
+**How it is calculated.** In monthly steps. Until the FIRE date the contribution grows by **Contribution growth % per year** (by inflation when blank, so it keeps its purchasing power), and the money grows at the scenario's rate. After the FIRE date the spend grows with inflation and what remains keeps growing at the scenario's rate. The horizon is the birth date plus life expectancy (95 by default), or 50 years after the FIRE date without a birth date. *Money will never end* means the money is not used up in 200 years and is worth at least as much in today's money at the end as at the FIRE date.
 
 **Defaults and sources.** Without an override or fetched rates the app uses growth 7 % (optimistic 10 %, pessimistic 4 %), inflation 3 % (2 %, 5 %) and a withdrawal rate of 4 %. They come from the UBS Global Investment Returns Yearbook 2026 (world, 1900–2024: equities 9.8 % a year nominal, bonds 4.6 %, inflation 2.9 %; 7 % is about a 60/40 mix), the 2 % inflation targets of central banks, and Bengen (1994) and the Trinity study (1998) for the 4 % rule. See also [FIRE]({{ page.base }}/manual#fire) in the manual.
 

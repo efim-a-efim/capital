@@ -70,6 +70,15 @@ class FireTest {
         val r = solve(zero.copy(contribution = "1000", fireDate = today.plusYears(10).toString()))
         eq("120000", r.target); eq("400", r.spend); assertTrue(r.reachable)
     }
+    @Test fun contributionGrowthRaisesTheContributionEachYear() {
+        val flat = solve(zero.copy(contribution = "1000", fireDate = today.plusYears(10).toString(), contributionGrowth = "0"))
+        val raised = solve(zero.copy(contribution = "1000", fireDate = today.plusYears(10).toString(), contributionGrowth = "10"))
+        eq("120000", flat.target); assertTrue(raised.target > flat.target)
+        // 10 % a year compounded monthly: the last month pays 1000 × 1.1^(119/12)
+        assertTrue(raised.target.toDouble() in 199000.0..201000.0)
+        val derived = solve(zero.copy(target = raised.target.text(), fireDate = today.plusYears(10).toString(), contributionGrowth = "10"))
+        assertTrue((derived.contribution.toDouble() - 1000).let { it > -1 && it < 1 })
+    }
     @Test fun keepsGivenDateAndShowsShortfall() {
         val short = solve(zero.copy(contribution = "1000", fireDate = today.plusYears(5).toString(), target = "120000"))
         assertEquals(today.plusYears(5), short.fireDate); assertFalse(short.reachable); eq("60000", short.shortfall!!); assertEquals(today.plusYears(10), short.earliest)

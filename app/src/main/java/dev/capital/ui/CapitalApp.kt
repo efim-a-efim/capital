@@ -653,7 +653,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
         "address" to (h?.address ?: a?.address ?: ""), "type" to (if(editor.kind=="Goal") (if(g?.fire!=null) "FIRE" else "Savings") else if(h?.accountId!=null) "Account" else if(h?.address!=null) "Wallet" else "Manual"), "broker" to (a?.broker ?: brokerChoices.first()), "account" to (h?.accountId ?: ""), "ignore" to (a?.ignoreBelow!=null).toString(), "minimum" to (a?.ignoreBelow ?: "1"),
         "mode" to (c?.mode?.name ?: Limit.AUTO.name), "value" to (c?.value ?: "0"), "cap" to (c?.goalCap ?: ""),
         "theme" to data.settings.theme, "currencyAction" to "Choose treatment",
-        "birth" to (g?.fire?.birth ?: ""), "fireDate" to (g?.fire?.fireDate ?: ""), "contribution" to (g?.fire?.contribution ?: ""), "period" to (g?.fire?.period ?: Period.MONTH).name, "days" to (g?.fire?.days?.toString() ?: ""), "spend" to (g?.fire?.spend ?: ""),
+        "birth" to (g?.fire?.birth ?: ""), "fireDate" to (g?.fire?.fireDate ?: ""), "contribution" to (g?.fire?.contribution ?: ""), "period" to (g?.fire?.period ?: Period.MONTH).name, "days" to (g?.fire?.days?.toString() ?: ""), "spend" to (g?.fire?.spend ?: ""), "contributionGrowth" to (g?.fire?.contributionGrowth ?: ""),
         "inflation" to (g?.fire?.inflation ?: ""), "inflationOptimistic" to (g?.fire?.inflationOptimistic ?: ""), "inflationPessimistic" to (g?.fire?.inflationPessimistic ?: ""), "growth" to (g?.fire?.growth ?: ""), "growthOptimistic" to (g?.fire?.growthOptimistic ?: ""), "growthPessimistic" to (g?.fire?.growthPessimistic ?: ""), "withdrawal" to (g?.fire?.withdrawal ?: ""), "life" to (g?.fire?.life?.toString() ?: ""),
     ) }
     val fields=remember { mutableStateMapOf<String,String>().apply { putAll(initial) } }
@@ -728,7 +728,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                 fun opt(key: String)=fields.getValue(key).trim().replace(',','.').takeIf { it.isNotBlank() }
                 fun int(key: String)=opt(key)?.let { it.toIntOrNull() ?: error(tr("Invalid FIRE settings")) }
                 // ponytail: FIRE amounts are not converted on a currency change; a blank target or date gets a placeholder that solvedFire() overwrites.
-                val fire=if(fields.getValue("type")=="FIRE") Fire(opt("birth"),opt("fireDate"),opt("contribution"),Period.valueOf(fields.getValue("period")),int("days"),opt("spend"),opt("target"),opt("inflation"),opt("inflationOptimistic"),opt("inflationPessimistic"),opt("growth"),opt("growthOptimistic"),opt("growthPessimistic"),opt("withdrawal"),int("life")) else null
+                val fire=if(fields.getValue("type")=="FIRE") Fire(opt("birth"),opt("fireDate"),opt("contribution"),Period.valueOf(fields.getValue("period")),int("days"),opt("spend"),opt("target"),opt("inflation"),opt("inflationOptimistic"),opt("inflationPessimistic"),opt("growth"),opt("growthOptimistic"),opt("growthPessimistic"),opt("withdrawal"),int("life"),opt("contributionGrowth")) else null
                 val target=if(fire!=null) fire.target ?: g?.target ?: "1" else if(convert) converted(requireNotNull(g?.target)) else number("target")
                 val due=fire?.fireDate ?: fields.getValue("due")
                 val item=Goal(g?.id ?: newId,name,target,currency,due,g?.takeIf { it.due==due }?.priority ?: 0,g?.archived ?: false,fire)
@@ -886,6 +886,7 @@ private fun limitLabel(mode: Limit)=when(mode) { Limit.AUTO -> tr("Auto — up t
                                 field("contribution",tr("I can invest · blank to derive"),true)
                                 Choice(tr("per"),fields.getValue("period"),Period.entries.map { it.name },!saving,{ periodLabel(Period.valueOf(it)) }) { fields["period"]=it; error=null }
                                 if(fields.getValue("period")==Period.DAYS.name) field("days",tr("Days"),true)
+                                field("contributionGrowth",tr("Contribution growth % per year · blank = inflation"),true)
                                 field("spend",tr("Spend per month after FIRE · blank to derive"),true)
                                 field("target",tr("Amount to have after FIRE · blank to derive"),true)
                                 Note(tr("All amounts are in today's money of the goal currency. Blank fields are derived from the others when possible."))

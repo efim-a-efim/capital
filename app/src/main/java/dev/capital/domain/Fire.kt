@@ -74,6 +74,7 @@ fun Portfolio.fire(goal: Goal, today: LocalDate = LocalDate.now()): FireOutcome 
 // ponytail: whole months from today; a FIRE date inside the current month counts as today.
 private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: LocalDate?, fireDate: LocalDate?, life: Long, today: LocalDate): FireResult {
     val g = (1 + rates.growth.toDouble() / 100).pow(1 / 12.0); val inf = 1 + rates.inflation.toDouble() / 100; val w = rates.withdrawal.toDouble() / 100
+    val raise = f.contributionGrowth?.decimal()?.toDouble()?.let { 1 + it / 100 } ?: inf
     var target = f.target?.decimal()?.toDouble() ?: f.spend?.decimal()?.toDouble()?.let { it * 12 / w }
     var spend = f.spend?.decimal()?.toDouble() ?: target?.let { it * w / 12 }
     fun months(d: LocalDate) = ChronoUnit.MONTHS.between(today, d).toInt().coerceAtLeast(0)
@@ -82,15 +83,15 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
     fun age(d: LocalDate) = birth?.let { ChronoUnit.YEARS.between(it, d).toInt() }
     var n = fireDate?.let(::months)
     val span = maxOf(n ?: 0, months(birth?.plusYears(life) ?: (fireDate ?: today).plusYears(50)))
-    var acc = accumulate(c0, monthly ?: 0.0, g, inf, span)
+    var acc = accumulate(c0, monthly ?: 0.0, g, raise, span)
     var contribution = monthly
     var reachable = true; var draw = true; var shortfall: Double? = null; var earliest: LocalDate? = null
     when {
         n == null -> { n = (0..span).firstOrNull { acc[it] >= nominal(it) } ?: run { draw = false; reachable = false; shortfall = deflate(nominal(span) - acc[span], span); span } }
         contribution == null -> {
-            val denom = (0 until n).sumOf { k -> g.pow(n - 1 - k) * inf.pow(k / 12.0) }
+            val denom = (0 until n).sumOf { k -> g.pow(n - 1 - k) * raise.pow(k / 12.0) }
             contribution = if (denom > 0) ((nominal(n) - c0 * g.pow(n)) / denom).coerceAtLeast(0.0) else 0.0
-            acc = accumulate(c0, contribution, g, inf, span)
+            acc = accumulate(c0, contribution, g, raise, span)
         }
         target == null -> { target = deflate(acc[n], n); spend = target * w / 12 }
         else -> {
