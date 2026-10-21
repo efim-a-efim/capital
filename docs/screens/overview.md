@@ -21,4 +21,4 @@ title: Overview
 
 **Top bar.** The refresh icon reloads every wallet balance and price and spins while it works. The gear opens Settings. **?** opens this page.
 
-**Notices.** A yellow bar appears when quotes are stale or missing, when the folder has unsaved changes, or when two revisions of the folder conflict. Each notice has its own buttons; see [Sync, backup, recovery]({{ page.base }}/manual#sync-backup-recovery).
+**Notices.** A yellow bar appears when the folder has unsaved changes or when two revisions of the folder conflict; stale or missing quotes are reported on the [Settings]({{ page.base }}/screens/settings) screen. Each notice has its own buttons; see [Sync, backup, recovery]({{ page.base }}/manual#sync-backup-recovery).

@@ -387,7 +387,8 @@ private val rtlType=Typography().run {
                             Button(onClick={ copyFolder=false; model.expectReturn(); folderPicker.launch(null) }) { Text(tr("Choose or reopen folder")) }
                             Note(tr("Default currency starts as EUR. Change it and configure optional free provider keys in Settings."))
                         } else if(state.ready) {
-                            if(data.stale() || allocation.incomplete || data.incomplete(data.settings.currency)) Notice(if(allocation.incomplete || data.incomplete(data.settings.currency)) tr("Incomplete valuation — some balances or rates are unavailable. Native quantities remain visible.") else tr("Cached / stale values — refresh when online. Allocations are estimates."))
+                            // The stale / incomplete notice lives on the Settings screen only; the other screens stay uncluttered.
+                            if(section=="Settings" && (data.stale() || allocation.incomplete || data.incomplete(data.settings.currency))) Notice(if(allocation.incomplete || data.incomplete(data.settings.currency)) tr("Incomplete valuation — some balances or rates are unavailable. Native quantities remain visible.") else tr("Cached / stale values — refresh when online. Allocations are estimates."))
                             when(section) {
                                 "Overview" -> {
                                     val currency=data.settings.currency

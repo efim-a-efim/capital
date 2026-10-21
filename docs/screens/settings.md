@@ -10,6 +10,8 @@ title: Settings
 
 **What it is.** Everything that is not a record: preferences, data sources, security and the folder. Opened with the gear in the top bar; on wide screens it is a tab in the rail.
 
+**Notice.** A yellow bar at the top says when cached values are stale (refresh when online) or when a valuation is incomplete because a balance or rate is missing. It appears only here.
+
 **Preferences.** Default currency and theme (system, light, dark). The default currency values the Overview and is proposed for new buckets and goals; existing records keep their currency. **Language** switches the interface immediately; *System default* follows the device.
 
 **Free data providers.** One row per data type, each with the operator in use: BTC, ETH, TON, TRX balances; ETH, TON, TRX token lists; crypto prices; fiat rates; **Inflation** (**World Bank**, **ECB**, **OECD**, **Off**) and **Market growth** (**World Bank**, **Yahoo Finance · unofficial**, **Off**), which feed [FIRE goals]({{ page.base }}/screens/goal#fire) and keep the built-in defaults when **Off**. Tap a row to pick another operator, switch token lookups **Off** for a chain, or enter an optional API key. Keys are stored encrypted on the device and sent only to the operator that issued them. **Test sources / refresh portfolio** queries every operator with the assets you actually hold and reports what failed. No operator is ever substituted silently.
