@@ -177,7 +177,7 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
         tr("FIRE number · at the FIRE date") to { x -> m(x.targetNominal) },
         tr("Spend per month · today's money") to { x -> m(x.spend) },
         tr("Spend per month · at the FIRE date") to { x -> m(x.spendNominal) },
-        tr("Money lasts") to { x -> when { !x.reachable -> tr("short by {0}",m(x.shortfall)); x.neverEnds -> tr("money will never end 🥳"); x.beyondLife -> tr("{0} years · beyond life expectancy",x.lastsYears ?: 0); else -> tr("until {0}",date(x.lastsUntil.toString()))+ageText(x.ageAtEnd) } },
+        tr("Money lasts") to { x -> when { !x.reachable -> x.shortfall?.let { tr("short by {0}",m(it)) } ?: tr("Not reachable before {0}",date(x.fireDate.toString())); x.neverEnds -> tr("money will never end 🥳"); x.beyondLife -> tr("{0} years · beyond life expectancy",x.lastsYears ?: 0); else -> tr("until {0}",date(x.lastsUntil.toString()))+ageText(x.ageAtEnd) } },
     )
     // Values equal in all three scenarios are the user's own inputs: shown once, above the folds.
     val same=rows.filter { (_,cell) -> Scenario.entries.map { cell(r.getValue(it)) }.distinct().size==1 }
@@ -188,7 +188,7 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
     Scenario.entries.forEach { s ->
         val x=r.getValue(s); val rt=data.fireRates(goal,s)
         val badge=when { !x.reachable -> tr("Not enough money") to badgeYellow; x.neverEnds -> tr("money will never end 🥳") to badgeGreen; x.beyondLife -> tr("Money is enough") to badgeGreen; else -> tr("Not enough money") to badgeYellow }
-        BadgedItem((if(open==s.name) "▾ " else "▸ ")+scenarioName(s),tr("growth {0}% · inflation {1}%",rt.growth.text(),rt.inflation.text()),null,badge) { open=if(open==s.name) null else s.name }
+        BadgedItem((if(open==s.name) "▾ " else "▸ ")+scenarioName(s),tr("growth {0}% · inflation {1}%",rt.growth.text(),rt.inflation.text())+(if(goal.fire?.fireDate==null) " · "+(if(x.reachable) tr("FIRE on {0}",date(x.fireDate.toString()))+ageText(x.ageAtFire) else tr("Not reachable before {0}",date(x.fireDate.toString()))) else ""),null,badge) { open=if(open==s.name) null else s.name }
         if(open==s.name) {
             rows.filter { it !in same }.forEach { (label,cell) -> line(label,cell(x)) }
             if((x.shortfall?.signum() ?: 0)>0 && x.earliest!=null && x.earliest>x.fireDate) Note(tr("Short by {0} at the FIRE date · reachable on {1}",m(x.shortfall),date(x.earliest.toString())))

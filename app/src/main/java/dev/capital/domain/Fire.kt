@@ -87,7 +87,13 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
     var contribution = monthly
     var reachable = true; var draw = true; var shortfall: Double? = null; var earliest: LocalDate? = null
     when {
-        n == null -> { n = (0..span).firstOrNull { acc[it] >= nominal(it) } ?: run { draw = false; reachable = false; shortfall = deflate(nominal(span) - acc[span], span); span } }
+        n == null -> {
+            // The earliest month from which the spend lasts to the horizon (life expectancy, or 50 years without a birth date) and, when the target was given, the target is reached.
+            val given = f.target != null
+            fun survives(k: Int): Boolean { val end = birth?.let { months(it.plusYears(life)) } ?: (k + 600); var v = acc[k]; for (t in k until end) { v = v * g - spend!! * inf.pow(t / 12.0); if (v < 0) return false }; return true }
+            n = (0..span).firstOrNull { (!given || acc[it] >= nominal(it)) && survives(it) } ?: run { draw = false; reachable = false; shortfall = if (given) deflate(nominal(span) - acc[span], span) else null; span }
+            if (!given && reachable) target = deflate(acc[n!!], n!!)
+        }
         contribution == null -> {
             val denom = (0 until n).sumOf { k -> g.pow(n - 1 - k) * raise.pow(k / 12.0) }
             contribution = if (denom > 0) ((nominal(n) - c0 * g.pow(n)) / denom).coerceAtLeast(0.0) else 0.0
@@ -113,7 +119,7 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
         fireDate = fire, ageAtFire = age(fire), contribution = (contribution ?: 0.0).money(),
         target = t.money(), targetNominal = (t * inf.pow(n / 12.0)).money(), spend = s.money(), spendNominal = (s * inf.pow(n / 12.0)).money(),
         lastsUntil = lastsUntil, ageAtEnd = lastsUntil?.let(::age), lastsYears = lastsUntil?.let { ChronoUnit.YEARS.between(fire, it).toInt() },
-        beyondLife = lastsUntil != null && lastsUntil > horizon, neverEnds = neverEnds, reachable = reachable,
+        beyondLife = lastsUntil != null && lastsUntil >= horizon, neverEnds = neverEnds, reachable = reachable,
         shortfall = shortfall?.money(), earliest = earliest,
         curve = (0..curveEnd).map { today.plusMonths(it.toLong()) to deflate(path[it], it).money() },
     )

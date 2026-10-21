@@ -32,14 +32,14 @@ All amounts are in today's money of the goal currency. The screen also shows the
 
 **What is derived.**
 
-- FIRE date: from target and contribution.
+- FIRE date: the first month from which the spend lasts until life expectancy (50 years without a birth date) and, when a target is given, the target is reached. Without a target the FIRE number becomes the amount that lifetime needs.
 - Contribution: from target and FIRE date.
-- Target: from spend (spend × 12 ÷ withdrawal rate), or from FIRE date and contribution.
+- Target: from spend (spend × 12 ÷ withdrawal rate) when the FIRE date is given, or from FIRE date and contribution.
 - Spend: from target (target × withdrawal rate ÷ 12).
 
 If FIRE date, contribution and target are all given, the date is kept and the screen shows the shortfall and the earliest date that is reachable. The derived target and date are written into the goal's target and due date, so ordering, allocation, the Overview and Plans work as for any goal. They are refreshed on every edit and every refresh.
 
-**The FIRE section.** First the values that are the same in every scenario (what you entered, and the **Withdrawal rate**), one per line. Then one foldable row per scenario, **Average**, **Optimistic** and **Pessimistic**, with its growth and inflation rates and a badge: **Money is enough** (green) when the money lasts beyond life expectancy, **money will never end 🥳** (green) when it is never used up, **Not enough money** (yellow) when the FIRE date is not reachable or the money runs out earlier. Tap the row to unfold the values that differ by scenario:
+**The FIRE section.** First the values that are the same in every scenario (what you entered, and the **Withdrawal rate**), one per line. Then one foldable row per scenario, **Average**, **Optimistic** and **Pessimistic**, with its growth and inflation rates, the derived FIRE date when you left it blank, and a badge: **Money is enough** (green) when the money lasts beyond life expectancy, **money will never end 🥳** (green) when it is never used up, **Not enough money** (yellow) when the FIRE date is not reachable or the money runs out earlier. Tap the row to unfold the values that differ by scenario:
 
 | Row | Meaning |
 |---|---|

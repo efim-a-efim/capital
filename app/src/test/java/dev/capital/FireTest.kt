@@ -50,10 +50,16 @@ class FireTest {
     }
     @Test fun derivesFireDate() {
         val r = solve(zero.copy(contribution = "1000", target = "120000"))
-        assertEquals(today.plusYears(10), r.fireDate); eq("1000", r.contribution); eq("120000", r.targetNominal); eq("400", r.spend); eq("400", r.spendNominal)
+        // 400 a month for the 50-year horizon needs 240000, more than the 120000 target: the lifetime sets the date.
+        assertEquals(today.plusYears(20), r.fireDate); eq("1000", r.contribution); eq("120000", r.targetNominal); eq("400", r.spend); eq("400", r.spendNominal)
         assertTrue(r.reachable); assertNull(r.shortfall); assertNull(r.ageAtFire)
-        assertEquals(421, r.curve.size); eq("120000", r.curve[120].second); assertTrue(r.curve.last().second.signum() <= 0)
-        assertEquals(today.plusYears(10), solve(zero.copy(contribution = "12000", period = Period.YEAR, target = "120000")).fireDate)
+        assertEquals(today.plusYears(70), r.lastsUntil); assertTrue(r.beyondLife); eq("240000", r.curve[240].second)
+        assertEquals(today.plusYears(20), solve(zero.copy(contribution = "12000", period = Period.YEAR, target = "120000")).fireDate)
+        // Without a target the FIRE number is what the lifetime needs.
+        val bySpend = solve(zero.copy(contribution = "1000", spend = "400"))
+        assertEquals(today.plusYears(20), bySpend.fireDate); eq("240000", bySpend.target)
+        val late = solve(zero.copy(contribution = "1000", spend = "400", birth = today.minusYears(60).toString()))
+        assertEquals(today.plusYears(10), late.fireDate); eq("120000", late.target); assertEquals(today.plusYears(35), late.lastsUntil); assertTrue(late.beyondLife)
         val miss = solve(zero.copy(contribution = "100", target = "120000"))
         assertFalse(miss.reachable); assertEquals(today.plusYears(50), miss.fireDate); eq("60000", miss.shortfall!!); assertNull(miss.earliest); assertEquals(miss.fireDate, miss.lastsUntil); assertEquals(601, miss.curve.size)
     }
@@ -63,7 +69,7 @@ class FireTest {
         eq("0", solve(zero.copy(fireDate = today.plusYears(10).toString(), target = "120000"), cash = "200000").contribution)
     }
     @Test fun derivesTargetFromSpend() {
-        val r = solve(zero.copy(contribution = "1000", spend = "400"))
+        val r = solve(zero.copy(fireDate = today.plusYears(10).toString(), spend = "400"))
         eq("120000", r.target); eq("400", r.spend); assertEquals(today.plusYears(10), r.fireDate)
     }
     @Test fun derivesTargetFromDateAndContribution() {
@@ -110,13 +116,13 @@ class FireTest {
         assertEquals(today.plusYears(110), r.lastsUntil); assertEquals(100, r.lastsYears); assertTrue(r.beyondLife); assertEquals(65 * 12 + 1, r.curve.size)
     }
     @Test fun lastsUntilWithAge() {
-        val r = solve(zero.copy(birth = today.minusYears(30).toString(), contribution = "1000", target = "120000", spend = "1000"))
+        val r = solve(zero.copy(birth = today.minusYears(30).toString(), fireDate = today.plusYears(10).toString(), contribution = "1000", target = "120000", spend = "1000"))
         assertEquals(40, r.ageAtFire); assertEquals(today.plusYears(20), r.lastsUntil); assertEquals(50, r.ageAtEnd); assertEquals(10, r.lastsYears)
         assertFalse(r.beyondLife); assertFalse(r.neverEnds); assertEquals(241, r.curve.size)
     }
     @Test fun solvedFireWritesDerivedTargetAndDue() {
         val derived = portfolio(zero.copy(contribution = "1000", spend = "400")).solvedFire(today).goals.single()
-        assertEquals("120000", derived.target); assertEquals(today.plusYears(10).toString(), derived.due)
+        assertEquals("240000", derived.target); assertEquals(today.plusYears(20).toString(), derived.due)
         val given = portfolio(zero.copy(contribution = "1000", target = "500", fireDate = "2040-01-01")).solvedFire(today).goals.single()
         assertEquals("1000000", given.target); assertEquals("2030-01-01", given.due)
         val missing = portfolio(Fire(contribution = "1000")).solvedFire(today).goals.single()
