@@ -18,7 +18,7 @@ title: Ajustes
 
 **Brókeres.** Las cuentas de bróker y sus credenciales tienen su propia pantalla: [Brókeres]({{ page.base }}/screens/brokers).
 
-**Cotizaciones y vigencia.** Cada cotización en caché y cada serie de inflación y de crecimiento obtenida, con la fuente y la hora en que se observó y se obtuvo. Las cotizaciones desactualizadas siguen siendo utilizables y se marcan en el Resumen.
+**Cotizaciones y vigencia.** Cada cotización en caché y cada serie de inflación y de crecimiento obtenida, con la fuente y la hora en que se observó y se obtuvo. Las cotizaciones desactualizadas siguen siendo utilizables y se señalan en el aviso de la parte superior de esta pantalla.
 
 **Seguridad.** **Cifrado** cifra con una contraseña todos los archivos de la carpeta; al desactivarlo se descifran. Con el cifrado activado puede usar **Configurar PIN**, activar **Usar biometría**, elegir **Bloquear tras un tiempo en segundo plano** y **Cambiar contraseña**. No existe recuperación de contraseña. Diez PIN incorrectos eliminan el PIN; la contraseña siempre funciona. Consulte [Seguridad]({{ page.base }}/manual#security).
 

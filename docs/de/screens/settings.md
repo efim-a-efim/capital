@@ -18,7 +18,7 @@ title: Einstellungen
 
 **Broker.** Brokerkonten und ihre Zugangsdaten haben einen eigenen Bildschirm: [Broker]({{ page.base }}/screens/brokers).
 
-**Kurse und Aktualität.** Jeder zwischengespeicherte Kurs und jede abgerufene Inflations- und Wachstumsreihe, mit Quelle und dem Zeitpunkt, zu dem er ermittelt und abgerufen wurde. Veraltete Kurse bleiben nutzbar und werden in der Übersicht gekennzeichnet.
+**Kurse und Aktualität.** Jeder zwischengespeicherte Kurs und jede abgerufene Inflations- und Wachstumsreihe, mit Quelle und dem Zeitpunkt, zu dem er ermittelt und abgerufen wurde. Veraltete Kurse bleiben nutzbar und werden durch den Hinweis oben auf diesem Bildschirm gekennzeichnet.
 
 **Sicherheit.** **Verschlüsselung** verschlüsselt jede Datei im Ordner mit einem Passwort; beim Ausschalten werden sie entschlüsselt. Mit aktiver Verschlüsselung können Sie eine **PIN festlegen**, **Biometrie verwenden** aktivieren, **Zeit im Hintergrund bis zur Sperre** wählen und das **Passwort ändern**. Eine Passwortwiederherstellung gibt es nicht. Zehn falsche PIN-Eingaben entfernen die PIN; das Passwort funktioniert immer. Siehe [Sicherheit]({{ page.base }}/manual#security).
 

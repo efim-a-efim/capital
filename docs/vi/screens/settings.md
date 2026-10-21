@@ -18,7 +18,7 @@ title: Cài đặt
 
 **Môi giới.** Các tài khoản môi giới và thông tin xác thực của chúng có màn hình riêng: [Môi giới]({{ page.base }}/screens/brokers).
 
-**Giá và độ cập nhật.** Mọi giá đã lưu đệm, cùng mọi chuỗi lạm phát và tăng trưởng đã tải, kèm nguồn, thời điểm ghi nhận và thời điểm lấy về. Giá cũ vẫn được dùng và được đánh dấu trên màn hình Tổng quan.
+**Giá và độ cập nhật.** Mọi giá đã lưu đệm, cùng mọi chuỗi lạm phát và tăng trưởng đã tải, kèm nguồn, thời điểm ghi nhận và thời điểm lấy về. Giá cũ vẫn được dùng và được đánh dấu bằng thông báo ở đầu màn hình này.
 
 **Bảo mật.** **Mã hóa** mã hóa mọi tệp trong thư mục bằng mật khẩu; tắt mã hóa sẽ giải mã chúng. Khi bật mã hóa, bạn có thể **Đặt PIN**, bật **Dùng sinh trắc học**, chọn **Khóa sau thời gian ở chế độ nền** và **Đổi mật khẩu**. Không thể khôi phục mật khẩu. Nhập sai PIN mười lần sẽ xóa PIN; mật khẩu luôn dùng được. Xem [Bảo mật]({{ page.base }}/manual#security).
 

@@ -18,7 +18,7 @@ title: Paramètres
 
 **Courtiers.** Les comptes de courtage et leurs identifiants ont leur propre écran : [Courtiers]({{ page.base }}/screens/brokers).
 
-**Cours et fraîcheur des données.** Chaque cours en cache, et chaque série d’inflation et de croissance récupérée, avec la source et sa date d’observation et de récupération. Les cours obsolètes restent utilisables et sont signalés dans la Synthèse.
+**Cours et fraîcheur des données.** Chaque cours en cache, et chaque série d’inflation et de croissance récupérée, avec la source et sa date d’observation et de récupération. Les cours obsolètes restent utilisables et sont signalés par l’avertissement en haut de cet écran.
 
 **Sécurité.** Le **Chiffrement** chiffre tous les fichiers du dossier avec un mot de passe ; le désactiver les déchiffre. Lorsque le chiffrement est activé, vous pouvez **Définir un PIN**, activer **Utiliser la biométrie**, choisir **Verrouiller après un délai en arrière-plan** et **Changer le mot de passe**. Il n’existe aucune récupération du mot de passe. Dix PIN erronés suppriment le PIN ; le mot de passe fonctionne toujours. Voir [Sécurité]({{ page.base }}/manual#security).
 

@@ -18,7 +18,7 @@ title: Pengaturan
 
 **Broker.** Akun broker dan kredensialnya punya layar sendiri: [Broker]({{ page.base }}/screens/brokers).
 
-**Harga dan waktu pembaruan.** Setiap harga tersimpan, dan setiap seri inflasi dan pertumbuhan yang diambil, beserta sumber serta waktu diamati dan diambilnya. Harga yang usang tetap dapat dipakai dan ditandai di Ringkasan.
+**Harga dan waktu pembaruan.** Setiap harga tersimpan, dan setiap seri inflasi dan pertumbuhan yang diambil, beserta sumber serta waktu diamati dan diambilnya. Harga yang usang tetap dapat dipakai dan ditandai oleh pemberitahuan di bagian atas layar ini.
 
 **Keamanan.** **Enkripsi** mengenkripsi semua file di folder dengan kata sandi; menonaktifkannya akan mendekripsi file-file tersebut. Dengan enkripsi aktif, Anda dapat **Atur PIN**, mengaktifkan **Gunakan biometrik**, memilih **Kunci otomatis setelah di latar belakang**, dan **Ubah kata sandi**. Kata sandi tidak dapat dipulihkan. Sepuluh kali PIN salah akan menghapus PIN; kata sandi selalu berfungsi. Lihat [Keamanan]({{ page.base }}/manual#security).
 

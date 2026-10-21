@@ -18,7 +18,7 @@ title: Ajustes
 
 **Corretoras.** As contas de corretora e as credenciais delas têm tela própria: [Corretoras]({{ page.base }}/screens/brokers).
 
-**Cotações e atualização.** Todas as cotações em cache e todas as séries de inflação e de crescimento obtidas, com a fonte e o horário em que foram observadas e obtidas. Cotações desatualizadas continuam utilizáveis e são sinalizadas na Visão geral.
+**Cotações e atualização.** Todas as cotações em cache e todas as séries de inflação e de crescimento obtidas, com a fonte e o horário em que foram observadas e obtidas. Cotações desatualizadas continuam utilizáveis e são sinalizadas pelo aviso no topo desta tela.
 
 **Segurança.** **Criptografia** criptografa com uma senha todos os arquivos da pasta; desativá-la descriptografa os arquivos. Com a criptografia ativada, você pode usar **Definir PIN**, ativar **Usar biometria**, escolher **Bloquear após tempo em segundo plano** e **Alterar senha**. Não há recuperação de senha. Dez PINs incorretos removem o PIN; a senha sempre funciona. Veja [Segurança]({{ page.base }}/manual#security).
 
