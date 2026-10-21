@@ -701,6 +701,10 @@
  "Growth % · optimistic · now {0}": "Crecimiento % · optimista · ahora {0}",
  "Growth % · pessimistic · now {0}": "Crecimiento % · pesimista · ahora {0}",
  "Withdrawal rate % · now {0}": "Tasa de retiro % · ahora {0}",
+ "Withdrawal rate": "Tasa de retiro",
+ "Not enough money": "Dinero insuficiente",
+ "Money is enough": "Dinero suficiente",
+ "growth {0}% · inflation {1}%": "crecimiento {0}% · inflación {1}%",
  "Life expectancy · years · now {0}": "Esperanza de vida · años · ahora {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "En blanco se usa la tasa obtenida por los proveedores elegidos en Ajustes o, si no hay, el valor predeterminado integrado."
 }

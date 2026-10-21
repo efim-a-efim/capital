@@ -700,6 +700,10 @@
  "Growth % · average · now {0}": "Crescimento % · média · agora {0}",
  "Growth % · optimistic · now {0}": "Crescimento % · otimista · agora {0}",
  "Growth % · pessimistic · now {0}": "Crescimento % · pessimista · agora {0}",
+ "Withdrawal rate": "Taxa de retirada",
+ "Not enough money": "Dinheiro insuficiente",
+ "Money is enough": "Dinheiro suficiente",
+ "growth {0}% · inflation {1}%": "crescimento {0}% · inflação {1}%",
  "Withdrawal rate % · now {0}": "Taxa de retirada % · agora {0}",
  "Life expectancy · years · now {0}": "Expectativa de vida · anos · agora {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Se vazio, usa a taxa obtida pelos provedores escolhidos em Ajustes; sem ela, o padrão do app."

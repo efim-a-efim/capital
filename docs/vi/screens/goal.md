@@ -39,11 +39,11 @@ Mọi số tiền tính theo tiền hôm nay của tiền tệ mục tiêu. Màn
 
 Nếu cả ngày FIRE, khoản đóng góp và số tiền mục tiêu đều được nhập, ngày được giữ nguyên và màn hình hiển thị phần còn thiếu cùng ngày sớm nhất có thể đạt được. Số tiền mục tiêu và ngày được tính ra sẽ được ghi vào số tiền mục tiêu và hạn hoàn thành của mục tiêu, nên việc sắp xếp, phân bổ, màn hình Tổng quan và Kế hoạch hoạt động như với mọi mục tiêu. Chúng được cập nhật sau mỗi lần chỉnh sửa và mỗi lần làm mới.
 
-**Phần FIRE.** Một bảng có mỗi cột cho một kịch bản: **Trung bình**, **Lạc quan** và **Bi quan**:
+**Phần FIRE.** Trước tiên là các giá trị giống nhau ở mọi kịch bản (những gì bạn đã nhập và **Tỷ lệ rút tiền**), mỗi giá trị một dòng. Sau đó là một hàng có thể gập cho mỗi kịch bản, **Trung bình**, **Lạc quan** và **Bi quan**, kèm tỷ lệ tăng trưởng, lạm phát và một huy hiệu: **Đủ tiền** (xanh lá) khi tiền đủ dùng vượt quá tuổi thọ, **tiền sẽ không bao giờ hết 🥳** (xanh lá) khi tiền không bao giờ cạn, **Không đủ tiền** (vàng) khi chưa đạt được ngày FIRE hoặc tiền hết sớm hơn. Chạm vào hàng để mở ra các giá trị khác nhau theo kịch bản:
 
 | Hàng | Ý nghĩa |
 |---|---|
-| **Ngày FIRE** | Ngày đó, kèm "{N} tuổi" khi đã biết ngày sinh |
+| **Ngày FIRE** | Ngày đó, kèm "{N} tuổi" khi đã biết ngày sinh, hoặc *Không đạt được trước <ngày>* |
 | **Đóng góp mỗi tháng** | Số tiền phải đầu tư mỗi tháng |
 | **Số tiền FIRE · tiền hôm nay** | Số tiền cần có, đúng như trình chỉnh sửa ghi |
 | **Số tiền FIRE · tại ngày FIRE** | Cùng số tiền đó sau khi tính lạm phát |
@@ -51,7 +51,7 @@ Nếu cả ngày FIRE, khoản đóng góp và số tiền mục tiêu đều đ
 | **Chi tiêu mỗi tháng · tại ngày FIRE** | Cùng khoản chi đó sau khi tính lạm phát |
 | **Tiền đủ dùng** | *đến <ngày> · {N} tuổi*, *{N} năm · vượt quá tuổi thọ*, *tiền sẽ không bao giờ hết 🥳*, hoặc *thiếu …* khi chưa đạt được ngày đó |
 
-Bên dưới bảng là tỷ lệ của từng kịch bản ("Trung bình: tăng trưởng 7% · lạm phát 3% · rút tiền 4%") và dòng "Tỷ lệ: …" nêu nhà cung cấp mà chúng đến từ, hoặc *mặc định tích hợp*. Biểu đồ bên dưới cho thấy tiền giảm dần: giá trị của tiền theo tiền hôm nay, từ hôm nay đến khi tiền hết hoặc hết khoảng thời gian tính toán, với ba đường màu, mỗi kịch bản một đường. Đường nét đứt đánh dấu ngày FIRE. Ghi chú bên dưới ghi *Dự báo dựa trên số liệu của chính bạn; không đưa ra khuyến nghị nào.* Trên thẻ [Mục tiêu]({{ page.base }}/screens/goals), mục tiêu hiển thị *FIRE vào <ngày> · {N} tuổi*, hoặc *không đạt được*.
+Bên dưới các hàng gập, dòng "Tỷ lệ: …" nêu nhà cung cấp mà các tỷ lệ đến từ, hoặc *mặc định tích hợp*. Biểu đồ bên dưới cho thấy tiền giảm dần: giá trị của tiền theo tiền hôm nay, từ hôm nay đến khi tiền hết hoặc hết khoảng thời gian tính toán, với ba đường màu, mỗi kịch bản một đường. Đường nét đứt đánh dấu ngày FIRE. Ghi chú bên dưới ghi *Dự báo dựa trên số liệu của chính bạn; không đưa ra khuyến nghị nào.* Trên thẻ [Mục tiêu]({{ page.base }}/screens/goals), mục tiêu hiển thị *FIRE vào <ngày> · {N} tuổi*, hoặc *không đạt được*.
 
 **Cách tính.** Theo từng bước một tháng. Đến ngày FIRE, khoản đóng góp tăng theo **Mức tăng khoản đầu tư % mỗi năm** (theo lạm phát khi để trống, nên giữ nguyên sức mua), và tiền tăng trưởng theo tỷ lệ của kịch bản. Sau ngày FIRE, chi tiêu tăng theo lạm phát và phần còn lại tiếp tục tăng trưởng theo tỷ lệ của kịch bản. Khoảng thời gian tính toán là ngày sinh cộng tuổi thọ (mặc định 95), hoặc 50 năm sau ngày FIRE nếu không có ngày sinh. *Tiền sẽ không bao giờ hết* nghĩa là tiền không bị dùng hết trong 200 năm và vào cuối kỳ có giá trị theo tiền hôm nay ít nhất bằng tại ngày FIRE.
 

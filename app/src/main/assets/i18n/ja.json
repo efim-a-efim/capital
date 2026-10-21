@@ -701,6 +701,10 @@
  "Growth % · optimistic · now {0}": "成長率 % · 楽観 · 現在 {0}",
  "Growth % · pessimistic · now {0}": "成長率 % · 悲観 · 現在 {0}",
  "Withdrawal rate % · now {0}": "取り崩し率 % · 現在 {0}",
+ "Withdrawal rate": "取り崩し率",
+ "Not enough money": "お金が足りません",
+ "Money is enough": "お金は足ります",
+ "growth {0}% · inflation {1}%": "成長率 {0}% · インフレ率 {1}%",
  "Life expectancy · years · now {0}": "想定寿命 · 年 · 現在 {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "空欄の場合は、設定で選んだプロバイダが取得したレートを使い、なければ組み込みの初期値を使います。"
 }

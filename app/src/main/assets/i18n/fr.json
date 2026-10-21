@@ -700,6 +700,10 @@
  "Growth % · average · now {0}": "Croissance % · moyenne · actuellement {0}",
  "Growth % · optimistic · now {0}": "Croissance % · optimiste · actuellement {0}",
  "Growth % · pessimistic · now {0}": "Croissance % · pessimiste · actuellement {0}",
+ "Withdrawal rate": "Taux de retrait",
+ "Not enough money": "Argent insuffisant",
+ "Money is enough": "L’argent suffit",
+ "growth {0}% · inflation {1}%": "croissance {0} % · inflation {1} %",
  "Withdrawal rate % · now {0}": "Taux de retrait % · actuellement {0}",
  "Life expectancy · years · now {0}": "Espérance de vie · années · actuellement {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Vide : le taux récupéré auprès des fournisseurs choisis dans les Paramètres, sinon la valeur par défaut intégrée."

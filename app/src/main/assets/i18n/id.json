@@ -701,6 +701,10 @@
  "Growth % · optimistic · now {0}": "Pertumbuhan % · optimis · saat ini {0}",
  "Growth % · pessimistic · now {0}": "Pertumbuhan % · pesimis · saat ini {0}",
  "Withdrawal rate % · now {0}": "Tingkat penarikan % · saat ini {0}",
+ "Withdrawal rate": "Tingkat penarikan",
+ "Not enough money": "Uang tidak cukup",
+ "Money is enough": "Uang cukup",
+ "growth {0}% · inflation {1}%": "pertumbuhan {0}% · inflasi {1}%",
  "Life expectancy · years · now {0}": "Harapan hidup · tahun · saat ini {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Jika kosong, dipakai suku yang diambil oleh penyedia yang dipilih di Pengaturan, atau bawaan aplikasi."
 }

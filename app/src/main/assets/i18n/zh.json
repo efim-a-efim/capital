@@ -702,5 +702,9 @@
  "Growth % · pessimistic · now {0}": "增长率 % · 悲观 · 当前 {0}",
  "Withdrawal rate % · now {0}": "提取率 % · 当前 {0}",
  "Life expectancy · years · now {0}": "预期寿命 · 年 · 当前 {0}",
+  "Withdrawal rate": "提取率",
+ "Not enough money": "资金不足",
+ "Money is enough": "资金充足",
+ "growth {0}% · inflation {1}%": "增长 {0}% · 通胀 {1}%",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "留空则使用“设置”中所选数据源获取的比率，否则使用内置默认值。"
 }

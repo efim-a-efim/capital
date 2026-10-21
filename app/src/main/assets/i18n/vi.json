@@ -700,6 +700,10 @@
  "Growth % · average · now {0}": "Tăng trưởng % · trung bình · hiện {0}",
  "Growth % · optimistic · now {0}": "Tăng trưởng % · lạc quan · hiện {0}",
  "Growth % · pessimistic · now {0}": "Tăng trưởng % · bi quan · hiện {0}",
+ "Withdrawal rate": "Tỷ lệ rút tiền",
+ "Not enough money": "Không đủ tiền",
+ "Money is enough": "Đủ tiền",
+ "growth {0}% · inflation {1}%": "tăng trưởng {0}% · lạm phát {1}%",
  "Withdrawal rate % · now {0}": "Tỷ lệ rút tiền % · hiện {0}",
  "Life expectancy · years · now {0}": "Tuổi thọ · năm · hiện {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Để trống sẽ dùng tỷ lệ do các nhà cung cấp chọn trong Cài đặt tải về, nếu không có thì dùng mặc định tích hợp."

@@ -39,11 +39,11 @@ Todos os valores estão em valores de hoje, na moeda da meta. A tela também mos
 
 Se a data FIRE, o aporte e o valor-alvo forem todos informados, a data é mantida e a tela mostra o que falta e a data mais próxima que é alcançável. O valor-alvo e a data calculados são gravados no valor-alvo e na data de vencimento da meta; assim, a ordem, a alocação, a Visão geral e os Planos funcionam como em qualquer meta. Eles são atualizados a cada edição e a cada atualização.
 
-**A seção FIRE.** Uma tabela com uma coluna por cenário, **Média**, **Otimista** e **Pessimista**:
+**A seção FIRE.** Primeiro vêm os valores iguais em todos os cenários (o que você informou e a **Taxa de retirada**), um por linha. Depois, uma linha expansível por cenário, **Média**, **Otimista** e **Pessimista**, com suas taxas de crescimento e de inflação e um selo: **Dinheiro suficiente** (verde) quando o dinheiro dura além da expectativa de vida, **o dinheiro nunca acaba 🥳** (verde) quando ele nunca se esgota, **Dinheiro insuficiente** (amarelo) quando a data FIRE é inalcançável ou o dinheiro acaba antes. Toque na linha para expandir os valores que mudam conforme o cenário:
 
 | Linha | Significado |
 |---|---|
-| **Data FIRE** | A data, com "N anos" quando a data de nascimento é conhecida |
+| **Data FIRE** | A data, com "N anos" quando a data de nascimento é conhecida, ou *Inalcançável antes de <data>* |
 | **Aporte por mês** | O que precisa ser investido a cada mês |
 | **Montante FIRE · valores de hoje** | O valor a ter, como o editor o informa |
 | **Montante FIRE · na data FIRE** | O mesmo valor depois da inflação |
@@ -51,7 +51,7 @@ Se a data FIRE, o aporte e o valor-alvo forem todos informados, a data é mantid
 | **Gasto por mês · na data FIRE** | O mesmo gasto depois da inflação |
 | **O dinheiro dura** | *até <data> · N anos*, *N anos · além da expectativa de vida*, *o dinheiro nunca acaba 🥳* ou *faltam …* quando a data não é alcançável |
 
-Abaixo da tabela ficam as taxas de cada cenário ("Média: crescimento 7% · inflação 3% · retirada 4%") e uma linha "Taxas: …" com o provedor de onde vêm, ou *padrões do app*. O gráfico abaixo mostra o dinheiro diminuindo: o valor do dinheiro em valores de hoje, de agora até o fim do dinheiro ou do horizonte, com três curvas coloridas, uma por cenário. A linha tracejada marca a data FIRE. A nota abaixo diz *Uma projeção com os seus próprios números; não recomenda nada.* Na aba [Metas]({{ page.base }}/screens/goals), a meta mostra *FIRE em <data> · N anos*, ou *inalcançável*.
+Abaixo das linhas expansíveis, uma linha "Taxas: …" indica o provedor de onde vêm as taxas, ou *padrões do app*. O gráfico abaixo mostra o dinheiro diminuindo: o valor do dinheiro em valores de hoje, de agora até o fim do dinheiro ou do horizonte, com três curvas coloridas, uma por cenário. A linha tracejada marca a data FIRE. A nota abaixo diz *Uma projeção com os seus próprios números; não recomenda nada.* Na aba [Metas]({{ page.base }}/screens/goals), a meta mostra *FIRE em <data> · N anos*, ou *inalcançável*.
 
 **Como é calculado.** Em passos mensais. Até a data FIRE, o aporte cresce conforme **Crescimento do aporte % por ano** (com a inflação quando vazio, mantendo assim o poder de compra), e o dinheiro cresce à taxa do cenário. Depois da data FIRE, o gasto cresce com a inflação e o que sobra continua crescendo à taxa do cenário. O horizonte é a data de nascimento mais a expectativa de vida (95 por padrão), ou 50 anos após a data FIRE sem data de nascimento. *O dinheiro nunca acaba* significa que o dinheiro não se esgota em 200 anos e que, no fim, vale em valores de hoje pelo menos tanto quanto na data FIRE.
 

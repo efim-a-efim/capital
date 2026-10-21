@@ -39,11 +39,11 @@ Alle Beträge verstehen sich in heutiger Kaufkraft der Zielwährung. Der Bildsch
 
 Sind FIRE-Datum, Beitrag und Zielbetrag alle angegeben, bleibt das Datum erhalten, und der Bildschirm zeigt die Lücke und das früheste erreichbare Datum. Der berechnete Zielbetrag und das berechnete Datum werden als Zielbetrag und Fälligkeitsdatum des Ziels gespeichert; Reihenfolge, Zuordnung, Übersicht und Pläne funktionieren daher wie bei jedem Ziel. Sie werden bei jeder Bearbeitung und jeder Aktualisierung neu berechnet.
 
-**Der Abschnitt FIRE.** Eine Tabelle mit je einer Spalte pro Szenario, **Durchschnitt**, **Optimistisch** und **Pessimistisch**:
+**Der Abschnitt FIRE.** Zuerst die Werte, die in jedem Szenario gleich sind (Ihre Eingaben und die **Entnahmerate**), je einer pro Zeile. Dann pro Szenario eine aufklappbare Zeile, **Durchschnitt**, **Optimistisch** und **Pessimistisch**, mit Wachstums- und Inflationssatz und einem Abzeichen: **Geld reicht** (grün), wenn das Geld über die Lebenserwartung hinaus reicht, **Geld geht nie aus 🥳** (grün), wenn es nie aufgebraucht wird, **Nicht genug Geld** (gelb), wenn das FIRE-Datum nicht erreichbar ist oder das Geld früher ausgeht. Tippen Sie auf die Zeile, um die Werte aufzuklappen, die sich je Szenario unterscheiden:
 
 | Zeile | Bedeutung |
 |---|---|
-| **FIRE-Datum** | Das Datum, mit „Alter N“, wenn das Geburtsdatum bekannt ist |
+| **FIRE-Datum** | Das Datum, mit „Alter N“, wenn das Geburtsdatum bekannt ist, oder *Nicht erreichbar vor <Datum>* |
 | **Beitrag pro Monat** | Was jeden Monat investiert werden muss |
 | **FIRE-Betrag · heutige Kaufkraft** | Der Betrag, den Sie haben sollen, wie ihn der Editor angibt |
 | **FIRE-Betrag · zum FIRE-Datum** | Derselbe Betrag nach Inflation |
@@ -51,7 +51,7 @@ Sind FIRE-Datum, Beitrag und Zielbetrag alle angegeben, bleibt das Datum erhalte
 | **Ausgaben pro Monat · zum FIRE-Datum** | Dieselben Ausgaben nach Inflation |
 | **Geld reicht** | *bis <Datum> · Alter N*, *N Jahre · über die Lebenserwartung hinaus*, *Geld geht nie aus 🥳* oder *es fehlen …*, wenn das Datum nicht erreichbar ist |
 
-Unter der Tabelle stehen die Sätze jedes Szenarios („Durchschnitt: Wachstum 7% · Inflation 3% · Entnahme 4%“) und eine Zeile „Sätze: …“ mit dem Anbieter, von dem sie stammen, oder *eingebaute Standardwerte*. Das Diagramm darunter zeigt den Verlauf des Geldes: den Wert in heutiger Kaufkraft von heute bis zum Ende des Geldes oder zum Horizont, mit drei farbigen Kurven, eine pro Szenario. Die gestrichelte Linie markiert das FIRE-Datum. Der Hinweis darunter lautet *Eine Projektion auf Basis Ihrer eigenen Zahlen; sie empfiehlt nichts.* Im Tab [Ziele]({{ page.base }}/screens/goals) zeigt das Ziel *FIRE am <Datum> · Alter N* oder *nicht erreichbar*.
+Unter den Zeilen nennt eine Zeile „Sätze: …“ den Anbieter, von dem die Sätze stammen, oder *eingebaute Standardwerte*. Das Diagramm darunter zeigt den Verlauf des Geldes: den Wert in heutiger Kaufkraft von heute bis zum Ende des Geldes oder zum Horizont, mit drei farbigen Kurven, eine pro Szenario. Die gestrichelte Linie markiert das FIRE-Datum. Der Hinweis darunter lautet *Eine Projektion auf Basis Ihrer eigenen Zahlen; sie empfiehlt nichts.* Im Tab [Ziele]({{ page.base }}/screens/goals) zeigt das Ziel *FIRE am <Datum> · Alter N* oder *nicht erreichbar*.
 
 **So wird gerechnet.** In Monatsschritten. Bis zum FIRE-Datum wächst der Beitrag um **Beitragswachstum % pro Jahr** (leer: mit der Inflation, behält also seine Kaufkraft), und das Geld wächst mit dem Satz des Szenarios. Nach dem FIRE-Datum wachsen die Ausgaben mit der Inflation, und der Rest wächst weiter mit dem Satz des Szenarios. Der Horizont ist das Geburtsdatum plus Lebenserwartung (standardmäßig 95) oder, ohne Geburtsdatum, 50 Jahre nach dem FIRE-Datum. *Geld geht nie aus* bedeutet: Das Geld ist in 200 Jahren nicht aufgebraucht und am Ende in heutiger Kaufkraft mindestens so viel wert wie zum FIRE-Datum.
 

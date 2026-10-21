@@ -39,11 +39,11 @@ Todos los importes están en dinero de hoy de la moneda de la meta. La pantalla 
 
 Si se indican la fecha FIRE, la aportación y el objetivo, se mantiene la fecha y la pantalla muestra lo que falta y la fecha más próxima alcanzable. El objetivo y la fecha calculados se escriben en el objetivo y la fecha de vencimiento de la meta, de modo que el orden, la asignación, el Resumen y los Planes funcionan como con cualquier meta. Se actualizan en cada edición y en cada actualización.
 
-**La sección FIRE.** Una tabla con una columna por escenario, **Medio**, **Optimista** y **Pesimista**:
+**La sección FIRE.** Primero los valores que son iguales en todos los escenarios (lo que usted indicó y la **Tasa de retiro**), uno por línea. Después una fila plegable por escenario, **Medio**, **Optimista** y **Pesimista**, con sus tasas de crecimiento e inflación y una insignia: **Dinero suficiente** (verde) cuando el dinero dura más allá de la esperanza de vida, **el dinero nunca se acabará 🥳** (verde) cuando nunca se agota, **Dinero insuficiente** (amarillo) cuando la fecha FIRE es inalcanzable o el dinero se acaba antes. Toque la fila para desplegar los valores que difieren según el escenario:
 
 | Fila | Significado |
 |---|---|
-| **Fecha FIRE** | La fecha, con «N años» cuando se conoce la fecha de nacimiento |
+| **Fecha FIRE** | La fecha, con «N años» cuando se conoce la fecha de nacimiento, o *Inalcanzable antes del <fecha>* |
 | **Aportación al mes** | Lo que debe invertirse cada mes |
 | **Importe FIRE · dinero de hoy** | El importe necesario, tal como lo indica el editor |
 | **Importe FIRE · en la fecha FIRE** | El mismo importe tras la inflación |
@@ -51,7 +51,7 @@ Si se indican la fecha FIRE, la aportación y el objetivo, se mantiene la fecha 
 | **Gasto al mes · en la fecha FIRE** | El mismo gasto tras la inflación |
 | **El dinero dura** | *hasta el <fecha> · N años*, *N años · más allá de la esperanza de vida*, *el dinero nunca se acabará 🥳* o *faltan …* cuando la fecha no es alcanzable |
 
-Bajo la tabla figuran las tasas de cada escenario («Medio: crecimiento 7% · inflación 3% · retiro 4%») y una línea «Tasas: …» con el proveedor del que proceden, o *valores predeterminados integrados*. El gráfico de debajo muestra cómo se gasta el dinero: su valor en dinero de hoy desde hoy hasta que se acaba o hasta el horizonte, con tres curvas de colores, una por escenario. La línea discontinua marca la fecha FIRE. La nota de debajo dice *Una proyección con sus propias cifras; no recomienda nada.* En la pestaña [Metas]({{ page.base }}/screens/goals) la meta muestra *FIRE el <fecha> · N años* o *inalcanzable*.
+Bajo los pliegues, una línea «Tasas: …» indica el proveedor del que proceden las tasas, o *valores predeterminados integrados*. El gráfico de debajo muestra cómo se gasta el dinero: su valor en dinero de hoy desde hoy hasta que se acaba o hasta el horizonte, con tres curvas de colores, una por escenario. La línea discontinua marca la fecha FIRE. La nota de debajo dice *Una proyección con sus propias cifras; no recomienda nada.* En la pestaña [Metas]({{ page.base }}/screens/goals) la meta muestra *FIRE el <fecha> · N años* o *inalcanzable*.
 
 **Cómo se calcula.** En pasos mensuales. Hasta la fecha FIRE la aportación crece según **Crecimiento de la aportación % al año · en blanco = inflación** (según la inflación si está en blanco, de modo que mantiene su poder adquisitivo), y el dinero crece a la tasa del escenario. Después de la fecha FIRE el gasto crece con la inflación y lo que queda sigue creciendo a la tasa del escenario. El horizonte es la fecha de nacimiento más la esperanza de vida (95 por defecto), o 50 años después de la fecha FIRE si no hay fecha de nacimiento. *El dinero nunca se acabará* significa que el dinero no se agota en 200 años y que al final vale, en dinero de hoy, al menos tanto como en la fecha FIRE.
 

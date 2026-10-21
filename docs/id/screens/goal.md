@@ -39,11 +39,11 @@ Semua jumlah dalam nilai uang hari ini dalam mata uang tujuan. Layar juga menamp
 
 Jika tanggal FIRE, kontribusi, dan target semuanya diisi, tanggal dipertahankan dan layar menampilkan kekurangan serta tanggal paling awal yang dapat dicapai. Target dan tanggal hasil hitungan ditulis ke target dan tenggat tujuan, sehingga urutan, alokasi, Ringkasan, dan Rencana bekerja seperti pada tujuan lain. Keduanya diperbarui pada setiap pengeditan dan setiap pembaruan.
 
-**Bagian FIRE.** Tabel dengan satu kolom per skenario, **Rata-rata**, **Optimis**, dan **Pesimis**:
+**Bagian FIRE.** Pertama nilai yang sama di setiap skenario (yang Anda masukkan, dan **Tingkat penarikan**), satu per baris. Lalu satu baris yang dapat dilipat per skenario, **Rata-rata**, **Optimis**, dan **Pesimis**, dengan suku pertumbuhan dan inflasinya serta sebuah lencana: **Uang cukup** (hijau) bila uang bertahan melampaui harapan hidup, **uang tidak akan habis 🥳** (hijau) bila uang tidak pernah habis, **Uang tidak cukup** (kuning) bila tanggal FIRE tidak tercapai atau uang habis lebih awal. Ketuk baris untuk membuka nilai yang berbeda di tiap skenario:
 
 | Baris | Arti |
 |---|---|
-| **Tanggal FIRE** | Tanggalnya, dengan "usia N" bila tanggal lahir diketahui |
+| **Tanggal FIRE** | Tanggalnya, dengan "usia N" bila tanggal lahir diketahui, atau *Tidak tercapai sebelum <tanggal>* |
 | **Kontribusi per bulan** | Jumlah yang harus diinvestasikan setiap bulan |
 | **Dana FIRE · nilai uang hari ini** | Dana yang harus dimiliki, seperti yang dinyatakan di editor |
 | **Dana FIRE · pada tanggal FIRE** | Dana yang sama setelah inflasi |
@@ -51,7 +51,7 @@ Jika tanggal FIRE, kontribusi, dan target semuanya diisi, tanggal dipertahankan 
 | **Pengeluaran per bulan · pada tanggal FIRE** | Pengeluaran yang sama setelah inflasi |
 | **Uang bertahan** | *hingga <tanggal> · usia N*, *N tahun · melampaui harapan hidup*, *uang tidak akan habis 🥳*, atau *kurang …* bila tanggal tidak tercapai |
 
-Di bawah tabel terdapat suku tiap skenario ("Rata-rata: pertumbuhan 7% · inflasi 3% · penarikan 4%") dan baris "Suku: …" yang menyebut penyedia asalnya, atau *bawaan aplikasi*. Grafik di bawahnya adalah grafik penyusutan: nilai uang dalam uang hari ini dari sekarang hingga uang habis atau hingga akhir cakrawala, dengan tiga kurva berwarna, satu per skenario. Garis putus-putus menandai tanggal FIRE. Catatan di bawahnya berbunyi *Proyeksi berdasarkan angka Anda sendiri; tidak merekomendasikan apa pun.* Di tab [Tujuan]({{ page.base }}/screens/goals), tujuan tersebut menampilkan *FIRE pada <tanggal> · usia N*, atau *tidak tercapai*.
+Di bawah lipatan, baris "Suku: …" menyebut penyedia asal suku tersebut, atau *bawaan aplikasi*. Grafik di bawahnya adalah grafik penyusutan: nilai uang dalam uang hari ini dari sekarang hingga uang habis atau hingga akhir cakrawala, dengan tiga kurva berwarna, satu per skenario. Garis putus-putus menandai tanggal FIRE. Catatan di bawahnya berbunyi *Proyeksi berdasarkan angka Anda sendiri; tidak merekomendasikan apa pun.* Di tab [Tujuan]({{ page.base }}/screens/goals), tujuan tersebut menampilkan *FIRE pada <tanggal> · usia N*, atau *tidak tercapai*.
 
 **Cara menghitung.** Dalam langkah bulanan. Hingga tanggal FIRE, kontribusi naik sebesar **Kontribusi bertambah % per tahun** (mengikuti inflasi bila dikosongkan, sehingga daya belinya tetap terjaga), dan uang tumbuh sesuai suku skenario. Setelah tanggal FIRE, pengeluaran naik mengikuti inflasi dan sisanya terus tumbuh sesuai suku skenario. Cakrawalanya adalah tanggal lahir ditambah harapan hidup (bawaan 95), atau 50 tahun setelah tanggal FIRE bila tanggal lahir tidak diisi. *Uang tidak akan habis* berarti uang tidak terpakai habis dalam 200 tahun dan nilainya di akhir, dalam uang hari ini, setidaknya sama dengan pada tanggal FIRE.
 

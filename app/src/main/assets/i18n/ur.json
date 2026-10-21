@@ -700,6 +700,10 @@
  "Growth % · average · now {0}": "نمو % · اوسط · ابھی ⁨{0}⁩",
  "Growth % · optimistic · now {0}": "نمو % · پرامید · ابھی ⁨{0}⁩",
  "Growth % · pessimistic · now {0}": "نمو % · مایوس کن · ابھی ⁨{0}⁩",
+ "Withdrawal rate": "نکلوانے کی شرح",
+ "Not enough money": "رقم کافی نہیں",
+ "Money is enough": "رقم کافی ہے",
+ "growth {0}% · inflation {1}%": "نمو ⁨{0}⁩% · مہنگائی ⁨{1}⁩%",
  "Withdrawal rate % · now {0}": "نکلوانے کی شرح % · ابھی ⁨{0}⁩",
  "Life expectancy · years · now {0}": "متوقع عمر · سال · ابھی ⁨{0}⁩",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "خالی چھوڑنے پر سیٹنگز میں منتخب پرووائیڈرز سے حاصل کی گئی شرح استعمال ہوتی ہے، ورنہ پہلے سے طے شدہ شرح۔"

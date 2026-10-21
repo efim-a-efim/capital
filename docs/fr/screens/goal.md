@@ -39,11 +39,11 @@ Tous les montants sont en valeur d’aujourd’hui, dans la devise de l’object
 
 Si la date FIRE, le versement et la cible sont tous renseignés, la date est conservée et l’écran affiche le manque et la date la plus proche qui soit atteignable. La cible et la date calculées sont écrites dans la cible et l’échéance de l’objectif ; le classement, l’affectation, la Synthèse et les Prévisions fonctionnent donc comme pour tout objectif. Elles sont recalculées à chaque modification et à chaque actualisation.
 
-**La section FIRE.** Un tableau avec une colonne par scénario, **Moyen**, **Optimiste** et **Pessimiste** :
+**La section FIRE.** D’abord les valeurs identiques dans tous les scénarios (ce que vous avez saisi, et le **Taux de retrait**), une par ligne. Ensuite une ligne dépliable par scénario, **Moyen**, **Optimiste** et **Pessimiste**, avec ses taux de croissance et d’inflation et un badge : **L’argent suffit** (vert) lorsque l’argent dure au-delà de l’espérance de vie, **l’argent ne s’épuisera jamais 🥳** (vert) lorsqu’il n’est jamais épuisé, **Argent insuffisant** (jaune) lorsque la date FIRE n’est pas atteignable ou que l’argent s’épuise plus tôt. Touchez la ligne pour déplier les valeurs qui diffèrent selon le scénario :
 
 | Ligne | Signification |
 |---|---|
-| **Date FIRE** | La date, avec « N ans » lorsque la date de naissance est connue |
+| **Date FIRE** | La date, avec « N ans » lorsque la date de naissance est connue, ou *Inatteignable avant le <date>* |
 | **Versement par mois** | Ce qu’il faut investir chaque mois |
 | **Montant FIRE · valeur d’aujourd’hui** | Le montant à avoir, tel que l’éditeur l’indique |
 | **Montant FIRE · à la date FIRE** | Le même montant après inflation |
@@ -51,7 +51,7 @@ Si la date FIRE, le versement et la cible sont tous renseignés, la date est con
 | **Dépense par mois · à la date FIRE** | La même dépense après inflation |
 | **L’argent dure** | *jusqu’au <date> · N ans*, *N ans · au-delà de l’espérance de vie*, *l’argent ne s’épuisera jamais 🥳*, ou *il manque …* lorsque la date n’est pas atteignable |
 
-Sous le tableau figurent les taux de chaque scénario (« Moyen : croissance 7 % · inflation 3 % · retrait 4 % ») et une ligne « Taux : … » qui nomme le fournisseur dont ils proviennent, ou *valeurs par défaut intégrées*. Le graphique en dessous est une courbe d’épuisement : la valeur de l’argent en valeur d’aujourd’hui, d’aujourd’hui jusqu’à l’épuisement de l’argent ou l’horizon, avec trois courbes colorées, une par scénario. La ligne pointillée marque la date FIRE. La note en dessous indique *Une projection sur vos propres chiffres ; elle ne recommande rien.* Dans l’onglet [Objectifs]({{ page.base }}/screens/goals), l’objectif affiche *FIRE le <date> · N ans*, ou *inatteignable*.
+Sous les lignes dépliables, une ligne « Taux : … » nomme le fournisseur dont les taux proviennent, ou *valeurs par défaut intégrées*. Le graphique en dessous est une courbe d’épuisement : la valeur de l’argent en valeur d’aujourd’hui, d’aujourd’hui jusqu’à l’épuisement de l’argent ou l’horizon, avec trois courbes colorées, une par scénario. La ligne pointillée marque la date FIRE. La note en dessous indique *Une projection sur vos propres chiffres ; elle ne recommande rien.* Dans l’onglet [Objectifs]({{ page.base }}/screens/goals), l’objectif affiche *FIRE le <date> · N ans*, ou *inatteignable*.
 
 **Mode de calcul.** Par pas mensuels. Jusqu’à la date FIRE, le versement augmente de **Croissance du versement % par an** (de l’inflation si le champ est vide, donc il conserve son pouvoir d’achat), et l’argent croît au taux du scénario. Après la date FIRE, la dépense augmente avec l’inflation et ce qui reste continue de croître au taux du scénario. L’horizon est la date de naissance plus l’espérance de vie (95 ans par défaut), ou 50 ans après la date FIRE sans date de naissance. *L’argent ne s’épuisera jamais* signifie que l’argent n’est pas épuisé en 200 ans et qu’il vaut, en valeur d’aujourd’hui, au moins autant à la fin qu’à la date FIRE.
 

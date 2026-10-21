@@ -700,6 +700,10 @@
  "Growth % · average · now {0}": "Wachstum % · Durchschnitt · jetzt {0}",
  "Growth % · optimistic · now {0}": "Wachstum % · optimistisch · jetzt {0}",
  "Growth % · pessimistic · now {0}": "Wachstum % · pessimistisch · jetzt {0}",
+ "Withdrawal rate": "Entnahmerate",
+ "Not enough money": "Nicht genug Geld",
+ "Money is enough": "Geld reicht",
+ "growth {0}% · inflation {1}%": "Wachstum {0}% · Inflation {1}%",
  "Withdrawal rate % · now {0}": "Entnahmerate % · jetzt {0}",
  "Life expectancy · years · now {0}": "Lebenserwartung · Jahre · jetzt {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Bei leerem Feld gilt der Satz, den die in den Einstellungen gewählten Anbieter abrufen, sonst der eingebaute Standardwert."
