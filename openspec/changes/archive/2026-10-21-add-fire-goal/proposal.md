@@ -5,6 +5,7 @@ Goals say what to save by when. They cannot answer the question a long-term save
 ## What Changes
 
 - A goal can be of type **FIRE**. Its editor adds: birth date, FIRE date, contribution ("I can invest X per week / 2 weeks / month / year / N days"), monthly spend after FIRE, and the amount to have after FIRE (the goal target). Each of FIRE date, contribution, target and spend may be left blank; the app derives what it can from the rest and says what is missing.
+- **Foldable scenarios** (v2.13.0): shared inputs once, one fold per scenario with a status badge.
 - **Contribution growth % per year** (v2.12.0): a yearly raise of the contribution; blank keeps its purchasing power.
 - **Advanced** section with defaults taken from public sources: inflation 3 % (optimistic 2, pessimistic 5), growth 7 % (optimistic 10, pessimistic 4), withdrawal rate 4 %, life expectancy 95. All overridable per goal.
 - All amounts are entered in today's money; the goal screen shows nominal values next to them. Funding from connected buckets counts as today's money, as for every goal.

@@ -31,7 +31,7 @@ The calculation SHALL run for average, optimistic and pessimistic growth and inf
 - **THEN** the average scenario uses 5 % and the others keep their values.
 
 ### Requirement: Burndown
-After the FIRE date the value SHALL decrease by the inflation-adjusted spend each month and grow by the scenario's rate. The screen SHALL say until which date (and age, when the birth date is known) the money lasts; when it lasts beyond life expectancy it SHALL say for how many years; when it is never exhausted it SHALL say "money will never end 🥳". A chart SHALL draw the value in today's money from today to the end of the money or the horizon for the three scenarios, with the FIRE date marked.
+After the FIRE date the value SHALL decrease by the inflation-adjusted spend each month and grow by the scenario's rate. The screen SHALL say until which date (and age, when the birth date is known) the money lasts; when it lasts beyond life expectancy it SHALL say for how many years; when it is never exhausted it SHALL say "money will never end 🥳". The screen SHALL show the values equal in every scenario once, then one foldable row per scenario with its growth and inflation rates and a badge: "Money is enough", "money will never end 🥳" or "Not enough money". A chart SHALL draw the value in today's money from today to the end of the money or the horizon for the three scenarios, with the FIRE date marked.
 
 #### Scenario: Money outlives the saver
 - **WHEN** the drawdown ends after the life-expectancy age under a scenario
