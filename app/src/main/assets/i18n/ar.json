@@ -677,7 +677,6 @@
  "{0} years · beyond life expectancy": "{0} سنة · أبعد من متوسط العمر المتوقع",
  "until {0}": "حتى {0}",
  "Short by {0} at the FIRE date · reachable on {1}": "ينقص {0} عند تاريخ FIRE · يمكن بلوغه في {1}",
- "{0}: growth {1}% · inflation {2}% · withdrawal {3}%": "{0}: النمو {1}% · التضخم {2}% · السحب {3}%",
  "Rates: {0}": "المعدلات: {0}",
  "built-in defaults": "القيم الافتراضية المضمنة",
  "Value in today's money · the dashed line marks the FIRE date": "القيمة بأموال اليوم · الخط المتقطع يشير إلى تاريخ FIRE",

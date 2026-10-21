@@ -677,7 +677,6 @@
  "{0} years · beyond life expectancy": "⁨{0}⁩ سال · متوقع عمر سے آگے",
  "until {0}": "⁨{0}⁩ تک",
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE کی تاریخ پر ⁨{0}⁩ کی کمی · ⁨{1}⁩ کو حاصل ہو سکتا ہے",
- "{0}: growth {1}% · inflation {2}% · withdrawal {3}%": "⁨{0}⁩: نمو ⁨{1}⁩% · مہنگائی ⁨{2}⁩% · نکلوانا ⁨{3}⁩%",
  "Rates: {0}": "شرحیں: ⁨{0}⁩",
  "built-in defaults": "پہلے سے طے شدہ اقدار",
  "Value in today's money · the dashed line marks the FIRE date": "آج کی قدر میں مالیت · ٹوٹی ہوئی لکیر FIRE کی تاریخ بتاتی ہے",

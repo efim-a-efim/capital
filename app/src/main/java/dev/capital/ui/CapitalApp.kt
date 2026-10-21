@@ -179,11 +179,21 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
         tr("Spend per month · at the FIRE date") to { x -> m(x.spendNominal) },
         tr("Money lasts") to { x -> when { !x.reachable -> tr("short by {0}",m(x.shortfall)); x.neverEnds -> tr("money will never end 🥳"); x.beyondLife -> tr("{0} years · beyond life expectancy",x.lastsYears ?: 0); else -> tr("until {0}",date(x.lastsUntil.toString()))+ageText(x.ageAtEnd) } },
     )
-    @Composable fun line(cells: List<String>,weight: FontWeight?=null) { Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) { cells.forEach { Text(it,Modifier.weight(1f).padding(end=4.dp),style=MaterialTheme.typography.bodySmall,fontWeight=weight) } } }
-    line(listOf("")+Scenario.entries.map(::scenarioName),FontWeight.SemiBold)
-    rows.forEach { (label,cell) -> line(listOf(label)+Scenario.entries.map { cell(r.getValue(it)) }) }
-    r.getValue(Scenario.AVERAGE).let { a -> if((a.shortfall?.signum() ?: 0)>0 && a.earliest!=null && a.earliest>a.fireDate) Note(tr("Short by {0} at the FIRE date · reachable on {1}",m(a.shortfall),date(a.earliest.toString()))) }
-    Scenario.entries.forEach { s -> val rt=data.fireRates(goal,s); Note(tr("{0}: growth {1}% · inflation {2}% · withdrawal {3}%",scenarioName(s),rt.growth.text(),rt.inflation.text(),rt.withdrawal.text())) }
+    // Values equal in all three scenarios are the user's own inputs: shown once, above the folds.
+    val same=rows.filter { (_,cell) -> Scenario.entries.map { cell(r.getValue(it)) }.distinct().size==1 }
+    @Composable fun line(label: String,value: String) { Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) { Text(label,Modifier.weight(1f).padding(end=8.dp),style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant); Text(value,style=MaterialTheme.typography.bodySmall) } }
+    same.forEach { (label,cell) -> line(label,cell(r.getValue(Scenario.AVERAGE))) }
+    line(tr("Withdrawal rate"),data.fireRates(goal,Scenario.AVERAGE).withdrawal.text()+"%")
+    var open by rememberSaveable { mutableStateOf<String?>(null) }
+    Scenario.entries.forEach { s ->
+        val x=r.getValue(s); val rt=data.fireRates(goal,s)
+        val badge=when { !x.reachable -> tr("Not enough money") to badgeYellow; x.neverEnds -> tr("money will never end 🥳") to badgeGreen; x.beyondLife -> tr("Money is enough") to badgeGreen; else -> tr("Not enough money") to badgeYellow }
+        BadgedItem((if(open==s.name) "▾ " else "▸ ")+scenarioName(s),tr("growth {0}% · inflation {1}%",rt.growth.text(),rt.inflation.text()),null,badge) { open=if(open==s.name) null else s.name }
+        if(open==s.name) {
+            rows.filter { it !in same }.forEach { (label,cell) -> line(label,cell(x)) }
+            if((x.shortfall?.signum() ?: 0)>0 && x.earliest!=null && x.earliest>x.fireDate) Note(tr("Short by {0} at the FIRE date · reachable on {1}",m(x.shortfall),date(x.earliest.toString())))
+        }
+    }
     Note(tr("Rates: {0}",listOf("inflation" to "Inflation","growth" to "Market growth").joinToString(" · ") { (kind,category) -> shown(category)+" "+(data.rates.find { it.kind==kind && it.currency==goal.currency && it.values.isNotEmpty() && it.error==null }?.source?.let(::shown) ?: tr("built-in defaults")) }))
     val colors=mapOf(Scenario.AVERAGE to MaterialTheme.colorScheme.primary,Scenario.OPTIMISTIC to MaterialTheme.colorScheme.tertiary,Scenario.PESSIMISTIC to MaterialTheme.colorScheme.error)
     val today=LocalDate.now()

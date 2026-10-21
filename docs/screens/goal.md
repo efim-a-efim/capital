@@ -39,11 +39,11 @@ All amounts are in today's money of the goal currency. The screen also shows the
 
 If FIRE date, contribution and target are all given, the date is kept and the screen shows the shortfall and the earliest date that is reachable. The derived target and date are written into the goal's target and due date, so ordering, allocation, the Overview and Plans work as for any goal. They are refreshed on every edit and every refresh.
 
-**The FIRE section.** A table with one column per scenario, **Average**, **Optimistic** and **Pessimistic**:
+**The FIRE section.** First the values that are the same in every scenario (what you entered, and the **Withdrawal rate**), one per line. Then one foldable row per scenario, **Average**, **Optimistic** and **Pessimistic**, with its growth and inflation rates and a badge: **Money is enough** (green) when the money lasts beyond life expectancy, **money will never end 🥳** (green) when it is never used up, **Not enough money** (yellow) when the FIRE date is not reachable or the money runs out earlier. Tap the row to unfold the values that differ by scenario:
 
 | Row | Meaning |
 |---|---|
-| **FIRE date** | The date, with "age N" when the birth date is known |
+| **FIRE date** | The date, with "age N" when the birth date is known, or *Not reachable before <date>* |
 | **Contribution per month** | What must be invested each month |
 | **FIRE number · today's money** | The amount to have, as the editor states it |
 | **FIRE number · at the FIRE date** | The same amount after inflation |
@@ -51,7 +51,7 @@ If FIRE date, contribution and target are all given, the date is kept and the sc
 | **Spend per month · at the FIRE date** | The same spend after inflation |
 | **Money lasts** | *until <date> · age N*, *N years · beyond life expectancy*, *money will never end 🥳*, or *short by …* when the date is not reachable |
 
-Under the table, the rates of each scenario ("Average: growth 7% · inflation 3% · withdrawal 4%") and a "Rates: …" line naming the provider they come from, or *built-in defaults*. The chart below is a burndown: the value of the money in today's money from today to the end of the money or the horizon, with three coloured curves, one per scenario. The dashed line marks the FIRE date. The note under it reads *A projection on your own numbers; it recommends nothing.* On the [Goals]({{ page.base }}/screens/goals) tab the goal shows *FIRE on <date> · age N*, or *not reachable*.
+Under the folds, a "Rates: …" line names the provider the rates come from, or *built-in defaults*. The chart below is a burndown: the value of the money in today's money from today to the end of the money or the horizon, with three coloured curves, one per scenario. The dashed line marks the FIRE date. The note under it reads *A projection on your own numbers; it recommends nothing.* On the [Goals]({{ page.base }}/screens/goals) tab the goal shows *FIRE on <date> · age N*, or *not reachable*.
 
 **How it is calculated.** In monthly steps. Until the FIRE date the contribution grows by **Contribution growth % per year** (by inflation when blank, so it keeps its purchasing power), and the money grows at the scenario's rate. After the FIRE date the spend grows with inflation and what remains keeps growing at the scenario's rate. The horizon is the birth date plus life expectancy (95 by default), or 50 years after the FIRE date without a birth date. *Money will never end* means the money is not used up in 200 years and is worth at least as much in today's money at the end as at the FIRE date.
 

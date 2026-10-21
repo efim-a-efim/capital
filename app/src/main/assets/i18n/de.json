@@ -677,7 +677,6 @@
  "{0} years · beyond life expectancy": "{0} Jahre · über die Lebenserwartung hinaus",
  "until {0}": "bis {0}",
  "Short by {0} at the FIRE date · reachable on {1}": "Zum FIRE-Datum fehlen {0} · erreichbar am {1}",
- "{0}: growth {1}% · inflation {2}% · withdrawal {3}%": "{0}: Wachstum {1}% · Inflation {2}% · Entnahme {3}%",
  "Rates: {0}": "Sätze: {0}",
  "built-in defaults": "eingebaute Standardwerte",
  "Value in today's money · the dashed line marks the FIRE date": "Wert in heutiger Kaufkraft · die gestrichelte Linie markiert das FIRE-Datum",

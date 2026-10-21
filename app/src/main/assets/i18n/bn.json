@@ -677,7 +677,6 @@
  "{0} years · beyond life expectancy": "{0} বছর · প্রত্যাশিত আয়ুর পরেও",
  "until {0}": "{0} পর্যন্ত",
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE-এর তারিখে ঘাটতি {0} · {1} তারিখে পৌঁছানো যাবে",
- "{0}: growth {1}% · inflation {2}% · withdrawal {3}%": "{0}: প্রবৃদ্ধি {1}% · মুদ্রাস্ফীতি {2}% · উত্তোলন {3}%",
  "Rates: {0}": "হার: {0}",
  "built-in defaults": "অ্যাপের ডিফল্ট মান",
  "Value in today's money · the dashed line marks the FIRE date": "আজকের মূল্যে মান · ড্যাশ দেওয়া রেখা FIRE-এর তারিখ নির্দেশ করে",

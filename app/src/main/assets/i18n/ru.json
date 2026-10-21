@@ -677,7 +677,6 @@
  "{0} years · beyond life expectancy": "{0} лет · дольше ожидаемой продолжительности жизни",
  "until {0}": "до {0}",
  "Short by {0} at the FIRE date · reachable on {1}": "На дату FIRE не хватает {0} · достижима {1}",
- "{0}: growth {1}% · inflation {2}% · withdrawal {3}%": "{0}: рост {1}% · инфляция {2}% · изъятие {3}%",
  "Rates: {0}": "Ставки: {0}",
  "built-in defaults": "встроенные значения по умолчанию",
  "Value in today's money · the dashed line marks the FIRE date": "Стоимость в сегодняшних деньгах · пунктир отмечает дату FIRE",
