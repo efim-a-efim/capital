@@ -679,7 +679,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE 日缺口 {0} · 可于 {1} 达成",
  "Rates: {0}": "比率：{0}",
  "built-in defaults": "内置默认值",
- "Value in today's money · the dashed line marks the FIRE date": "按今日币值计 · 虚线标示 FIRE 日期",
  "A projection on your own numbers; it recommends nothing.": "基于您自己数据的推算，不构成任何建议。",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · 获取于 {3}",
  "Goal type": "目标类型",

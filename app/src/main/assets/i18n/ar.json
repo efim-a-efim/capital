@@ -683,7 +683,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "ينقص {0} عند تاريخ FIRE · يمكن بلوغه في {1}",
  "Rates: {0}": "المعدلات: {0}",
  "built-in defaults": "القيم الافتراضية المضمنة",
- "Value in today's money · the dashed line marks the FIRE date": "القيمة بأموال اليوم · الخط المتقطع يشير إلى تاريخ FIRE",
  "A projection on your own numbers; it recommends nothing.": "توقع مبني على أرقامك أنت؛ ولا يوصي بأي شيء.",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · جُلب {3}",
  "Goal type": "نوع الهدف",

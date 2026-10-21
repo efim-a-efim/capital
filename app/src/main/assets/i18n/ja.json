@@ -679,7 +679,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE日時点で {0} 不足 · {1} に到達可能",
  "Rates: {0}": "レート：{0}",
  "built-in defaults": "組み込みの初期値",
- "Value in today's money · the dashed line marks the FIRE date": "現在の価値での金額 · 破線はFIRE日を示します",
  "A projection on your own numbers; it recommends nothing.": "ご自身の数値に基づく試算です。何かを推奨するものではありません。",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · 取得 {3}",
  "Goal type": "目標の種類",

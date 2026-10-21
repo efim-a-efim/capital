@@ -679,7 +679,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "Zum FIRE-Datum fehlen {0} · erreichbar am {1}",
  "Rates: {0}": "Sätze: {0}",
  "built-in defaults": "eingebaute Standardwerte",
- "Value in today's money · the dashed line marks the FIRE date": "Wert in heutiger Kaufkraft · die gestrichelte Linie markiert das FIRE-Datum",
  "A projection on your own numbers; it recommends nothing.": "Eine Projektion auf Basis Ihrer eigenen Zahlen; sie empfiehlt nichts.",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · abgerufen {3}",
  "Goal type": "Zieltyp",

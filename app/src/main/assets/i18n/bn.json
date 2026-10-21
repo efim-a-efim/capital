@@ -683,7 +683,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE-এর তারিখে ঘাটতি {0} · {1} তারিখে পৌঁছানো যাবে",
  "Rates: {0}": "হার: {0}",
  "built-in defaults": "অ্যাপের ডিফল্ট মান",
- "Value in today's money · the dashed line marks the FIRE date": "আজকের মূল্যে মান · ড্যাশ দেওয়া রেখা FIRE-এর তারিখ নির্দেশ করে",
  "A projection on your own numbers; it recommends nothing.": "আপনার নিজের সংখ্যার ওপর একটি প্রক্ষেপণ; এটি কোনো সুপারিশ করে না।",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · সংগৃহীত {3}",
  "Goal type": "লক্ষ্যের ধরন",

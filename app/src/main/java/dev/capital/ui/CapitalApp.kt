@@ -53,6 +53,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -195,22 +197,30 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
         }
     }
     Note(tr("Rates: {0}",listOf("inflation" to "Inflation","growth" to "Market growth").joinToString(" · ") { (kind,category) -> shown(category)+" "+(data.rates.find { it.kind==kind && it.currency==goal.currency && it.values.isNotEmpty() && it.error==null }?.source?.let(::shown) ?: tr("built-in defaults")) }))
-    val colors=mapOf(Scenario.AVERAGE to MaterialTheme.colorScheme.primary,Scenario.OPTIMISTIC to MaterialTheme.colorScheme.tertiary,Scenario.PESSIMISTIC to MaterialTheme.colorScheme.error)
+    val colors=mapOf(Scenario.AVERAGE to MaterialTheme.colorScheme.primary,Scenario.OPTIMISTIC to MaterialTheme.colorScheme.tertiary,Scenario.PESSIMISTIC to Color(0xffe53935))
     val today=LocalDate.now()
     // ponytail: at most 400 samples per curve; x in days from today, y in today's money.
     val curves=remember(outcome) { r.mapValues { (_,x) -> val step=(x.curve.size+399)/400; x.curve.filterIndexed { i,_ -> i%step==0 || i==x.curve.lastIndex }.map { (d,v) -> ChronoUnit.DAYS.between(today,d).toFloat() to v.toFloat() } } }
     val maxX=curves.values.maxOf { it.lastOrNull()?.first ?: 0f }.coerceAtLeast(1f); val maxY=curves.values.maxOf { it.maxOfOrNull { p -> p.second } ?: 0f }.coerceAtLeast(1f)
     val fireX=ChronoUnit.DAYS.between(today,r.getValue(Scenario.AVERAGE).fireDate).toFloat()
     val axis=MaterialTheme.colorScheme.onSurfaceVariant
-    Canvas(Modifier.fillMaxWidth().height(220.dp).padding(top=8.dp)) {
-        val w=size.width; val h=size.height
-        fun x(d: Float)=d/maxX*w
+    val measurer=rememberTextMeasurer(); val labelStyle=MaterialTheme.typography.labelSmall.copy(color=axis)
+    // Axis labels: compact amounts on the left (0, half, max), years below (today, FIRE, end).
+    val compact=remember { android.icu.text.CompactDecimalFormat.getInstance(I18n.locale,android.icu.text.CompactDecimalFormat.CompactStyle.SHORT) }
+    val yLabels=listOf(0f,maxY/2,maxY).map { compact.format(it.toDouble()) }
+    val endYear=today.plusDays(maxX.toLong()).year; val fireYear=r.getValue(Scenario.AVERAGE).fireDate.year
+    Canvas(Modifier.fillMaxWidth().height(240.dp).padding(top=8.dp)) {
+        val left=yLabels.maxOf { measurer.measure(it,labelStyle).size.width }+8.dp.toPx(); val bottom=measurer.measure("0",labelStyle).size.height+4.dp.toPx()
+        val w=size.width-left; val h=size.height-bottom
+        fun x(d: Float)=left+d/maxX*w
         fun y(v: Float)=h-v.coerceAtLeast(0f)/maxY*h
-        drawLine(axis,Offset(0f,h),Offset(w,h),1.dp.toPx())
+        yLabels.forEachIndexed { i,t -> val yy=y(maxY/2*i); val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset(left-8.dp.toPx()-m.size.width,(yy-m.size.height/2).coerceIn(0f,h-m.size.height))); if(i>0) drawLine(axis.copy(alpha=0.3f),Offset(left,yy),Offset(left+w,yy),1.dp.toPx()) }
+        drawLine(axis,Offset(left,h),Offset(left+w,h),1.dp.toPx())
         drawLine(axis,Offset(x(fireX),0f),Offset(x(fireX),h),1.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(8.dp.toPx(),6.dp.toPx())))
+        listOf(today.year.toString() to left,fireYear.toString() to x(fireX),endYear.toString() to left+w).forEach { (t,xx) -> val m=measurer.measure(t,labelStyle); drawText(m,topLeft=Offset((xx-m.size.width/2).coerceIn(left,left+w-m.size.width),h+4.dp.toPx())) }
         curves.forEach { (s,pts) -> if(pts.isNotEmpty()) drawPath(Path().apply { moveTo(x(pts[0].first),y(pts[0].second)); pts.drop(1).forEach { (d,v) -> lineTo(x(d),y(v)) } },colors.getValue(s),style=Stroke(3.dp.toPx())) }
     }
-    Note(tr("Value in today's money · the dashed line marks the FIRE date"))
+    Note(tr("Value in {0}, today's money · the dashed line marks the FIRE date",goal.currency))
     Row(horizontalArrangement=Arrangement.spacedBy(12.dp)) { Scenario.entries.forEach { s -> Text("● "+scenarioName(s),style=MaterialTheme.typography.bodySmall,color=colors.getValue(s)) } }
     Note(tr("A projection on your own numbers; it recommends nothing."))
 }

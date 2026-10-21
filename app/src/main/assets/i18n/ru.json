@@ -679,7 +679,6 @@
  "Short by {0} at the FIRE date · reachable on {1}": "На дату FIRE не хватает {0} · достижима {1}",
  "Rates: {0}": "Ставки: {0}",
  "built-in defaults": "встроенные значения по умолчанию",
- "Value in today's money · the dashed line marks the FIRE date": "Стоимость в сегодняшних деньгах · пунктир отмечает дату FIRE",
  "A projection on your own numbers; it recommends nothing.": "Прогноз на ваших собственных числах; он ничего не рекомендует.",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · загружено {3}",
  "Goal type": "Тип цели",
