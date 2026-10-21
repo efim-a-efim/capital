@@ -708,5 +708,12 @@
  "Work until age · now {0}": "就労を続ける年齢 · 現在 {0}",
  "Life expectancy · years · now {0}": "想定寿命 · 年 · 現在 {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "空欄の場合は、設定で選んだプロバイダが取得したレートを使い、なければ組み込みの初期値を使います。",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "レート履歴",
+ "Auto update rates": "レートの自動更新",
+ "Every {0} h": "{0}時間ごと",
+ "Last background update: {0}": "最終バックグラウンド更新：{0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "バックグラウンドの処理が、この間隔で保有資産のレートを取得してレート履歴に保存します。データフォルダには一切触れません。ネットワーク接続が必要で、バッテリーとデータ通信を少し使います。",
+ "Duplicate series": "系列が重複しています",
+ "Invalid series": "無効な系列です"
 }

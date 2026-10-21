@@ -41,6 +41,7 @@ Capitalが通信するのは、あなたが「設定」で選んだ事業者だ�
 | トークンのコントラクトアドレスと資産ID | 選択した暗号資産価格の事業者 | 資産の価格を取得するため |
 | 通貨コード | 選択した法定通貨レートの事業者 | 通貨間の換算のため |
 | 各FIRE目標の通貨圏または指数のシンボル | 選択したインフレ率・市場成長率の事業者 | FIRE計算のためにインフレ率と指数の系列を取得するため |
+| 保有する通貨とコインのコード（レートの自動更新がオンのときはバックグラウンドの処理からも） | 選択したレート履歴の事業者 | レート履歴のために過去と現在のレートを取得するため |
 | 事業者用に入力したAPIキー | その事業者のみ | その事業者でのあなた自身のアカウントを認証するため |
 | ブローカー口座のアクセストークンまたはAPIキーと、口座ID（またはクエリID） | そのブローカーのみ（[ブローカー・FX口座]({{ page.base }}/accounts)を参照） | 口座の評価額の合計を読み取るため |
 
@@ -54,6 +55,7 @@ Capitalが通信するのは、あなたが「設定」で選んだ事業者だ�
 | TRONとTRC-20トークン | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | 暗号資産の価格 | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | 法定通貨のレート | [Frankfurter](https://frankfurter.dev), [欧州中央銀行](https://www.ecb.europa.eu) |
+| レート履歴 | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | インフレ率と市場成長率 | [World Bank](https://data.worldbank.org), [欧州中央銀行](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | ブローカー口座 | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

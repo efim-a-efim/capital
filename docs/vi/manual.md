@@ -80,7 +80,7 @@ Thẻ Môi giới → **+**. Tài khoản môi giới là một kết nối ch�
 
 ## Làm mới
 
-Biểu tượng làm mới ở trên cùng tải lại mọi số dư ví, giá trị tài khoản môi giới và giá. Có thể làm mới riêng từng hũ. Ứng dụng tự làm mới một lần khi được mở mới; khi quay lại từ chế độ nền, ứng dụng chỉ tải lại các tệp cục bộ. Làm mới cần có Internet; nếu không có, các giá trị trước đó được giữ lại và đánh dấu là cũ.
+Biểu tượng làm mới ở trên cùng tải lại mọi số dư ví, giá trị tài khoản môi giới và giá. Có thể làm mới riêng từng hũ. Ứng dụng tự làm mới một lần khi được mở mới; khi quay lại từ chế độ nền, ứng dụng chỉ tải lại các tệp cục bộ. Làm mới cần có Internet; nếu không có, các giá trị trước đó được giữ lại và đánh dấu là cũ. Mỗi lần làm mới cũng ghi tỷ giá trong ngày vào lịch sử tỷ giá; **Cài đặt → Tự động cập nhật tỷ giá** giữ lịch sử này luôn mới ở chế độ nền (từ 1 đến 24 giờ một lần) và cho bạn tỷ giá mới nhất khi mở ứng dụng.
 
 ## Bảo mật {#security}
 

@@ -708,5 +708,12 @@
  "Life expectancy · years · now {0}": "Ожидаемая продолжительность жизни · лет · сейчас {0}",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "Стоимость в {0}, в сегодняшних деньгах · пунктир отмечает дату FIRE",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Если пусто, берётся ставка от провайдеров, выбранных в настройках, иначе встроенное значение по умолчанию.",
+ "Rate history": "История курсов",
+ "Auto update rates": "Автообновление курсов",
+ "Every {0} h": "Каждые {0} ч",
+ "Last background update: {0}": "Последнее фоновое обновление: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "Фоновая задача с этим интервалом загружает курсы ваших активов и сохраняет их в истории курсов; папку с данными она не трогает. Нужно подключение к сети; немного расходует заряд и трафик.",
+ "Duplicate series": "Повторяющийся ряд",
+ "Invalid series": "Некорректный ряд",
  "{0} · {1}": "{0} · {1}"
 }

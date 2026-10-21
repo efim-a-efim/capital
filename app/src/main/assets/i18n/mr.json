@@ -708,5 +708,12 @@
  "Life expectancy · years · now {0}": "आयुर्मान · वर्षे · सध्या {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "रिकामे ठेवल्यास सेटिंग्जमध्ये निवडलेल्या प्रदात्यांकडून मिळवलेला दर वापरला जातो, नाहीतर अॅपमधील डीफॉल्ट.",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} मध्ये, आजच्या मूल्यात · तुटक रेषा FIRE तारीख दर्शवते",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "दर इतिहास",
+ "Auto update rates": "दर आपोआप अपडेट करा",
+ "Every {0} h": "दर {0} ता",
+ "Last background update: {0}": "शेवटचे बॅकग्राउंड अपडेट: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "बॅकग्राउंडमधील एक काम या अंतराने तुमच्या मालमत्तांचे दर मिळवून दर इतिहासात ठेवते; ते डेटा फोल्डरला कधीही स्पर्श करत नाही. नेटवर्क कनेक्शन हवे; थोडी बॅटरी आणि डेटा वापरला जातो.",
+ "Duplicate series": "मालिका पुन्हा आली आहे",
+ "Invalid series": "अवैध मालिका"
 }

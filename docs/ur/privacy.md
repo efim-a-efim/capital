@@ -41,6 +41,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | ٹوکن کنٹریکٹ ایڈریس اور اثاثوں کی ID | آپ کا منتخب کردہ کرپٹو قیمت آپریٹر | اثاثوں کی قیمت معلوم کرنا |
 | کرنسی کوڈ | آپ کا منتخب کردہ فیاٹ ریٹ آپریٹر | کرنسیوں کے درمیان تبدیلی |
 | ہر FIRE ہدف کا کرنسی علاقہ یا انڈیکس علامت | آپ کے منتخب کردہ مہنگائی اور مارکیٹ نمو کے آپریٹرز | FIRE کے حساب کے لیے مہنگائی اور انڈیکس کی سیریز حاصل کرنا |
+| آپ کے پاس موجود کرنسیوں اور کوائنز کے کوڈ، ریٹس کی خودکار اپ ڈیٹ آن ہونے پر بیک گراؤنڈ کام سے بھی | آپ کے منتخب کردہ ریٹ ہسٹری کے آپریٹرز | ریٹ ہسٹری کے لیے ماضی اور موجودہ ریٹس حاصل کرنا |
 | کسی آپریٹر کے لیے آپ کی درج کردہ API کلید | صرف وہی آپریٹر | اس کے ہاں آپ کے اپنے اکاؤنٹ کی تصدیق |
 | بروکر اکاؤنٹ کا ایکسیس ٹوکن یا API کلید اور اکاؤنٹ یا کوئری id | صرف وہی بروکر (دیکھیں [بروکر اور فاریکس اکاؤنٹس]({{ page.base }}/accounts)) | اکاؤنٹ کی کل مالیت پڑھنا |
 
@@ -54,6 +55,7 @@ Capital صرف انہی آپریٹرز سے رابطہ کرتی ہے جنہیں 
 | TRON اور TRC-20 ٹوکنز | [TronGrid](https://www.trongrid.io)، [PublicNode](https://publicnode.com) |
 | کرپٹو قیمتیں | [DefiLlama](https://defillama.com)، [CoinGecko](https://www.coingecko.com)، [CoinPaprika](https://coinpaprika.com) |
 | فیاٹ ریٹس | [Frankfurter](https://frankfurter.dev)، [یورپی مرکزی بینک](https://www.ecb.europa.eu) |
+| ریٹ ہسٹری | [Frankfurter](https://frankfurter.dev)، [DefiLlama](https://defillama.com) |
 | مہنگائی اور مارکیٹ کی نمو | [World Bank](https://data.worldbank.org)، [یورپی مرکزی بینک](https://www.ecb.europa.eu)، [OECD](https://www.oecd.org)، [Yahoo Finance](https://finance.yahoo.com) |
 | بروکر اکاؤنٹس | [Interactive Brokers](https://www.interactivebrokers.com)، [OANDA](https://www.oanda.com)، [Trading 212](https://www.trading212.com)، [SnapTrade](https://snaptrade.com)، [Alpaca](https://alpaca.markets)، [Tradier](https://tradier.com)، [tastytrade](https://tastytrade.com)، [Public.com](https://public.com)، [eToro](https://www.etoro.com)، [Indexa Capital](https://indexacapital.com)، [T-Invest](https://www.tbank.ru/invest/)، [ALOR](https://www.alorbroker.ru)، [Capital.com](https://capital.com)، [Akahu](https://www.akahu.nz) |
 

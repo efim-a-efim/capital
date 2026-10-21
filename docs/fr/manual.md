@@ -80,7 +80,7 @@ Onglet Courtiers → **+**. Un compte de courtage est une connexion en lecture s
 
 ## Actualisation
 
-L’icône d’actualisation en haut recharge tous les soldes de portefeuilles crypto, toutes les valeurs de comptes de courtage et tous les cours. Une poche peut être actualisée seule. L’application s’actualise une fois au démarrage à froid ; au retour depuis l’arrière-plan, elle recharge seulement les fichiers locaux. L’actualisation nécessite une connexion Internet ; sans connexion, les valeurs précédentes sont conservées et signalées comme obsolètes.
+L’icône d’actualisation en haut recharge tous les soldes de portefeuilles crypto, toutes les valeurs de comptes de courtage et tous les cours. Une poche peut être actualisée seule. L’application s’actualise une fois au démarrage à froid ; au retour depuis l’arrière-plan, elle recharge seulement les fichiers locaux. L’actualisation nécessite une connexion Internet ; sans connexion, les valeurs précédentes sont conservées et signalées comme obsolètes. Chaque actualisation enregistre aussi les taux du jour dans un historique des taux ; **Paramètres → Mise à jour auto des taux** maintient cet historique à jour en arrière-plan (toutes les 1 à 24 heures) et vous donne les taux les plus récents à l’ouverture de l’application.
 
 ## Sécurité {#security}
 

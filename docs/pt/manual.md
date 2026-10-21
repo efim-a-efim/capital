@@ -80,7 +80,7 @@ Aba Corretoras → **+**. Uma conta de corretora é uma conexão somente leitura
 
 ## Atualização
 
-O ícone de atualizar no topo recarrega todos os saldos de carteiras, valores de contas de corretora e preços. Também é possível atualizar uma caixinha sozinha. O app atualiza uma vez ao ser iniciado do zero; ao voltar do segundo plano, ele apenas recarrega os arquivos locais. Atualizar exige internet; sem conexão, os valores anteriores são mantidos e marcados como desatualizados.
+O ícone de atualizar no topo recarrega todos os saldos de carteiras, valores de contas de corretora e preços. Também é possível atualizar uma caixinha sozinha. O app atualiza uma vez ao ser iniciado do zero; ao voltar do segundo plano, ele apenas recarrega os arquivos locais. Atualizar exige internet; sem conexão, os valores anteriores são mantidos e marcados como desatualizados. Cada atualização também registra as taxas do dia em um histórico de taxas; **Ajustes → Atualização automática das taxas** mantém esse histórico em dia em segundo plano (a cada 1 a 24 horas) e dá a você as taxas mais recentes ao abrir o app.
 
 ## Segurança {#security}
 

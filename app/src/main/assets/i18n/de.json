@@ -708,5 +708,12 @@
  "Life expectancy · years · now {0}": "Lebenserwartung · Jahre · jetzt {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Bei leerem Feld gilt der Satz, den die in den Einstellungen gewählten Anbieter abrufen, sonst der eingebaute Standardwert.",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "Wert in {0}, heutige Kaufkraft · die gestrichelte Linie markiert das FIRE-Datum",
+ "Rate history": "Kursverlauf",
+ "Auto update rates": "Kurse automatisch aktualisieren",
+ "Every {0} h": "Alle {0} Std.",
+ "Last background update: {0}": "Letzte Hintergrundaktualisierung: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "Ein Hintergrundjob ruft in diesem Intervall die Kurse Ihrer Vermögenswerte ab und speichert sie im Kursverlauf; er berührt den Datenordner nie. Benötigt eine Netzwerkverbindung; verbraucht etwas Akku und Daten.",
+ "Duplicate series": "Doppelte Reihe",
+ "Invalid series": "Ungültige Reihe",
  "{0} · {1}": "{0} · {1}"
 }

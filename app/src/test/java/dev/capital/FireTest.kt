@@ -139,7 +139,7 @@ class FireTest {
         assertEquals("1000000", portfolio(null).solvedFire(today).goals.single().target)
     }
     @Test fun schemaSevenRoundTripAndValidation() {
-        assertEquals(7, SCHEMA)
+        assertEquals(8, SCHEMA)
         val p = portfolio(Fire(birth = "1990-05-05", fireDate = "2040-01-01", contribution = "250", period = Period.DAYS, days = 10, spend = "1500", target = "450000", growth = "6", withdrawal = "3.5", life = 90)).validate()
         assertEquals(p, decodeRevision(encodeRevision(Revision(data = p))).data)
         rejects { portfolio(Fire(period = Period.DAYS)).validate() }

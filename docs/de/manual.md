@@ -80,7 +80,7 @@ Tab „Broker“ → **+**. Ein Brokerkonto ist eine reine Lesezugriffsverbindun
 
 ## Aktualisieren
 
-Das Aktualisieren-Symbol oben lädt alle Wallet-Guthaben, Brokerkontowerte und Kurse neu. Ein Topf lässt sich auch einzeln aktualisieren. Die App aktualisiert einmal bei einem Kaltstart; bei der Rückkehr aus dem Hintergrund werden nur die lokalen Dateien neu geladen. Zum Aktualisieren ist eine Internetverbindung nötig; ohne sie bleiben die bisherigen Werte erhalten und werden als veraltet gekennzeichnet.
+Das Aktualisieren-Symbol oben lädt alle Wallet-Guthaben, Brokerkontowerte und Kurse neu. Ein Topf lässt sich auch einzeln aktualisieren. Die App aktualisiert einmal bei einem Kaltstart; bei der Rückkehr aus dem Hintergrund werden nur die lokalen Dateien neu geladen. Zum Aktualisieren ist eine Internetverbindung nötig; ohne sie bleiben die bisherigen Werte erhalten und werden als veraltet gekennzeichnet. Jede Aktualisierung hält außerdem die Kurse des Tages in einem Kursverlauf fest; **Einstellungen → Kurse automatisch aktualisieren** hält diesen Verlauf im Hintergrund aktuell (alle 1 bis 24 Stunden) und liefert Ihnen beim Öffnen der App die neuesten Kurse.
 
 ## Sicherheit {#security}
 

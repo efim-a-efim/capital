@@ -708,5 +708,12 @@
  "Work until age · now {0}": "Trabajar hasta los · ahora {0}",
  "Life expectancy · years · now {0}": "Esperanza de vida · años · ahora {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "En blanco se usa la tasa obtenida por los proveedores elegidos en Ajustes o, si no hay, el valor predeterminado integrado.",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "Historial de tasas",
+ "Auto update rates": "Actualizar tasas automáticamente",
+ "Every {0} h": "Cada {0} h",
+ "Last background update: {0}": "Última actualización en segundo plano: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "Una tarea en segundo plano obtiene las tasas de sus activos con este intervalo y las guarda en el historial de tasas; nunca modifica la carpeta de datos. Requiere conexión a la red; consume algo de batería y datos.",
+ "Duplicate series": "Serie duplicada",
+ "Invalid series": "Serie no válida"
 }

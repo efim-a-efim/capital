@@ -703,10 +703,17 @@
   "Not enough money": "पैसा काफ़ी नहीं",
   "Money is enough": "पैसा काफ़ी है",
   "growth {0}% · inflation {1}%": "वृद्धि {0}% · महँगाई {1}%",
- "Withdrawal rate % · now {0}": "निकासी दर % · अभी {0}",
+  "Withdrawal rate % · now {0}": "निकासी दर % · अभी {0}",
  "Work until age · now {0}": "कार्य-आयु सीमा · अभी {0}",
  "Life expectancy · years · now {0}": "जीवन प्रत्याशा · वर्ष · अभी {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "खाली छोड़ने पर सेटिंग में चुने प्रदाताओं से मिली दर इस्तेमाल होती है, वरना अंतर्निहित डिफ़ॉल्ट।",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} में, आज के मूल्य में राशि · बिंदीदार रेखा FIRE तिथि दिखाती है",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "दर इतिहास",
+ "Auto update rates": "दरें अपने-आप अपडेट करें",
+ "Every {0} h": "हर {0} घं.",
+ "Last background update: {0}": "आखिरी बैकग्राउंड अपडेट: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "बैकग्राउंड में चलने वाला काम इस अंतराल पर आपके एसेट की दरें प्राप्त करता है और उन्हें दर इतिहास में रखता है; यह डेटा फ़ोल्डर को कभी नहीं छूता। नेटवर्क कनेक्शन चाहिए; थोड़ी बैटरी और डेटा खर्च होता है।",
+ "Duplicate series": "दोहराई गई श्रृंखला",
+ "Invalid series": "अमान्य श्रृंखला"
 }

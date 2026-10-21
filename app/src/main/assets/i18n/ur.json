@@ -708,5 +708,12 @@
  "Work until age · now {0}": "کام کرنے کی آخری عمر · ابھی ⁨{0}⁩",
  "Life expectancy · years · now {0}": "متوقع عمر · سال · ابھی ⁨{0}⁩",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "خالی چھوڑنے پر سیٹنگز میں منتخب پرووائیڈرز سے حاصل کی گئی شرح استعمال ہوتی ہے، ورنہ پہلے سے طے شدہ شرح۔",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "ریٹ ہسٹری",
+ "Auto update rates": "ریٹس کی خودکار اپ ڈیٹ",
+ "Every {0} h": "ہر ⁨{0}⁩ گھنٹے",
+ "Last background update: {0}": "آخری بیک گراؤنڈ اپ ڈیٹ: ⁨{0}⁩",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "ایک بیک گراؤنڈ کام اس وقفے سے آپ کے اثاثوں کے ریٹس حاصل کر کے ریٹ ہسٹری میں رکھتا ہے؛ یہ ڈیٹا فولڈر کو کبھی نہیں چھوتا۔ نیٹ ورک کنکشن درکار ہے؛ تھوڑی بیٹری اور ڈیٹا خرچ ہوتا ہے۔",
+ "Duplicate series": "سیریز دہرائی گئی ہے",
+ "Invalid series": "سیریز غلط ہے"
 }

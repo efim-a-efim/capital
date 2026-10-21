@@ -41,6 +41,7 @@ Capital contacte uniquement les opérateurs que vous choisissez dans les Paramè
 | Adresses de contrats de jetons et identifiants d’actifs | L’opérateur de cours crypto que vous avez sélectionné | Obtenir le cours des actifs |
 | Codes de devise | L’opérateur de taux de change que vous avez sélectionné | Convertir entre devises |
 | La zone monétaire ou le symbole d’indice de chaque objectif FIRE | Les opérateurs d’inflation et de croissance des marchés que vous avez sélectionnés | Récupérer les séries d’inflation et d’indice pour le calcul FIRE |
+| Les codes des devises et des cryptomonnaies que vous détenez, y compris depuis la tâche en arrière-plan lorsque la mise à jour auto des taux est activée | Les opérateurs d’historique des taux que vous avez sélectionnés | Récupérer les taux passés et actuels pour l’historique des taux |
 | La clé API que vous avez saisie pour un opérateur | Cet opérateur uniquement | Vous authentifier sur votre propre compte chez lui |
 | Le jeton d’accès ou la clé API et l’identifiant du compte ou de la requête d’un compte de courtage | Ce courtier uniquement (voir [Comptes de courtage et de forex]({{ page.base }}/accounts)) | Lire la valeur totale du compte |
 
@@ -54,6 +55,7 @@ Chaque opérateur voit aussi votre adresse IP, comme pour toute requête sur Int
 | TRON et jetons TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Cours des cryptomonnaies | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Taux de change des devises | [Frankfurter](https://frankfurter.dev), [Banque centrale européenne](https://www.ecb.europa.eu) |
+| Historique des taux | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | Inflation et croissance des marchés | [World Bank](https://data.worldbank.org), [Banque centrale européenne](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Comptes de courtage | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

@@ -80,7 +80,7 @@ Pestaña Brókeres → **+**. Una cuenta de bróker es una conexión de solo lec
 
 ## Actualizar
 
-El icono de actualizar de la parte superior vuelve a cargar todos los saldos de billeteras, valores de cuentas de bróker y precios. Un bolsillo se puede actualizar por separado. La aplicación actualiza una vez al iniciarse desde cero; al volver desde segundo plano solo recarga los archivos locales. Actualizar requiere conexión a internet; sin ella se conservan los valores anteriores, marcados como desactualizados.
+El icono de actualizar de la parte superior vuelve a cargar todos los saldos de billeteras, valores de cuentas de bróker y precios. Un bolsillo se puede actualizar por separado. La aplicación actualiza una vez al iniciarse desde cero; al volver desde segundo plano solo recarga los archivos locales. Actualizar requiere conexión a internet; sin ella se conservan los valores anteriores, marcados como desactualizados. Cada actualización registra además las tasas del día en un historial de tasas; **Ajustes → Actualizar tasas automáticamente** mantiene ese historial al día en segundo plano (cada 1 a 24 horas) y le ofrece las tasas más recientes al abrir la aplicación.
 
 ## Seguridad {#security}
 

@@ -708,5 +708,12 @@
  "growth {0}% · inflation {1}%": "增长 {0}% · 通胀 {1}%",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "留空则使用“设置”中所选数据源获取的比率，否则使用内置默认值。",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "按今日币值计（{0}） · 虚线标示 FIRE 日期",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "汇率历史",
+ "Auto update rates": "自动更新汇率",
+ "Every {0} h": "每 {0} 小时",
+ "Last background update: {0}": "上次后台更新：{0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "后台任务会按此间隔获取您所持资产的汇率，并保存到汇率历史中；它绝不会改动数据文件夹。需要网络连接；会消耗少量电量和流量。",
+ "Duplicate series": "序列重复",
+ "Invalid series": "序列无效"
 }

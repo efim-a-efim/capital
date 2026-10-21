@@ -41,6 +41,7 @@ Capital chỉ liên hệ với các nhà cung cấp bạn chọn trong Cài đ�
 | Địa chỉ hợp đồng token và mã định danh tài sản | Nhà cung cấp giá tiền mã hóa bạn đã chọn | Định giá tài sản |
 | Mã tiền tệ | Nhà cung cấp tỷ giá tiền pháp định bạn đã chọn | Quy đổi giữa các loại tiền tệ |
 | Vùng tiền tệ hoặc ký hiệu chỉ số của từng mục tiêu FIRE | Nhà cung cấp lạm phát và tăng trưởng thị trường bạn đã chọn | Tải chuỗi lạm phát và chỉ số cho phép tính FIRE |
+| Mã của các loại tiền tệ và đồng coin bạn nắm giữ, kể cả từ tác vụ nền khi Tự động cập nhật tỷ giá đang bật | Nhà cung cấp lịch sử tỷ giá bạn đã chọn | Tải tỷ giá trong quá khứ và hiện tại cho lịch sử tỷ giá |
 | Khóa API bạn đã nhập cho một nhà cung cấp | Chỉ nhà cung cấp đó | Xác thực tài khoản của chính bạn với họ |
 | Mã truy cập hoặc khóa API và mã tài khoản hoặc mã truy vấn của một tài khoản môi giới | Chỉ nhà môi giới đó (xem [Tài khoản môi giới và ngoại hối]({{ page.base }}/accounts)) | Đọc tổng giá trị của tài khoản |
 
@@ -54,6 +55,7 @@ Như với mọi yêu cầu qua Internet, mỗi nhà cung cấp cũng thấy đ�
 | TRON và token TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Giá tiền mã hóa | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Tỷ giá tiền pháp định | [Frankfurter](https://frankfurter.dev), [Ngân hàng Trung ương châu Âu](https://www.ecb.europa.eu) |
+| Lịch sử tỷ giá | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | Lạm phát và tăng trưởng thị trường | [World Bank](https://data.worldbank.org), [Ngân hàng Trung ương châu Âu](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Tài khoản môi giới | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

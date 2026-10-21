@@ -708,5 +708,12 @@
  "Life expectancy · years · now {0}": "Espérance de vie · années · actuellement {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Vide : le taux récupéré auprès des fournisseurs choisis dans les Paramètres, sinon la valeur par défaut intégrée.",
  "Value in {0}, today's money · the dashed line marks the FIRE date": "Valeur en {0}, en valeur d’aujourd’hui · la ligne pointillée marque la date FIRE",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "Historique des taux",
+ "Auto update rates": "Mise à jour auto des taux",
+ "Every {0} h": "Toutes les {0} h",
+ "Last background update: {0}": "Dernière mise à jour en arrière-plan : {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "Une tâche en arrière-plan récupère les taux de vos actifs à cet intervalle et les conserve dans l’historique des taux ; elle ne touche jamais au dossier de données. Nécessite une connexion réseau ; consomme un peu de batterie et de données.",
+ "Duplicate series": "Série en double",
+ "Invalid series": "Série non valide"
 }

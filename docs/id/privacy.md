@@ -40,6 +40,7 @@ Capital hanya menghubungi operator yang Anda pilih di Pengaturan, hanya melalui 
 | Alamat dompet publik yang Anda tambahkan | Operator data blockchain yang dipilih untuk jaringan tersebut | Membaca saldo dan kepemilikan token di alamat itu |
 | Alamat kontrak token dan ID aset | Operator harga kripto yang Anda pilih | Menentukan harga aset |
 | Kode mata uang | Operator kurs fiat yang Anda pilih | Mengonversi antarmata uang |
+| Kode mata uang dan koin yang Anda miliki, juga dari tugas latar belakang bila Perbarui kurs otomatis aktif | Operator riwayat kurs yang Anda pilih | Mengambil kurs lampau dan terkini untuk riwayat kurs |
 | Area mata uang atau simbol indeks setiap tujuan FIRE | Operator inflasi dan pertumbuhan pasar yang Anda pilih | Mengambil seri inflasi dan indeks untuk perhitungan FIRE |
 | Kunci API yang Anda masukkan untuk suatu operator | Hanya operator tersebut | Mengautentikasi akun Anda sendiri di operator itu |
 | Token akses atau kunci API dan ID akun atau ID query dari akun broker | Hanya broker tersebut (lihat [Akun broker dan forex]({{ page.base }}/accounts)) | Membaca total nilai akun |
@@ -54,6 +55,7 @@ Setiap operator juga melihat alamat IP Anda, seperti pada permintaan internet ma
 | TRON dan token TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Harga kripto | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Kurs fiat | [Frankfurter](https://frankfurter.dev), [Bank Sentral Eropa](https://www.ecb.europa.eu) |
+| Riwayat kurs | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | Inflasi dan pertumbuhan pasar | [World Bank](https://data.worldbank.org), [Bank Sentral Eropa](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Akun broker | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

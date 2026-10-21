@@ -41,6 +41,7 @@ Capital обращается только к провайдерам, выбра�
 | Адреса контрактов токенов и идентификаторы активов | Выбранному вами провайдеру цен криптовалют | Оценить активы |
 | Коды валют | Выбранному вами провайдеру курсов фиатных валют | Пересчитать валюты |
 | Валютная зона или символ индекса каждой цели FIRE | Выбранным вами провайдерам инфляции и роста рынка | Загрузить ряды инфляции и индекса для расчёта FIRE |
+| Коды валют и монет, которые у вас есть, в том числе из фоновой задачи при включённом автообновлении курсов | Выбранным вами провайдерам истории курсов | Загрузить прошлые и текущие курсы для истории курсов |
 | API-ключ, введённый вами для провайдера | Только этому провайдеру | Авторизовать вашу собственную учётную запись у него |
 | Токен доступа или API key и ID счёта или запроса брокерского счёта | Только этому брокеру (см. [Брокерские и форекс-счета]({{ page.base }}/accounts)) | Прочитать общую стоимость счёта |
 
@@ -54,6 +55,7 @@ Capital обращается только к провайдерам, выбра�
 | TRON и токены TRC-20 | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Цены криптовалют | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Курсы фиатных валют | [Frankfurter](https://frankfurter.dev), [Европейский центральный банк](https://www.ecb.europa.eu) |
+| История курсов | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | Инфляция и рост рынка | [World Bank](https://data.worldbank.org), [Европейский центральный банк](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Брокерские счета | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

@@ -80,7 +80,7 @@ Tab Broker → **+**. Akun broker adalah koneksi hanya-baca: pilih broker (dafta
 
 ## Pembaruan
 
-Ikon perbarui di bagian atas memuat ulang semua saldo dompet, nilai akun broker, dan harga. Satu kantong juga dapat diperbarui sendiri. Aplikasi melakukan pembaruan sekali saat baru dibuka; kembali dari latar belakang hanya memuat ulang file lokal. Pembaruan memerlukan internet; tanpa internet, nilai sebelumnya tetap ada dan ditandai usang.
+Ikon perbarui di bagian atas memuat ulang semua saldo dompet, nilai akun broker, dan harga. Satu kantong juga dapat diperbarui sendiri. Aplikasi melakukan pembaruan sekali saat baru dibuka; kembali dari latar belakang hanya memuat ulang file lokal. Pembaruan memerlukan internet; tanpa internet, nilai sebelumnya tetap ada dan ditandai usang. Setiap pembaruan juga mencatat kurs hari itu ke riwayat kurs; **Pengaturan → Perbarui kurs otomatis** menjaga riwayat itu tetap segar di latar belakang (setiap 1 hingga 24 jam) dan memberi Anda kurs terbaru saat aplikasi dibuka.
 
 ## Keamanan {#security}
 

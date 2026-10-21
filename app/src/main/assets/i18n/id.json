@@ -708,5 +708,12 @@
  "Work until age · now {0}": "Bekerja hingga usia · saat ini {0}",
  "Life expectancy · years · now {0}": "Harapan hidup · tahun · saat ini {0}",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Jika kosong, dipakai suku yang diambil oleh penyedia yang dipilih di Pengaturan, atau bawaan aplikasi.",
- "{0} · {1}": "{0} · {1}"
+ "{0} · {1}": "{0} · {1}",
+ "Rate history": "Riwayat kurs",
+ "Auto update rates": "Perbarui kurs otomatis",
+ "Every {0} h": "Setiap {0} jam",
+ "Last background update: {0}": "Pembaruan latar belakang terakhir: {0}",
+ "A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data.": "Tugas latar belakang mengambil kurs aset Anda pada interval ini dan menyimpannya di riwayat kurs; tugas ini tidak pernah menyentuh folder data. Memerlukan koneksi jaringan; memakai sedikit baterai dan data.",
+ "Duplicate series": "Seri duplikat",
+ "Invalid series": "Seri tidak valid"
 }
