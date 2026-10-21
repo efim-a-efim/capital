@@ -139,6 +139,29 @@ An account that SnapTrade has not finished syncing yet reports *SnapTrade has no
 
 SnapTrade documentation: [Getting started](https://docs.snaptrade.com/docs/getting-started) · [Personal vs Commercial](https://docs.snaptrade.com/docs/personal-vs-commercial) · [Supported brokerages](https://snaptrade.com/brokerage-integrations) · [Pricing](https://snaptrade.com/pricing)
 
+## Deposits and value history for PnL {#pnl}
+
+[Investment PnL]({{ page.base }}/screens/bucket) needs the deposits and withdrawals of a linked account and, when the broker offers it, a daily account value. Both are read with the same credential as the balance.
+
+| Broker | Deposits and withdrawals | Daily account value |
+|---|---|---|
+| Interactive Brokers | Flex Query section *Cash Transactions* | Flex Query section *Equity Summary in Base by Report Date* (365 days per query) |
+| Alpaca | Account activities (CSD, CSW) | Portfolio history |
+| Tradier | Account history (ACH, wire, check) | Historical balances |
+| tastytrade | Transactions, money movements | Net liquidating value history |
+| SnapTrade | Activities (contribution, withdrawal) | No (balance history is a beta feature, off by default) |
+| OANDA | Transactions of type TRANSFER_FUNDS | No |
+| Trading 212 | Transaction history (deposit, withdraw) | No |
+| Public.com | History, money movements | No |
+| T-Invest | Operations of the input and output types | No |
+| Capital.com | Transaction history (deposit, withdrawal) | No |
+| eToro | No: the API has no deposit history for trading accounts, so deposits count as gains | Balance history (last 12 months) |
+| Indexa Capital | No: the deposit codes are undocumented | No |
+| ALOR | No | No |
+| Akahu | No: investment accounts have no transactions | No |
+
+Without deposit history the PnL of that account is its value change. Add the Flex Query sections for Interactive Brokers in the Flex Query editor; the app says *The Flex Query lacks the … section* otherwise.
+
 ## Connecting an account in Capital {#connect}
 
 The sections below say how to create the credential at each broker. In Capital the steps are the same for all of them:

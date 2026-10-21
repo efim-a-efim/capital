@@ -22,4 +22,12 @@ title: Bucket
 
 **Tokens and "not counted".** A token is identified by its contract address. It counts only when your price source lists that exact contract; otherwise it is listed as *Unknown token · not counted* and stays out of the totals. This is what keeps an airdropped fake "USDT" out of your savings.
 
+**Investment PnL.** Switch it on in **Edit bucket** (checkbox **Investment PnL**). The app then records, at every refresh, the quantity of each holding and the deposits and withdrawals of its broker accounts, and the screen gains an **Investment** section:
+
+- Five rows, **All time**, **Last year**, **Last month**, **Last week** and **Last day**, each with the profit or loss in the bucket currency and the time-weighted return in percent, green when positive and red when negative. A row shows *since <date>* instead when the history starts after that period began.
+- A **Value** chart of the bucket's value and a **Profit and loss** chart of the cumulative result, both in the bucket currency. The chips **All**, **1Y**, **1M**, **1W** and **1D** focus both charts on that time frame; the PnL curve restarts at zero at the start of the frame.
+- *Since <date> · in <currency>* says where the history begins. *Some days lack a rate; those values carry the last known one* appears when the rate history has gaps.
+
+**How it is computed.** Profit or loss = value change minus deposits plus withdrawals. The percentage is time-weighted: each day's return is chained, so the timing of your deposits does not change it. Deposits and withdrawals come from the broker for linked accounts ([which brokers]({{ page.base }}/accounts#pnl)); for manual holdings and wallets a change of the quantity counts as a deposit or withdrawal at that day's rate, never as profit. Past values use the daily rate history (**Settings → Rate history**). Turning the switch on builds the history from the snapshots already in your folder and from the brokers (*Building the PnL history…*, then *PnL history ready: N days*); until the first refresh the section says *No history yet*.
+
 **Portfolio mode.** When it is on, the screen adds a table with value, real share, target and difference per asset, plus a **Rebalance** button that asks for an amount and lists what to buy. Sells appear only when *Allow sells during rebalance* is on. Nothing is traded.

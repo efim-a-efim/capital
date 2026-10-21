@@ -40,6 +40,9 @@ Give each goal a target and a due date, then connect the buckets that may fund i
 FIRE
 A goal of type FIRE turns a FIRE date, a contribution and a monthly spend – any of them may be left blank – into the missing number, and shows for three scenarios when the money can start to pay your spend and how long it lasts. It is a projection on your own numbers; it recommends nothing.
 
+INVESTMENT PNL
+Switch it on per bucket to see the profit or loss for all time, the last year, month, week and day, with a value chart and a PnL chart. Deposits and withdrawals are read from your brokers, past values from a daily rate history; a deposit is never counted as a gain.
+
 PLANS
 Add the savings you intend to make – salary at the end of the month, a bonus in December. Capital projects them onto your goals and tells you the date each goal closes, or how much it falls short. Plans whose date has passed move to an archive and stop counting.
 

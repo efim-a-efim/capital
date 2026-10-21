@@ -32,7 +32,8 @@ object InteractiveBrokers: BrokerPlugin {
         "1003","1021" -> tr("Statement is not available; retry later")
         else -> tr("Interactive Brokers error {0}",(code ?: "?")+(message?.let { " "+it.clean() } ?: ""))
     }
-    override suspend fun read(host: BrokerHost,id: String): Reading {
+    /** The one statement the Flex Query returns, after the two-step SendRequest / GetStatement exchange. */
+    private suspend fun statement(host: BrokerHost,id: String): org.w3c.dom.Document {
         val token=host.required(name,name); if(!token.matches(Regex("[A-Za-z0-9]{1,200}"))) throw KeyArgument(tr("Invalid Interactive Brokers token"))
         val base="https://ndcdyn.interactivebrokers.com/AccountManagement/FlexWebService"; val ua=mapOf("User-Agent" to "Java")
         val sent=xml(host.text("$base/SendRequest?t=$token&q=$id&v=3",headers=ua)).documentElement
@@ -45,13 +46,7 @@ object InteractiveBrokers: BrokerPlugin {
             if(root.tagName=="FlexQueryResponse") {
                 val statements=doc.getElementsByTagName("FlexStatement")
                 if(statements.length!=1) throw ProviderFailure(tr("The query returned {0} accounts; make one Flex Query per account",statements.length))
-                val rows=doc.getElementsByTagName("EquitySummaryByReportDateInBase")
-                val latest=(0 until rows.length).map { rows.item(it) as org.w3c.dom.Element }.filter { it.hasAttribute("total") }.maxByOrNull { it.getAttribute("reportDate").filter { c -> c.isDigit() } }
-                    ?: throw ProviderFailure(tr("Add the section Net Asset Value (NAV) Summary in Base with Report Date and Total to the Flex Query"))
-                val info=doc.getElementsByTagName("AccountInformation").item(0) as? org.w3c.dom.Element
-                val currency=latest.getAttribute("currency").ifBlank { info?.getAttribute("currency").orEmpty() }.ifBlank { throw ProviderFailure(tr("Add the Currency field of Account Information to the Flex Query")) }
-                val date=latest.getAttribute("reportDate").filter { it.isDigit() }.takeIf { it.length==8 }?.let { LocalDate.parse(it,DateTimeFormatter.BASIC_ISO_DATE) } ?: throw ProviderFailure(tr("Invalid quote time"))
-                return Reading(currency,latest.getAttribute("total"),date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())
+                return doc
             }
             if(root.tagName!="FlexStatementResponse") throw ProviderFailure(tr("Invalid provider response"))
             val code=root.child("ErrorCode")
@@ -60,5 +55,40 @@ object InteractiveBrokers: BrokerPlugin {
             delay(if(code=="1018") 10_000 else 5_000)
         }
         throw ProviderFailure(tr("Provider unavailable"))
+    }
+    private fun org.w3c.dom.Document.rows(tag: String): List<org.w3c.dom.Element> = getElementsByTagName(tag).let { n -> (0 until n.length).map { n.item(it) as org.w3c.dom.Element } }
+    private fun org.w3c.dom.Document.baseCurrency(): String = (getElementsByTagName("AccountInformation").item(0) as? org.w3c.dom.Element)?.getAttribute("currency").orEmpty()
+    /** Flex dates: `20250115`, `2025-01-15`, or with a time after `;` or `,`. */
+    private fun flexDate(raw: String): LocalDate? = raw.substringBefore(';').substringBefore(',').filter { it.isDigit() }.takeIf { it.length==8 }?.let { runCatching { LocalDate.parse(it,DateTimeFormatter.BASIC_ISO_DATE) }.getOrNull() }
+    private fun navRows(doc: org.w3c.dom.Document): List<org.w3c.dom.Element> = doc.rows("EquitySummaryByReportDateInBase").filter { it.hasAttribute("total") }
+    override suspend fun read(host: BrokerHost,id: String): Reading {
+        val doc=statement(host,id)
+        val latest=navRows(doc).maxByOrNull { it.getAttribute("reportDate").filter { c -> c.isDigit() } }
+            ?: throw ProviderFailure(tr("Add the section Net Asset Value (NAV) Summary in Base with Report Date and Total to the Flex Query"))
+        val currency=latest.getAttribute("currency").ifBlank { doc.baseCurrency() }.ifBlank { throw ProviderFailure(tr("Add the Currency field of Account Information to the Flex Query")) }
+        val date=flexDate(latest.getAttribute("reportDate")) ?: throw ProviderFailure(tr("Invalid quote time"))
+        return Reading(currency,latest.getAttribute("total"),date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())
+    }
+    override val listsFlows=true
+    /** `CashTransactions` rows of type Deposits & Withdrawals; the Flex web service returns at most the days the query's period covers (365 at most), no paging. */
+    override suspend fun flows(host: BrokerHost,id: String,since: LocalDate): List<BrokerFlow> {
+        val doc=statement(host,id)
+        if(doc.getElementsByTagName("CashTransactions").length==0) throw ProviderFailure(tr("The Flex Query lacks the {0} section","Cash Transactions"))
+        // The official field list does not give the type values; fixtures show "Deposits & Withdrawals", the NAV reports say "Deposits/Withdrawals".
+        return doc.rows("CashTransaction").filter { it.getAttribute("type").trim() in setOf("Deposits & Withdrawals","Deposits/Withdrawals") }.mapNotNull { r ->
+            val date=listOf("dateTime","settleDateTime","reportDate","date").firstNotNullOfOrNull { flexDate(r.getAttribute(it)) } ?: return@mapNotNull null
+            val ref=r.getAttribute("transactionID").ifBlank { return@mapNotNull null }
+            if(date.isBefore(since)) null else BrokerFlow(date,r.getAttribute("amount"),r.getAttribute("currency").ifBlank { doc.baseCurrency() },ref)
+        }.sortedBy { it.date }
+    }
+    override val listsHistory=true
+    /** Daily NAV from `EquitySummaryByReportDateInBase`; the same 365-day limit applies. */
+    override suspend fun history(host: BrokerHost,id: String,since: LocalDate): List<Pair<LocalDate,Reading>> {
+        val doc=statement(host,id)
+        val rows=navRows(doc)
+        if(rows.isEmpty() && doc.getElementsByTagName("EquitySummaryInBase").length==0) throw ProviderFailure(tr("The Flex Query lacks the {0} section","Net Asset Value (NAV) Summary in Base"))
+        val base=doc.baseCurrency()
+        return rows.mapNotNull { r -> flexDate(r.getAttribute("reportDate"))?.takeIf { !it.isBefore(since) }?.let { d -> d to Reading(r.getAttribute("currency").ifBlank { base },r.getAttribute("total"),d.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()) } }
+            .groupBy { it.first }.map { (_,l) -> l.last() }.sortedBy { it.first }
     }
 }

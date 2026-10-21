@@ -36,6 +36,14 @@ Amounts accept a decimal point or comma, without grouping separators. Each bucke
 
 **Portfolio mode** (bucket settings) treats a bucket as an investment portfolio: set a target percentage per asset, see real share versus target, and use **Rebalance** to get a list of what to buy for a given amount. Sells are suggested only when *Allow sells during rebalance* is on. It is a calculator; it changes nothing.
 
+## Investment PnL {#pnl}
+
+Switch **Investment PnL** on in a bucket's editor to see what the bucket earned, separated from what you paid in. The bucket screen then shows the profit or loss and the time-weighted return for all time, the last year, month, week and day, a value chart and a profit-and-loss chart with time-frame chips (All, 1Y, 1M, 1W, 1D).
+
+- **Data.** Every refresh records the quantity of each holding of the bucket and asks the linked brokers for deposits and withdrawals; manual and wallet quantity changes count as deposits or withdrawals at that day's rate. Past values are priced with the daily [rate history]({{ page.base }}/screens/settings).
+- **Backfill.** When you switch it on, the app rebuilds the history from the snapshots in your folder (one per day), fetches the missing rates, and asks each broker for its deposit history and, where the broker offers it, its daily account value. Which brokers provide what is listed on the [broker page]({{ page.base }}/accounts#pnl).
+- **Reading it.** Profit or loss is the value change minus net deposits. The percentage is time-weighted, so the timing of deposits does not move it. A period that began before your history shows *since <date>* instead of a number.
+
 ## Goals
 
 Goals tab → **+**. A goal has a name, a currency, a target amount and a due date. Open the goal and **Connect bucket** to say which buckets may fund it, optionally with a limit: a fixed amount, a percentage of the bucket, or a percentage of the goal.
