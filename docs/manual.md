@@ -80,7 +80,7 @@ Brokers tab → **+**. A broker account is a read-only connection: pick the brok
 
 ## Refresh
 
-The refresh icon at the top reloads every wallet balance, broker account value and price. A bucket can be refreshed alone. The app refreshes once on a cold start; coming back from the background only reloads the local files. Refreshing needs internet; without it the previous values remain and are marked stale.
+The refresh icon at the top reloads every wallet balance, broker account value and price. A bucket can be refreshed alone. The app refreshes once on a cold start; coming back from the background only reloads the local files. Refreshing needs internet; without it the previous values remain and are marked stale. Every refresh also records the day's rates in a rate history; **Settings → Auto update rates** keeps that history fresh in the background (every 1 to 24 hours) and gives you the newest rates when you open the app.
 
 ## Security
 

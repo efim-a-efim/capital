@@ -48,6 +48,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
     private val providers=Providers(secrets::get)
     private var foreground=true
     init {
+        RatesSchedule.apply(app,RatesSchedule.choice(app).toIntOrNull())
         val uri=prefs.getString("folder",null)
         if(uri==null) update { it.copy(loading=false) } else viewModelScope.launch {
             connect(Uri.parse(uri),false)
@@ -90,6 +91,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
                 store=next
                 update { it.copy(encrypted=false,security="OPEN",pendingRewrite=null,restorePassword=null) }
                 applyScan(scan)
+                absorbCache()
             }
             prefs.edit().putString("folder",uri.toString()).apply()
             update { it.copy(folder=uri.toString()) }
@@ -144,7 +146,22 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         try {
             val (_,scan)=target.save(data,mutable.value.heads.map { it.id }.toSet(),resolve)
             update { it.copy(heads=scan.heads,unsaved=false,blocked=scan.conflicted || scan.missingParents,message=if(scan.conflicted) tr("Concurrent edit detected. Resolve the conflict.") else tr("Saved on device")) }
+            withContext(Dispatchers.IO) { snapshot(getApplication(),data) }
         } finally { update { it.copy(saving=false) } }
+    }
+    /** Background samples folded into quotes and history; the file is dropped only once they are saved. The notice stays as it was. */
+    private suspend fun absorbCache() {
+        val s=mutable.value
+        if(!isOpen || !s.ready || s.blocked || s.unsaved) return
+        val app=getApplication<Application>(); val file=cacheFile(app)
+        val cached=withContext(Dispatchers.IO) { readCache(file) }
+        val merged=s.data.withCachedRates(cached)
+        try {
+            if(merged != s.data) { val keep=s.message; persist(merged.linked().solvedFire()); update { it.copy(message=keep) } }
+            else withContext(Dispatchers.IO) { snapshot(app,s.data) }
+            if(cached.isNotEmpty()) { RatesSchedule.touch(app); withContext(Dispatchers.IO) { file.delete() } }
+        } catch(e: CancellationException) { throw e }
+        catch(e: Exception) { notice(e.message ?: tr("Could not save")) }
     }
     fun retrySave()=viewModelScope.launch { transaction.withLock {
         try { persist(mutable.value.data) } catch(e: Exception) { notice(e.message ?: tr("Save failed")) }
@@ -160,7 +177,8 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
         refreshJob=viewModelScope.launch {
             update { it.copy(refreshing=true,message=tr("Refreshing selected providers…")) }
             try {
-                val observations=providers.refresh(requested,bucketId)
+                transaction.withLock { absorbCache() }
+                val observations=providers.refresh(mutable.value.data,bucketId)
                 transaction.withLock {
                     if(mutable.value.blocked || mutable.value.unsaved) { notice(tr("Refresh finished; resolve storage issues before retrying.")); return@withLock }
                     withContext(NonCancellable) { persist(mergeObservations(mutable.value.data,requested,observations.holdings,observations.quotes,observations.unlisted,observations.accounts,observations.rates)) }
@@ -279,6 +297,7 @@ class CapitalModel(app: Application): AndroidViewModel(app) {
             applyScan(scan)
             val pending=prefs.getString("rewrite",null) ?: if(forms.plain>0 && forms.encrypted>0) "on" else null
             update { it.copy(security="OPEN",encrypted=true,pendingRewrite=pending) }
+            absorbCache()
         } catch(e: Exception) { return@withLock fail(e.message ?: tr("Cannot open folder")) }
         null
     }

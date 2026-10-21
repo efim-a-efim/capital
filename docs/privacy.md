@@ -41,6 +41,7 @@ Capital contacts only the operators you choose in Settings, only over HTTPS, and
 | Token contract addresses and asset ids | The crypto price operator you selected | Price the assets |
 | Currency codes | The fiat rate operator you selected | Convert between currencies |
 | The currency area or index symbol of each FIRE goal | The inflation and market growth operators you selected | Fetch the inflation and index series for the FIRE calculation |
+| The codes of the currencies and coins you hold, also from the background job when Auto update rates is on | The rate history operators you selected | Fetch past and current rates for the rate history |
 | The API key you entered for an operator | That operator only | Authenticate your own account with them |
 | The access token or API key and the account or query id of a broker account | That broker only (see [Broker and forex accounts]({{ page.base }}/accounts)) | Read the account's total value |
 
@@ -54,6 +55,7 @@ Every operator also sees your IP address, as with any internet request. The oper
 | TRON and TRC-20 tokens | [TronGrid](https://www.trongrid.io), [PublicNode](https://publicnode.com) |
 | Crypto prices | [DefiLlama](https://defillama.com), [CoinGecko](https://www.coingecko.com), [CoinPaprika](https://coinpaprika.com) |
 | Fiat rates | [Frankfurter](https://frankfurter.dev), [European Central Bank](https://www.ecb.europa.eu) |
+| Rate history | [Frankfurter](https://frankfurter.dev), [DefiLlama](https://defillama.com) |
 | Inflation and market growth | [World Bank](https://data.worldbank.org), [European Central Bank](https://www.ecb.europa.eu), [OECD](https://www.oecd.org), [Yahoo Finance](https://finance.yahoo.com) |
 | Broker accounts | [Interactive Brokers](https://www.interactivebrokers.com), [OANDA](https://www.oanda.com), [Trading 212](https://www.trading212.com), [SnapTrade](https://snaptrade.com), [Alpaca](https://alpaca.markets), [Tradier](https://tradier.com), [tastytrade](https://tastytrade.com), [Public.com](https://public.com), [eToro](https://www.etoro.com), [Indexa Capital](https://indexacapital.com), [T-Invest](https://www.tbank.ru/invest/), [ALOR](https://www.alorbroker.ru), [Capital.com](https://capital.com), [Akahu](https://www.akahu.nz) |
 

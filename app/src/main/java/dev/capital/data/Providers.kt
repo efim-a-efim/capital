@@ -15,6 +15,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.coroutines.resume
@@ -121,7 +122,7 @@ fun parseYahoo(body: String,thisYear: Int): Map<String,String> {
     }
     return out
 }
-fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList(), rates: List<Rate> = emptyList()): Portfolio {
+fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<Holding>, quotes: List<Quote>, unlisted: Set<String> = emptySet(), accounts: List<Account> = emptyList(), rates: List<Rate> = emptyList(), history: List<Series> = emptyList()): Portfolio {
     val results=holdings.associateBy { it.id }; val read=accounts.associateBy { it.id }
     val merged=current.copy(
         accounts=current.accounts.map { a -> read[a.id]?.takeIf { r -> requested.accounts.find { it.id == a.id }?.let { it.broker == a.broker && it.address == a.address } == true }?.let { r -> a.copy(asset=r.asset,quantity=r.quantity,observedAt=r.observedAt,fetchedAt=r.fetchedAt,error=r.error) } ?: a },
@@ -137,9 +138,35 @@ fun mergeObservations(current: Portfolio, requested: Portfolio, holdings: List<H
         quotes=if(current.settings.providers == requested.settings.providers) (current.quotes.associateBy { it.asset } + quotes.associateBy { it.asset }).values.filter { it.asset !in unlisted } else current.quotes,
     )
     val used=merged.holdings.flatMap { h -> h.tokens.filter { it.contract !in h.excluded }.map { tokenAsset(h.asset,it.contract) } }.toSet()
-    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used }).linked().solvedFire()
+    // Fetched days replace stored ones; other days are kept. A series keeps its newest 4000 days.
+    val union=history.fold(merged.history.associateBy { it.key }) { acc,s -> acc + (s.key to Series(s.key,(acc[s.key]?.points.orEmpty()+s.points).toSortedMap().entries.toList().takeLast(4000).associate { it.key to it.value })) }
+    return merged.copy(quotes=merged.quotes.filter { ':' !in it.asset || it.asset in used },history=union.values.toList()).recorded().linked().solvedFire()
 }
-data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList())
+/** Oldest first day of history the portfolio needs for an asset: the earliest day of its stored series, else the oldest observation time of any holding, account or quote, else one year back. Never more than 4000 days back. */
+fun historyStart(data: Portfolio,asset: String,today: LocalDate): LocalDate {
+    val stored=data.history.find { it.key=="rate:$asset" }?.points?.keys?.minOrNull()?.let { LocalDate.parse(it) }
+    val observed=(data.holdings.mapNotNull { it.observedAt }+data.accounts.mapNotNull { it.observedAt }+data.quotes.map { it.observedAt }).filter { it>0 }.minOrNull()?.let { Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate() }
+    // The earliest of: the stored series, the oldest observation, and one year back (a series that only holds today's point must still backfill).
+    return listOfNotNull(stored,observed,today.minusDays(365)).min().let { if(it.isBefore(today.minusDays(3999))) today.minusDays(3999) else it }
+}
+/** The day to fetch history from, or null when the asset's series is complete: it has its first needed day and a point in the last 7 days. */
+fun historyGap(data: Portfolio,asset: String,today: LocalDate): LocalDate? {
+    val start=historyStart(data,asset,today); val points=data.history.find { it.key=="rate:$asset" }?.points?.keys.orEmpty()
+    if(start.toString() !in points) return start
+    return points.max().takeIf { it<today.minusDays(7).toString() }?.let { LocalDate.parse(it) }
+}
+private val coingeckoIds=mapOf("BTC" to "bitcoin","ETH" to "ethereum","TON" to "the-open-network","TRX" to "tron")
+private val llamaPlatforms=mapOf("ETH" to "ethereum","TRX" to "tron","TON" to "ton")
+/** DefiLlama coin key of a chain native or token asset. */
+private fun llamaKey(asset: String): String {
+    if(':' !in asset) return "coingecko:${coingeckoIds.getValue(asset)}"
+    val (c,contract)=asset.split(":",limit=2)
+    return "${llamaPlatforms.getValue(c)}:${providerAddress(Chain.valueOf(c),contract)}"
+}
+private fun llamaCase(key: String) = key.startsWith("ethereum:") || key.startsWith("coingecko:")
+/** Dates since..until cut into inclusive ranges of at most `size` days. */
+private fun dayRanges(since: LocalDate,until: LocalDate,size: Long) = generateSequence(since) { it.plusDays(size) }.takeWhile { !it.isAfter(until) }.map { it to minOf(it.plusDays(size-1),until) }.toList()
+data class Observations(val holdings: List<Holding>, val quotes: List<Quote>, val errors: List<String>, val unlisted: Set<String> = emptySet(), val accounts: List<Account> = emptyList(), val rates: List<Rate> = emptyList(), val history: List<Series> = emptyList())
 // Contract lookups per refresh. DefiLlama answers in batches. CoinPaprika free tier: 60 requests per hour, a listed contract costs two.
 fun tokenLookups(provider: String) = when(provider) { "DefiLlama" -> 1000; "CoinPaprika" -> 10; else -> 30 }
 const val MIN_CONFIDENCE = "0.9"
@@ -319,7 +346,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             val coins=obj("https://coins.llama.fi/prices/current/${chunk.joinToString(",")}").sub("coins") ?: throw ProviderFailure(tr("Missing coins in provider response"))
             chunk.mapNotNull { k ->
                 // TON and TRON addresses are case-sensitive; hex and ids are not.
-                val c=coins.entries.firstOrNull { it.key.equals(k,ignoreCase=k.startsWith("ethereum:") || k.startsWith("coingecko:")) }?.value as? JsonObject ?: return@mapNotNull null
+                val c=coins.entries.firstOrNull { it.key.equals(k,ignoreCase=llamaCase(k)) }?.value as? JsonObject ?: return@mapNotNull null
                 val price=c.opt("price")?.toBigDecimalOrNull()?.setScale(18,java.math.RoundingMode.DOWN) ?: return@mapNotNull null
                 val confidence=c.opt("confidence")?.toBigDecimalOrNull() ?: return@mapNotNull null
                 val stamp=(c.opt("timestamp")?.toBigDecimalOrNull()?.toLong() ?: return@mapNotNull null)*1000
@@ -327,10 +354,10 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             }
         }.toMap()
     }
-    private suspend fun crypto(assets: Set<String>,provider: String,onError: (String,Exception)->Unit): List<Quote> {
+    suspend fun crypto(assets: Set<String>,provider: String,onError: (String,Exception)->Unit): List<Quote> {
         val now=System.currentTimeMillis()
         if(assets.isEmpty()) return emptyList()
-        val ids=mapOf("BTC" to "bitcoin","ETH" to "ethereum","TON" to "the-open-network","TRX" to "tron")
+        val ids=coingeckoIds
         if(provider=="DefiLlama") {
             val coins=llama(assets.map { "coingecko:${ids.getValue(it)}" })
             return quoteEach(assets,onError) { asset -> coins["coingecko:${ids.getValue(asset)}"]?.let { (price,stamp) -> Quote(asset,price,provider,stamp,now) } ?: throw ProviderFailure(tr("No price for {0}",asset)) }
@@ -355,7 +382,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             Quote(asset,price,provider,Instant.parse(q.string("last_updated")).toEpochMilli(),now)
         }
     }
-    private suspend fun fiat(assets: Set<String>,provider: String,onError: (String,Exception)->Unit): List<Quote> {
+    suspend fun fiat(assets: Set<String>,provider: String,onError: (String,Exception)->Unit): List<Quote> {
         if(assets.isEmpty()) return emptyList()
         val now=System.currentTimeMillis()
         if(provider=="Frankfurter") {
@@ -416,6 +443,56 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
                 }
                 else -> throw ProviderFailure(tr("Unsupported provider"))
             })
+        }
+    }
+    /** Daily USD prices of assets from `since` to `until` as `rate:<asset>` series. Failed assets go to onError and are left out; the caller keeps their old series. */
+    suspend fun history(assets: Set<String>,since: LocalDate,until: LocalDate,provider: String,onError: (String,Exception)->Unit): List<Series> {
+        if(provider!="Frankfurter + DefiLlama" || assets.isEmpty() || until.isBefore(since)) return emptyList()
+        val points=mutableMapOf<String,MutableMap<String,String>>(); val failed=mutableSetOf<String>()
+        fun fail(asset: String,e: Exception) { if(failed.add(asset)) onError(asset,e) }
+        // One request for the assets that have not failed yet; a failure of the whole request fails each of them.
+        suspend fun group(list: List<String>,block: suspend (List<String>)->Unit) {
+            val active=list.filter { it !in failed }
+            if(active.isEmpty()) return
+            try { block(active) } catch(e: CancellationException) { throw e } catch(e: Exception) { active.forEach { fail(it,e) } }
+        }
+        val native=Chain.entries.map { it.name }.toSet()
+        val fiat=assets.filter { ':' !in it && it !in native && it!="USD" }.sorted()
+        // Frankfurter answers about one year per request and only for business days; the consumer carries the last point forward.
+        for((from,to) in dayRanges(since,until,365)) group(fiat) { active ->
+            val rows=obj("https://api.frankfurter.dev/v1/$from..$to?base=USD&symbols=${active.joinToString(",")}")["rates"]?.jsonObject ?: throw ProviderFailure(tr("Missing {0} in provider response","rates"))
+            val found=mutableMapOf<String,MutableMap<String,String>>()
+            for((day,row) in rows) {
+                LocalDate.parse(day)
+                for(a in active) {
+                    val rate=row.jsonObject.opt(a)?.toBigDecimalOrNull() ?: continue
+                    if(rate.signum()<=0) throw badResponse()
+                    found.getOrPut(a) { mutableMapOf() }[day]=java.math.BigDecimal.ONE.divideMoney(rate).text()
+                }
+            }
+            found.forEach { (a,p) -> points.getOrPut(a) { mutableMapOf() } += p }
+        }
+        for(list in assets.filter { ':' in it || it in native }.sorted().chunked(20)) for((from,to) in dayRanges(since,until,1000)) group(list) { active ->
+            val keys=active.mapNotNull { a -> try { a to llamaKey(a) } catch(e: Exception) { fail(a,e); null } }.toMap()
+            if(keys.isEmpty()) return@group
+            val start=from.atStartOfDay().toEpochSecond(ZoneOffset.UTC)
+            val coins=obj("https://coins.llama.fi/chart/${keys.values.joinToString(",")}?start=$start&span=${ChronoUnit.DAYS.between(from,to)+1}&period=1d").sub("coins") ?: throw ProviderFailure(tr("Missing coins in provider response"))
+            for((a,k) in keys) try {
+                val prices=(coins.entries.firstOrNull { it.key.equals(k,ignoreCase=llamaCase(k)) }?.value as? JsonObject)?.get("prices")?.jsonArray ?: throw ProviderFailure(tr("No price for {0}",a))
+                val found=mutableMapOf<String,String>()
+                for(row in prices) {
+                    val o=row.jsonObject; val day=Instant.ofEpochSecond(o.string("timestamp").toBigDecimal().toLong()).atZone(ZoneOffset.UTC).toLocalDate()
+                    val price=o.string("price").toBigDecimal().setScale(18,java.math.RoundingMode.DOWN)
+                    if(price.signum()<0 || price.precision()-price.scale()>40) throw badResponse()
+                    if(!day.isBefore(from) && !day.isAfter(to)) found[day.toString()]=price.text()
+                }
+                points.getOrPut(a) { mutableMapOf() } += found
+            } catch(e: CancellationException) { throw e } catch(e: Exception) { fail(a,e) }
+        }
+        return assets.sorted().filter { it !in failed }.mapNotNull { a ->
+            val p=points[a].orEmpty()
+            if(p.isEmpty()) { onError(a,ProviderFailure(tr("No rate data for {0}",a))); null }
+            else Series("rate:$a",p.toSortedMap().entries.toList().takeLast(4000).associate { it.key to it.value })
         }
     }
     /** What broker plugins see: the paced HTTPS client and the stored credentials. */
@@ -492,8 +569,7 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
         val missingKey=try { if(lookups.isNotEmpty() && provider=="CoinGecko") requiredKey(provider); null } catch(e: Exception) { e.safeMessage() }
         if(missingKey != null) { errors += tr("{0} · {1}",provider,tr("Tokens: {0}",missingKey)); lookups.forEach { keepOld(it,missingKey) } }
         else if(provider=="DefiLlama") {
-            val platform=mapOf("ETH" to "ethereum","TRX" to "tron","TON" to "ton")
-            val keys=lookups.associateWith { a -> val (c,contract)=a.split(":",limit=2); "${platform.getValue(c)}:${providerAddress(Chain.valueOf(c),contract)}" }
+            val keys=lookups.associateWith(::llamaKey)
             try {
                 val found=if(keys.isEmpty()) emptyMap() else llama(keys.values.toList())
                 lookups.forEach { a -> looked += a; found[keys.getValue(a)]?.let { (price,stamp) -> quotes += Quote(a,price,provider,stamp,now) } ?: run { unlisted += a } }
@@ -533,7 +609,21 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             catch(e: CancellationException) { throw e }
             catch(e: Exception) { currencies.forEach { failedRate(it,e) } }
         }
-        return Observations(final,quotes,errors,unlisted,read,fetchedRates)
+        val fetchedHistory=mutableListOf<Series>()
+        val historySource=data.settings.providers.getValue("Rate history")
+        if(bucketId==null && historySource!="Off") {
+            val today=LocalDate.now(ZoneOffset.UTC)
+            // Assets that miss days, grouped by the day to start from so that one request covers many.
+            val needs=assets.sorted().mapNotNull { a -> historyGap(data,a,today)?.let { a to it } }.groupBy({ it.second },{ it.first })
+            for((since,group) in needs) {
+                try { fetchedHistory += history(group.toSet(),since,today,historySource) { a,e -> errors += tr("{0} · {1}",historySource,tr("{0}: {1}",a,e.safeMessage())) } }
+                catch(e: CancellationException) { throw e }
+                catch(e: Exception) { group.forEach { a -> errors += tr("{0} · {1}",historySource,tr("{0}: {1}",a,e.safeMessage())) } }
+            }
+        }
+        // Stored days win over fetched ones; the rest is the union.
+        val mergedHistory=fetchedHistory.groupBy { it.key }.map { (k,list) -> Series(k,list.flatMap { it.points.entries }.associate { it.key to it.value }+data.history.find { it.key==k }?.points.orEmpty()) }
+        return Observations(final,quotes,errors,unlisted,read,fetchedRates,mergedHistory)
     }
 }
 fun Exception.safeMessage(): String = when(this) {

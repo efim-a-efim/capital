@@ -42,8 +42,11 @@ checks = [
     ("ECB inflation", "https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.000000.4.ANR?format=csvdata&startPeriod=1997-01", None),
     ("OECD inflation", "https://sdmx.oecd.org/public/rest/data/OECD.SDD.TPS,DSD_PRICES@DF_PRICES_ALL,1.0/USA.A.N.CPI.PA._T.N.GY?startPeriod=1990&dimensionAtObservation=AllDimensions&format=jsondata", None),
     ("Yahoo Finance growth", "https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=30y&interval=1mo", None),
+    # Rate history: one Frankfurter range and one DefiLlama chart.
+    ("Frankfurter range", "https://api.frankfurter.dev/v1/2024-01-02..2024-01-05?base=USD&symbols=EUR,GBP", None),
+    ("DefiLlama chart", "https://coins.llama.fi/chart/coingecko:bitcoin,ethereum:0xdac17f958d2ee523a2206206994597c13d831ec7?start=1704153600&span=3&period=1d", None),
 ]
-shapes={"World Bank inflation": '[{"page"', "World Bank growth": '[{"page"', "ECB inflation": "KEY,FREQ,", "OECD inflation": '{"meta"', "Yahoo Finance growth": '{"chart"'}
+shapes={"Frankfurter range": '{"amount"', "DefiLlama chart": '{"coins"', "World Bank inflation": '[{"page"', "World Bank growth": '[{"page"', "ECB inflation": "KEY,FREQ,", "OECD inflation": '{"meta"', "Yahoo Finance growth": '{"chart"'}
 # T-Invest (invest-public-api.tbank.ru) is not listed: it is served under the Russian Trusted Root CA, which only the app trusts for that host.
 expected_errors={"OANDA v20": 401, "Trading 212": 401, "Alpaca": 401, "Tradier": 401, "tastytrade": 400, "Public.com": 401, "eToro": 401, "Indexa Capital": 401, "ALOR": 403, "Capital.com": 400, "Akahu": 401}
 results=[]

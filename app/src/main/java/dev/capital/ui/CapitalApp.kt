@@ -62,6 +62,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.capital.CapitalModel
+import dev.capital.data.RatesSchedule
 import dev.capital.data.Revision
 import dev.capital.Tips
 import dev.capital.brokers.Brokers
@@ -322,6 +323,7 @@ private val rtlType=Typography().run {
     val restore=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { it?.let(model::inspectRestore) }
     val context=LocalContext.current
     var language by remember { mutableStateOf(dev.capital.Language.choice(context)) }
+    var ratesHours by remember { mutableStateOf(RatesSchedule.choice(context)) }
     val screenScroll=remember(section,bucketId,goalId) { ScrollState(0) }
     val scheme=when(data.settings.theme) { "Dark" -> dark; "Light" -> light; else -> if(isSystemInDarkTheme()) dark else light }
     fun move(id: String,up: Boolean,times: Int) { model.edit({ p -> (1..times).fold(p) { acc,_ -> acc.moveGoal(id,up) } }) }
@@ -561,9 +563,12 @@ private val rtlType=Typography().run {
                                         val provider=data.settings.providers.getValue(category)
                                         if(!category.endsWith(" tokens") && provider in listOf("Alchemy","TronGrid","CoinGecko","TON Center")) TextButton(onClick={ keyProvider=provider }) { Text(if(provider=="TON Center") tr("Optional key: {0}",provider) else tr("Required free key: {0}",provider)) }
                                     }
+                                    Choice(tr("Auto update rates"),ratesHours,RatesSchedule.options,editable,show={ if(it=="Off") shown("Off") else tr("Every {0} h",it) }) { RatesSchedule.choose(context,it); ratesHours=it }
+                                    Note(tr("A background job fetches the rates of your assets at this interval and keeps them in the rate history; it never touches the data folder. Needs a network connection; uses a little battery and data."))
                                     OutlinedButton(onClick={ model.refresh() },enabled=editable && !state.refreshing) { Text(tr("Test sources / refresh portfolio")) }
                                     Note(tr("Tests query only assets and addresses in your portfolio. No silent provider fallback. Token sources and price providers also receive wallet or token contract addresses; choose Off to stop token lookups for a chain."))
                                     Heading(tr("Quotes and freshness"))
+                                    RatesSchedule.last(context)?.let { Note(tr("Last background update: {0}",time(it))) }
                                     if(data.quotes.isEmpty()) Note(tr("No cached quotes. Add holdings and refresh."))
                                     data.quotes.count { ':' in it.asset }.takeIf { it>0 }?.let { Note(tr("{0} token prices by contract address are shown with their wallets.",it)) }
                                     data.quotes.filter { ':' !in it.asset }.forEach { q -> Text("${q.asset}: ${money(q.usd.decimal(),"USD")}"); Note(tr("{0} · observed {1} · fetched {2}{3}",shown(q.source),time(q.observedAt),time(q.fetchedAt),q.error?.let { "\n$it" } ?: "")) }

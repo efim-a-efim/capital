@@ -12,12 +12,13 @@ import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicInteger
 
 class ProviderTest {
+    private fun Settings.noHistory()=copy(providers=providers+("Rate history" to "Off"))
     private fun client(retryAfter: String="0",reply: (Request)->Pair<Int,String>)=OkHttpClient.Builder().addInterceptor { chain ->
         val (status,body)=reply(chain.request())
         Response.Builder().request(chain.request()).protocol(Protocol.HTTP_1_1).code(status).message("test").header("Retry-After",retryAfter).body(body.toResponseBody()).build()
     }.build()
     @Test fun partialQuoteFailurePreservesSuccessfulObservations()=runBlocking {
-        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),holdings=listOf(Holding("eur","b","Euro","EUR","10"),Holding("rsd","b","Dinar","RSD","10")),quotes=listOf(Quote("RSD","0.01","old",1000,1000)),settings=Settings("USD"))
+        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),holdings=listOf(Holding("eur","b","Euro","EUR","10"),Holding("rsd","b","Dinar","RSD","10")),quotes=listOf(Quote("RSD","0.01","old",1000,1000)),settings=Settings("USD").noHistory())
         val provider=Providers({ "" },client { 200 to """[{"base":"USD","quote":"EUR","date":"2026-09-28","rate":0.8}]""" })
         val result=provider.refresh(p,null)
         assertEquals(2,result.quotes.size)
@@ -66,7 +67,7 @@ class ProviderTest {
         assertEquals(1,attempts.get())
     }
     @Test fun refreshRetainsPriorHoldingOnFailure()=runBlocking {
-        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),holdings=listOf(btc.copy(quantity="0.5")),settings=Settings("USD"))
+        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),holdings=listOf(btc.copy(quantity="0.5")),settings=Settings("USD").noHistory())
         val result=Providers({ "" },client { 500 to "{}" }).refresh(p,null)
         assertEquals("0.5",result.holdings.single().quantity)
         assertNotNull(result.holdings.single().error)
@@ -95,7 +96,7 @@ class ProviderTest {
     private fun blockscout(vararg rows: Triple<String,String,String>) = ok(rows.joinToString(",","[","]") { (a,v,type) -> """{"token":{"address_hash":"$a","decimals":"6","name":"n","symbol":"USDT","type":"$type"},"value":"$v"}""" })
     private val ethWallet=Holding("w","b","Wallet","ETH",null,wallet)
     private fun ethPortfolio(w: Holding=ethWallet,quotes: List<Quote> = emptyList(),ethTokens: String="Blockscout")=Portfolio(buckets=listOf(Bucket("b","B","USD")),holdings=listOf(w),quotes=quotes,
-        settings=Settings("USD",providers=providerChoices.mapValues { it.value.first() }+("Crypto" to "CoinPaprika")+("ETH tokens" to ethTokens)))
+        settings=Settings("USD",providers=providerChoices.mapValues { it.value.first() }+("Crypto" to "CoinPaprika")+("ETH tokens" to ethTokens)+("Rate history" to "Off")))
     @Test fun blockscoutKeepsOnlyValidErc20()=runBlocking {
         val provider=route { blockscout(Triple(real,"250000000","ERC-20"),Triple("0x"+"4".repeat(40),"1","ERC-721"),Triple("0x"+"5".repeat(40),"0","ERC-20"),Triple("0x123","7","ERC-20")).let { ok(it.second.replace("USDT","US\\u0000D\\nT")) } }
         val t=provider.tokens(ethWallet,"Blockscout").single()
@@ -289,7 +290,7 @@ class ProviderTest {
         try { other.account(oandaHolding); fail("Expected failure") } catch(_: IllegalArgumentException) { }
     }
     @Test fun refreshUpdatesAccountsAndFollowsTheirCurrency()=runBlocking {
-        val p=Portfolio(buckets=listOf(Bucket("b","B","USD")),accounts=listOf(oandaHolding,ibHolding),holdings=listOf(Holding("oa","b","Forex","USD",null,accountId="oa"),Holding("ib","b","Broker","USD","10",accountId="ib")),settings=Settings("USD",providers=providerChoices.mapValues { it.value.first() }+("Fiat" to "Frankfurter"))).linked()
+        val p=Portfolio(buckets=listOf(Bucket("b","B","USD")),accounts=listOf(oandaHolding,ibHolding),holdings=listOf(Holding("oa","b","Forex","USD",null,accountId="oa"),Holding("ib","b","Broker","USD","10",accountId="ib")),settings=Settings("USD",providers=providerChoices.mapValues { it.value.first() }+("Fiat" to "Frankfurter")+("Rate history" to "Off"))).linked()
         val fiat=mutableListOf<String>()
         val provider=route { req -> when {
             req.url.host=="api-fxtrade.oanda.com" -> ok("""{"account":{"id":"001-001-1234567-001","currency":"CHF","NAV":"100.5"}}""")
@@ -434,5 +435,78 @@ class ProviderTest {
         assertTrue(Providers({ "" },client { 200 to wbBody },0).refresh(p,"b").rates.isEmpty())
         val failing=Providers({ "" },client { 500 to "{}" },0).refresh(p.copy(rates=result.rates),null)
         assertEquals(result.rates.single().values,failing.rates.single().values); assertNotNull(failing.rates.single().error)
+    }
+    // --- rate history ---
+    private val frankfurterBody="""{"amount":1.0,"base":"USD","start_date":"2024-01-02","end_date":"2024-01-03","rates":{"2024-01-02":{"EUR":0.8,"GBP":0.5},"2024-01-03":{"EUR":0.5,"GBP":0.25}}}"""
+    private val chartBody="""{"coins":{"coingecko:bitcoin":{"symbol":"BTC","confidence":0.99,"prices":[{"timestamp":1704153608,"price":44147},{"timestamp":1704240009,"price":44952.5}]},"coingecko:ethereum":{"symbol":"ETH","confidence":0.99,"prices":[{"timestamp":1704153625,"price":2300.25}]}}}"""
+    private fun history(assets: Set<String>,since: String,until: String,provider: Providers,errors: MutableMap<String,String> = mutableMapOf()) = runBlocking {
+        provider.history(assets,java.time.LocalDate.parse(since),java.time.LocalDate.parse(until),"Frankfurter + DefiLlama") { a,e -> errors[a]=e.message.orEmpty() }
+    }
+    @Test fun frankfurterRangeGivesInversePricePerDay() {
+        val seen=mutableListOf<Request>()
+        val series=history(setOf("EUR","GBP"),"2024-01-02","2024-01-03",Providers({ "" },client { r -> seen += r; 200 to frankfurterBody },0))
+        assertEquals("https://api.frankfurter.dev/v1/2024-01-02..2024-01-03?base=USD&symbols=EUR,GBP",seen.single().url.toString())
+        assertEquals(listOf("rate:EUR","rate:GBP"),series.map { it.key })
+        assertEquals(mapOf("2024-01-02" to "1.25","2024-01-03" to "2"),series[0].points)
+        assertEquals(mapOf("2024-01-02" to "2","2024-01-03" to "4"),series[1].points)
+    }
+    @Test fun frankfurterRangesOverOneYearAreChunked() {
+        val seen=mutableListOf<String>()
+        history(setOf("EUR"),"2022-01-01","2024-01-01",Providers({ "" },client { r -> seen += r.url.encodedPath; 200 to frankfurterBody },0))
+        assertEquals(listOf("/v1/2022-01-01..2022-12-31","/v1/2023-01-01..2023-12-31","/v1/2024-01-01..2024-01-01"),seen)
+    }
+    @Test fun llamaChartMapsTimestampsToUtcDays() {
+        val seen=mutableListOf<Request>()
+        val series=history(setOf("BTC","ETH"),"2024-01-02","2024-01-03",Providers({ "" },client { r -> seen += r; 200 to chartBody },0))
+        assertEquals("https://coins.llama.fi/chart/coingecko:bitcoin,coingecko:ethereum?start=1704153600&span=2&period=1d",seen.single().url.toString().replace("%3A",":"))
+        assertEquals(mapOf("2024-01-02" to "44147","2024-01-03" to "44952.5"),series.first { it.key=="rate:BTC" }.points)
+        assertEquals(mapOf("2024-01-02" to "2300.25"),series.first { it.key=="rate:ETH" }.points)
+    }
+    @Test fun llamaTokenUsesPlatformKeyAndSpanIsChunked() {
+        val seen=mutableListOf<String>()
+        history(setOf(tokenAsset("ETH",real)),"2020-01-01","2024-01-01",Providers({ "" },client { r -> seen += r.url.queryParameter("span").orEmpty() + r.url.encodedPath.substringAfterLast('/'); 200 to """{"coins":{"ethereum:$real":{"prices":[{"timestamp":1577836800,"price":1}]}}}""" },0))
+        assertEquals("1000ethereum:$real",seen.first()); assertEquals(2,seen.size)
+    }
+    @Test fun historyErrorsAreReportedPerAsset() {
+        val errors=mutableMapOf<String,String>()
+        val series=history(setOf("BTC","ETH"),"2024-01-02","2024-01-03",Providers({ "" },client { 200 to """{"coins":{"coingecko:bitcoin":{"prices":[{"timestamp":1704153608,"price":44147}]},"coingecko:ethereum":{"prices":[{"timestamp":1704153625,"price":-1}]}}}""" },0),errors)
+        assertEquals(listOf("rate:BTC"),series.map { it.key }); assertEquals(setOf("ETH"),errors.keys)
+        val all=mutableMapOf<String,String>()
+        assertTrue(history(setOf("EUR","GBP"),"2024-01-02","2024-01-03",Providers({ "" },client { 500 to "{}" },0),all).isEmpty())
+        assertEquals(setOf("EUR","GBP"),all.keys)
+        assertTrue(runBlocking { Providers({ "" },client { fail("no request"); 200 to "" },0).history(setOf("EUR"),java.time.LocalDate.now(),java.time.LocalDate.now(),"Off") { _,_ -> } }.isEmpty())
+    }
+    @Test fun mergeUnionsHistoryAndRecordsTodaysQuotes() {
+        val p=Portfolio(quotes=listOf(Quote("EUR","1.1","x",1,1)),history=listOf(Series("rate:EUR",mapOf("2024-01-02" to "1","2024-01-03" to "1.5"))))
+        val m=mergeObservations(p,p,emptyList(),emptyList(),history=listOf(Series("rate:EUR",mapOf("2024-01-03" to "2","2024-01-04" to "3")),Series("rate:GBP",mapOf("2024-01-04" to "4"))))
+        val eur=m.history.first { it.key=="rate:EUR" }.points
+        assertEquals("1",eur["2024-01-02"]); assertEquals("2",eur["2024-01-03"]); assertEquals("3",eur["2024-01-04"])
+        assertEquals("1.1",eur[java.time.LocalDate.now().toString()]); assertEquals(setOf("rate:EUR","rate:GBP"),m.history.map { it.key }.toSet())
+    }
+    @Test fun earliestDayNeededRule() {
+        val today=java.time.LocalDate.parse("2026-10-22")
+        fun ms(d: String)=java.time.LocalDate.parse(d).atStartOfDay().toInstant(java.time.ZoneOffset.UTC).toEpochMilli()
+        assertEquals(today.minusDays(365),historyStart(Portfolio(),"EUR",today))
+        val seen=Portfolio(quotes=listOf(Quote("BTC","1","x",ms("2026-03-05"),1)),holdings=listOf(Holding("h","b","H","EUR","1",observedAt=ms("2026-01-01"))))
+        assertEquals(today.minusDays(365),historyStart(seen,"EUR",today))
+        val old=seen.copy(holdings=listOf(seen.holdings.single().copy(observedAt=ms("2024-06-01"))))
+        assertEquals(java.time.LocalDate.parse("2024-06-01"),historyStart(old,"EUR",today))
+        assertEquals(java.time.LocalDate.parse("2024-01-31"),historyStart(old.copy(history=listOf(Series("rate:EUR",mapOf("2024-01-31" to "1")))),"EUR",today))
+        assertEquals(today.minusDays(365),historyGap(seen,"EUR",today))
+        val full=seen.copy(history=listOf(Series("rate:EUR",mapOf(today.minusDays(365).toString() to "1","2026-10-20" to "1"))))
+        assertNull(historyGap(full,"EUR",today))
+        assertEquals(java.time.LocalDate.parse("2026-10-01"),historyGap(full.copy(history=listOf(Series("rate:EUR",mapOf(today.minusDays(365).toString() to "1","2026-10-01" to "1")))),"EUR",today))
+    }
+    @Test fun refreshFetchesHistoryForFullRefreshOnly()=runBlocking {
+        val p=Portfolio(buckets=listOf(Bucket("b","Cash","USD")),holdings=listOf(Holding("e","b","Euro","EUR","10")),settings=Settings("USD"))
+        val paths=mutableListOf<String>()
+        val provider=Providers({ "" },client { r -> paths += r.url.encodedPath; 200 to (if(r.url.encodedPath.startsWith("/v1/")) frankfurterBody.replace("2024","${java.time.LocalDate.now().year}") else """[{"base":"USD","quote":"EUR","date":"2026-09-28","rate":0.8}]""") },0)
+        val result=provider.refresh(p,null)
+        assertTrue(paths.any { it.startsWith("/v1/") })
+        assertEquals(listOf("rate:EUR"),result.history.map { it.key })
+        paths.clear()
+        assertTrue(provider.refresh(p,"b").history.isEmpty()); assertTrue(paths.none { it.startsWith("/v1/") })
+        paths.clear()
+        assertTrue(provider.refresh(p.copy(settings=p.settings.noHistory()),null).history.isEmpty()); assertTrue(paths.none { it.startsWith("/v1/") })
     }
 }
