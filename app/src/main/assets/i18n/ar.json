@@ -706,5 +706,6 @@
  "Withdrawal rate % · now {0}": "معدل السحب % · حاليًا {0}",
  "Work until age · now {0}": "العمل حتى سن · حاليًا {0}",
 "Life expectancy · years · now {0}": "العمر المتوقع · سنوات · حاليًا {0}",
- "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "يستخدم الحقل الفارغ المعدل الذي جلبه المزودون المختارون في الإعدادات، وإلا فالقيمة الافتراضية المضمنة."
+ "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "يستخدم الحقل الفارغ المعدل الذي جلبه المزودون المختارون في الإعدادات، وإلا فالقيمة الافتراضية المضمنة.",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "القيمة بعملة {0}، بأموال اليوم · الخط المتقطع يشير إلى تاريخ FIRE"
 }

@@ -706,5 +706,6 @@
  "Withdrawal rate % · now {0}": "निकासी दर % · अभी {0}",
  "Work until age · now {0}": "कार्य-आयु सीमा · अभी {0}",
  "Life expectancy · years · now {0}": "जीवन प्रत्याशा · वर्ष · अभी {0}",
- "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "खाली छोड़ने पर सेटिंग में चुने प्रदाताओं से मिली दर इस्तेमाल होती है, वरना अंतर्निहित डिफ़ॉल्ट।"
+ "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "खाली छोड़ने पर सेटिंग में चुने प्रदाताओं से मिली दर इस्तेमाल होती है, वरना अंतर्निहित डिफ़ॉल्ट।",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} में, आज के मूल्य में राशि · बिंदीदार रेखा FIRE तिथि दिखाती है"
 }

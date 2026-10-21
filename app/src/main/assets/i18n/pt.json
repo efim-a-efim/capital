@@ -679,6 +679,7 @@
  "Short by {0} at the FIRE date · reachable on {1}": "Faltam {0} na data FIRE · alcançável em {1}",
  "Rates: {0}": "Taxas: {0}",
  "built-in defaults": "padrões do app",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "Valor em {0}, em valores de hoje · a linha tracejada marca a data FIRE",
  "A projection on your own numbers; it recommends nothing.": "Uma projeção com os seus próprios números; não recomenda nada.",
  "{0} {1} · {2} · fetched {3}": "{0} {1} · {2} · obtido {3}",
  "Goal type": "Tipo de meta",

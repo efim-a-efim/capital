@@ -670,6 +670,7 @@
  "FIRE number · today's money": "FIRE必要額 · 現在の価値",
  "FIRE number · at the FIRE date": "FIRE必要額 · FIRE日の価値",
  "Spend per month · today's money": "月々の支出 · 現在の価値",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "{0}建ての現在の価値 · 破線はFIRE日を示します",
  "Spend per month · at the FIRE date": "月々の支出 · FIRE日の価値",
  "Money lasts": "お金が持つ期間",
  "short by {0}": "{0} 不足",

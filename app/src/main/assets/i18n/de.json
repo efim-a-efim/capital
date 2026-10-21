@@ -706,5 +706,6 @@
  "Withdrawal rate % · now {0}": "Entnahmerate % · jetzt {0}",
  "Work until age · now {0}": "Arbeiten bis Alter · jetzt {0}",
  "Life expectancy · years · now {0}": "Lebenserwartung · Jahre · jetzt {0}",
- "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Bei leerem Feld gilt der Satz, den die in den Einstellungen gewählten Anbieter abrufen, sonst der eingebaute Standardwert."
+ "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Bei leerem Feld gilt der Satz, den die in den Einstellungen gewählten Anbieter abrufen, sonst der eingebaute Standardwert.",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "Wert in {0}, heutige Kaufkraft · die gestrichelte Linie markiert das FIRE-Datum"
 }

@@ -679,6 +679,7 @@
  "Short by {0} at the FIRE date · reachable on {1}": "FIRE کی تاریخ پر ⁨{0}⁩ کی کمی · ⁨{1}⁩ کو حاصل ہو سکتا ہے",
  "Rates: {0}": "شرحیں: ⁨{0}⁩",
  "built-in defaults": "پہلے سے طے شدہ اقدار",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "{0} میں، آج کی قدر میں مالیت · ٹوٹی ہوئی لکیر FIRE کی تاریخ بتاتی ہے",
  "A projection on your own numbers; it recommends nothing.": "آپ کے اپنے اعداد پر پیش گوئی؛ یہ کسی چیز کی سفارش نہیں کرتی۔",
  "{0} {1} · {2} · fetched {3}": "⁨{0}⁩ ⁨{1}⁩ · ⁨{2}⁩ · حاصل کیا گیا ⁨{3}⁩",
  "Goal type": "ہدف کی قسم",

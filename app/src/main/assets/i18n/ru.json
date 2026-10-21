@@ -706,5 +706,6 @@
  "growth {0}% · inflation {1}%": "рост {0}% · инфляция {1}%",
  "Work until age · now {0}": "Работать до возраста · сейчас {0}",
  "Life expectancy · years · now {0}": "Ожидаемая продолжительность жизни · лет · сейчас {0}",
+ "Value in {0}, today's money · the dashed line marks the FIRE date": "Стоимость в {0}, в сегодняшних деньгах · пунктир отмечает дату FIRE",
  "Blank uses the rate fetched by the providers chosen in Settings, else the built-in default.": "Если пусто, берётся ставка от провайдеров, выбранных в настройках, иначе встроенное значение по умолчанию."
 }
