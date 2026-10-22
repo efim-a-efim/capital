@@ -21,7 +21,7 @@ Ein Ziel vom Typ **FIRE** (finanzielle Unabhängigkeit, früher Ruhestand) beant
 **Felder im Editor.** Jedes Feld außer Name und Währung darf leer bleiben; die App berechnet, was sie aus dem Rest ableiten kann.
 
 - **Geburtsdatum · YYYY-MM-DD · optional**: zeigt Alter an und setzt den Horizont auf die Lebenserwartung.
-- **FIRE-Datum · YYYY-MM-DD · leer = wird berechnet**: der Tag, an dem Sie aufhören zu sparen und anfangen auszugeben.
+- **FIRE-Datum · YYYY-MM-DD · leer = wird berechnet**: der Tag, an dem Sie aufhören zu sparen und anfangen auszugeben. Ein Datum in der Vergangenheit bedeutet, dass die Ausgabephase begonnen hat: Der Plan läuft ab heute mit dem Geld, das das Ziel jetzt hat.
 - **Ich kann investieren · leer = wird berechnet**: ein Betrag pro **Woche**, **2 Wochen**, **Monat**, **Jahr** oder **N Tage** (dann **Tage** eingeben).
 - **Beitragswachstum % pro Jahr · leer = Inflation**: um wie viel mehr Sie jedes Jahr investieren können, zum Beispiel eine jährliche Gehaltserhöhung. Leer behält die Kaufkraft des Beitrags.
 - **Ausgaben pro Monat nach FIRE · leer = wird berechnet**.
@@ -49,11 +49,13 @@ Sind FIRE-Datum, Beitrag und Zielbetrag alle angegeben, bleibt das Datum erhalte
 | **FIRE-Betrag · zum FIRE-Datum** | Derselbe Betrag nach Inflation |
 | **Ausgaben pro Monat · heutige Kaufkraft** | Die monatlichen Ausgaben nach FIRE |
 | **Ausgaben pro Monat · zum FIRE-Datum** | Dieselben Ausgaben nach Inflation |
+| **Ausgaben jetzt · pro Monat** | 0 vor dem FIRE-Datum. Danach das, was Sie diesen Monat entnehmen können: das Geld, das das Ziel heute hat, in gleichen Beträgen in heutiger Kaufkraft bis zur Lebenserwartung ausgezahlt |
+| **Ausgaben jetzt · pro Jahr** | Dasselbe für 12 Monate |
 | **Geld reicht** | *bis <Datum> · Alter N*, *N Jahre · über die Lebenserwartung hinaus*, *Geld geht nie aus 🥳* oder *es fehlen …*, wenn das Datum nicht erreichbar ist |
 
 Unter den Zeilen nennt eine Zeile „Sätze: …“ den Anbieter, von dem die Sätze stammen, oder *eingebaute Standardwerte*. Das Diagramm darunter zeigt den Verlauf des Geldes: den Wert in heutiger Kaufkraft von heute bis zum Ende des Geldes oder zum Horizont, mit drei farbigen Kurven, eine pro Szenario. Die linke Achse zeigt Beträge in der Zielwährung, die untere Achse die Jahre (heute, das FIRE-Datum, das Ende). Die gestrichelte Linie markiert das FIRE-Datum. Der Hinweis darunter lautet *Eine Projektion auf Basis Ihrer eigenen Zahlen; sie empfiehlt nichts.* Im Tab [Ziele]({{ page.base }}/screens/goals) zeigt das Ziel *FIRE am <Datum> · Alter N* oder *nicht erreichbar*.
 
-**So wird gerechnet.** In Monatsschritten. Bis zum FIRE-Datum wächst der Beitrag um **Beitragswachstum % pro Jahr** (leer: mit der Inflation, behält also seine Kaufkraft), und das Geld wächst mit dem Satz des Szenarios. Nach dem FIRE-Datum wachsen die Ausgaben mit der Inflation, und der Rest wächst weiter mit dem Satz des Szenarios. Der Horizont ist das Geburtsdatum plus Lebenserwartung (standardmäßig 95) oder, ohne Geburtsdatum, 50 Jahre nach dem FIRE-Datum. *Geld geht nie aus* bedeutet: Das Geld ist in 200 Jahren nicht aufgebraucht und am Ende in heutiger Kaufkraft mindestens so viel wert wie zum FIRE-Datum.
+**So wird gerechnet.** In Monatsschritten. Bis zum FIRE-Datum wächst der Beitrag um **Beitragswachstum % pro Jahr** (leer: mit der Inflation, behält also seine Kaufkraft), und das Geld wächst mit dem Satz des Szenarios. Nach dem FIRE-Datum wachsen die Ausgaben mit der Inflation, und der Rest wächst weiter mit dem Satz des Szenarios. Der Horizont ist das Geburtsdatum plus Lebenserwartung (standardmäßig 95) oder, ohne Geburtsdatum, 50 Jahre nach dem FIRE-Datum. *Geld geht nie aus* bedeutet: Das Geld ist in 200 Jahren nicht aufgebraucht und am Ende in heutiger Kaufkraft mindestens so viel wert wie zum FIRE-Datum. **Ausgaben jetzt** nutzt das Geld, das das Ziel heute zu den neuesten Preisen hat, nicht die geplanten Ausgaben, und die Sätze des Szenarios aus der letzten Aktualisierung: Fallen die Märkte, fallen das Geld und die Ausgaben jetzt mit; so bleibt das Geld für die Erholung erhalten. Steigen sie, steigt es.
 
 **Standardwerte und Quellen.** Ohne eigenen Wert und ohne abgerufene Sätze nutzt die App Wachstum 7 % (optimistisch 10 %, pessimistisch 4 %), Inflation 3 % (2 %, 5 %) und eine Entnahmerate von 4 %. Sie stammen aus dem UBS Global Investment Returns Yearbook 2026 (Welt, 1900–2024: Aktien 9,8 % pro Jahr nominal, Anleihen 4,6 %, Inflation 2,9 %; 7 % entspricht etwa einer 60/40-Mischung), den 2-%-Inflationszielen der Zentralbanken sowie Bengen (1994) und der Trinity-Studie (1998) für die 4-%-Regel. Siehe auch [FIRE]({{ page.base }}/manual#fire) im Handbuch.
 
@@ -65,7 +67,6 @@ Unter den Zeilen nennt eine Zeile „Sätze: …“ den Anbieter, von dem die S�
 |---|---|
 | *Geben Sie einen Zielbetrag, monatliche Ausgaben oder FIRE-Datum und Beitrag zusammen ein* | Füllen Sie eines der drei aus; sonst lässt sich nichts berechnen. |
 | *Geben Sie ein FIRE-Datum oder einen Beitrag ein* | Der Zielbetrag ist bekannt, aber weder Datum noch Beitrag; geben Sie eines von beiden an. |
-| *Das FIRE-Datum liegt in der Vergangenheit* | Wählen Sie ein Datum in der Zukunft. |
 | *Das Geburtsdatum liegt in der Zukunft* | Korrigieren Sie das Geburtsdatum. |
 | *Die Entnahmerate muss größer als null sein* | Geben Sie unter **Erweiterte Annahmen** eine Entnahmerate über 0 ein oder leeren Sie das Feld, um den Standardwert zu nutzen. |
 | *Nicht erreichbar vor <Datum>* | Mit diesem Beitrag und diesen Sätzen wird der Zielbetrag vor diesem Datum (dem Ende des Horizonts) nicht erreicht; erhöhen Sie den Beitrag, senken Sie Zielbetrag oder Ausgaben, oder wählen Sie ein anderes Szenario. |

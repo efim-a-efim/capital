@@ -20,6 +20,8 @@ data class FireResult(
     val reachable: Boolean,
     val shortfall: BigDecimal?, val earliest: LocalDate?,
     val curve: List<Pair<LocalDate, BigDecimal>>,
+    /** Monthly spend in today's money that empties the goal's current funds at life expectancy; zero before the FIRE date. */
+    val spendNow: BigDecimal = BigDecimal.ZERO,
 )
 sealed class FireOutcome { data class Ready(val results: Map<Scenario, FireResult>) : FireOutcome(); data class Missing(val message: String) : FireOutcome() }
 
@@ -63,7 +65,6 @@ fun Portfolio.fire(goal: Goal, today: LocalDate = LocalDate.now()): FireOutcome 
     val birth = f.birth?.let(LocalDate::parse); val fireDate = f.fireDate?.let(LocalDate::parse)
     if (f.target == null && f.spend == null && (fireDate == null || f.contribution == null)) return FireOutcome.Missing(tr("Enter a target, a monthly spend, or both a FIRE date and a contribution"))
     if (fireDate == null && f.contribution == null) return FireOutcome.Missing(tr("Enter a FIRE date or a contribution"))
-    if (fireDate != null && fireDate < today) return FireOutcome.Missing(tr("The FIRE date is in the past"))
     if (birth != null && birth > today) return FireOutcome.Missing(tr("The birth date is in the future"))
     if (f.target == null && f.spend != null && (f.withdrawal?.decimal()?.signum() ?: 1) == 0) return FireOutcome.Missing(tr("The withdrawal rate must be above zero"))
     val c0 = (convert(allocate().goal(goal.id), "USD", goal.currency) ?: ZERO).toDouble()
@@ -109,7 +110,8 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
         }
     }
     val t = target!!; val s = spend!!
-    val fire = today.plusMonths(n.toLong())
+    // A FIRE date in the past means the spend period has started: the plan runs from today with the current funds.
+    val fire = if (fireDate != null && fireDate < today) fireDate else today.plusMonths(n.toLong())
     val horizon = if (!draw) fire else birth?.plusYears(life) ?: fire.plusYears(50)
     val path = acc.take(n + 1).toMutableList()
     var exhausted: Int? = null
@@ -117,6 +119,9 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
     val neverEnds = draw && exhausted == null && deflate(path.last(), path.lastIndex) >= deflate(acc[n], n)
     // ponytail: money that outlives the 200-year simulation but shrinks in real terms is reported as lasting 200 years.
     val lastsUntil = if (neverEnds) null else today.plusMonths((if (!draw) n else exhausted ?: path.lastIndex).toLong())
+    // Spend period: the current funds (live market value) paid out in equal real amounts until life expectancy (50 years from FIRE without a birth date), at least over one year.
+    val left = months(birth?.plusYears(life) ?: fire.plusYears(50)).coerceAtLeast(12)
+    val spendNow = if (n > 0 || c0 <= 0) 0.0 else c0 / (0 until left).sumOf { k -> inf.pow(k / 12.0) / g.pow(k + 1) }
     val curveEnd = minOf(exhausted ?: Int.MAX_VALUE, maxOf(months(horizon), n), path.lastIndex, MAX_DRAWDOWN - 1)
     return FireResult(
         fireDate = fire, ageAtFire = age(fire), contribution = (contribution ?: 0.0).money(),
@@ -125,6 +130,7 @@ private fun solve(f: Fire, rates: Rates, c0: Double, monthly: Double?, birth: Lo
         beyondLife = lastsUntil != null && lastsUntil >= horizon, neverEnds = neverEnds, reachable = reachable,
         shortfall = shortfall?.money(), earliest = earliest,
         curve = (0..curveEnd).map { today.plusMonths(it.toLong()) to deflate(path[it], it).money() },
+        spendNow = spendNow.money(),
     )
 }
 

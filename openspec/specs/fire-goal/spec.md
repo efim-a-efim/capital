@@ -50,3 +50,14 @@ Settings SHALL offer an Inflation provider (World Bank, ECB, OECD, Off) and a Ma
 #### Scenario: Euro goal with ECB
 - **WHEN** Inflation is set to ECB and the goal is in EUR
 - **THEN** the euro-area HICP series is used; a goal in USD shows "ECB does not cover USD".
+
+### Requirement: Spend now
+Each scenario SHALL show **Spend now** per month and per year in today's money. Before the FIRE date it SHALL be 0. From the FIRE date on it SHALL be the goal's current funds (latest refreshed prices) paid out in equal real monthly amounts until life expectancy (50 years after the FIRE date without a birth date, at least 12 months), at the scenario's growth and inflation. A FIRE date in the past SHALL be accepted and mean that the spend period has started.
+
+#### Scenario: Markets fall after FIRE
+- **WHEN** the goal's funds fall by half after a refresh
+- **THEN** Spend now falls by half.
+
+#### Scenario: Still saving
+- **WHEN** the FIRE date is in the future
+- **THEN** Spend now is 0.

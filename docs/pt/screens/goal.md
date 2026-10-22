@@ -21,7 +21,7 @@ Uma meta do tipo **FIRE** (independência financeira, aposentadoria antecipada) 
 **Campos do editor.** Todos os campos, exceto nome e moeda, podem ficar vazios; o app calcula o que for possível a partir dos demais.
 
 - **Data de nascimento · YYYY-MM-DD · opcional**: mostra as idades e define o horizonte pela expectativa de vida.
-- **Data FIRE · YYYY-MM-DD · vazio para calcular**: o dia em que você deixa de poupar e começa a gastar.
+- **Data FIRE · YYYY-MM-DD · vazio para calcular**: o dia em que você deixa de poupar e começa a gastar. Uma data no passado significa que o período de gastos já começou: o plano parte de hoje, com o dinheiro que a meta tem agora.
 - **Posso investir · vazio para calcular**: um valor por **semana**, **2 semanas**, **mês**, **ano** ou **N dias** (nesse caso, informe **Dias**).
 - **Crescimento do aporte % por ano · vazio = inflação**: quanto a mais você pode investir a cada ano, por exemplo um aumento salarial anual. Vazio mantém o poder de compra do aporte.
 - **Gasto por mês após a FIRE · vazio para calcular**.
@@ -49,11 +49,13 @@ Se a data FIRE, o aporte e o valor-alvo forem todos informados, a data é mantid
 | **Montante FIRE · na data FIRE** | O mesmo valor depois da inflação |
 | **Gasto por mês · valores de hoje** | O gasto mensal após a FIRE |
 | **Gasto por mês · na data FIRE** | O mesmo gasto depois da inflação |
+| **Gasto agora · por mês** | 0 antes da data FIRE. Depois dela, o que você pode retirar neste mês: o dinheiro que a meta tem hoje, pago em parcelas iguais, em valores de hoje, até a expectativa de vida |
+| **Gasto agora · por ano** | O mesmo, para 12 meses |
 | **O dinheiro dura** | *até <data> · N anos*, *N anos · além da expectativa de vida*, *o dinheiro nunca acaba 🥳* ou *faltam …* quando a data não é alcançável |
 
 Abaixo das linhas expansíveis, uma linha "Taxas: …" indica o provedor de onde vêm as taxas, ou *padrões do app*. O gráfico abaixo mostra o dinheiro diminuindo: o valor do dinheiro em valores de hoje, de agora até o fim do dinheiro ou do horizonte, com três curvas coloridas, uma por cenário. O eixo esquerdo mostra os valores na moeda da meta, o eixo inferior os anos (hoje, a data FIRE, o fim). A linha tracejada marca a data FIRE. A nota abaixo diz *Uma projeção com os seus próprios números; não recomenda nada.* Na aba [Metas]({{ page.base }}/screens/goals), a meta mostra *FIRE em <data> · N anos*, ou *inalcançável*.
 
-**Como é calculado.** Em passos mensais. Até a data FIRE, o aporte cresce conforme **Crescimento do aporte % por ano** (com a inflação quando vazio, mantendo assim o poder de compra), e o dinheiro cresce à taxa do cenário. Depois da data FIRE, o gasto cresce com a inflação e o que sobra continua crescendo à taxa do cenário. O horizonte é a data de nascimento mais a expectativa de vida (95 por padrão), ou 50 anos após a data FIRE sem data de nascimento. *O dinheiro nunca acaba* significa que o dinheiro não se esgota em 200 anos e que, no fim, vale em valores de hoje pelo menos tanto quanto na data FIRE.
+**Como é calculado.** Em passos mensais. Até a data FIRE, o aporte cresce conforme **Crescimento do aporte % por ano** (com a inflação quando vazio, mantendo assim o poder de compra), e o dinheiro cresce à taxa do cenário. Depois da data FIRE, o gasto cresce com a inflação e o que sobra continua crescendo à taxa do cenário. O horizonte é a data de nascimento mais a expectativa de vida (95 por padrão), ou 50 anos após a data FIRE sem data de nascimento. *O dinheiro nunca acaba* significa que o dinheiro não se esgota em 200 anos e que, no fim, vale em valores de hoje pelo menos tanto quanto na data FIRE. **Gasto agora** usa o dinheiro que a meta tem hoje, nos preços mais recentes, e não o gasto planejado, e as taxas do cenário da última atualização: quando os mercados caem, o dinheiro e o gasto agora caem junto, e assim o dinheiro é preservado para a recuperação; quando sobem, o gasto agora sobe.
 
 **Padrões e fontes.** Sem valor próprio nem taxas obtidas, o app usa crescimento de 7 % (otimista 10 %, pessimista 4 %), inflação de 3 % (2 %, 5 %) e taxa de retirada de 4 %. Eles vêm do UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: ações 9,8 % ao ano nominal, títulos 4,6 %, inflação 2,9 %; 7 % é cerca de uma carteira 60/40), das metas de inflação de 2 % dos bancos centrais e de Bengen (1994) e do estudo Trinity (1998) para a regra dos 4 %. Veja também [FIRE]({{ page.base }}/manual#fire) no manual.
 
@@ -65,7 +67,6 @@ Abaixo das linhas expansíveis, uma linha "Taxas: …" indica o provedor de onde
 |---|---|
 | *Informe um valor-alvo, um gasto mensal, ou a data FIRE e um aporte* | Preencha um dos três; sem eles nada pode ser calculado. |
 | *Informe uma data FIRE ou um aporte* | O valor-alvo é conhecido, mas a data e o aporte não; informe um dos dois. |
-| *A data FIRE está no passado* | Escolha uma data futura. |
 | *A data de nascimento está no futuro* | Corrija a data de nascimento. |
 | *A taxa de retirada deve ser maior que zero* | Informe uma taxa de retirada acima de 0 em **Premissas avançadas**, ou apague o campo para usar o padrão. |
 | *Inalcançável antes de <data>* | Com este aporte e estas taxas, o valor-alvo não é atingido antes dessa data (o fim do horizonte); aumente o aporte, reduza o valor-alvo ou o gasto, ou escolha outro cenário. |

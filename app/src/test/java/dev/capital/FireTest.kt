@@ -104,7 +104,6 @@ class FireTest {
         assertEquals("Enter a target, a monthly spend, or both a FIRE date and a contribution", missing(Fire(contribution = "1")))
         assertEquals("Enter a target, a monthly spend, or both a FIRE date and a contribution", missing(Fire(fireDate = "2030-01-01")))
         assertEquals("Enter a FIRE date or a contribution", missing(Fire(target = "1")))
-        assertEquals("The FIRE date is in the past", missing(Fire(target = "1", fireDate = "2025-12-31")))
         assertEquals("The birth date is in the future", missing(Fire(target = "1", contribution = "1", birth = "2026-01-02")))
         assertEquals("The withdrawal rate must be above zero", missing(Fire(spend = "1", contribution = "1", withdrawal = "0")))
     }
@@ -144,5 +143,18 @@ class FireTest {
         assertEquals(p, decodeRevision(encodeRevision(Revision(data = p))).data)
         rejects { portfolio(Fire(period = Period.DAYS)).validate() }
         rejects { portfolio(Fire(withdrawal = "101")).validate() }
+    }
+    @Test fun spendNowIsZeroBeforeFire() {
+        eq("0", solve(zero.copy(target = "1000000", fireDate = "2030-01-01", contribution = "100"), cash = "500000").spendNow)
+    }
+    @Test fun spendNowPaysCurrentFundsOutUntilLifeExpectancy() {
+        // Retired since 2020; born 1961, life 95 -> 2056-01-01 = 360 months left; zero rates -> funds / months.
+        val r = solve(zero.copy(target = "1000000", fireDate = "2020-01-01", birth = "1961-01-01", contribution = "0"), cash = "360000")
+        eq("1000", r.spendNow); assertEquals(LocalDate.of(2020, 1, 1), r.fireDate)
+        // Funds fall by half -> spend falls by half.
+        eq("500", solve(zero.copy(target = "1000000", fireDate = "2020-01-01", birth = "1961-01-01", contribution = "0"), cash = "180000").spendNow)
+        // Growth above inflation lets the same funds pay more.
+        val grown = solve(zero.copy(target = "1000000", fireDate = "2020-01-01", birth = "1961-01-01", contribution = "0", growth = "5"), cash = "360000").spendNow
+        assertTrue(grown > BigDecimal(1900) && grown < BigDecimal(2000))
     }
 }

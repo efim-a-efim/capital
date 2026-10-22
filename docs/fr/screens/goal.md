@@ -21,7 +21,7 @@ Un objectif de type **FIRE** (indépendance financière, retraite anticipée) r�
 **Champs de l’éditeur.** Tous les champs, sauf le nom et la devise, peuvent rester vides ; l’application calcule ce qu’elle peut à partir du reste.
 
 - **Date de naissance · YYYY-MM-DD · facultatif** : affiche les âges et fixe l’horizon à l’espérance de vie.
-- **Date FIRE · YYYY-MM-DD · vide pour la calculer** : le jour où vous arrêtez d’épargner et commencez à dépenser.
+- **Date FIRE · YYYY-MM-DD · vide pour la calculer** : le jour où vous arrêtez d’épargner et commencez à dépenser. Une date passée signifie que la période de dépense a commencé : le plan part d’aujourd’hui avec l’argent dont l’objectif dispose maintenant.
 - **Je peux investir · vide pour le calculer** : un montant par **semaine**, **2 semaines**, **mois**, **an** ou **N jours** (saisissez alors **Jours**).
 - **Croissance du versement % par an · vide = inflation** : de combien vous pouvez investir de plus chaque année, par exemple une augmentation annuelle de salaire. Vide, le versement conserve son pouvoir d’achat.
 - **Dépense par mois après FIRE · vide pour la calculer**.
@@ -49,11 +49,13 @@ Si la date FIRE, le versement et la cible sont tous renseignés, la date est con
 | **Montant FIRE · à la date FIRE** | Le même montant après inflation |
 | **Dépense par mois · valeur d’aujourd’hui** | La dépense mensuelle après FIRE |
 | **Dépense par mois · à la date FIRE** | La même dépense après inflation |
+| **Dépense maintenant · par mois** | 0 avant la date FIRE. Ensuite, ce que vous pouvez retirer ce mois-ci : l’argent dont l’objectif dispose aujourd’hui, versé en montants égaux, en valeur d’aujourd’hui, jusqu’à l’espérance de vie |
+| **Dépense maintenant · par an** | La même chose, pour 12 mois |
 | **L’argent dure** | *jusqu’au <date> · N ans*, *N ans · au-delà de l’espérance de vie*, *l’argent ne s’épuisera jamais 🥳*, ou *il manque …* lorsque la date n’est pas atteignable |
 
 Sous les lignes dépliables, une ligne « Taux : … » nomme le fournisseur dont les taux proviennent, ou *valeurs par défaut intégrées*. Le graphique en dessous est une courbe d’épuisement : la valeur de l’argent en valeur d’aujourd’hui, d’aujourd’hui jusqu’à l’épuisement de l’argent ou l’horizon, avec trois courbes colorées, une par scénario. L’axe de gauche indique les montants dans la devise de l’objectif, l’axe du bas les années (aujourd’hui, la date FIRE, la fin). La ligne pointillée marque la date FIRE. La note en dessous indique *Une projection sur vos propres chiffres ; elle ne recommande rien.* Dans l’onglet [Objectifs]({{ page.base }}/screens/goals), l’objectif affiche *FIRE le <date> · N ans*, ou *inatteignable*.
 
-**Mode de calcul.** Par pas mensuels. Jusqu’à la date FIRE, le versement augmente de **Croissance du versement % par an** (de l’inflation si le champ est vide, donc il conserve son pouvoir d’achat), et l’argent croît au taux du scénario. Après la date FIRE, la dépense augmente avec l’inflation et ce qui reste continue de croître au taux du scénario. L’horizon est la date de naissance plus l’espérance de vie (95 ans par défaut), ou 50 ans après la date FIRE sans date de naissance. *L’argent ne s’épuisera jamais* signifie que l’argent n’est pas épuisé en 200 ans et qu’il vaut, en valeur d’aujourd’hui, au moins autant à la fin qu’à la date FIRE.
+**Mode de calcul.** Par pas mensuels. Jusqu’à la date FIRE, le versement augmente de **Croissance du versement % par an** (de l’inflation si le champ est vide, donc il conserve son pouvoir d’achat), et l’argent croît au taux du scénario. Après la date FIRE, la dépense augmente avec l’inflation et ce qui reste continue de croître au taux du scénario. L’horizon est la date de naissance plus l’espérance de vie (95 ans par défaut), ou 50 ans après la date FIRE sans date de naissance. *L’argent ne s’épuisera jamais* signifie que l’argent n’est pas épuisé en 200 ans et qu’il vaut, en valeur d’aujourd’hui, au moins autant à la fin qu’à la date FIRE. **Dépense maintenant** utilise l’argent dont l’objectif dispose aujourd’hui aux derniers prix, et non la dépense prévue, ainsi que les taux du scénario issus de la dernière actualisation : lorsque les marchés baissent, l’argent et la dépense maintenant baissent avec eux, de sorte que l’argent est conservé pour la reprise ; lorsqu’ils montent, elle augmente.
 
 **Valeurs par défaut et sources.** Sans valeur saisie ni taux récupérés, l’application utilise une croissance de 7 % (optimiste 10 %, pessimiste 4 %), une inflation de 3 % (2 %, 5 %) et un taux de retrait de 4 %. Ils proviennent du UBS Global Investment Returns Yearbook 2026 (monde, 1900–2024 : actions 9,8 % par an en nominal, obligations 4,6 %, inflation 2,9 % ; 7 % correspond à peu près à un mix 60/40), des cibles d’inflation de 2 % des banques centrales, et de Bengen (1994) et de l’étude Trinity (1998) pour la règle des 4 %. Voir aussi [FIRE]({{ page.base }}/manual#fire) dans le manuel.
 
@@ -65,7 +67,6 @@ Sous les lignes dépliables, une ligne « Taux : … » nomme le fournisseur don
 |---|---|
 | *Saisissez une cible, une dépense mensuelle, ou à la fois une date FIRE et un versement* | Renseignez l’un des trois ; sans eux, rien ne peut être calculé. |
 | *Saisissez une date FIRE ou un versement* | La cible est connue, mais ni la date ni le versement ne le sont ; donnez l’un des deux. |
-| *La date FIRE est dans le passé* | Choisissez une date future. |
 | *La date de naissance est dans le futur* | Corrigez la date de naissance. |
 | *Le taux de retrait doit être supérieur à zéro* | Saisissez un taux de retrait supérieur à 0 dans **Hypothèses avancées**, ou videz le champ pour utiliser la valeur par défaut. |
 | *Inatteignable avant le <date>* | Avec ce versement et ces taux, la cible n’est pas atteinte avant cette date (la fin de l’horizon) ; augmentez le versement, baissez la cible ou la dépense, ou choisissez un autre scénario. |

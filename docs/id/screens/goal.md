@@ -21,7 +21,7 @@ Tujuan berjenis **FIRE** (kemandirian finansial, pensiun dini) menjawab dua pert
 **Kolom editor.** Semua kolom selain nama dan mata uang boleh kosong; aplikasi menghitung apa yang bisa dari sisanya.
 
 - **Tanggal lahir · YYYY-MM-DD · opsional**: menampilkan usia dan menetapkan cakrawala sesuai harapan hidup.
-- **Tanggal FIRE · YYYY-MM-DD · kosongkan untuk dihitung**: hari Anda berhenti menabung dan mulai membelanjakan.
+- **Tanggal FIRE · YYYY-MM-DD · kosongkan untuk dihitung**: hari Anda berhenti menabung dan mulai membelanjakan. Tanggal di masa lalu berarti masa pembelanjaan sudah dimulai: rencana berjalan dari hari ini dengan uang yang dimiliki tujuan sekarang.
 - **Saya bisa berinvestasi · kosongkan untuk dihitung**: jumlah per **minggu**, **2 minggu**, **bulan**, **tahun**, atau **N hari** (lalu isi **Hari**).
 - **Kontribusi bertambah % per tahun · kosongkan = inflasi**: seberapa banyak lagi yang bisa Anda investasikan setiap tahun, misalnya kenaikan gaji tahunan. Bila dikosongkan, daya beli kontribusi tetap terjaga.
 - **Pengeluaran per bulan setelah FIRE · kosongkan untuk dihitung**.
@@ -49,11 +49,13 @@ Jika tanggal FIRE, kontribusi, dan target semuanya diisi, tanggal dipertahankan 
 | **Dana FIRE · pada tanggal FIRE** | Dana yang sama setelah inflasi |
 | **Pengeluaran per bulan · nilai uang hari ini** | Pengeluaran bulanan setelah FIRE |
 | **Pengeluaran per bulan · pada tanggal FIRE** | Pengeluaran yang sama setelah inflasi |
+| **Pengeluaran sekarang · per bulan** | 0 sebelum tanggal FIRE. Sesudahnya, yang dapat Anda tarik bulan ini: uang yang dimiliki tujuan hari ini, dibayarkan dalam jumlah sama dalam nilai uang hari ini hingga harapan hidup |
+| **Pengeluaran sekarang · per tahun** | Sama, untuk 12 bulan |
 | **Uang bertahan** | *hingga <tanggal> · usia N*, *N tahun · melampaui harapan hidup*, *uang tidak akan habis 🥳*, atau *kurang …* bila tanggal tidak tercapai |
 
 Di bawah lipatan, baris "Suku: …" menyebut penyedia asal suku tersebut, atau *bawaan aplikasi*. Grafik di bawahnya adalah grafik penyusutan: nilai uang dalam uang hari ini dari sekarang hingga uang habis atau hingga akhir cakrawala, dengan tiga kurva berwarna, satu per skenario. Sumbu kiri menampilkan jumlah dalam mata uang tujuan, sumbu bawah menampilkan tahun (hari ini, tanggal FIRE, akhir). Garis putus-putus menandai tanggal FIRE. Catatan di bawahnya berbunyi *Proyeksi berdasarkan angka Anda sendiri; tidak merekomendasikan apa pun.* Di tab [Tujuan]({{ page.base }}/screens/goals), tujuan tersebut menampilkan *FIRE pada <tanggal> · usia N*, atau *tidak tercapai*.
 
-**Cara menghitung.** Dalam langkah bulanan. Hingga tanggal FIRE, kontribusi naik sebesar **Kontribusi bertambah % per tahun** (mengikuti inflasi bila dikosongkan, sehingga daya belinya tetap terjaga), dan uang tumbuh sesuai suku skenario. Setelah tanggal FIRE, pengeluaran naik mengikuti inflasi dan sisanya terus tumbuh sesuai suku skenario. Cakrawalanya adalah tanggal lahir ditambah harapan hidup (bawaan 95), atau 50 tahun setelah tanggal FIRE bila tanggal lahir tidak diisi. *Uang tidak akan habis* berarti uang tidak terpakai habis dalam 200 tahun dan nilainya di akhir, dalam uang hari ini, setidaknya sama dengan pada tanggal FIRE.
+**Cara menghitung.** Dalam langkah bulanan. Hingga tanggal FIRE, kontribusi naik sebesar **Kontribusi bertambah % per tahun** (mengikuti inflasi bila dikosongkan, sehingga daya belinya tetap terjaga), dan uang tumbuh sesuai suku skenario. Setelah tanggal FIRE, pengeluaran naik mengikuti inflasi dan sisanya terus tumbuh sesuai suku skenario. Cakrawalanya adalah tanggal lahir ditambah harapan hidup (bawaan 95), atau 50 tahun setelah tanggal FIRE bila tanggal lahir tidak diisi. *Uang tidak akan habis* berarti uang tidak terpakai habis dalam 200 tahun dan nilainya di akhir, dalam uang hari ini, setidaknya sama dengan pada tanggal FIRE. **Pengeluaran sekarang** memakai uang yang dimiliki tujuan hari ini menurut harga terbaru, bukan pengeluaran yang direncanakan, dan suku skenario dari pembaruan terakhir: saat pasar turun, uang dan pengeluaran sekarang ikut turun, sehingga uang tersimpan untuk pemulihan; saat pasar naik, keduanya naik.
 
 **Bawaan dan sumber.** Tanpa nilai yang Anda isi atau suku yang diambil, aplikasi memakai pertumbuhan 7 % (optimis 10 %, pesimis 4 %), inflasi 3 % (2 %, 5 %), dan tingkat penarikan 4 %. Angka ini berasal dari UBS Global Investment Returns Yearbook 2026 (dunia, 1900–2024: saham 9,8 % per tahun nominal, obligasi 4,6 %, inflasi 2,9 %; 7 % kira-kira setara campuran 60/40), target inflasi 2 % bank sentral, serta Bengen (1994) dan studi Trinity (1998) untuk aturan 4 %. Lihat juga [FIRE]({{ page.base }}/manual#fire) di manual.
 
@@ -65,7 +67,6 @@ Di bawah lipatan, baris "Suku: …" menyebut penyedia asal suku tersebut, atau *
 |---|---|
 | *Masukkan target, pengeluaran bulanan, atau tanggal FIRE beserta kontribusi* | Isi salah satu dari ketiganya; tanpa itu tidak ada yang dapat dihitung. |
 | *Masukkan tanggal FIRE atau kontribusi* | Target sudah diketahui tetapi tanggal maupun kontribusi belum; isi salah satunya. |
-| *Tanggal FIRE sudah lewat* | Pilih tanggal di masa depan. |
 | *Tanggal lahir berada di masa depan* | Perbaiki tanggal lahir. |
 | *Tingkat penarikan harus di atas nol* | Masukkan tingkat penarikan di atas 0 di **Asumsi lanjutan**, atau kosongkan untuk memakai bawaan. |
 | *Tidak tercapai sebelum <tanggal>* | Dengan kontribusi dan suku ini, target tidak tercapai sebelum tanggal itu (akhir cakrawala); naikkan kontribusi, turunkan target atau pengeluaran, atau pilih skenario lain. |

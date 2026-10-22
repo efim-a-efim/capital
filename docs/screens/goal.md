@@ -21,7 +21,7 @@ A goal of type **FIRE** (financial independence, retire early) answers two quest
 **Editor fields.** Every field except the name and currency may be blank; the app derives what it can from the rest.
 
 - **Birth date · YYYY-MM-DD · optional**: shows ages and sets the horizon to the life expectancy.
-- **FIRE date · YYYY-MM-DD · blank to derive**: the day you stop saving and start spending.
+- **FIRE date · YYYY-MM-DD · blank to derive**: the day you stop saving and start spending. A date in the past means the spend period has started: the plan runs from today with the money the goal has now.
 - **I can invest · blank to derive**: an amount per **week**, **2 weeks**, **month**, **year** or **N days** (then enter **Days**).
 - **Contribution growth % per year · blank = inflation**: how much more you can invest each year, for example a yearly raise. Blank keeps the contribution's purchasing power.
 - **Spend per month after FIRE · blank to derive**.
@@ -49,11 +49,13 @@ If FIRE date, contribution and target are all given, the date is kept and the sc
 | **FIRE number · at the FIRE date** | The same amount after inflation |
 | **Spend per month · today's money** | The monthly spend after FIRE |
 | **Spend per month · at the FIRE date** | The same spend after inflation |
+| **Spend now · per month** | 0 before the FIRE date. After it, what you can take out this month: the money the goal has today, paid out in equal amounts in today's money until life expectancy |
+| **Spend now · per year** | The same, for 12 months |
 | **Money lasts** | *until <date> · age N*, *N years · beyond life expectancy*, *money will never end 🥳*, or *short by …* when the date is not reachable |
 
 Under the folds, a "Rates: …" line names the provider the rates come from, or *built-in defaults*. The chart below is a burndown: the value of the money in today's money from today to the end of the money or the horizon, with three coloured curves, one per scenario. The left axis shows amounts in the goal currency, the bottom axis the years (today, the FIRE date, the end). The dashed line marks the FIRE date. The note under it reads *A projection on your own numbers; it recommends nothing.* On the [Goals]({{ page.base }}/screens/goals) tab the goal shows *FIRE on <date> · age N*, or *not reachable*.
 
-**How it is calculated.** In monthly steps. Until the FIRE date the contribution grows by **Contribution growth % per year** (by inflation when blank, so it keeps its purchasing power), and the money grows at the scenario's rate. After the FIRE date the spend grows with inflation and what remains keeps growing at the scenario's rate. The horizon is the birth date plus life expectancy (95 by default), or 50 years after the FIRE date without a birth date. *Money will never end* means the money is not used up in 200 years and is worth at least as much in today's money at the end as at the FIRE date.
+**How it is calculated.** In monthly steps. Until the FIRE date the contribution grows by **Contribution growth % per year** (by inflation when blank, so it keeps its purchasing power), and the money grows at the scenario's rate. After the FIRE date the spend grows with inflation and what remains keeps growing at the scenario's rate. The horizon is the birth date plus life expectancy (95 by default), or 50 years after the FIRE date without a birth date. *Money will never end* means the money is not used up in 200 years and is worth at least as much in today's money at the end as at the FIRE date. **Spend now** uses the money the goal has today at the latest prices, not the planned spend, and the scenario's rates from the latest refresh: when markets fall, the money and the spend now fall with them, so the money is kept for the recovery; when they rise, it rises.
 
 **Defaults and sources.** Without an override or fetched rates the app uses growth 7 % (optimistic 10 %, pessimistic 4 %), inflation 3 % (2 %, 5 %) and a withdrawal rate of 4 %. They come from the UBS Global Investment Returns Yearbook 2026 (world, 1900–2024: equities 9.8 % a year nominal, bonds 4.6 %, inflation 2.9 %; 7 % is about a 60/40 mix), the 2 % inflation targets of central banks, and Bengen (1994) and the Trinity study (1998) for the 4 % rule. See also [FIRE]({{ page.base }}/manual#fire) in the manual.
 
@@ -65,7 +67,6 @@ Under the folds, a "Rates: …" line names the provider the rates come from, or 
 |---|---|
 | *Enter a target, a monthly spend, or both a FIRE date and a contribution* | Fill in one of the three; without them nothing can be derived. |
 | *Enter a FIRE date or a contribution* | The target is known but neither the date nor the contribution is; give one of them. |
-| *The FIRE date is in the past* | Choose a date in the future. |
 | *The birth date is in the future* | Correct the birth date. |
 | *The withdrawal rate must be above zero* | Enter a withdrawal rate above 0 in **Advanced assumptions**, or clear it to use the default. |
 | *Not reachable before <date>* | With this contribution and these rates the target is not reached before that date (the end of the horizon); raise the contribution, lower the target or spend, or choose another scenario. |

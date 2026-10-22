@@ -181,6 +181,8 @@ private fun fireLine(g: Goal,data: Portfolio)=when(val o=data.fire(g)) {
         tr("FIRE number · at the FIRE date") to { x -> m(x.targetNominal) },
         tr("Spend per month · today's money") to { x -> m(x.spend) },
         tr("Spend per month · at the FIRE date") to { x -> m(x.spendNominal) },
+        tr("Spend now · per month") to { x -> m(x.spendNow) },
+        tr("Spend now · per year") to { x -> m(x.spendNow*BigDecimal(12)) },
         tr("Money lasts") to { x -> when { !x.reachable -> x.shortfall?.let { tr("short by {0}",m(it)) } ?: tr("Not reachable before {0}",date(x.fireDate.toString())); x.neverEnds -> tr("money will never end 🥳"); x.beyondLife -> tr("{0} years · beyond life expectancy",x.lastsYears ?: 0); else -> tr("until {0}",date(x.lastsUntil.toString()))+ageText(x.ageAtEnd) } },
     )
     // Values equal in all three scenarios are the user's own inputs: shown once, above the folds.

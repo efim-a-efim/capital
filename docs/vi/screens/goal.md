@@ -21,7 +21,7 @@ Mục tiêu loại **FIRE** (độc lập tài chính, nghỉ hưu sớm) trả 
 **Các trường trong trình chỉnh sửa.** Mọi trường ngoại trừ tên và tiền tệ đều có thể để trống; ứng dụng tự tính những gì có thể từ phần còn lại.
 
 - **Ngày sinh · YYYY-MM-DD · tùy chọn**: hiển thị tuổi và đặt khoảng thời gian tính toán theo tuổi thọ.
-- **Ngày FIRE · YYYY-MM-DD · để trống để tự tính**: ngày bạn ngừng tiết kiệm và bắt đầu chi tiêu.
+- **Ngày FIRE · YYYY-MM-DD · để trống để tự tính**: ngày bạn ngừng tiết kiệm và bắt đầu chi tiêu. Ngày trong quá khứ nghĩa là giai đoạn chi tiêu đã bắt đầu: kế hoạch chạy từ hôm nay với số tiền mục tiêu đang có.
 - **Tôi có thể đầu tư · để trống để tự tính**: một số tiền **mỗi** **tuần**, **2 tuần**, **tháng**, **năm** hoặc **N ngày** (khi đó hãy nhập **Số ngày**).
 - **Mức tăng khoản đầu tư % mỗi năm · để trống = lạm phát**: số tiền bạn có thể đầu tư tăng thêm mỗi năm, ví dụ khi được tăng lương hằng năm. Để trống thì khoản đóng góp giữ nguyên sức mua.
 - **Chi tiêu mỗi tháng sau FIRE · để trống để tự tính**.
@@ -49,11 +49,13 @@ Nếu cả ngày FIRE, khoản đóng góp và số tiền mục tiêu đều đ
 | **Số tiền FIRE · tại ngày FIRE** | Cùng số tiền đó sau khi tính lạm phát |
 | **Chi tiêu mỗi tháng · tiền hôm nay** | Khoản chi mỗi tháng sau FIRE |
 | **Chi tiêu mỗi tháng · tại ngày FIRE** | Cùng khoản chi đó sau khi tính lạm phát |
+| **Chi tiêu hiện tại · mỗi tháng** | 0 trước ngày FIRE. Sau đó là số tiền bạn có thể rút trong tháng này: số tiền mục tiêu đang có hôm nay, chia thành các khoản bằng nhau theo tiền hôm nay đến hết tuổi thọ |
+| **Chi tiêu hiện tại · mỗi năm** | Tương tự, cho 12 tháng |
 | **Tiền đủ dùng** | *đến <ngày> · {N} tuổi*, *{N} năm · vượt quá tuổi thọ*, *tiền sẽ không bao giờ hết 🥳*, hoặc *thiếu …* khi chưa đạt được ngày đó |
 
 Bên dưới các hàng gập, dòng "Tỷ lệ: …" nêu nhà cung cấp mà các tỷ lệ đến từ, hoặc *mặc định tích hợp*. Biểu đồ bên dưới cho thấy tiền giảm dần: giá trị của tiền theo tiền hôm nay, từ hôm nay đến khi tiền hết hoặc hết khoảng thời gian tính toán, với ba đường màu, mỗi kịch bản một đường. Trục bên trái hiển thị số tiền theo tiền tệ của mục tiêu, trục bên dưới hiển thị các năm (hôm nay, ngày FIRE, lúc hết tiền). Đường nét đứt đánh dấu ngày FIRE. Ghi chú bên dưới ghi *Dự báo dựa trên số liệu của chính bạn; không đưa ra khuyến nghị nào.* Trên thẻ [Mục tiêu]({{ page.base }}/screens/goals), mục tiêu hiển thị *FIRE vào <ngày> · {N} tuổi*, hoặc *không đạt được*.
 
-**Cách tính.** Theo từng bước một tháng. Đến ngày FIRE, khoản đóng góp tăng theo **Mức tăng khoản đầu tư % mỗi năm** (theo lạm phát khi để trống, nên giữ nguyên sức mua), và tiền tăng trưởng theo tỷ lệ của kịch bản. Sau ngày FIRE, chi tiêu tăng theo lạm phát và phần còn lại tiếp tục tăng trưởng theo tỷ lệ của kịch bản. Khoảng thời gian tính toán là ngày sinh cộng tuổi thọ (mặc định 95), hoặc 50 năm sau ngày FIRE nếu không có ngày sinh. *Tiền sẽ không bao giờ hết* nghĩa là tiền không bị dùng hết trong 200 năm và vào cuối kỳ có giá trị theo tiền hôm nay ít nhất bằng tại ngày FIRE.
+**Cách tính.** Theo từng bước một tháng. Đến ngày FIRE, khoản đóng góp tăng theo **Mức tăng khoản đầu tư % mỗi năm** (theo lạm phát khi để trống, nên giữ nguyên sức mua), và tiền tăng trưởng theo tỷ lệ của kịch bản. Sau ngày FIRE, chi tiêu tăng theo lạm phát và phần còn lại tiếp tục tăng trưởng theo tỷ lệ của kịch bản. Khoảng thời gian tính toán là ngày sinh cộng tuổi thọ (mặc định 95), hoặc 50 năm sau ngày FIRE nếu không có ngày sinh. *Tiền sẽ không bao giờ hết* nghĩa là tiền không bị dùng hết trong 200 năm và vào cuối kỳ có giá trị theo tiền hôm nay ít nhất bằng tại ngày FIRE. **Chi tiêu hiện tại** dùng số tiền mục tiêu đang có hôm nay theo giá mới nhất, không dùng khoản chi đã lên kế hoạch, và dùng tỷ lệ của kịch bản từ lần làm mới gần nhất: khi thị trường giảm, tiền và khoản chi hiện tại giảm theo, nên tiền được giữ lại chờ phục hồi; khi thị trường tăng, nó tăng theo.
 
 **Mặc định và nguồn.** Khi không có giá trị ghi đè hay tỷ lệ tải về, ứng dụng dùng tăng trưởng 7 % (lạc quan 10 %, bi quan 4 %), lạm phát 3 % (2 %, 5 %) và tỷ lệ rút tiền 4 %. Chúng dựa trên UBS Global Investment Returns Yearbook 2026 (toàn thế giới, 1900–2024: cổ phiếu 9,8 % mỗi năm danh nghĩa, trái phiếu 4,6 %, lạm phát 2,9 %; 7 % xấp xỉ danh mục 60/40), mục tiêu lạm phát 2 % của các ngân hàng trung ương, cùng Bengen (1994) và nghiên cứu Trinity (1998) cho quy tắc 4 %. Xem thêm [FIRE]({{ page.base }}/manual#fire) trong hướng dẫn sử dụng.
 
@@ -65,7 +67,6 @@ Bên dưới các hàng gập, dòng "Tỷ lệ: …" nêu nhà cung cấp mà c
 |---|---|
 | *Hãy nhập số tiền mục tiêu, khoản chi mỗi tháng, hoặc cả ngày FIRE lẫn khoản đóng góp* | Điền một trong ba mục; nếu thiếu thì không tính được gì. |
 | *Hãy nhập ngày FIRE hoặc khoản đóng góp* | Đã biết số tiền mục tiêu nhưng chưa có ngày lẫn khoản đóng góp; hãy nhập một trong hai. |
-| *Ngày FIRE đã qua* | Chọn một ngày trong tương lai. |
 | *Ngày sinh nằm trong tương lai* | Sửa lại ngày sinh. |
 | *Tỷ lệ rút tiền phải lớn hơn không* | Nhập tỷ lệ rút tiền lớn hơn 0 trong **Giả định nâng cao**, hoặc xóa trống để dùng mặc định. |
 | *Không đạt được trước <ngày>* | Với khoản đóng góp và các tỷ lệ này, số tiền mục tiêu không đạt được trước ngày đó (cuối khoảng thời gian tính toán); hãy tăng khoản đóng góp, giảm số tiền mục tiêu hoặc chi tiêu, hoặc chọn kịch bản khác. |

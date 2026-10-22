@@ -21,7 +21,7 @@ Una meta de tipo **FIRE** (independencia financiera, jubilación anticipada) res
 **Campos del editor.** Todos los campos salvo el nombre y la moneda pueden quedar en blanco; la aplicación calcula lo que puede a partir del resto.
 
 - **Fecha de nacimiento · YYYY-MM-DD · opcional**: muestra las edades y fija el horizonte según la esperanza de vida.
-- **Fecha FIRE · YYYY-MM-DD · en blanco para calcular**: el día en que deja de ahorrar y empieza a gastar.
+- **Fecha FIRE · YYYY-MM-DD · en blanco para calcular**: el día en que deja de ahorrar y empieza a gastar. Una fecha pasada significa que el periodo de gasto ya empezó: el plan parte de hoy con el dinero que la meta tiene ahora.
 - **Puedo invertir · en blanco para calcular**: un importe **por** **semana**, **2 semanas**, **mes**, **año** o **N días** (en ese caso indique **Días**).
 - **Crecimiento de la aportación % al año · en blanco = inflación**: cuánto más puede invertir cada año, por ejemplo con un aumento de sueldo anual. En blanco se mantiene el poder adquisitivo de la aportación.
 - **Gasto al mes tras FIRE · en blanco para calcular**.
@@ -49,11 +49,13 @@ Si se indican la fecha FIRE, la aportación y el objetivo, se mantiene la fecha 
 | **Importe FIRE · en la fecha FIRE** | El mismo importe tras la inflación |
 | **Gasto al mes · dinero de hoy** | El gasto mensual tras FIRE |
 | **Gasto al mes · en la fecha FIRE** | El mismo gasto tras la inflación |
+| **Gasto ahora · al mes** | 0 antes de la fecha FIRE. Después, lo que puede retirar este mes: el dinero que la meta tiene hoy, pagado en importes iguales en dinero de hoy hasta la esperanza de vida |
+| **Gasto ahora · al año** | Lo mismo, para 12 meses |
 | **El dinero dura** | *hasta el <fecha> · N años*, *N años · más allá de la esperanza de vida*, *el dinero nunca se acabará 🥳* o *faltan …* cuando la fecha no es alcanzable |
 
 Bajo los pliegues, una línea «Tasas: …» indica el proveedor del que proceden las tasas, o *valores predeterminados integrados*. El gráfico de debajo muestra cómo se gasta el dinero: su valor en dinero de hoy desde hoy hasta que se acaba o hasta el horizonte, con tres curvas de colores, una por escenario. El eje izquierdo muestra los importes en la moneda de la meta; el eje inferior, los años (hoy, la fecha FIRE, el final). La línea discontinua marca la fecha FIRE. La nota de debajo dice *Una proyección con sus propias cifras; no recomienda nada.* En la pestaña [Metas]({{ page.base }}/screens/goals) la meta muestra *FIRE el <fecha> · N años* o *inalcanzable*.
 
-**Cómo se calcula.** En pasos mensuales. Hasta la fecha FIRE la aportación crece según **Crecimiento de la aportación % al año · en blanco = inflación** (según la inflación si está en blanco, de modo que mantiene su poder adquisitivo), y el dinero crece a la tasa del escenario. Después de la fecha FIRE el gasto crece con la inflación y lo que queda sigue creciendo a la tasa del escenario. El horizonte es la fecha de nacimiento más la esperanza de vida (95 por defecto), o 50 años después de la fecha FIRE si no hay fecha de nacimiento. *El dinero nunca se acabará* significa que el dinero no se agota en 200 años y que al final vale, en dinero de hoy, al menos tanto como en la fecha FIRE.
+**Cómo se calcula.** En pasos mensuales. Hasta la fecha FIRE la aportación crece según **Crecimiento de la aportación % al año · en blanco = inflación** (según la inflación si está en blanco, de modo que mantiene su poder adquisitivo), y el dinero crece a la tasa del escenario. Después de la fecha FIRE el gasto crece con la inflación y lo que queda sigue creciendo a la tasa del escenario. El horizonte es la fecha de nacimiento más la esperanza de vida (95 por defecto), o 50 años después de la fecha FIRE si no hay fecha de nacimiento. *El dinero nunca se acabará* significa que el dinero no se agota en 200 años y que al final vale, en dinero de hoy, al menos tanto como en la fecha FIRE. **Gasto ahora** usa el dinero que la meta tiene hoy a los últimos precios, no el gasto previsto, y las tasas del escenario de la última actualización: cuando los mercados caen, el dinero y el gasto ahora caen con ellos, de modo que el dinero se conserva para la recuperación; cuando suben, sube.
 
 **Valores predeterminados y fuentes.** Sin un valor propio ni tasas obtenidas, la aplicación usa un crecimiento del 7 % (optimista 10 %, pesimista 4 %), una inflación del 3 % (2 %, 5 %) y una tasa de retiro del 4 %. Proceden del UBS Global Investment Returns Yearbook 2026 (mundo, 1900–2024: renta variable 9,8 % anual nominal, bonos 4,6 %, inflación 2,9 %; el 7 % equivale aproximadamente a una mezcla 60/40), de los objetivos de inflación del 2 % de los bancos centrales y de Bengen (1994) y el estudio Trinity (1998) para la regla del 4 %. Véase también [FIRE]({{ page.base }}/manual#fire) en el manual.
 
@@ -65,7 +67,6 @@ Bajo los pliegues, una línea «Tasas: …» indica el proveedor del que procede
 |---|---|
 | *Indique un objetivo, un gasto mensual, o bien una fecha FIRE y una aportación* | Rellene uno de los tres; sin ellos no se puede calcular nada. |
 | *Indique una fecha FIRE o una aportación* | Se conoce el objetivo pero ni la fecha ni la aportación; indique una de las dos. |
-| *La fecha FIRE ya pasó* | Elija una fecha futura. |
 | *La fecha de nacimiento es futura* | Corrija la fecha de nacimiento. |
 | *La tasa de retiro debe ser mayor que cero* | Introduzca una tasa de retiro superior a 0 en **Supuestos avanzados**, o bórrela para usar la predeterminada. |
 | *Inalcanzable antes del <fecha>* | Con esta aportación y estas tasas el objetivo no se alcanza antes de esa fecha (el final del horizonte); aumente la aportación, reduzca el objetivo o el gasto, o elija otro escenario. |
