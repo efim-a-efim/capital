@@ -465,7 +465,12 @@ class ProviderTest {
     @Test fun llamaTokenUsesPlatformKeyAndSpanIsChunked() {
         val seen=mutableListOf<String>()
         history(setOf(tokenAsset("ETH",real)),"2020-01-01","2024-01-01",Providers({ "" },client { r -> seen += r.url.queryParameter("span").orEmpty() + r.url.encodedPath.substringAfterLast('/'); 200 to """{"coins":{"ethereum:$real":{"prices":[{"timestamp":1577836800,"price":1}]}}}""" },0))
-        assertEquals("1000ethereum:$real",seen.first()); assertEquals(2,seen.size)
+        assertEquals("500ethereum:$real",seen.first()); assertEquals(3,seen.size)
+    }
+    @Test fun llamaKeysTimesDaysStayUnder500PerRequest() {
+        val seen=mutableListOf<String>()
+        history(setOf("BTC","ETH","TON"),"2024-01-01","2024-12-31",Providers({ "" },client { r -> seen += r.url.encodedPath.substringAfterLast('/'); 200 to chartBody },0))
+        assertEquals(listOf("coingecko:bitcoin","coingecko:ethereum","coingecko:the-open-network"),seen.map { it.replace("%3A",":") })
     }
     @Test fun historyErrorsAreReportedPerAsset() {
         val errors=mutableMapOf<String,String>()

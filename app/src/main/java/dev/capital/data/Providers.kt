@@ -481,7 +481,9 @@ class Providers(private val key: (String)->String, private val client: OkHttpCli
             }
             found.forEach { (a,p) -> points.getOrPut(a) { mutableMapOf() } += p }
         }
-        for(list in assets.filter { ':' in it || it in native }.sorted().chunked(20)) for((from,to) in dayRanges(since,until,1000)) group(list) { active ->
+        // DefiLlama answers at most 500 points per chart request (keys × days): at most 500 days and 500/days keys per request.
+        val days=ChronoUnit.DAYS.between(since,until)+1
+        for(list in assets.filter { ':' in it || it in native }.sorted().chunked((500/days).toInt().coerceIn(1,20))) for((from,to) in dayRanges(since,until,500)) group(list) { active ->
             val keys=active.mapNotNull { a -> try { a to llamaKey(a) } catch(e: Exception) { fail(a,e); null } }.toMap()
             if(keys.isEmpty()) return@group
             val start=from.atStartOfDay().toEpochSecond(ZoneOffset.UTC)
